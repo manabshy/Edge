@@ -631,7 +631,9 @@
               </p-accordionTab>
 
               <p-accordionTab class="landRegister" header="Land Register" [(selected)]="activeState[6]">
-                <app-valuation-land-register (afterFileOperation)="scrollSpecificElement('landRegister')">
+                <app-valuation-land-register [deedLandReg]="valuation?.deedLandReg"
+                  [nameChangeReg]="valuation?.nameChangeReg" [leaseLandReg]="valuation?.leaseLandReg"
+                  (afterFileOperation)="scrollSpecificElement('landRegister')">
                 </app-valuation-land-register>
               </p-accordionTab>
 

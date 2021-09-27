@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Input,
@@ -19,7 +20,7 @@ import { FileTypeEnum } from "src/app/core/services/file.service";
   templateUrl: "./file-upload.component.html",
   styleUrls: ["./file-upload.component.scss"],
 })
-export class FileUploadComponent implements OnInit, OnDestroy {
+export class FileUploadComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() fileLimit = 50;
 
   private fileTypes: string = "file_extension|";
@@ -52,11 +53,9 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   set uploadedFiles(value) {
     if (value && this._uploadedFiles != value) {
       this._uploadedFiles = value;
-      if (value.length > 0) this.fileUploadControl.setValue(value);
-      else {
-        console.log(this.fileUploadControl.value);
-        this.fileUploadControl.clear();
-      }
+      // if (value.length == 0) {
+      //   this.hasValidFiles = false;
+      // }
     }
   }
 
@@ -64,11 +63,13 @@ export class FileUploadComponent implements OnInit, OnDestroy {
     return this._uploadedFiles;
   }
 
+  hasValidFiles = false;
+
   fileUploadControl: FileUploadControl = new FileUploadControl({
     accept: [this.fileTypes],
+    listVisible: true,
   });
 
-  hasValidFiles = false;
   private subscription: Subscription;
   public readonly uploadedFile: BehaviorSubject<any> = new BehaviorSubject(
     null
@@ -87,15 +88,26 @@ export class FileUploadComponent implements OnInit, OnDestroy {
       FileUploadValidators.accept([this.fileTypes]),
       FileUploadValidators.filesLimit(this.fileLimit),
     ]);
-    console.log(this.fileLimit);
+  }
+
+  ngAfterViewInit(): void {
     this.subscription = this.fileUploadControl.valueChanges.subscribe(
       (values: Array<File>) => {
         console.log(values);
         if (values && values.length > 0) {
           this.hasValidFiles = true;
+          this.getFiles.emit([...this.fileUploadControl.value]);
         } else this.hasValidFiles = false;
-        this.getFiles.emit(this.fileUploadControl.value);
       }
+    );
+  }
+  removeFile(file) {
+    this.fileUploadControl.removeFile(file);
+  }
+
+  clear() {
+    this.fileUploadControl.value.forEach((x) =>
+      this.fileUploadControl.removeFile(x)
     );
   }
 }

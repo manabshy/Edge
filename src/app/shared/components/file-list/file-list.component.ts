@@ -1,3 +1,4 @@
+import { FileUploadComponent } from "./../file-upload/file-upload.component";
 import {
   FileService,
   FileTypeEnum,
@@ -9,6 +10,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from "@angular/core";
 import moment from "moment";
 import { MessageService, PrimeNGConfig } from "primeng/api";
@@ -20,13 +22,19 @@ import { MessageService, PrimeNGConfig } from "primeng/api";
 export class FileListComponent implements OnInit, OnDestroy {
   @Input() header;
   @Input() fileLimit = 50;
+  @Input() type: string;
   @Input() fileType: FileTypeEnum;
-  @Input() files: any[];
+  files: any[];
   // @Output() deleteFile: EventEmitter<any> = new EventEmitter();
-  @Output() getFileNames: EventEmitter<any[]> = new EventEmitter();
+  @Output() getFileNames: EventEmitter<{
+    file: any[];
+    type: string;
+  }> = new EventEmitter();
   openFileDialog = false;
   tmpFiles: File[];
   fileNames: string[];
+
+  @ViewChild(FileUploadComponent) fileUploadComponent: FileUploadComponent;
 
   constructor(
     private fileService: FileService,
@@ -48,9 +56,10 @@ export class FileListComponent implements OnInit, OnDestroy {
       this.fileService.saveFileTemp(formData).subscribe(
         (data) => {
           if (data && data.files) {
-            this.getFileNames.emit(data.files);
-            this.openFileDialog = false;
+            this.getFileNames.emit({ file: [...data.files], type: this.type });
             this.files = [...this.tmpFiles];
+            this.fileUploadClear();
+            this.openFileDialog = false;
           } else {
             this.tmpFiles = [];
             this.showWarningMessage("Adding file gets error, please try again");
@@ -70,6 +79,10 @@ export class FileListComponent implements OnInit, OnDestroy {
     }
   }
 
+  fileUploadClear() {
+    this.fileUploadComponent.clear();
+  }
+
   showWarningMessage(message) {
     this.messageService.add({
       severity: "warn",
@@ -78,11 +91,18 @@ export class FileListComponent implements OnInit, OnDestroy {
     });
   }
 
+  cancel() {
+    this.fileUploadClear();
+    this.openFileDialog = false;
+  }
+
   ngOnDestroy(): void {}
 
   deleteFile(fileName: string) {
     if (this.files && this.files.length > 0) {
       this.files = this.files.filter((x) => x.name != fileName);
+      // let file = this.files.find((c) => c.name == fileName);
+      // if (file) this.fileUploadComponent.removeFile(file);
     }
   }
 

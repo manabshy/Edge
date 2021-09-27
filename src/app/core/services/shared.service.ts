@@ -267,7 +267,8 @@ export class SharedService {
     group: FormGroup,
     fakeTouched: boolean,
     scrollToError = false
-  ) {
+  ): boolean {
+    let validationControl = true;
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
@@ -279,6 +280,7 @@ export class SharedService {
         for (const errorKey in control.errors) {
           if (errorKey) {
             FormErrors[key] += messages ? messages[errorKey] + "\n" : "";
+            validationControl = false;
           }
         }
       }
@@ -289,6 +291,7 @@ export class SharedService {
     if (scrollToError) {
       this.scrollToFirstInvalidField();
     }
+    return validationControl;
   }
 
   resetForm(form: FormGroup) {
