@@ -15,17 +15,19 @@
         <th>Short Let</th>
       </tr>
     </thead>
+
+    <!-- [routerLink]="['detail', val?.valuationEventId, 'edit']"
+    (click)="$event.stopPropagation()" -->
     <tbody>
-      <tr *ngFor="let val of valuations" 
-        (click)="navigateTo(['detail', val?.valuationEventId, 'edit'])"
-        data-cy="valuationList" class="cursor-pointer">
+      <tr *ngFor="let val of valuations" (click)="navigateTo(val)" data-cy="valuationList" class="cursor-pointer">
         <td data-title="Status">
           <span class="cell-content">{{val?.valuationStatusLabel}}</span>
         </td>
         <td data-title="Address">
-          <span class="cell-content"><a class="underline table-link"
-              [routerLink]="['detail', val?.valuationEventId, 'edit']"
-              (click)="$event.stopPropagation()">{{val?.property?.address | formatAddress}}</a></span>
+          <span class="cell-content">
+            <a class="underline table-link" (click)="navigateTo(val);$event.stopPropagation()">{{val?.property?.address
+              |
+              formatAddress}}</a></span>
         </td>
         <td data-title="Owner">
           <span class="cell-content">{{val?.propertyOwner?.contactNames || '-'}}</span>

@@ -8,6 +8,9 @@ import {
   Valuer,
   ValuersAvailabilityOption,
   CalendarAvailibility,
+  CancelValuation,
+  ValuationStatusEnum,
+  ValuationCancellationReasons,
 } from "./valuation";
 import { AppConstants } from "src/app/core/shared/app-constants";
 import { map, tap } from "rxjs/operators";
@@ -61,7 +64,15 @@ export class ValuationService {
   getValuation(valuationId: number): Observable<Valuation | any> {
     const url = `${AppConstants.baseValuationUrl}/${valuationId}`;
     return this.http.get<any>(url).pipe(
-      map((response) => response.result)
+      map((response) => {
+        return {
+          ...response.result,
+          valuationStatusDescription:
+            ValuationStatusEnum[response.result.valuationStatus],
+          cancellationReason:
+            ValuationCancellationReasons[response.result.cancellationTypeId],
+        };
+      })
       // tap(data => console.log('valuation', JSON.stringify(data)))
     );
   }
@@ -76,6 +87,14 @@ export class ValuationService {
     return this.http.post<any>(url, valuation).pipe(
       map((response) => response.result),
       tap((data) => console.log("added valuation", JSON.stringify(data)))
+    );
+  }
+
+  cancelValuation(cancelVm: CancelValuation): Observable<any> {
+    const url = `${AppConstants.baseValuationUrl}/${cancelVm.valuationEventId}/cancel`;
+    return this.http.put<any>(url, cancelVm).pipe(
+      map((response) => response.result),
+      tap((data) => console.log("cancel valuation", JSON.stringify(data)))
     );
   }
 

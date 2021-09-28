@@ -165,6 +165,8 @@ export const FormErrors = {
   userEnteredOwner: "",
   leaseExpiryDate: "",
   ownerConfirmed: "",
+  cancelTypeId: "",
+  cancelReason: "",
 };
 
 export const ValidationMessages = {
@@ -401,6 +403,12 @@ export const ValidationMessages = {
   },
   ownerConfirmed: {
     required: "Legal owner selection is required",
+  },
+  cancelTypeId: {
+    required: "Cancel reason selection is required",
+  },
+  cancelReason: {
+    required: "Description is required",
   },
 };
 
