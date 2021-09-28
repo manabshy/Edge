@@ -31,7 +31,7 @@
   [draggable]="false" class="modal--small modal--hasFooter">
   <div style="min-width:500px;min-height:400px">
     <div>
-      <app-file-upload [uploadedFiles]="files" [fileLimit]="fileLimit" [fileType]="fileType"
+      <app-file-upload [uploadedFiles]="files" [isMultiple]="isMultiple" [fileType]="fileType"
         (getFiles)="getFiles($event)">
       </app-file-upload>
     </div>

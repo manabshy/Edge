@@ -1,4 +1,4 @@
-<file-upload class="h-80" [control]="fileUploadControl">
+<file-upload class="h-80" [control]="fileUploadControl" [multiple]="isMultiple" [accept]="fileTypes">
   <ng-template let-isFileDragDropAvailable="isFileDragDropAvailable" #placeholder>
     <file-upload-drop-zone class="flex justify-end">
       <span>

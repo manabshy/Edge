@@ -688,7 +688,7 @@
                     d="M11.9 48.4c-4.1-5-6.3-11.5-5.8-18.6C7.1 17.6 16.8 7.5 29 6.2 44.7 4.4 58 16.7 58 32c0 6.2-2.2 11.8-5.8 16.3 -1 1.2-0.8 2.9 0.3 4l0 0c1.3 1.3 3.4 1.1 4.5-0.3 4.8-6 7.5-13.8 7-22.2C62.9 14 50.1 1.2 34.3 0.1 15.6-1.2 0 13.6 0 32c0 7.7 2.7 14.8 7.3 20.3 1.1 1.3 3 1.4 4.2 0.2l0.2-0.2C12.8 51.2 12.8 49.6 11.9 48.4z">
                   </path>
                 </svg>Save Valuation</button>
-              <button *ngIf="canInstruct" type="button" class="btn btn--info" (click)="startInstruction()"
+              <button *ngIf="canInstruct" type="button" class="btn btn--positive" (click)="startInstruction()"
                 data-cy="startInstruction">Instruct</button>
             </footer>
           </ng-container>
@@ -725,6 +725,12 @@
   <app-contactgroup-finder [showCreateNewCompanyContact]="false" [isSinglePerson]="true"
     (selectedContactGroup)="getSelectedAdminContact($event)" (isCreatingNewGroup)="createNewLastKnownOwner()">
   </app-contactgroup-finder>
+</p-dialog>
+
+<!-- Cancel valuation Modal -->
+<p-dialog header="Cancel Valuation" [(visible)]="isCancelValuationVisible" [modal]="true" [draggable]="false"
+  class="modal--small modal--hasFooter">
+
 </p-dialog>
 
 <!-- Property Finder Modal -->
@@ -1162,7 +1168,7 @@
       <div class="btn--container">
         <button type="button" class="btn btn--ghost"
           (click)="isInstructVisible = false; cancelInstruction()">Cancel</button>
-        <button type="submit" class="btn btn--info"
+        <button type="submit" class="btn btn--positive"
           [disabled]="!instructionForm.get('instructLet').value && !instructionForm.get('instructSale').value ? true : null"
           data-cy="saveInstruction">Instruct</button>
       </div>

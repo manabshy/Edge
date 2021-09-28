@@ -71,6 +71,7 @@ export interface DropdownListInfo {
   section21Statuses: InfoDetail[];
   associations: InfoDetail[];
   propertyFloors: InfoDetail[];
+  valuationCancellationReasons: InfoDetail[];
 }
 
 export interface InfoDetail extends LeadTypeInfo {

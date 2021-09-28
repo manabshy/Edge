@@ -27,8 +27,7 @@ import { Subscription } from "rxjs";
 })
 export class HeaderComponent
   extends BaseComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   currentStaffMember: StaffMember;
   navTitle: string;
   headerLabel: string;
@@ -80,22 +79,24 @@ export class HeaderComponent
 
     this.primengConfig.ripple = true;
 
-    this.openContactGroupSubscription =
-      this.sharedService.openContactGroupChanged.subscribe((value) => {
+    this.openContactGroupSubscription = this.sharedService.openContactGroupChanged.subscribe(
+      (value) => {
         if (!value) {
           this.filteredItems = [
             ...this.items.filter((x) => x.id !== "addAdmin"),
           ];
         }
-      });
-    this.openContactGroupSubscription =
-      this.sharedService.removeContactGroupChanged.subscribe((value) => {
+      }
+    );
+    this.openContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe(
+      (value) => {
         if (!value) {
           this.filteredItems = [
             ...this.items.filter((x) => x.id !== "removeAdmin"),
           ];
         }
-      });
+      }
+    );
   }
 
   setItems(navTitle: string) {
@@ -143,6 +144,14 @@ export class HeaderComponent
           icon: "pi pi-chart-bar",
           command: () => {
             this.sharedService.openContactGroupChanged.next(true);
+          },
+        },
+        {
+          id: "cancelValuation",
+          label: "Cancel Valuation",
+          icon: "pi pi-ban",
+          command: () => {
+            this.sharedService.cancelValuationChanged.next(true);
           },
         },
       ];

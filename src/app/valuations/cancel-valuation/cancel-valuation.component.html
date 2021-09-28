@@ -1,0 +1,13 @@
+<div>
+  <fieldset>
+    <label for="reasonId">What is the reason for cancelling</label>
+    <span class="select">
+      <select name="reasonId" id="reasonId" [(ngModel)]="reason">
+        <option selected value="0"></option>
+        <option *ngFor="let reason of reasons" [value]='reason.id'>
+          {{propertyFloor.value}}
+        </option>
+      </select>
+    </span>
+  </fieldset>
+</div>

@@ -22,7 +22,7 @@ import { EdgeFile } from "../../models/edgeFile";
 })
 export class FileListComponent implements OnInit, OnDestroy {
   @Input() header;
-  @Input() fileLimit = 50;
+  @Input() isMultiple;
   @Input() type: string;
   @Input() fileType: FileTypeEnum;
 
@@ -45,7 +45,7 @@ export class FileListComponent implements OnInit, OnDestroy {
   }
 
   files: any[] = [];
-  // @Output() deleteFile: EventEmitter<any> = new EventEmitter();
+  //@Output() deleteFileFromL: EventEmitter<any> = new EventEmitter();
   @Output() getFileNames: EventEmitter<{
     file: any[];
     type: string;
@@ -124,6 +124,7 @@ export class FileListComponent implements OnInit, OnDestroy {
       this.edgeFileList = this.edgeFileList.filter(
         (x) => x.fileName != fileName
       );
+      this.getFileNames.emit({ file: [...this.edgeFileList], type: this.type });
       // let file = this.files.find((c) => c.name == fileName);
       // if (file) this.fileUploadComponent.removeFile(file);
     }
