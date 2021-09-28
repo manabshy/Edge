@@ -143,6 +143,11 @@ export interface ValuationBooking {
   totalHours?: number;
 }
 
+export interface CancelValuation {
+  typeId?: number;
+  reason?: string;
+}
+
 export interface ValuationStatus {
   id: number;
   value: string;

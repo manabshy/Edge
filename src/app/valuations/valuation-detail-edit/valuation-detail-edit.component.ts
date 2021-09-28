@@ -231,6 +231,7 @@ export class ValuationDetailEditComponent
   person: Person;
   destroy = new Subject();
   showStudioLabel = false;
+  isCancelValuationVisible = false;
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -575,6 +576,14 @@ export class ValuationDetailEditComponent
       (value) => {
         if (value) {
           this.removeAdminContact();
+        }
+      }
+    );
+
+    this.openContactGroupSubscription = this.sharedService.cancelValuationChanged.subscribe(
+      (value) => {
+        if (value) {
+          this.isCancelValuationVisible = value;
         }
       }
     );
@@ -2505,7 +2514,8 @@ export class ValuationDetailEditComponent
     this.setValuersValidators();
     this.sharedService.logValidationErrors(this.valuationForm, true);
 
-    this.valuationService.valuationValidationSubject.next(true);
+    // validation of land register
+    //this.valuationService.valuationValidationSubject.next(true);
 
     if (this.formErrors["declarableInterest"]) {
       this.accordionIndex = 4;
@@ -2526,11 +2536,8 @@ export class ValuationDetailEditComponent
       });
       return;
     }
-
-    if (
-      this.valuationForm.valid &&
-      this.valuationService.validationControlBs.getValue()
-    ) {
+    //this.valuationService.validationControlBs.getValue()
+    if (this.valuationForm.valid) {
       this.addOrUpdateValuation();
       // if (
       //   this.valuationForm.dirty ||

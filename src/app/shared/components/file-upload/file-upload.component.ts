@@ -21,9 +21,18 @@ import { FileTypeEnum } from "src/app/core/services/file.service";
   styleUrls: ["./file-upload.component.scss"],
 })
 export class FileUploadComponent implements OnInit, OnDestroy, AfterViewInit {
-  @Input() fileLimit = 50;
+  private _isMultiple;
+  set isMultiple(value) {
+    if (value && this._isMultiple != value) {
+      this._isMultiple = value;
+    }
+  }
 
-  private fileTypes: string = "file_extension|";
+  @Input() get isMultiple() {
+    return this._isMultiple;
+  }
+
+  public fileTypes: string;
 
   private _fileType: FileTypeEnum;
   set fileType(value: FileTypeEnum) {
@@ -31,12 +40,12 @@ export class FileUploadComponent implements OnInit, OnDestroy, AfterViewInit {
       this._fileType = value;
       switch (value) {
         case FileTypeEnum.OnlyDocument:
-          this.fileTypes = this.fileTypes.concat(".pdf|.doc|.docx");
+          this.fileTypes = "file_extension|" + ".pdf|.doc|.docx";
           break;
         case FileTypeEnum.OnlyImage:
-          this.fileTypes = this.fileTypes.concat("image/*|media_type");
+          this.fileTypes = "file_extension|" + "image/*|media_type";
         case FileTypeEnum.ImageAndDocument:
-          this.fileTypes = this.fileTypes.concat(".pdf|.doc|.docx|.png|.jpeg");
+          this.fileTypes = "file_extension|" + ".pdf|.doc|.docx|.png|.jpeg";
         case FileTypeEnum.All:
           this.fileTypes = "file_extension|.pdf|.doc|.docx|image/*|media_type";
         default:
@@ -53,9 +62,6 @@ export class FileUploadComponent implements OnInit, OnDestroy, AfterViewInit {
   set uploadedFiles(value) {
     if (value && this._uploadedFiles != value) {
       this._uploadedFiles = value;
-      // if (value.length == 0) {
-      //   this.hasValidFiles = false;
-      // }
     }
   }
 
@@ -65,10 +71,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, AfterViewInit {
 
   hasValidFiles = false;
 
-  fileUploadControl: FileUploadControl = new FileUploadControl({
-    accept: [this.fileTypes],
-    listVisible: true,
-  });
+  fileUploadControl: FileUploadControl = new FileUploadControl();
 
   private subscription: Subscription;
   public readonly uploadedFile: BehaviorSubject<any> = new BehaviorSubject(
@@ -79,16 +82,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor() {}
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
-  ngOnInit(): void {
-    this.fileUploadControl.setValidators([
-      FileUploadValidators.accept([this.fileTypes]),
-      FileUploadValidators.filesLimit(this.fileLimit),
-    ]);
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this.subscription = this.fileUploadControl.valueChanges.subscribe(
@@ -109,5 +103,9 @@ export class FileUploadComponent implements OnInit, OnDestroy, AfterViewInit {
     this.fileUploadControl.value.forEach((x) =>
       this.fileUploadControl.removeFile(x)
     );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

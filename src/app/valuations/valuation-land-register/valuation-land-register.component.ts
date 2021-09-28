@@ -82,6 +82,7 @@ export class ValuationsLandRegisterComponent implements OnInit, OnDestroy {
   showFileUploadForLeaseError = false;
   showFileUploadForDeedError = false;
   showFileUploadForNameChangeError = false;
+  controlValidation = false;
 
   constructor(
     private fb: FormBuilder,
@@ -118,15 +119,17 @@ export class ValuationsLandRegisterComponent implements OnInit, OnDestroy {
       this.deedLandReg.userEnteredOwner = data.userEnteredOwner;
       this.deedLandReg.ownerConfirmed = data.ownerConfirmed;
       this.leaseLandReg.leaseExpiryDate = data.leaseExpiryDate;
-      this._valuationService.validationControlBs.next(
-        this._sharedService.logValidationErrors(this.landRegistryForm, true)
-      );
+      if (this.controlValidation)
+        this._valuationService.validationControlBs.next(
+          this._sharedService.logValidationErrors(this.landRegistryForm, true)
+        );
     });
 
     this.subscription = this._valuationService.valuationValidation$.subscribe(
       (data) => {
         if (data === true) {
           this.controlFiles();
+          this.controlValidation = data;
           this._valuationService.validationControlBs.next(
             this._sharedService.logValidationErrors(
               this.landRegistryForm,
@@ -142,18 +145,20 @@ export class ValuationsLandRegisterComponent implements OnInit, OnDestroy {
   }
 
   controlFiles() {
-    if (!(this.deedLandReg.files && this.deedLandReg.files.length > 0)) {
-      this.showFileUploadForDeedError = true;
-    } else this.showFileUploadForDeedError = false;
-    if (!(this.leaseLandReg.files && this.leaseLandReg.files.length > 0)) {
-      this.showFileUploadForLeaseError = true;
-    } else this.showFileUploadForLeaseError = false;
-    if (
-      this.deedLandReg.ownerConfirmed == 3 &&
-      !(this.nameChangeReg.files && this.nameChangeReg.files.length > 0)
-    ) {
-      this.showFileUploadForNameChangeError = true;
-    } else this.showFileUploadForNameChangeError = false;
+    if (this.controlValidation) {
+      if (!(this.deedLandReg.files && this.deedLandReg.files.length > 0)) {
+        this.showFileUploadForDeedError = true;
+      } else this.showFileUploadForDeedError = false;
+      if (!(this.leaseLandReg.files && this.leaseLandReg.files.length > 0)) {
+        this.showFileUploadForLeaseError = true;
+      } else this.showFileUploadForLeaseError = false;
+      if (
+        this.deedLandReg.ownerConfirmed == 3 &&
+        !(this.nameChangeReg.files && this.nameChangeReg.files.length > 0)
+      ) {
+        this.showFileUploadForNameChangeError = true;
+      } else this.showFileUploadForNameChangeError = false;
+    }
   }
 
   getFileNames(fileObj: any) {
@@ -162,11 +167,11 @@ export class ValuationsLandRegisterComponent implements OnInit, OnDestroy {
         this.leaseLandReg.files = [...fileObj.file];
       } else if (fileObj.type == "D") {
         this.deedLandReg.files = [...fileObj.file];
-      } else if (fileObj.type == "N") {
+      } else if (fileObj.type == "P") {
         this.nameChangeReg.files = [...fileObj.file];
       }
     }
-    this.afterFileOperation.emit();
+    //this.afterFileOperation.emit();
     this.controlFiles();
   }
 }
