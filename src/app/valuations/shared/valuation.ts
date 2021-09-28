@@ -1,4 +1,4 @@
-import { Signer } from "src/app/contactgroups/shared/contact-group";
+import { Signer } from "src/app/contact-groups/shared/contact-group";
 import { DiaryEvent } from "src/app/diary/shared/diary";
 import { BaseProperty } from "src/app/shared/models/base-property";
 import { BaseRequestOption } from "src/app/shared/models/base-request-option";

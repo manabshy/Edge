@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BasicContactGroup, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { BasicContactGroup, ContactGroup } from 'src/app/contact-groups/shared/contact-group';
 
 @Component({
-  selector: 'app-shared-contactgroup-list',
-  templateUrl: './shared-contactgroup-list.component.html',
-  styleUrls: ['./shared-contactgroup-list.component.scss']
+  selector: 'app-shared-contact-group-list',
+  templateUrl: './shared-contact-group-list.component.html',
+  styleUrls: ['./shared-contact-group-list.component.scss']
 })
 export class SharedContactgroupListComponent implements OnInit {
   @Input() contactGroups: BasicContactGroup[];

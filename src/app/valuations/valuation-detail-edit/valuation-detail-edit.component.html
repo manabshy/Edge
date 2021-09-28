@@ -1,9 +1,9 @@
 <div class="row">
   <div class="row__item row__item--aside">
     <div class="wrapper--sticky">
-      <app-contactgroup-card class="appWrapper" [(adminContact)]="adminContact"
+      <app-contact-group-card class="appWrapper" [(adminContact)]="adminContact"
         [contactGroup]="adminContactGroup? adminContactGroup: contactGroup" *ngIf="contactGroup">
-      </app-contactgroup-card>
+      </app-contact-group-card>
       <app-sidenav-item class="appWrapper" [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals"
         (selectedItem)="getSelectedSideNavItem($event)">
       </app-sidenav-item>
@@ -638,11 +638,7 @@
               </p-accordionTab>
 
               <p-accordionTab header="Compliance Checks" [(selected)]="activeState[9]">
-                <app-compliance-checks-shell
-                  [contacts]="complianceChecksTemp.contacts"
-                  [checksAreValid]="complianceChecksTemp.checksAreValid"
-                  [checkType]="complianceChecksTemp.checkType"
-                  [message]="complianceChecksTemp.message" >
+                <app-compliance-checks-shell>
                 </app-compliance-checks-shell>
               </p-accordionTab>
 
@@ -724,16 +720,16 @@
 <!-- Contactgroup Finder Modal -->
 <p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false"
   class="modal--medium modal--hasFooter">
-  <app-contactgroup-finder (selectedContactGroup)="getSelectedOwner($event)"
-    (isCreatingNewGroup)="createNewLastKnownOwner()"></app-contactgroup-finder>
+  <app-contact-group-finder (selectedContactGroup)="getSelectedOwner($event)"
+    (isCreatingNewGroup)="createNewLastKnownOwner()"></app-contact-group-finder>
 </p-dialog>
 
 <!-- Contactgroup Finder for admin contact Modal -->
 <p-dialog header="Admin Contact" [(visible)]="isAdminContactVisible" [modal]="true" [draggable]="false"
   class="modal--medium modal--hasFooter">
-  <app-contactgroup-finder [showCreateNewCompanyContact]="false" [isSinglePerson]="true"
+  <app-contact-group-finder [showCreateNewCompanyContact]="false" [isSinglePerson]="true"
     (selectedContactGroup)="getSelectedAdminContact($event)" (isCreatingNewGroup)="createNewLastKnownOwner()">
-  </app-contactgroup-finder>
+  </app-contact-group-finder>
 </p-dialog>
 
 <!-- Property Finder Modal -->

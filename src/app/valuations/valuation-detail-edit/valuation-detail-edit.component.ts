@@ -25,8 +25,8 @@ import {
   ContactNote,
   PersonSummaryFigures,
   Signer,
-} from "src/app/contactgroups/shared/contact-group";
-import { ContactGroupsService } from "src/app/contactgroups/shared/contact-groups.service";
+} from "src/app/contact-groups/shared/contact-group";
+import { ContactGroupsService } from "src/app/contact-groups/shared/contact-groups.service";
 import {
   DropdownListInfo,
   InfoDetail,
@@ -231,54 +231,7 @@ export class ValuationDetailEditComponent
   person: Person;
   destroy = new Subject();
   showStudioLabel = false;
-  documents = {
-    idDoc: {
-      documentType: 'ID',
-      files: [{
-        id:0,
-        label: 'ID',
-        uploadDate: '07/04/21',
-        expiryDate: '12/11/26'
-      }],
-    },
-    proofOfAddressDoc: {
-      documentType: 'proof-of-address',
-      label: 'Upload Proof Of Address',
-      files: [{
-        id:0,
-        label: 'Proof of Address',
-        uploadDate: '20/09/21'
-      }]
-    },
-    reportDocs: {
-      documentType: 'report',
-      label: 'Upload Report',
-      files: [{
-        id:0,
-        label: 'Report',
-        valid: true,
-        uploadDate: '20/09/21'
-      }]
-    },
-    additionalDocs: {
-      documentType: 'additional-documents',
-      label: 'Upload Additional Documents',
-      files: [{
-        id:0,
-        label: 'Document',
-        uploadDate: '01/09/21'
-      }]
-    }
-  }
-  complianceChecksTemp = {
-    checksAreValid: false,
-    checkType: 'KYC',
-    message: {
-      type: 'warn',
-      text: ['KYC not yet completed', 'SmartSearch added: 7th Sep 2020 (11:45)']
-    },
-    contacts: []
-  }
+  
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -944,7 +897,6 @@ export class ValuationDetailEditComponent
     // this.valuers = result.valuers;
     this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
       this.contactGroup = result;
-      this.setContactsForCompliance()
       this.valuationService.contactGroupBs.next(this.contactGroup);
       this.getSearchedPersonSummaryInfo(this.contactGroup);
     });
@@ -961,17 +913,6 @@ export class ValuationDetailEditComponent
       propertyTypeId: this.property.propertyTypeId,
       propertyFloorId: this.property["propertyFloorId"],
     });
-  }
-
-  setContactsForCompliance() :void {
-    this.complianceChecksTemp.contacts = this.contactGroup.contactPeople.map(contact => {
-      return {
-        name: contact.firstName + ' ' + contact.lastName,
-        pillLabel: contact.isMainPerson ? 'lead' : 'associated',
-        address: contact.address.addressLines ? contact.address.addressLines + ' ' + contact.address.postCode : '',
-        documents: this.documents
-      }
-    })
   }
 
   getContactGroup(contactGroupId: number) {

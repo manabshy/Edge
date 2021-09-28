@@ -3,7 +3,7 @@ import { SharedService } from '../../core/services/shared.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppConstants } from '../../core/shared/app-constants';
 import { Person } from '../models/person';
-import { Company } from 'src/app/contactgroups/shared/contact-group';
+import { Company } from 'src/app/contact-groups/shared/contact-group';
 import { Property } from 'src/app/property/shared/property';
 import { Address } from '../models/address';
 import { debounceTime } from 'rxjs/operators';

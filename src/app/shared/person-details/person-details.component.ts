@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { MarketingPreferences, Person, Referral } from '../models/person';
 import { Router } from '@angular/router';
-import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
+import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { ResultData } from '../result-data';

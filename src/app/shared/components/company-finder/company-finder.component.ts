@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, Renderer2, ViewChild, ElementRef, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControlName, FormControl } from '@angular/forms';
-import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
-import { Company, CompanyAutoCompleteResult } from 'src/app/contactgroups/shared/contact-group';
+import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
+import { Company, CompanyAutoCompleteResult } from 'src/app/contact-groups/shared/contact-group';
 import { debounceTime, distinctUntilChanged, switchMap, tap, catchError } from 'rxjs/operators';
 import { Observable, EMPTY } from 'rxjs';
 import { Router } from '@angular/router';

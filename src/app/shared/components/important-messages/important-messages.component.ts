@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ContactNote } from 'src/app/contactgroups/shared/contact-group';
+import { ContactNote } from 'src/app/contact-groups/shared/contact-group';
 
 @Component({
   selector: 'app-important-messages',
