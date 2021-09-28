@@ -60,6 +60,7 @@ import {
   ValuationStaffMembersCalanderEvents,
   ValuationBooking,
   ValuationStatuses,
+  CancelValuation,
 } from "../shared/valuation";
 import { ValuationService } from "../shared/valuation.service";
 import { Instruction } from "src/app/shared/models/instruction";
@@ -82,6 +83,7 @@ import { BasicEventRequest, DiaryProperty } from "src/app/diary/shared/diary";
 import { DiaryEventService } from "src/app/diary/shared/diary-event.service";
 import { SidenavService } from "src/app/core/services/sidenav.service";
 import { Person } from "src/app/shared/models/person";
+import moment from "moment";
 
 @Component({
   selector: "app-valuation-detail-edit",
@@ -232,6 +234,9 @@ export class ValuationDetailEditComponent
   destroy = new Subject();
   showStudioLabel = false;
   isCancelValuationVisible = false;
+  isCancelled = false;
+  cancelString: string = "";
+  cancelReasonString: string = "";
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -1161,9 +1166,23 @@ export class ValuationDetailEditComponent
           this.valuation.approxLeaseExpiryDate
             ? (this.showLeaseExpiryDate = true)
             : (this.showLeaseExpiryDate = false);
+
+          if (
+            this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
+          ) {
+            this.isCancelled = true;
+            this.cancelString =
+              "Cancelled " +
+              moment(data.cancelledDate).format("Do MMM YYYY (HH:mm)") +
+              " by " +
+              data.cancelledBy?.fullName;
+            this.cancelReasonString =
+              "Reason for cancellation: " + data.cancellationReason;
+          }
           if (
             this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
-            this.valuation.valuationStatus === ValuationStatusEnum.Valued
+            this.valuation.valuationStatus === ValuationStatusEnum.Valued ||
+            this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
           ) {
             this.isEditable = false;
           } else {
@@ -1269,6 +1288,13 @@ export class ValuationDetailEditComponent
       .catch((err) => {
         console.log("err: ", err);
       });
+  }
+
+  controlIsCancelled($event) {
+    if (this.isCancelled) {
+      $event.preventDefault();
+      return false;
+    }
   }
 
   getSearchedPersonSummaryInfo(contactGroup: ContactGroup) {
@@ -1720,6 +1746,15 @@ export class ValuationDetailEditComponent
           }
         });
     }
+  }
+
+  routeToValuationList() {
+    this.messageService.add({
+      severity: "success",
+      summary: "Valuation cancelled",
+      closable: false,
+    });
+    this.router.navigate(["/valuations-register"]);
   }
 
   private getValuationPropertyInfo(propertyId: number) {

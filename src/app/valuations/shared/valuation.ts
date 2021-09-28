@@ -1,3 +1,4 @@
+import { StaffMember } from "./../../shared/models/staff-member";
 import { Signer } from "src/app/contactgroups/shared/contact-group";
 import { DiaryEvent } from "src/app/diary/shared/diary";
 import { BaseProperty } from "src/app/shared/models/base-property";
@@ -65,6 +66,9 @@ export interface Valuation extends ValuationInfo {
   valuationFiles?: ValuationFile[];
   valuationType?: ValuationTypeEnum;
   dateRequestSent?: Date;
+  cancellationReason?: string;
+  cancelledBy?: StaffMember;
+  cancelledDate?: Date;
 }
 
 export interface ValuationFile {
@@ -144,6 +148,7 @@ export interface ValuationBooking {
 }
 
 export interface CancelValuation {
+  valuationEventId?: number;
   typeId?: number;
   reason?: string;
 }
@@ -168,10 +173,34 @@ export enum ValuationStatusEnum {
   Cancelled = 5,
 }
 
+export enum ValuationCancellationReasons {
+  Tenant_Refusing_Access = 1,
+  Gone_With_Another_Agent = 2,
+  No_Show_No_Contact = 3,
+  Change_of_Circumstance = 4,
+  Agent_Not_Allowing_Access = 5,
+  Did_Not_Want_Sales_Let_Val = 6,
+  Other = 7,
+  Booked = 2,
+  Valued = 3,
+  Instructed = 4,
+  Cancelled = 5,
+}
+
 export enum ValuationTypeEnum {
   None = 0,
   Sales = 1,
   Lettings = 2,
+}
+
+export enum ValuationActions {
+  addAdmin = 0,
+  removeAdmin = 1,
+  salesTermsofBusiness = 2,
+  lettingsTermsofBusiness = 3,
+  landLordQuestionnaire = 4,
+  vendorQuestionnaire = 5,
+  cancelValuation = 6,
 }
 
 export function getValuationStatuses() {
