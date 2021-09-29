@@ -21,7 +21,10 @@ import {
 import { FileTypeEnum } from "src/app/core/services/file.service";
 import { Observable, Subscription } from "rxjs";
 import { SharedService } from "src/app/core/services/shared.service";
-import { ContactGroup } from "src/app/contactgroups/shared/contact-group";
+import {
+  ContactGroup,
+  ContactType,
+} from "src/app/contactgroups/shared/contact-group";
 
 @Component({
   selector: "app-valuation-land-register",
@@ -159,16 +162,23 @@ export class ValuationsLandRegisterComponent
 
     this._valuationService.contactGroupBs.subscribe((data) => {
       let contactGroup = data;
-      if (contactGroup && contactGroup.contactPeople) {
-        let contactListExceptAdmin = contactGroup.contactPeople.filter(
-          (contact) => !contact.isAdminContact
-        );
-        this.contactNamesQuestion = "Is";
-        this.lengthOfContacts = contactListExceptAdmin.length;
-        if (this.lengthOfContacts > 1) this.contactNamesQuestion = "Are";
-        contactListExceptAdmin.forEach((x) => {
-          this.contactNamesQuestion += " " + x.firstName + " " + x.lastName;
-        });
+      if (contactGroup) {
+        this.contactNamesQuestion = "Are";
+        if (
+          contactGroup.contactType != ContactType.CompanyContact &&
+          contactGroup.contactPeople
+        ) {
+          let contactListExceptAdmin = contactGroup.contactPeople.filter(
+            (contact) => !contact.isAdminContact
+          );
+          this.lengthOfContacts = contactListExceptAdmin.length;
+          if (this.lengthOfContacts <= 1) this.contactNamesQuestion = "Is";
+          contactListExceptAdmin.forEach((x) => {
+            this.contactNamesQuestion += " " + x.firstName + " " + x.lastName;
+          });
+        } else if (contactGroup.companyName) {
+          this.contactNamesQuestion += " " + contactGroup.companyName;
+        }
       }
     });
   }
