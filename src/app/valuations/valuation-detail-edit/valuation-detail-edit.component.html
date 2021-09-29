@@ -10,9 +10,11 @@
         </app-sidenav-item>
         <div class="card" *ngIf="property">
           <div class="card__header">
-            Status <span class="pill pill--negative flexRight">{{valuation?.valuationStatusDescription}}</span>
+            Status <span class="pill flexRight"
+              [ngClass]="{'pill--negative':valuation.valuationStatus == 5,'pill--positive':valuation.valuationStatus != 5}">
+              {{valuation?.valuationStatusDescription}}</span>
           </div>
-          <div class="card__body">
+          <div class=" card__body">
             <ol class="timeline timeline--condensed">
               <li *ngFor="let item of statuses index as i">
                 <a (click)="toggleAccordion(i)">{{item?.name|toPascalCase}}</a>
