@@ -1,3 +1,4 @@
+import { ValuationCancellationReasons } from "./../shared/valuation";
 import {
   Component,
   OnInit,
@@ -1177,7 +1178,10 @@ export class ValuationDetailEditComponent
               " by " +
               data.cancelledBy?.fullName;
             this.cancelReasonString =
-              "Reason for cancellation: " + data.cancellationReason;
+              "Reason for cancellation: " +
+              (data.cancellationTypeId == ValuationCancellationReasons.Other
+                ? data.cancellationReason
+                : ValuationCancellationReasons[data.cancellationTypeId]);
           }
           if (
             this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||

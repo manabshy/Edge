@@ -69,6 +69,7 @@ export interface Valuation extends ValuationInfo {
   cancellationReason?: string;
   cancelledBy?: StaffMember;
   cancelledDate?: Date;
+  cancellationTypeId?: number;
 }
 
 export interface ValuationFile {

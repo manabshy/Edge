@@ -69,8 +69,6 @@ export class ValuationService {
           ...response.result,
           valuationStatusDescription:
             ValuationStatusEnum[response.result.valuationStatus],
-          cancellationReason:
-            ValuationCancellationReasons[response.result.cancellationTypeId],
         };
       })
       // tap(data => console.log('valuation', JSON.stringify(data)))
