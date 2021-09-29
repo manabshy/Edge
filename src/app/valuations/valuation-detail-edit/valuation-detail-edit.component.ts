@@ -906,7 +906,7 @@ export class ValuationDetailEditComponent
     this.valuation.property = { ...this.property };
     this.valuation.officeId = this.property.officeId;
     // this.valuers = result.valuers;
-    this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
+    this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
       this.contactGroup = result;
       this.valuationService.contactGroupBs.next(this.contactGroup);
       this.getSearchedPersonSummaryInfo(this.contactGroup);
@@ -2187,7 +2187,7 @@ export class ValuationDetailEditComponent
   }
 
   onTenureChange(tenureId: number) {
-    if (+tenureId === 3) {
+    if (+tenureId === 3 || +tenureId === 2) {
       this.showLeaseExpiryDate = true;
     } else {
       this.showLeaseExpiryDate = false;
@@ -2630,6 +2630,10 @@ export class ValuationDetailEditComponent
     valuation.otherFeatures = [];
     valuation.propertyFeature = [];
 
+    if (this.showLeaseExpiryDate) {
+      valuation.leaseLandReg = {};
+    }
+
     if (valuation.isNewBuild)
       valuation.otherFeatures.push(OtherFeatures.New_Build);
     if (valuation.isRetirementHome)
@@ -2970,7 +2974,7 @@ export class ValuationDetailEditComponent
     this.openContactGroupSubscription.unsubscribe();
     this.propertySubsription.unsubscribe();
     this.contactGroupSubscription.unsubscribe();
-    this.storage.delete(this.mainPersonId.toString()).subscribe();
+    this.storage.delete(this.mainPersonId?.toString()).subscribe();
     this.destroy.unsubscribe();
   }
 }

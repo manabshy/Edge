@@ -68,7 +68,7 @@
           </div>
         </div>
 
-        <div class="grid grid--50 grid--dividerLeft">
+        <div class="grid grid--50 grid--dividerLeft" *ngIf="showLeaseExpiryDate">
           <div class="flex flex-col">
             <div>
               <fieldset [ngClass]="{'invalid': (showFileUploadForLeaseError)}">
