@@ -92,7 +92,7 @@ export class CancelValuationComponent extends BaseComponent implements OnInit {
   }
 
   cancelOperation() {
-    this.sharedService.cancelValuationChanged.next(false);
+    this.sharedService.cancelValuationOperationChanged.next(false);
   }
 
   controlForm() {

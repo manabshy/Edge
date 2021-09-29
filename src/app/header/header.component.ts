@@ -157,7 +157,7 @@ export class HeaderComponent
           label: "Cancel Valuation",
           icon: "pi pi-ban",
           command: () => {
-            this.sharedService.cancelValuationChanged.next(true);
+            this.sharedService.cancelValuationOperationChanged.next(true);
           },
         },
       ];

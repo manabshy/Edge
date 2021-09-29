@@ -586,11 +586,9 @@ export class ValuationDetailEditComponent
       }
     );
 
-    this.openContactGroupSubscription = this.sharedService.cancelValuationChanged.subscribe(
+    this.openContactGroupSubscription = this.sharedService.cancelValuationOperationChanged.subscribe(
       (value) => {
-        if (value) {
-          this.isCancelValuationVisible = value;
-        }
+        this.isCancelValuationVisible = value;
       }
     );
 
@@ -1758,6 +1756,7 @@ export class ValuationDetailEditComponent
       summary: "Valuation cancelled",
       closable: false,
     });
+    this.valuationService.doValuationSearchBs.next(true);
     this.router.navigate(["/valuations-register"]);
   }
 
