@@ -1,7 +1,13 @@
 <div>
-  <p-messages severity="warn" *ngIf="!isValid">
+  <p-messages severity="warn" *ngIf="!(isValid$ | async)">
     <ng-template pTemplate>
-      <div data-cy="landRegisterValidationMessage">Land Registry not yet completed
+      <div data-cy="landRegisterInvalidMessage">Land Registry not yet completed
+      </div>
+    </ng-template>
+  </p-messages>
+  <p-messages severity="successful" *ngIf="(isValid$ | async)">
+    <ng-template pTemplate>
+      <div data-cy="landRegisterValidMessage">Land Registry completed
       </div>
     </ng-template>
   </p-messages>
@@ -28,7 +34,8 @@
           </div>
           <div class="mt-3">
             <fieldset [ngClass]="{'invalid': formErrors?.ownerConfirmed}">
-              <span class="font-black">Is/Are[Contact Group] the legal owner(s) on the title deed?</span>
+              <span class="font-black">{{contactNamesQuestion}} the legal owner{{lengthOfContacts>1?'s':''}} on the
+                title deed?</span>
               <span id="ownerConfirmed" class="mt-2 radio radio--inline">
                 <span>
                   <input class="p-2" type="radio" id="isLegalOwnerYes" value="1" name="ownerConfirmed"
