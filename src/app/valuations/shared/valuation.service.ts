@@ -31,6 +31,8 @@ export class ValuationService {
   valuationValidation$ = this.valuationValidationSubject.asObservable();
 
   validationControlBs = new BehaviorSubject(false);
+  landRegisterValid = new BehaviorSubject(false);
+  doValuationSearchBs = new BehaviorSubject(false);
 
   constructor(private http: HttpClient, private storage: StorageMap) {}
 

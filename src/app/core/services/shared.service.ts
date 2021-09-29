@@ -36,7 +36,7 @@ export class SharedService {
 
   openContactGroupChanged = new Subject<boolean>();
   removeContactGroupChanged = new Subject<boolean>();
-  cancelValuationChanged = new BehaviorSubject<boolean>(false);
+  cancelValuationOperationChanged = new BehaviorSubject<boolean>(false);
 
   constructor(
     private _location: Location,

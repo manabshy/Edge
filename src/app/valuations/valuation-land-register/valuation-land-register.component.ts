@@ -1,7 +1,9 @@
+import { first } from "rxjs/operators";
 import { ValuationService } from "./../shared/valuation.service";
 import { differenceInCalendarYears } from "date-fns";
 import { FormErrors } from "src/app/core/shared/app-constants";
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Input,
@@ -17,14 +19,16 @@ import {
   ValuationTypeEnum,
 } from "../shared/valuation";
 import { FileTypeEnum } from "src/app/core/services/file.service";
-import { Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { SharedService } from "src/app/core/services/shared.service";
+import { ContactGroup } from "src/app/contactgroups/shared/contact-group";
 
 @Component({
   selector: "app-valuation-land-register",
   templateUrl: "./valuation-land-register.component.html",
 })
-export class ValuationsLandRegisterComponent implements OnInit, OnDestroy {
+export class ValuationsLandRegisterComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   @Input() interestList: any[] = [];
   @Input() valuationStatus: number;
 
@@ -65,7 +69,7 @@ export class ValuationsLandRegisterComponent implements OnInit, OnDestroy {
   }
 
   @Output() afterFileOperation: EventEmitter<any> = new EventEmitter();
-  isValid: boolean = false;
+  isValid$: Observable<boolean> = this._valuationService.landRegisterValid;
   isTermOfBusinessSigned = false;
   lastEmailDate: Date = new Date();
   public get valuationType(): typeof ValuationTypeEnum {
@@ -83,6 +87,8 @@ export class ValuationsLandRegisterComponent implements OnInit, OnDestroy {
   showFileUploadForDeedError = false;
   showFileUploadForNameChangeError = false;
   controlValidation = false;
+  contactNamesQuestion = "";
+  lengthOfContacts: number = 1;
 
   constructor(
     private fb: FormBuilder,
@@ -105,7 +111,9 @@ export class ValuationsLandRegisterComponent implements OnInit, OnDestroy {
         Validators.required,
       ],
       leaseExpiryDate: [
-        new Date(this.leaseLandReg.leaseExpiryDate),
+        this.leaseLandReg.leaseExpiryDate
+          ? new Date(this.leaseLandReg.leaseExpiryDate)
+          : null,
         Validators.required,
       ],
     });
@@ -119,29 +127,54 @@ export class ValuationsLandRegisterComponent implements OnInit, OnDestroy {
       this.deedLandReg.userEnteredOwner = data.userEnteredOwner;
       this.deedLandReg.ownerConfirmed = data.ownerConfirmed;
       this.leaseLandReg.leaseExpiryDate = data.leaseExpiryDate;
-      if (this.controlValidation)
+      if (this.controlValidation) {
         this._valuationService.validationControlBs.next(
           this._sharedService.logValidationErrors(this.landRegistryForm, true)
         );
+        this.controlFiles();
+      }
     });
 
     this.subscription = this._valuationService.valuationValidation$.subscribe(
       (data) => {
+        this.controlValidation = data;
         if (data === true) {
           this.controlFiles();
-          this.controlValidation = data;
           this._valuationService.validationControlBs.next(
-            this._sharedService.logValidationErrors(
-              this.landRegistryForm,
-              true
-            ) &&
-              !this.showFileUploadForNameChangeError &&
-              !this.showFileUploadForLeaseError &&
-              !this.showFileUploadForDeedError
+            this.getValidationResult()
           );
         }
       }
     );
+  }
+
+  ngAfterViewInit(): void {
+    this._valuationService.contactGroupBs.subscribe((data) => {
+      let contactGroup = data;
+      if (contactGroup && contactGroup.contactPeople) {
+        let contactListExceptAdmin = contactGroup.contactPeople.filter(
+          (contact) => !contact.isAdminContact
+        );
+        this.contactNamesQuestion = "Is";
+        this.lengthOfContacts = contactListExceptAdmin.length;
+        if (this.lengthOfContacts > 1) this.contactNamesQuestion = "Are";
+        contactListExceptAdmin.forEach((x) => {
+          this.contactNamesQuestion += " " + x.firstName + " " + x.lastName;
+        });
+      }
+    });
+  }
+
+  getValidationResult(): boolean {
+    let result: boolean = false;
+    result =
+      this._sharedService.logValidationErrors(this.landRegistryForm, true) &&
+      !this.showFileUploadForNameChangeError &&
+      !this.showFileUploadForLeaseError &&
+      !this.showFileUploadForDeedError;
+
+    this._valuationService.landRegisterValid.next(result);
+    return result;
   }
 
   controlFiles() {

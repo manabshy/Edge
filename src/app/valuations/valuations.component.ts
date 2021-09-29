@@ -8,12 +8,9 @@ import {
   switchMap,
   catchError,
   takeUntil,
-  tap
+  tap,
 } from "rxjs/operators";
-import {
-  Valuation,
-  ValuationStatuses,
-} from "./shared/valuation";
+import { Valuation, ValuationStatuses } from "./shared/valuation";
 import { WedgeError, SharedService } from "../core/services/shared.service";
 import { StorageMap } from "@ngx-pwa/local-storage";
 import { StaffMember, Office, RoleName } from "../shared/models/staff-member";
@@ -49,9 +46,9 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   selectControlModels = {
     statusId: [],
     valuerId: [],
-    officeId: []
-  }
-  currentStaffMember: StaffMember
+    officeId: [],
+  };
+  currentStaffMember: StaffMember;
 
   get searchTermControl() {
     return this.valuationFinderForm.get("searchTerm") as FormControl;
@@ -89,7 +86,11 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this.setSuggestions();
     this.getOffices();
     this.getCurrentStaffMember();
-   }
+
+    this.valuationService.doValuationSearchBs.subscribe((data) => {
+      if (data == true) this.getValuations();
+    });
+  }
 
   public getValuations() {
     this.page = 1;
@@ -153,7 +154,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   suggestionSelected(event) {
     if (event.item != null) {
       this.suggestedTerm = event.item;
-     }
+    }
     this.getValuations();
     this.suggestedTerm = "";
   }
@@ -172,23 +173,23 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
 
   selectionControlChange(fieldId, ev) {
     this.valuationFinderForm.patchValue({
-      [fieldId]: ev
-    })
-    this.selectControlModels[fieldId] = ev
+      [fieldId]: ev,
+    });
+    this.selectControlModels[fieldId] = ev;
   }
 
   // PRIVATE
-  private setPage(){
+  private setPage() {
     this.valuationService.valuationPageNumberChanges$
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe((newPageNumber) => {
-      this.page = newPageNumber;
-      this.getNextValuationsPage(this.page);
-      console.log("%c HEYYYY", "color: blue", this.page);
-    });
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((newPageNumber) => {
+        this.page = newPageNumber;
+        this.getNextValuationsPage(this.page);
+        console.log("%c HEYYYY", "color: blue", this.page);
+      });
   }
 
-  private setSuggestions(){
+  private setSuggestions() {
     this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
         debounceTime(200),
@@ -203,51 +204,55 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       );
   }
 
-  private getCurrentStaffMember(){
-    this.staffMemberService.getCurrentStaffMember().toPromise()
-    .then(res => {
-      this.currentStaffMember = res
-      this.setInitialFilters();
-      this.getValuations();
-    })
+  private getCurrentStaffMember() {
+    this.staffMemberService
+      .getCurrentStaffMember()
+      .toPromise()
+      .then((res) => {
+        this.currentStaffMember = res;
+        this.setInitialFilters();
+        this.getValuations();
+      });
   }
 
-  private getValuers(){
+  private getValuers() {
     this.storage.get("activeStaffmembers").subscribe((data) => {
       if (data) {
         this.valuers = data as StaffMember[];
-        this.setValuersForSelectControl()
+        this.setValuersForSelectControl();
       } else {
         this.staffMemberService
           .getActiveStaffMembers()
           .pipe(takeUntil(this.ngUnsubscribe))
           .subscribe((result) => {
-            this.valuers = result.result
-            this.setValuersForSelectControl()
+            this.valuers = result.result;
+            this.setValuersForSelectControl();
           });
       }
     });
   }
 
   private getOffices() {
-    this.officeService.getOffices().toPromise()
-      .then(res => {
-        this.offices = res.result.map(office => {
+    this.officeService
+      .getOffices()
+      .toPromise()
+      .then((res) => {
+        this.offices = res.result.map((office) => {
           return {
             id: office.officeId,
-            value: office.name
-          }
-        })
-      })
+            value: office.name,
+          };
+        });
+      });
   }
 
   private setValuersForSelectControl() {
-    this.valuersForSelect = this.valuers.map(valuer => {
+    this.valuersForSelect = this.valuers.map((valuer) => {
       return {
         id: valuer.staffMemberId,
-        value: valuer.fullName
-      }
-    })
+        value: valuer.fullName,
+      };
+    });
   }
 
   private setupForm() {
@@ -260,55 +265,66 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     });
   }
 
-  private setInitialFilters(){
-    this.setInitialStatusId()
-    this.setInitialValuerId()
-    this.setInitialOfficeId()
+  private setInitialFilters() {
+    this.setInitialStatusId();
+    this.setInitialValuerId();
+    this.setInitialOfficeId();
   }
 
-  private setInitialStatusId(){
-    this.selectControlModels.statusId = [2,3] // Booked, Valued. Default for all users
+  private setInitialStatusId() {
+    this.selectControlModels.statusId = [2, 3]; // Booked, Valued. Default for all users
   }
-  
-  private setInitialValuerId(){
-    if(this.currentStaffMember.roles && this.currentStaffMember.roles.length){
-      if(this.isManager() || this.isBroker()){
-        this.selectControlModels.valuerId = [this.currentStaffMember.staffMemberId]
-        } else {
-          this.selectControlModels.valuerId = []
-        }
+
+  private setInitialValuerId() {
+    if (this.currentStaffMember.roles && this.currentStaffMember.roles.length) {
+      if (this.isManager() || this.isBroker()) {
+        this.selectControlModels.valuerId = [
+          this.currentStaffMember.staffMemberId,
+        ];
+      } else {
+        this.selectControlModels.valuerId = [];
+      }
     }
   }
 
-  private isManager():boolean{
-    if (this.currentStaffMember.roles.findIndex(x=> x.roleName === RoleName.Manager) >-1){
+  private isManager(): boolean {
+    if (
+      this.currentStaffMember.roles.findIndex(
+        (x) => x.roleName === RoleName.Manager
+      ) > -1
+    ) {
       return true;
     }
     return false;
   }
 
-  private isBroker():boolean{
-    if (this.currentStaffMember.roles.findIndex(x=> x.roleName === RoleName.Broker) >-1){
+  private isBroker(): boolean {
+    if (
+      this.currentStaffMember.roles.findIndex(
+        (x) => x.roleName === RoleName.Broker
+      ) > -1
+    ) {
       return true;
     }
     return false;
   }
 
-  private isOfficeManager():boolean{
-    if (this.currentStaffMember.roles.findIndex(x=> x.roleName === RoleName.OfficeManager) >-1){
+  private isOfficeManager(): boolean {
+    if (
+      this.currentStaffMember.roles.findIndex(
+        (x) => x.roleName === RoleName.OfficeManager
+      ) > -1
+    ) {
       return true;
     }
     return false;
   }
 
-  private setInitialOfficeId(){
- 
-    if(this.isOfficeManager()){
-      this.selectControlModels.officeId = [this.currentStaffMember.officeId]
+  private setInitialOfficeId() {
+    if (this.isOfficeManager()) {
+      this.selectControlModels.officeId = [this.currentStaffMember.officeId];
     } else {
-     this.selectControlModels.officeId = []
+      this.selectControlModels.officeId = [];
     }
   }
-  
-
 }
