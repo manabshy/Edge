@@ -139,7 +139,7 @@ export class ValuationsLandRegisterComponent
     this.landRegistryForm.valueChanges.subscribe((data) => {
       this.deedLandReg.userEnteredOwner = data.userEnteredOwner;
       this.deedLandReg.ownerConfirmed = data.ownerConfirmed;
-      this.leaseLandReg.leaseExpiryDate = data.leaseExpiryDate;
+      this.leaseLandReg.leaseExpiryDate = new Date(data.leaseExpiryDate);
       if (this.controlValidation) {
         this._valuationService.validationControlBs.next(
           this._sharedService.logValidationErrors(this.landRegistryForm, true)
