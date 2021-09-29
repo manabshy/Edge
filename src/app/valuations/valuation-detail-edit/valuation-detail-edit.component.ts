@@ -1765,7 +1765,11 @@ export class ValuationDetailEditComponent
       .getValuationPropertyInfo(propertyId)
       .subscribe((res) => {
         if (res) {
-          if (+res.tenureId === 3 || res.approxLeaseExpiryDate) {
+          if (
+            +res.tenureId === 3 ||
+            +res.tenureId === 2 ||
+            res.approxLeaseExpiryDate
+          ) {
             this.showLeaseExpiryDate = true;
             //this.setApproxLeaseLengthValidator();
           } else {
@@ -2630,7 +2634,7 @@ export class ValuationDetailEditComponent
     valuation.otherFeatures = [];
     valuation.propertyFeature = [];
 
-    if (this.showLeaseExpiryDate) {
+    if (this.showLeaseExpiryDate == false) {
       valuation.leaseLandReg = {};
     }
 
