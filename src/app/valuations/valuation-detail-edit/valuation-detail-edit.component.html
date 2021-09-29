@@ -649,8 +649,9 @@
 
               <p-accordionTab class="landRegister" header="Land Register" [(selected)]="activeState[6]">
                 <div [ngClass]="{'opacity-75 pointer-events-none': isCancelled}" (click)="controlIsCancelled($event)">
-                  <app-valuation-land-register [deedLandReg]="valuation?.deedLandReg"
-                    [nameChangeReg]="valuation?.nameChangeReg" [leaseLandReg]="valuation?.leaseLandReg"
+                  <app-valuation-land-register [showLeaseExpiryDate]="showLeaseExpiryDate"
+                    [deedLandReg]="valuation?.deedLandReg" [nameChangeReg]="valuation?.nameChangeReg"
+                    [leaseLandReg]="valuation?.leaseLandReg"
                     (afterFileOperation)="scrollSpecificElement('landRegister')">
                   </app-valuation-land-register>
                 </div>

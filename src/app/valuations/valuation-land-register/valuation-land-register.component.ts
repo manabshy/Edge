@@ -32,6 +32,16 @@ export class ValuationsLandRegisterComponent
   @Input() interestList: any[] = [];
   @Input() valuationStatus: number;
 
+  private _showLeaseExpiryDate: boolean;
+  set showLeaseExpiryDate(value) {
+    if (this._showLeaseExpiryDate != value) {
+      this._showLeaseExpiryDate = value;
+    }
+  }
+  @Input() get showLeaseExpiryDate(): boolean {
+    return this._showLeaseExpiryDate;
+  }
+
   private _nameChangeReg: NameChangeReg;
   set nameChangeReg(value) {
     if (value && this._nameChangeReg != value) {
@@ -146,9 +156,7 @@ export class ValuationsLandRegisterComponent
         }
       }
     );
-  }
 
-  ngAfterViewInit(): void {
     this._valuationService.contactGroupBs.subscribe((data) => {
       let contactGroup = data;
       if (contactGroup && contactGroup.contactPeople) {
@@ -164,6 +172,8 @@ export class ValuationsLandRegisterComponent
       }
     });
   }
+
+  ngAfterViewInit(): void {}
 
   getValidationResult(): boolean {
     let result: boolean = false;
