@@ -182,10 +182,6 @@ export enum ValuationCancellationReasons {
   Agent_Not_Allowing_Access = 5,
   Did_Not_Want_Sales_Let_Val = 6,
   Other = 7,
-  Booked = 2,
-  Valued = 3,
-  Instructed = 4,
-  Cancelled = 5,
 }
 
 export enum ValuationTypeEnum {

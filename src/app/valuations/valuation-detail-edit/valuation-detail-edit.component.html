@@ -111,7 +111,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="isCancelled">
+        <div *ngIf="isCancelled && property">
           <p-messages severity="error">
             <ng-template pTemplate>
               <div data-cy="cancelMessage" class="p-ml-2">

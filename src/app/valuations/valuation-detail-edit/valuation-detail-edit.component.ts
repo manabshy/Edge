@@ -1190,7 +1190,9 @@ export class ValuationDetailEditComponent
               "Reason for cancellation: " +
               (data.cancellationTypeId == ValuationCancellationReasons.Other
                 ? data.cancellationReason
-                : ValuationCancellationReasons[data.cancellationTypeId]);
+                : this.removeUnderLine(
+                    ValuationCancellationReasons[data.cancellationTypeId]
+                  ));
           }
           if (
             this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
@@ -1308,6 +1310,10 @@ export class ValuationDetailEditComponent
       $event.preventDefault();
       return false;
     }
+  }
+
+  removeUnderLine(str: string): string {
+    return str.replaceAll("_", " ");
   }
 
   getSearchedPersonSummaryInfo(contactGroup: ContactGroup) {
