@@ -220,6 +220,8 @@ export class ValuationDetailEditComponent
   isActiveValuationsVisible = false;
   isCanDeactivate = false;
   openContactGroupSubscription = new Subscription();
+  cancelValuationSubscription = new Subscription();
+  removeContactGroupSubscription = new Subscription();
   moreInfo = (this.sidenavService.selectedItem = "valuationTicket");
   summaryTotals: PersonSummaryFigures;
   sideNavItems = this.sidenavService.valuationSideNavItems;
@@ -578,7 +580,7 @@ export class ValuationDetailEditComponent
       }
     );
 
-    this.openContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe(
+    this.removeContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe(
       (value) => {
         if (value) {
           this.removeAdminContact();
@@ -586,7 +588,7 @@ export class ValuationDetailEditComponent
       }
     );
 
-    this.openContactGroupSubscription = this.sharedService.cancelValuationOperationChanged.subscribe(
+    this.cancelValuationSubscription = this.sharedService.cancelValuationOperationChanged.subscribe(
       (value) => {
         this.isCancelValuationVisible = value;
       }
@@ -1169,6 +1171,15 @@ export class ValuationDetailEditComponent
           if (
             this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
           ) {
+            if (this.route.snapshot.routeConfig?.path?.indexOf("edit") > -1) {
+              let path = [
+                "valuations-register/detail",
+                data.valuationEventId,
+                "cancelled",
+              ];
+              this.router.navigate(path);
+              return;
+            }
             this.isCancelled = true;
             this.cancelString =
               "Cancelled " +
@@ -2976,6 +2987,8 @@ export class ValuationDetailEditComponent
     this.sharedService.clearFormValidators(this.valuationForm, this.formErrors);
     this.storage.delete("valuationFormData").subscribe();
     this.openContactGroupSubscription.unsubscribe();
+    this.removeContactGroupSubscription.unsubscribe();
+    this.cancelValuationSubscription.unsubscribe();
     this.propertySubsription.unsubscribe();
     this.contactGroupSubscription.unsubscribe();
     this.storage.delete(this.mainPersonId?.toString()).subscribe();

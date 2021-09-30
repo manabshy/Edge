@@ -73,7 +73,7 @@
             <div>
               <fieldset [ngClass]="{'invalid': (showFileUploadForLeaseError)}">
                 <h1 class="mb-2 text-lg font-bold"> Lease </h1>
-                <app-file-list [type]="'L'" [edgeFileList]="leaseLandReg?.files" [header]="'Title Deed'"
+                <app-file-list [type]="'L'" [edgeFileList]="leaseLandReg?.files" [header]="'Lease'"
                   [isMultiple]="'false'" (getFileNames)="getFileNames($event)" [fileType]="fileType">
                 </app-file-list>
                 <p class="mt-2 message message--negative"> Please Upload Lease File</p>
