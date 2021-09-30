@@ -3,4 +3,5 @@ export interface EdgeFile {
   fileName?: string;
   updateDate?: Date;
   fileStoreId?: number;
+  url?: string;
 }
