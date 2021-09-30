@@ -19,6 +19,7 @@ import { EdgeFile } from "../../models/edgeFile";
 @Component({
   selector: "app-file-list",
   templateUrl: "./file-list.component.html",
+  styleUrls: ["./file-list.component.scss"],
 })
 export class FileListComponent implements OnInit, OnDestroy {
   @Input() header;
@@ -32,7 +33,9 @@ export class FileListComponent implements OnInit, OnDestroy {
       this.files = [];
       value.forEach((x) => {
         this.files.push({
+          fileLongName: x.fileName,
           name: x.fileName,
+          url: x.url,
           lastModified: x.updateDate ? new Date(x.updateDate) : null,
         });
       });
@@ -112,6 +115,9 @@ export class FileListComponent implements OnInit, OnDestroy {
         (data) => {
           if (data && data.files) {
             this.getFileNames.emit({ file: [...data.files], type: this.type });
+            this.tmpFiles.forEach((file: any) => {
+              file.fileLongName = file.name;
+            });
             this.files = [...this.tmpFiles];
             this.fileUploadClear();
             this.openFileDialog = false;
