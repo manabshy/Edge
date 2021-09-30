@@ -109,6 +109,7 @@ export class CancelValuationComponent extends BaseComponent implements OnInit {
           valuationEventId: this.valuationEventId,
         })
         .subscribe(() => {
+          this.sharedService.cancelValuationOperationChanged.next(false);
           this.cancelOperationFinished.emit(true);
         });
     }
