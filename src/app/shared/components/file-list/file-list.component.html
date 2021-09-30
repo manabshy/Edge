@@ -1,9 +1,11 @@
 <div>
   <div *ngIf="files && files.length > 0,else uploadFile">
     <div *ngFor="let file of files" class="flex flex-row content-center mb-1">
-      <span>
+      <span class="flex flex-row items-center justify-center">
         <i class="mr-1 fa fa-file"></i>
-        <span class="tracking-tight truncate">{{file.name}}</span>
+        <span>
+          <p class="w-48 tracking-tight truncate">{{file.name}}</p>
+        </span>
       </span>
       <span class="flex-1"></span>
       <span>
