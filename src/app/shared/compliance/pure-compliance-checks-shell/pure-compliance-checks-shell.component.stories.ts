@@ -14,6 +14,7 @@ import { DocumentInfoComponent } from '../../components/document-info/document-i
 import { MessagesComponent } from '../../components/messages/messages.component';
 import { CompanyFinderComponent } from '../../components/company-finder/company-finder.component';
 import { 
+  LeadContactBlank,
   LeadContactValid,
   AssociatedContactBlank,
   AssociatedContactValid,
@@ -89,7 +90,7 @@ ContactAMLIncompleteAndInvalid.args = {
   people: [
     LeadContactValid.args.person,
     {...AssociatedContactInvalid.args.person, name: 'Jack Black'},
-    AssociatedContactValid.args.person,
+    AssociatedContactBlank.args.person,
     {...AssociatedContactValid.args.person, name: 'Eddie Murphy'}
   ]
 };

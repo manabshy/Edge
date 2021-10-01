@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ComplianceChecksStore } from '../compliance-checks.store';
+import { ComplianceChecksStore, ComplianceChecksState } from '../compliance-checks.store';
 
 /***
  * @description The outermost component for compliance checks. Uses compliance checks store for all server/service/biz logic interactions
@@ -8,51 +8,40 @@ import { ComplianceChecksStore } from '../compliance-checks.store';
 @Component({
   selector: 'app-compliance-checks-shell',
   template: `
-    <app-pure-compliance-checks-shell
-      [people]="people$ | async"
-      [checkType]="checkType"
-      [message]="message"
-      [checksAreValid]="complianceChecksAreValid"
-      [companyOrContact]="companyOrContact"
-      (fileWasUploaded)="onFileUploaded($event)"
-      (fileWasDeleted)="onFileDeleted($event)"
-      (passComplianceChecks)="onPassComplianceChecks($event)">
-    </app-pure-compliance-checks-shell>`,
+    <div *ngIf="vm$ | async as vm">
+      <app-pure-compliance-checks-shell
+        [people]="vm.people"
+        [checkType]="vm.checkType"
+        [message]="vm.message"
+        [checksAreValid]="vm.checksAreValid"
+        [companyOrContact]="vm.companyOrContact"
+        (fileWasUploaded)="onFileUploaded($event)"
+        (fileWasDeleted)="onFileDeleted($event)"
+        (passComplianceChecks)="onPassComplianceChecks($event)">
+      </app-pure-compliance-checks-shell>
+    </div>`,
   providers: [ComplianceChecksStore]
 })
-export class ComplianceChecksShellComponent implements OnInit {
+export class ComplianceChecksShellComponent {
 
-  people$: Observable<any>
-  companyOrContact: string = 'contact' // TODO
-  complianceChecksAreValid: boolean = true // TODO
-  checkType: string = 'AML' // TODO
-  message: any = {
-    type:'success',
-    text:['AML Completed', 'SmartSearch added: 7th Sep 2020 (11:45)']
-  } // TODO
+  vm$: Observable<ComplianceChecksState>
 
   constructor(
     private readonly _complianceChecksStore: ComplianceChecksStore,
-    ) { 
-      this.people$ = this._complianceChecksStore.contacts$
-    }
-  
-    ngOnInit(){
-    }
+  ) {
+    this.vm$ = this._complianceChecksStore.complianceChecksVm$
+  }
 
-    onFileUploaded(ev) {
-      console.log('onFileUploaded: ', ev)      
-      this._complianceChecksStore.saveFilesTemp(ev)
-    }
+  onFileUploaded(ev): void {
+    this._complianceChecksStore.saveFiles(ev)
+  }
 
-    onFileDeleted(ev) {
-      console.log('onFileDeleted: ', ev)
-      this._complianceChecksStore.deleteFiles()
-    }
-    
-    onPassComplianceChecks(ev) :void {
-      console.log('onPassComplianceChecks: ', ev)
-      this._complianceChecksStore.passComplianceChecks(ev)
-    }
+  onFileDeleted(ev): void {
+    this._complianceChecksStore.deleteFileFromPerson(ev)
+  }
+
+  onPassComplianceChecks(ev): void {
+    this._complianceChecksStore.passComplianceChecks(ev)
+  }
 
 }

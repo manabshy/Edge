@@ -8,6 +8,7 @@ import {
   Valuer,
   ValuersAvailabilityOption,
   CalendarAvailibility,
+  ValuationPricingInfo
 } from "./valuation";
 import { AppConstants } from "src/app/core/shared/app-constants";
 import { map, tap } from "rxjs/operators";
@@ -30,7 +31,10 @@ export class ValuationService {
 
   validationControlBs = new BehaviorSubject(false);
 
-  constructor(private http: HttpClient, private storage: StorageMap) {}
+  private readonly _valuationPricingInfo: BehaviorSubject<ValuationPricingInfo> = new BehaviorSubject({})
+  public readonly valuationPricingInfo$ = this._valuationPricingInfo.asObservable()
+
+  constructor(private http: HttpClient, private storage: StorageMap) { }
 
   valuationPageNumberChanged(page: number) {
     this.valuationPageNumberSubject.next(page);
@@ -62,8 +66,23 @@ export class ValuationService {
   getValuation(valuationId: number): Observable<Valuation | any> {
     const url = `${AppConstants.baseValuationUrl}/${valuationId}`;
     return this.http.get<any>(url).pipe(
-      map((response) => response.result)
-      // tap(data => console.log('valuation', JSON.stringify(data)))
+      map((response) => response.result),
+      tap(data => {
+        const pricingKeys = (({ suggestedAskingPrice,
+          suggestedAskingRentLongLet,
+          suggestedAskingRentShortLet,
+          suggestedAskingRentLongLetMonthly,
+          suggestedAskingRentShortLetMonthly
+        }) => ({
+          suggestedAskingPrice,
+          suggestedAskingRentLongLet,
+          suggestedAskingRentShortLet,
+          suggestedAskingRentLongLetMonthly,
+          suggestedAskingRentShortLetMonthly
+        }))(data)
+        console.log('pricingKeys: ', pricingKeys)
+        this._valuationPricingInfo.next(pricingKeys)
+      })
     );
   }
 

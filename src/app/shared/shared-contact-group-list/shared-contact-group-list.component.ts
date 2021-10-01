@@ -7,7 +7,7 @@ import { BasicContactGroup, ContactGroup } from 'src/app/contact-groups/shared/c
   templateUrl: './shared-contact-group-list.component.html',
   styleUrls: ['./shared-contact-group-list.component.scss']
 })
-export class SharedContactgroupListComponent implements OnInit {
+export class SharedContactGroupListComponent implements OnInit {
   @Input() contactGroups: BasicContactGroup[];
   @Input() personId: number;
   constructor(private router: Router, private route: ActivatedRoute) { }

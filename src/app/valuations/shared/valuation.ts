@@ -67,6 +67,11 @@ export interface Valuation extends ValuationInfo {
   dateRequestSent?: Date;
 }
 
+export interface ValuationPricingInfo {
+  suggestedAskingRentLongLetMonthly?: number;
+  suggestedAskingRentShortLetMonthly?: number;
+}
+
 export interface ValuationFile {
   blobFileTypeId: number;
   fileLastModified: Date;

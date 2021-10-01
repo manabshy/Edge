@@ -17,8 +17,7 @@ import { Person } from "../../models/person";
 
 @Component({
   selector: "app-contact-group-card",
-  templateUrl: "./contact-group-card.component.html",
-  styleUrls: ["./contact-group-card.component.scss"],
+  templateUrl: "./contact-group-card.component.html"
 })
 export class ContactGroupCardComponent implements OnInit, OnChanges {
   @Input() contactGroup: ContactGroup;

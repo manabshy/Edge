@@ -10,8 +10,7 @@ import * as _ from 'lodash';
 import { AppUtils } from 'src/app/core/shared/utils';
 @Component({
   selector: 'app-contact-groups-detail-notes',
-  templateUrl: './contact-groups-detail-notes.component.html',
-  styleUrls: ['./contact-groups-detail-notes.component.scss']
+  templateUrl: './contact-groups-detail-notes.component.html'
 })
 export class ContactGroupsDetailNotesComponent extends BaseComponent implements OnInit {
   person: Person;

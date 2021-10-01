@@ -708,6 +708,7 @@ export class ValuationDetailEditComponent
       this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
         (result) => {
           this.contactGroup = result;
+          console.log('----------------------------------- contactGroupBs.next')
           this.valuationService.contactGroupBs.next(this.contactGroup);
           this.getSearchedPersonSummaryInfo(this.contactGroup);
         }
@@ -897,6 +898,7 @@ export class ValuationDetailEditComponent
     // this.valuers = result.valuers;
     this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
       this.contactGroup = result;
+      console.log('----------------------------------- contactGroupBs.next')
       this.valuationService.contactGroupBs.next(this.contactGroup);
       this.getSearchedPersonSummaryInfo(this.contactGroup);
     });
@@ -1206,6 +1208,7 @@ export class ValuationDetailEditComponent
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
               (result) => {
                 this.contactGroup = result;
+                console.log('----------------------------------- contactGroupBs.next')
                 this.valuationService.contactGroupBs.next(this.contactGroup);
                 this.getSearchedPersonSummaryInfo(this.contactGroup);
                 this.setAdminContact();
@@ -1670,6 +1673,7 @@ export class ValuationDetailEditComponent
       this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then(
         (result) => {
           this.contactGroup = result;
+          console.log('----------------------------------- contactGroupBs.next')
           this.valuationService.contactGroupBs.next(this.contactGroup);
           this.getSearchedPersonSummaryInfo(this.contactGroup);
         }

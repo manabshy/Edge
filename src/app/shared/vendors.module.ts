@@ -60,7 +60,7 @@ const externalModules = [
   TabsModule,
   TypeaheadModule,
   BsDropdownModule,
-  BsDatepickerModule,
+  BsDatepickerModule.forRoot(),
   ModalModule,
   PopoverModule,
   NgPipesModule,
@@ -100,7 +100,7 @@ const externalModules = [
   TableModule,
   MenuModule,
   CheckboxModule,
-  FileUploadModule,
+  FileUploadModule
 ];
 
 @NgModule({

@@ -11,7 +11,19 @@ import { ComplianceCardComponent } from './compliance-card.component';
 
 // document-info component and stories
 import { DocumentInfoComponent } from '../../components/document-info/document-info.component'
-import { IdBlank, IdUploadedValid, IdUploadedInvalid,  ProofOfAddressBlank, ProofOfAddressUploaded, ReportBlank, ReportUploadedValid,  ReportUploadedInvalid, AdditionalDocumentsBlank, AdditionalDocumentUploaded } from '../../components/document-info/document-info.component.stories'
+import { 
+  IdBlank,
+  IdUploadedValid,
+  IdUploadedInvalid,
+  ProofOfAddressBlank,
+  ProofOfAddressUploaded,
+  ReportBlank,
+  ReportUploaded,
+  MultipleReportsUploaded,
+  AdditionalDocumentsBlank,
+  AdditionalDocumentUploaded,
+  MultipleAdditionalDocumentsUploaded
+} from '../../components/document-info/document-info.component.stories'
 import { FileUploadComponent } from '../../components/file-upload/file-upload.component';
 
 export default {
@@ -71,7 +83,7 @@ LeadContactValid.args = {
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
-      reportDocs: ReportUploadedValid.args,
+      reportDocs: ReportUploaded.args,
       additionalDocs: AdditionalDocumentUploaded.args
     }
   }
@@ -89,7 +101,7 @@ LeadContactAndUBO.args = {
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
-      reportDocs: ReportUploadedValid.args,
+      reportDocs: ReportUploaded.args,
       additionalDocs: AdditionalDocumentUploaded.args
     }
   }
@@ -106,7 +118,7 @@ LeadContactInvalid.args = {
     documents: {
       idDoc: IdUploadedInvalid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
-      reportDocs: ReportUploadedInvalid.args,
+      reportDocs: ReportUploaded.args,
       additionalDocs: AdditionalDocumentsBlank.args
     }
   }
@@ -123,8 +135,8 @@ LeadContactMixed.args = {
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
-      reportDocs: ReportUploadedValid.args,
-      additionalDocs: AdditionalDocumentUploaded.args
+      reportDocs: MultipleReportsUploaded.args,
+      additionalDocs: MultipleAdditionalDocumentsUploaded.args
     }
   }
 };
@@ -158,7 +170,7 @@ AssociatedContactValid.args = {
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
-      reportDocs: ReportUploadedValid.args,
+      reportDocs: MultipleReportsUploaded.args,
       additionalDocs: AdditionalDocumentsBlank.args
     }
   }
@@ -175,7 +187,7 @@ AssociatedContactInvalid.args = {
     documents: {
       idDoc: IdUploadedInvalid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
-      reportDocs: ReportUploadedInvalid.args,
+      reportDocs: MultipleReportsUploaded.args,
       additionalDocs: AdditionalDocumentUploaded.args
     }
   }
@@ -193,8 +205,8 @@ ContactWithMenu.args = {
     documents: {
       idDoc: IdUploadedInvalid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
-      reportDocs: ReportUploadedInvalid.args,
-      additionalDocs: AdditionalDocumentUploaded.args
+      reportDocs: ReportUploaded.args,
+      additionalDocs: MultipleAdditionalDocumentsUploaded.args
     }
   }
 };

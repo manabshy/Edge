@@ -29,7 +29,6 @@ export class ValuationsTermsOfBusinessComponent implements OnInit, OnChanges {
   constructor() {}
 
   ngOnInit(): void {
-    this.checkToBIsSigned()
   }
   
   ngOnChanges(changes): void {

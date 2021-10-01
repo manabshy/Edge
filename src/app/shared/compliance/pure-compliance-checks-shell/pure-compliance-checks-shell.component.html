@@ -1,6 +1,6 @@
 <div class="border-0 border-grey-100 w-full">
 
-  <div class="ml-1 p-0 w-100 md:w-1/2" >
+  <div class="ml-1 p-0 w-100 md:w-1/2" *ngIf="message">
     <app-messages
       [message]="message">
     </app-messages>
@@ -32,14 +32,14 @@
   </div>
 
   <div class="border-t border-gray-300 flex flex-row pt-4 items-center mt-8">
-    <a href="" class="text-blue-500">
+    <a href="https://www.smartsearchsecure.com" target="_blank" class="text-blue-500" *ngIf="checkType === 'AML'">
       <i class="fa fa-link"></i>
       <span class="underline">
         SmartSearch website
       </span>
     </a>
     <span class="flex-1"></span>
-    <button class="btn btn--positive" (click)="passComplianceChecks.emit($event)">{{checkType == 'AML' ? 'Pass AML' : 'Pass KYC'}}</button>
+    <button class="btn btn--positive" [disabled]="!checksAreValid" (click)="passComplianceChecks.emit($event)">{{checkType === 'AML' ? 'Pass AML' : 'Pass KYC'}}</button>
   </div>
 </div>
 

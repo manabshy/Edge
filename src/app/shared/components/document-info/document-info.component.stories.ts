@@ -7,6 +7,7 @@ import { action } from '@storybook/addon-actions'
 import { DocumentInfoComponent } from './document-info.component';
 import { VendorsModule } from '../../vendors.module';
 import { FileUploadComponent } from '../file-upload/file-upload.component';
+import { MessagesComponent } from '../messages/messages.component';
 
 export default {
   title: 'Components/Shared/DocumentInfo',
@@ -14,8 +15,8 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      declarations: [DocumentInfoComponent, FileUploadComponent],
-      imports: [CommonModule, VendorsModule, BrowserAnimationsModule],
+      declarations: [DocumentInfoComponent, FileUploadComponent, MessagesComponent ],
+      imports: [CommonModule, VendorsModule, BrowserAnimationsModule]
     }),
     componentWrapperDecorator((story)=> `
         <div style="margin: 3em" class="w-1/4">${story}</div>
@@ -38,98 +39,118 @@ const DocumentInfo: Story<DocumentInfoComponent> = (args: DocumentInfoComponent)
 
 export const IdBlank = DocumentInfo.bind({});
 IdBlank.args = {
-  documentType: 'id',
-  label: 'Upload ID',
+  documentType: 49,
+  label: 'ID',
   files: [],
   fileLimit: 1,
-  fileType: ''
+  fileType: '',
+  url: 'https://google.com'
 };
 
 export const IdUploadedValid = DocumentInfo.bind({});
 IdUploadedValid.args = {
-  documentType: 'id',
+  documentType: 49,
   files: [{
     id: 0,
     label: 'ID',
     uploadDate: '07/04/21',
-    expiryDate: '12/11/26'
+    IDValidationDateExpiry: '01/11/26',
+    url: 'https://google.com'
  }],
 };
 
 export const IdUploadedInvalid = DocumentInfo.bind({});
 IdUploadedInvalid.args = {
-  documentType: 'id',
+  documentType: 49,
   files: [{
     id: 0,
     label: 'ID',
     uploadDate: '07/04/21',
-    expiryDate: '20/09/21'
+    IDValidationDateExpiry: '02/09/21',
+    url: 'https://google.com'
   }],
 };
 
 export const ProofOfAddressBlank = DocumentInfo.bind({});
 ProofOfAddressBlank.args = {
- documentType: 'proof-of-address',
- label: 'Upload Proof Of Address',
+ documentType: 48,
+ label: 'Proof Of Address',
  files: []
 };
 
 export const ProofOfAddressUploaded = DocumentInfo.bind({});
 ProofOfAddressUploaded.args = {
-  documentType: 'proof-of-address',
-  label: 'Upload Proof Of Address',
+  documentType: 48,
+  label: 'Proof Of Address',
   files: [{
     id: 0,
     label: 'Proof of Address',
-    uploadDate: '20/09/21'
+    uploadDate: '05/09/21'
   }]
 };
 
 export const ReportBlank = DocumentInfo.bind({});
 ReportBlank.args = {
-  documentType: 'report',
-  label: 'Upload Report',
+  documentType: 51,
+  label: 'Report',
   files: []
 };
 
-export const ReportUploadedValid = DocumentInfo.bind({});
-ReportUploadedValid.args = {
-  documentType: 'report',
-  label: 'Upload Report',
+export const ReportUploaded = DocumentInfo.bind({});
+ReportUploaded.args = {
+  documentType: 51,
+  label: 'Report',
   files: [{
     id: 0,
     label: 'Report',
-    valid: true,
-    uploadDate: '20/09/21'
+    uploadDate: '10/19/21'
   }]
 };
 
-export const ReportUploadedInvalid = DocumentInfo.bind({});
-ReportUploadedInvalid.args = {
-  documentType: 'report',
-  label: 'Upload Report',
+export const MultipleReportsUploaded = DocumentInfo.bind({});
+MultipleReportsUploaded.args = {
+  documentType: 51,
+  label: 'Report',
   files: [{
     id: 0,
     label: 'Report',
-    valid: false,
-    uploadDate: '20/09/21'
+    uploadDate: '01/09/21'
+  }, {
+    id: 0,
+    label: 'Report',
+    uploadDate: '01/09/21'
   }]
 };
 
 export const AdditionalDocumentsBlank = DocumentInfo.bind({});
 AdditionalDocumentsBlank.args = {
-  documentType: 'additional-documents',
-  label: 'Upload Additional Documents',
+  documentType: 50,
+  label: 'Additional Documents',
   files: []
 };
 
 export const AdditionalDocumentUploaded = DocumentInfo.bind({});
 AdditionalDocumentUploaded.args = {
-  documentType: 'additional-documents',
-  label: 'Upload Additional Documents',
+  documentType: 50,
+  label: 'Additional Documents',
   files: [{
     id: 0,
-    label: 'Document',
+    label: 'Document.pdf',
+    uploadDate: '01/09/21'
+  }]
+};
+
+export const MultipleAdditionalDocumentsUploaded = DocumentInfo.bind({});
+MultipleAdditionalDocumentsUploaded.args = {
+  documentType: 50,
+  label: 'Additional Documents',
+  files: [{
+    id: 0,
+    label: 'Other-doc.pdf',
+    uploadDate: '01/09/21'
+  }, {
+    id: 0,
+    label: 'Reference-x.pdf',
     uploadDate: '01/09/21'
   }]
 };

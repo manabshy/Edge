@@ -7,7 +7,7 @@ export default create({
   appBg: '#0a1a4a',
   brandTitle: 'Douglas & Gordon storybook',
   brandUrl: 'https://example.com',
-  brandImage: '/assets/dng_logo.png',
+  brandImage: 'assets/dng_logo.png',
   base: 'light',
 
   colorPrimary: '#0a1a4a',

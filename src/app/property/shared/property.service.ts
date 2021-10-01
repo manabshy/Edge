@@ -243,7 +243,6 @@ export class PropertyService {
   }
 
   currentPropertyChanged(propertyId: number) {
-    console.log("next value is ", this.currentPropertyIdSubject.getValue());
     this.currentPropertyIdSubject.next(propertyId);
   }
 

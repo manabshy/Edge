@@ -23,8 +23,7 @@ import { PeopleService } from "src/app/core/services/people.service";
 
 @Component({
   selector: "app-contact-group-finder",
-  templateUrl: "./contact-group-finder.component.html",
-  styleUrls: ["./contact-group-finder.component.scss"],
+  templateUrl: "./contact-group-finder.component.html"
 })
 export class ContactGroupFinderComponent implements OnInit, OnChanges {
   @Input() label: string;
@@ -111,7 +110,6 @@ export class ContactGroupFinderComponent implements OnInit, OnChanges {
       .getContactGroupById(contactGroupId)
       .subscribe((data) => {
         console.log({ data });
-
         if (data) {
           this.fullSelectedContactGroup.emit(data);
         }

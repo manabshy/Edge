@@ -58,7 +58,7 @@ import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown/";
 import { CollapseModule } from "ngx-bootstrap/collapse/";
 import { TabsModule } from "ngx-bootstrap/tabs/";
-import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
+// import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
 import { ModalModule } from "ngx-bootstrap/modal/";
 import { PopoverModule } from "ngx-bootstrap/popover";
 import { TooltipModule } from "ngx-bootstrap/tooltip";
@@ -137,7 +137,7 @@ const externalModulesImports = [
   BsDropdownModule.forRoot(),
   CollapseModule.forRoot(),
   TabsModule.forRoot(),
-  BsDatepickerModule.forRoot(),
+  // BsDatepickerModule.forRoot(),
   TypeaheadModule.forRoot(),
   ModalModule.forRoot(),
   PopoverModule.forRoot(),
@@ -161,7 +161,7 @@ const externalModulesExports = [
   TabsModule,
   TypeaheadModule,
   BsDropdownModule,
-  BsDatepickerModule,
+  // BsDatepickerModule,
   ModalModule,
   PopoverModule,
   NgPipesModule,

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppConstants } from '../shared/app-constants';
-import { map, tap } from 'rxjs/operators';
+import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { PersonInstruction, PersonSearch, PersonOffer, PersonLettingsManagement, PersonHomeHelper, PersonProperty, Person } from '../../shared/models/person';
 import { Valuation } from 'src/app/valuations/shared/valuation';
 
@@ -71,5 +71,21 @@ export class PeopleService {
   performGdprRemoval(person: Person): Observable<Person | any> {
     const url = `${AppConstants.basePersonUrl}/${person.personId}/gdpr`;
     return this.http.put<any>(url, person).pipe(map(response => response.result));
+  }
+
+  getPeopleDocs(contactGroupId: number): Observable<any> {
+    console.log('getPeopleForContactGroup: ', contactGroupId)
+
+    const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}`;
+    return this.http.get<any>(url).pipe(
+      map((response) => response.result),
+    );
+  }
+
+  setPeopleDocs(people, contactGroupId: number): Observable<any> {
+    const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}`
+    return this.http.post<any>(url, [people]).pipe(
+      switchMap((response) => response.result)
+    )
   }
 }

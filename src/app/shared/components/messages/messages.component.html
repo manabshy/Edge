@@ -1,10 +1,10 @@
 <p-messages severity="{{message.type}}">
   <ng-template pTemplate>
     <div data-cy="availabilityMessage" class="flex flex-row items-center">
-      <i class="fa text-xl" [ngClass]="message.type === 'success' ? 'fa-check-circle text-green-600': message.type === 'warn' ? 'fa-exclamation-triangle text-yellow-600':''"></i>
+      <i class="fa text-xl" [ngClass]="message.type === 'success' ? 'fa-check-circle text-green-600': message.type === 'warn' ? 'fa-exclamation-triangle text-yellow-600':  message.type === 'info' ? 'fa-info-circle text-blue-500':''"></i>
       <div class="px-2">
           <p *ngFor="let message of message.text; let i = index; let even = even" 
-            [ngClass]="even ? '-mb-2' : 'mt-2'">
+            [ngClass]="even ? '-mb-1' : 'mt-2'">
             {{message}}
           </p>
       </div>
