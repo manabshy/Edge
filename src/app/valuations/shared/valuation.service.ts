@@ -8,7 +8,9 @@ import {
   Valuer,
   ValuersAvailabilityOption,
   CalendarAvailibility,
-  ValuationPricingInfo
+  ValuationPricingInfo,
+  CancelValuation,
+  ValuationStatusEnum
 } from "./valuation";
 import { AppConstants } from "src/app/core/shared/app-constants";
 import { map, tap } from "rxjs/operators";
@@ -30,6 +32,8 @@ export class ValuationService {
   valuationValidation$ = this.valuationValidationSubject.asObservable();
 
   validationControlBs = new BehaviorSubject(false);
+  landRegisterValid = new BehaviorSubject(false);
+  doValuationSearchBs = new BehaviorSubject(false);
 
   private readonly _valuationPricingInfo: BehaviorSubject<ValuationPricingInfo> = new BehaviorSubject({})
   public readonly valuationPricingInfo$ = this._valuationPricingInfo.asObservable()
@@ -66,23 +70,14 @@ export class ValuationService {
   getValuation(valuationId: number): Observable<Valuation | any> {
     const url = `${AppConstants.baseValuationUrl}/${valuationId}`;
     return this.http.get<any>(url).pipe(
-      map((response) => response.result),
-      tap(data => {
-        const pricingKeys = (({ suggestedAskingPrice,
-          suggestedAskingRentLongLet,
-          suggestedAskingRentShortLet,
-          suggestedAskingRentLongLetMonthly,
-          suggestedAskingRentShortLetMonthly
-        }) => ({
-          suggestedAskingPrice,
-          suggestedAskingRentLongLet,
-          suggestedAskingRentShortLet,
-          suggestedAskingRentLongLetMonthly,
-          suggestedAskingRentShortLetMonthly
-        }))(data)
-        console.log('pricingKeys: ', pricingKeys)
-        this._valuationPricingInfo.next(pricingKeys)
+      map((response) => {
+        return {
+          ...response.result,
+          valuationStatusDescription:
+            ValuationStatusEnum[response.result.valuationStatus],
+        };
       })
+      // tap(data => console.log('valuation', JSON.stringify(data)))
     );
   }
 
@@ -96,6 +91,14 @@ export class ValuationService {
     return this.http.post<any>(url, valuation).pipe(
       map((response) => response.result),
       tap((data) => console.log("added valuation", JSON.stringify(data)))
+    );
+  }
+
+  cancelValuation(cancelVm: CancelValuation): Observable<any> {
+    const url = `${AppConstants.baseValuationUrl}/${cancelVm.valuationEventId}/cancel`;
+    return this.http.put<any>(url, cancelVm).pipe(
+      map((response) => response.result),
+      tap((data) => console.log("cancel valuation", JSON.stringify(data)))
     );
   }
 

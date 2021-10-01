@@ -1,7 +1,7 @@
 import { Injectable, ElementRef } from "@angular/core";
 import { AppUtils, RequestOption } from "../shared/utils";
 import dayjs from "dayjs";
-import { Subject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 import { map, fill } from "lodash";
 import { BsModalService } from "ngx-bootstrap/modal/";
 import { ErrorModalComponent } from "../../shared/error-modal/error-modal.component";
@@ -34,6 +34,7 @@ export class SharedService {
 
   openContactGroupChanged = new Subject<boolean>();
   removeContactGroupChanged = new Subject<boolean>();
+  cancelValuationOperationChanged = new BehaviorSubject<boolean>(false);
 
   constructor(
     private _location: Location,

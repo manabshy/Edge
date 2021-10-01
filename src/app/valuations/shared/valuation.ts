@@ -1,11 +1,12 @@
 import { Signer } from "src/app/contact-groups/shared/contact-group";
+import { StaffMember } from "./../../shared/models/staff-member";
 import { DiaryEvent } from "src/app/diary/shared/diary";
 import { BaseProperty } from "src/app/shared/models/base-property";
 import { BaseRequestOption } from "src/app/shared/models/base-request-option";
 import { BaseStaffMember } from "src/app/shared/models/base-staff-member";
 import { Property } from "src/app/property/shared/property";
 import { Office } from "src/app/shared/models/staff-member";
-import { File } from "src/app/shared/models/file";
+import { EdgeFile } from "src/app/shared/models/edgeFile";
 
 export interface ValuationInfo {
   reason?: string;
@@ -65,6 +66,10 @@ export interface Valuation extends ValuationInfo {
   valuationFiles?: ValuationFile[];
   valuationType?: ValuationTypeEnum;
   dateRequestSent?: Date;
+  cancellationReason?: string;
+  cancelledBy?: StaffMember;
+  cancelledDate?: Date;
+  cancellationTypeId?: number;
 }
 
 export interface ValuationPricingInfo {
@@ -95,16 +100,16 @@ export interface ValuationPropertyInfo {
 export interface DeedLandReg {
   userEnteredOwner?: string;
   ownerConfirmed?: number;
-  files?: File[];
+  files?: EdgeFile[];
 }
 
 export interface LeaseLandReg {
   leaseExpiryDate?: Date;
-  files?: File[];
+  files?: EdgeFile[];
 }
 
 export interface NameChangeReg {
-  files?: File[];
+  files?: EdgeFile[];
 }
 
 export interface OfficeMember {
@@ -148,6 +153,12 @@ export interface ValuationBooking {
   totalHours?: number;
 }
 
+export interface CancelValuation {
+  valuationEventId?: number;
+  typeId?: number;
+  reason?: string;
+}
+
 export interface ValuationStatus {
   id: number;
   value: string;
@@ -168,10 +179,30 @@ export enum ValuationStatusEnum {
   Cancelled = 5,
 }
 
+export enum ValuationCancellationReasons {
+  Tenant_Refusing_Access = 1,
+  Gone_With_Another_Agent = 2,
+  No_Show_No_Contact = 3,
+  Change_of_Circumstance = 4,
+  Agent_Not_Allowing_Access = 5,
+  Did_Not_Want_Sales_Let_Val = 6,
+  Other = 7,
+}
+
 export enum ValuationTypeEnum {
   None = 0,
   Sales = 1,
   Lettings = 2,
+}
+
+export enum ValuationActions {
+  addAdmin = 0,
+  removeAdmin = 1,
+  salesTermsofBusiness = 2,
+  lettingsTermsofBusiness = 3,
+  landLordQuestionnaire = 4,
+  vendorQuestionnaire = 5,
+  cancelValuation = 6,
 }
 
 export function getValuationStatuses() {

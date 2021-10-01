@@ -23,6 +23,16 @@ const routes: Routes = [
         },
         canDeactivate: [CanDeactivateGuard],
       },
+      {
+        path: "cancelled",
+        component: ValuationDetailEditComponent,
+        data: {
+          shouldDetach: false,
+          title: "Valuation",
+          showMenuEditItem: false,
+        },
+        canDeactivate: [CanDeactivateGuard],
+      },
     ],
   },
 ];

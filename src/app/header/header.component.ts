@@ -27,8 +27,7 @@ import { Subscription } from "rxjs";
 })
 export class HeaderComponent
   extends BaseComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   currentStaffMember: StaffMember;
   navTitle: string;
   headerLabel: string;
@@ -80,22 +79,26 @@ export class HeaderComponent
 
     this.primengConfig.ripple = true;
 
-    this.openContactGroupSubscription =
-      this.sharedService.openContactGroupChanged.subscribe((value) => {
+    // valuation operations.
+    this.openContactGroupSubscription = this.sharedService.openContactGroupChanged.subscribe(
+      (value) => {
         if (!value) {
           this.filteredItems = [
             ...this.items.filter((x) => x.id !== "addAdmin"),
           ];
         }
-      });
-    this.openContactGroupSubscription =
-      this.sharedService.removeContactGroupChanged.subscribe((value) => {
+      }
+    );
+    this.openContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe(
+      (value) => {
         if (!value) {
           this.filteredItems = [
             ...this.items.filter((x) => x.id !== "removeAdmin"),
           ];
         }
-      });
+      }
+    );
+    //
   }
 
   setItems(navTitle: string) {
@@ -118,6 +121,7 @@ export class HeaderComponent
           },
         },
         {
+          id: "salesTermsofBusiness",
           label: "Sales Terms of Business",
           icon: "pi pi-file-pdf",
           command: () => {
@@ -125,6 +129,7 @@ export class HeaderComponent
           },
         },
         {
+          id: "lettingsTermsofBusiness",
           label: "Lettings Terms of Business",
           icon: "pi pi-file-pdf",
           command: () => {
@@ -132,6 +137,7 @@ export class HeaderComponent
           },
         },
         {
+          id: "landLordQuestionnaire",
           label: "Land Lord Questionnaire",
           icon: "pi pi-chart-bar",
           command: () => {
@@ -139,10 +145,19 @@ export class HeaderComponent
           },
         },
         {
+          id: "vendorQuestionnaire",
           label: "Vendor Questionnaire",
           icon: "pi pi-chart-bar",
           command: () => {
             this.sharedService.openContactGroupChanged.next(true);
+          },
+        },
+        {
+          id: "cancelValuation",
+          label: "Cancel Valuation",
+          icon: "pi pi-ban",
+          command: () => {
+            this.sharedService.cancelValuationOperationChanged.next(true);
           },
         },
       ];

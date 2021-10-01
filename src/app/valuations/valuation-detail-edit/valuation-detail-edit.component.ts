@@ -1,3 +1,4 @@
+import { ValuationCancellationReasons } from "./../shared/valuation";
 import {
   Component,
   OnInit,
@@ -60,6 +61,7 @@ import {
   ValuationStaffMembersCalanderEvents,
   ValuationBooking,
   ValuationStatuses,
+  CancelValuation,
 } from "../shared/valuation";
 import { ValuationService } from "../shared/valuation.service";
 import { Instruction } from "src/app/shared/models/instruction";
@@ -82,6 +84,7 @@ import { BasicEventRequest, DiaryProperty } from "src/app/diary/shared/diary";
 import { DiaryEventService } from "src/app/diary/shared/diary-event.service";
 import { SidenavService } from "src/app/core/services/sidenav.service";
 import { Person } from "src/app/shared/models/person";
+import moment from "moment";
 
 @Component({
   selector: "app-valuation-detail-edit",
@@ -217,6 +220,8 @@ export class ValuationDetailEditComponent
   isActiveValuationsVisible = false;
   isCanDeactivate = false;
   openContactGroupSubscription = new Subscription();
+  cancelValuationSubscription = new Subscription();
+  removeContactGroupSubscription = new Subscription();
   moreInfo = (this.sidenavService.selectedItem = "valuationTicket");
   summaryTotals: PersonSummaryFigures;
   sideNavItems = this.sidenavService.valuationSideNavItems;
@@ -231,7 +236,10 @@ export class ValuationDetailEditComponent
   person: Person;
   destroy = new Subject();
   showStudioLabel = false;
-  
+  isCancelValuationVisible = false;
+  isCancelled = false;
+  cancelString: string = "";
+  cancelReasonString: string = "";
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -573,11 +581,17 @@ export class ValuationDetailEditComponent
       }
     );
 
-    this.openContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe(
+    this.removeContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe(
       (value) => {
         if (value) {
           this.removeAdminContact();
         }
+      }
+    );
+
+    this.cancelValuationSubscription = this.sharedService.cancelValuationOperationChanged.subscribe(
+      (value) => {
+        this.isCancelValuationVisible = value;
       }
     );
 
@@ -896,7 +910,7 @@ export class ValuationDetailEditComponent
     this.valuation.property = { ...this.property };
     this.valuation.officeId = this.property.officeId;
     // this.valuers = result.valuers;
-    this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
+    this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
       this.contactGroup = result;
       console.log('----------------------------------- contactGroupBs.next')
       this.valuationService.contactGroupBs.next(this.contactGroup);
@@ -1156,9 +1170,37 @@ export class ValuationDetailEditComponent
           this.valuation.approxLeaseExpiryDate
             ? (this.showLeaseExpiryDate = true)
             : (this.showLeaseExpiryDate = false);
+
+          if (
+            this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
+          ) {
+            if (this.route.snapshot.routeConfig?.path?.indexOf("edit") > -1) {
+              let path = [
+                "valuations-register/detail",
+                data.valuationEventId,
+                "cancelled",
+              ];
+              this.router.navigate(path);
+              return;
+            }
+            this.isCancelled = true;
+            this.cancelString =
+              "Cancelled " +
+              moment(data.cancelledDate).format("Do MMM YYYY (HH:mm)") +
+              " by " +
+              data.cancelledBy?.fullName;
+            this.cancelReasonString =
+              "Reason for cancellation: " +
+              (data.cancellationTypeId == ValuationCancellationReasons.Other
+                ? data.cancellationReason
+                : this.removeUnderLine(
+                    ValuationCancellationReasons[data.cancellationTypeId]
+                  ));
+          }
           if (
             this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
-            this.valuation.valuationStatus === ValuationStatusEnum.Valued
+            this.valuation.valuationStatus === ValuationStatusEnum.Valued ||
+            this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
           ) {
             this.isEditable = false;
           } else {
@@ -1265,6 +1307,17 @@ export class ValuationDetailEditComponent
       .catch((err) => {
         console.log("err: ", err);
       });
+  }
+
+  controlIsCancelled($event) {
+    if (this.isCancelled) {
+      $event.preventDefault();
+      return false;
+    }
+  }
+
+  removeUnderLine(str: string): string {
+    return str.replaceAll("_", " ");
   }
 
   getSearchedPersonSummaryInfo(contactGroup: ContactGroup) {
@@ -1719,12 +1772,26 @@ export class ValuationDetailEditComponent
     }
   }
 
+  routeToValuationList() {
+    this.messageService.add({
+      severity: "success",
+      summary: "Valuation cancelled",
+      closable: false,
+    });
+    this.valuationService.doValuationSearchBs.next(true);
+    this.router.navigate(["/valuations-register"]);
+  }
+
   private getValuationPropertyInfo(propertyId: number) {
     this.valuationService
       .getValuationPropertyInfo(propertyId)
       .subscribe((res) => {
         if (res) {
-          if (+res.tenureId === 3 || res.approxLeaseExpiryDate) {
+          if (
+            +res.tenureId === 3 ||
+            +res.tenureId === 2 ||
+            res.approxLeaseExpiryDate
+          ) {
             this.showLeaseExpiryDate = true;
             //this.setApproxLeaseLengthValidator();
           } else {
@@ -2146,7 +2213,7 @@ export class ValuationDetailEditComponent
   }
 
   onTenureChange(tenureId: number) {
-    if (+tenureId === 3) {
+    if (+tenureId === 3 || +tenureId === 2) {
       this.showLeaseExpiryDate = true;
     } else {
       this.showLeaseExpiryDate = false;
@@ -2511,7 +2578,8 @@ export class ValuationDetailEditComponent
     this.setValuersValidators();
     this.sharedService.logValidationErrors(this.valuationForm, true);
 
-    this.valuationService.valuationValidationSubject.next(true);
+    // validation of land register
+    //this.valuationService.valuationValidationSubject.next(true);
 
     if (this.formErrors["declarableInterest"]) {
       this.accordionIndex = 4;
@@ -2532,21 +2600,19 @@ export class ValuationDetailEditComponent
       });
       return;
     }
-
-    if (
-      this.valuationForm.valid &&
-      this.valuationService.validationControlBs.getValue()
-    ) {
-      if (
-        this.valuationForm.dirty ||
-        this.isOwnerChanged ||
-        this.isPropertyChanged ||
-        this.isAdminContactChanged
-      ) {
-        this.addOrUpdateValuation();
-      } else {
-        this.onSaveComplete();
-      }
+    //this.valuationService.validationControlBs.getValue()
+    if (this.valuationForm.valid) {
+      this.addOrUpdateValuation();
+      // if (
+      //   this.valuationForm.dirty ||
+      //   this.isOwnerChanged ||
+      //   this.isPropertyChanged ||
+      //   this.isAdminContactChanged
+      // ) {
+      //   this.addOrUpdateValuation();
+      // } else {
+      //   this.onSaveComplete();
+      // }
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = "Please correct validation errors";
@@ -2589,6 +2655,10 @@ export class ValuationDetailEditComponent
     valuation.property.floorOther = valuation.floorOther;
     valuation.otherFeatures = [];
     valuation.propertyFeature = [];
+
+    if (this.showLeaseExpiryDate == false) {
+      valuation.leaseLandReg = {};
+    }
 
     if (valuation.isNewBuild)
       valuation.otherFeatures.push(OtherFeatures.New_Build);
@@ -2928,9 +2998,11 @@ export class ValuationDetailEditComponent
     this.sharedService.clearFormValidators(this.valuationForm, this.formErrors);
     this.storage.delete("valuationFormData").subscribe();
     this.openContactGroupSubscription.unsubscribe();
+    this.removeContactGroupSubscription.unsubscribe();
+    this.cancelValuationSubscription.unsubscribe();
     this.propertySubsription.unsubscribe();
     this.contactGroupSubscription.unsubscribe();
-    this.storage.delete(this.mainPersonId.toString()).subscribe();
+    this.storage.delete(this.mainPersonId?.toString()).subscribe();
     this.destroy.unsubscribe();
   }
 }

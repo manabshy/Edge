@@ -11,6 +11,7 @@ import { ValuationsTermsOfBusinessComponent } from "./valuations-terms-of-busine
 import { TermsOfBusinessTableSalesComponent } from "./shared/terms-of-business-tables/sales/terms-of-business-sales-table.component";
 import { TermsOfBusinessTableLettingsComponent } from "./shared/terms-of-business-tables/lettings/terms-of-business-lettings-table.component";
 import { ValuationsLandRegisterComponent } from "./valuation-land-register/valuation-land-register.component";
+import { CancelValuationComponent } from './cancel-valuation/cancel-valuation.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ValuationsLandRegisterComponent } from "./valuation-land-register/valua
     TermsOfBusinessTableSalesComponent,
     TermsOfBusinessTableLettingsComponent,
     ValuationsLandRegisterComponent,
+    CancelValuationComponent,
   ],
   imports: [
     CommonModule,
