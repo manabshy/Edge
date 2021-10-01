@@ -35,7 +35,10 @@ export class AppConstants {
     return `${environment.baseUrl}/contactGroups`;
   }
   public static get basePersonDocumentUrl(): string {
-    return `${environment.baseUrl}/personDocument`;
+    return `${environment.baseUrl}/document/person`;
+  }
+  public static get baseCompanyDocumentUrl(): string {
+    return `${environment.baseUrl}/document/company`;
   }
   public static get baseApplicantUrl(): string {
     return `${environment.baseUrl}/applicants`;
