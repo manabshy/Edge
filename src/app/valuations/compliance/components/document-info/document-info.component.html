@@ -3,7 +3,7 @@
   <div *ngFor="let file of files" 
     class="flex flex-row content-center my-1">
     <i class="fa fa-file tracking-normal text-gray-400 mr-1 mt-1"></i>
-    <a class="mr-2 tracking-tight" href="file.url" target="_blank">
+    <a class="mr-2 tracking-tight truncate" href="{{file.url}}" target="_blank">
       {{ file.label || label }}
     </a>
     <span *ngIf="documentType == DOCUMENT_TYPE.ID" [ngClass]="idHasExpired ? 'text-red-500':'text-green-500'">Exp {{moment(file.IDValidationDateExpiry).format('DD/MM/YY')}}</span>
@@ -22,7 +22,6 @@
   </button>
 </div>
 
-
 <p-dialog header="{{uploadDialogHeaderText}}" 
   appendTo="body" 
   [(visible)]="showFileUploadDialog" 
@@ -31,12 +30,10 @@
   <div class="flex flex-col" style="width: 500px;">
      <app-file-upload 
       [uploadedFiles]="files" 
-      [fileLimit]="fileLimit" 
       [fileType]="fileType"
       (getFiles)="getFiles($event)">
     </app-file-upload>
     <div *ngIf="showExpiryDatePicker" class="ml-2 mt-2 mb-0">
-      <!-- <p>Please enter the ID expiry date below.</p> -->
       <div class="animate__animated animate__pulse">
         <app-messages
           [message]="expiryDateMessage">
@@ -64,7 +61,7 @@
       <div class="flex flex-row space-x-4">
         <span class="flex-1"></span>
         <button type="button" class="btn btn--ghost" (click)="showFileUploadDialog = false">Cancel</button>
-        <button type="button" class="btn btn--positive" (click)="setSelectedFile()" [disabled]="saveFileBtnDisabled" data-cy="addFiles">Select</button>
+        <button type="button" class="btn btn--positive" (click)="setSelectedFile()" [disabled]="saveFileBtnDisabled" data-cy="addFiles">Upload</button>
       </div>
     </footer>
   </div>

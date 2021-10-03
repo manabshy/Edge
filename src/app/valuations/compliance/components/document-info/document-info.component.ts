@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter, Inject } from '@angular/core';
 import {
   FileTypeEnum,
-} from "./../../../core/services/file.service";
+} from "../../../../core/services/file.service";
 import moment from 'moment';
 import { FormControl, FormGroup } from '@angular/forms';
 // import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -94,6 +94,7 @@ export class DocumentInfoComponent implements OnInit {
 
     }
     this.uploadDialogHeaderText = label
+    return
   }
 
   private checkIdIsValid() {

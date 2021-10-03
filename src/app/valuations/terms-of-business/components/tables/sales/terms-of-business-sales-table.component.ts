@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import moment from 'moment';
-import { LettingsAgencyTypeEnum } from '../../../shared/valuation'
+import { LettingsAgencyTypeEnum } from '../../../../shared/valuation'
 @Component({
   selector: 'app-terms-of-business-table-sales',
   template:`

@@ -127,7 +127,8 @@
             (showMap)="showMapModal()" (changeProperty)="changeProperty()"
             (changeLastknownOwner)="isLastknownOwnerVisible = true"></app-property-card>
         </div>
-        <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()" autocompleteOff>
+
+        <form [formGroup]="valuationForm" autocompleteOff>
           <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
             <p-accordion [multiple]="true">
               <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]"
@@ -635,11 +636,11 @@
 
               <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
                 <div [ngClass]="{'opacity-75 pointer-events-none': isCancelled}" (click)="controlIsCancelled($event)">
-                  <app-valuations-terms-of-business [valuationForm]="valuationForm" [interestList]="interestList"
+                  <app-terms-of-business [valuationForm]="valuationForm" [interestList]="interestList"
                     [valuationFiles]="valuation.valuationFiles" [formErrors]="formErrors"
                     [tableType]="valuation.valuationType" [valuationStatus]="valuation.valuationStatus"
                     [dateRequestSent]="valuation.dateRequestSent">
-                  </app-valuations-terms-of-business>
+                  </app-terms-of-business>
                 </div>
               </p-accordionTab>
 
@@ -706,7 +707,7 @@
           <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
             <footer class="footer">
               <button (click)="cancel()" type="button" class="btn btn--ghost" data-cy="cancelVal">Cancel</button>
-              <button *ngIf="canSaveValuation" type="submit" class="btn btn--positive" id="saveVal" data-cy="saveVal"
+              <button *ngIf="canSaveValuation" (click)="saveValuation()" class="btn btn--positive" id="saveVal" data-cy="saveVal"
                 [disabled]="isSubmitting ? '' : null">
                 <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="loading" *ngIf="isSubmitting">
                   <path

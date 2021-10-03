@@ -4,10 +4,10 @@ import moment from "moment";
 import { ValuationTypeEnum } from "../shared/valuation";
 
 @Component({
-  selector: "app-valuations-terms-of-business",
-  templateUrl: "./valuations-terms-of-business.component.html"
+  selector: "app-terms-of-business",
+  templateUrl: "./terms-of-business.component.html"
 })
-export class ValuationsTermsOfBusinessComponent implements OnInit, OnChanges {
+export class TermsOfBusinessComponent implements OnInit, OnChanges {
   @Input() valuationFiles: any[] = [];
   @Input() valuationForm: FormGroup;
   @Input() interestList: any[] = [];

@@ -5,12 +5,12 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Story, Meta } from '@storybook/angular/types-6-0';
 import { action } from '@storybook/addon-actions'
 import { DocumentInfoComponent } from './document-info.component';
-import { VendorsModule } from '../../vendors.module';
-import { FileUploadComponent } from '../file-upload/file-upload.component';
-import { MessagesComponent } from '../messages/messages.component';
+import { VendorsModule } from '../../../../shared/vendors.module';
+import { FileUploadComponent } from '../../../../shared/components/file-upload/file-upload.component';
+import { MessagesComponent } from '../../../../shared/components/messages/messages.component';
 
 export default {
-  title: 'Components/Shared/DocumentInfo',
+  title: 'Valuations/Compliance/Components/DocumentInfo',
   component: DocumentInfoComponent,
   excludeStories: /.*Data$/,
   decorators: [
@@ -19,7 +19,7 @@ export default {
       imports: [CommonModule, VendorsModule, BrowserAnimationsModule]
     }),
     componentWrapperDecorator((story)=> `
-        <div style="margin: 3em" class="w-1/4">${story}</div>
+        <div class="w-full md:w-1/4 mx-auto">${story}</div>
       `
     )
   ],
@@ -148,6 +148,21 @@ MultipleAdditionalDocumentsUploaded.args = {
     id: 0,
     label: 'Other-doc.pdf',
     uploadDate: '01/09/21'
+  }, {
+    id: 0,
+    label: 'Reference-x.pdf',
+    uploadDate: '01/09/21'
+  }]
+};
+
+export const LongNameDocumentsUploaded = DocumentInfo.bind({});
+LongNameDocumentsUploaded.args = {
+  documentType: 50,
+  label: 'Additional Documents',
+  files: [{
+    id: 0,
+    uploadDate: '01/09/21',
+    label: 'p-52364_LandReg_0d4f32873cfa40ae918644e85472bcbe.pdf'
   }, {
     id: 0,
     label: 'Reference-x.pdf',

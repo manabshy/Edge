@@ -1,4 +1,4 @@
-import { DOCUMENT_TYPE } from '../components/document-info/document-info.component';
+import { DOCUMENT_TYPE } from './components/document-info/document-info.component';
 import { ComplianceDocTypes } from './compliance-checks.store'
 
 export const findAndRemoveDoc = (documents, ev) => {
@@ -248,4 +248,11 @@ export const checkAllPeopleHaveDocs = (people, checkType) => {
     })
   }
   return checksAreValid
+}
+
+export const identifyAmlOrKyc = (pricingInformation): string => {
+  return (
+    pricingInformation.suggestedAskingRentLongLetMonthly < 7500 ||
+    pricingInformation.suggestedAskingRentShortLetMonthly < 7500
+  ) ? 'KYC' : 'AML'
 }

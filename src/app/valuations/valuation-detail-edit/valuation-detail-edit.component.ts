@@ -2574,6 +2574,8 @@ export class ValuationDetailEditComponent
   }
 
   saveValuation() {
+    console.log('saveValuation')
+    // return
     this.checkAvailabilityBooking();
     this.setValuersValidators();
     this.sharedService.logValidationErrors(this.valuationForm, true);

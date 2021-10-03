@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { action } from '@storybook/addon-actions'
 import { Story, Meta } from '@storybook/angular/types-6-0';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { VendorsModule } from '../../vendors.module';
+import { VendorsModule } from '../../../../shared/vendors.module';
 
 // component under test
 import { PureComplianceChecksShellComponent } from './pure-compliance-checks-shell.component';
@@ -11,8 +11,8 @@ import { PureComplianceChecksShellComponent } from './pure-compliance-checks-she
 // child components
 import { ComplianceCardComponent } from '../compliance-card/compliance-card.component';
 import { DocumentInfoComponent } from '../../components/document-info/document-info.component';
-import { MessagesComponent } from '../../components/messages/messages.component';
-import { CompanyFinderComponent } from '../../components/company-finder/company-finder.component';
+import { MessagesComponent } from '../../../../shared/components/messages/messages.component'
+import { CompanyFinderComponent } from '../../../../shared/components/company-finder/company-finder.component';
 import { 
   LeadContactBlank,
   LeadContactValid,
@@ -20,11 +20,11 @@ import {
   AssociatedContactValid,
   AssociatedContactInvalid 
 } from '../compliance-card/compliance-card.component.stories'
-import { BigButtonComponent } from '../../components/big-button/big-button.component';
-import { FileUploadComponent } from '../../components/file-upload/file-upload.component';
+import { BigButtonComponent } from '../../../../shared/components/big-button/big-button.component';
+import { FileUploadComponent } from '../../../../shared/components/file-upload/file-upload.component';
 
 export default {
-  title: 'Components/Shared/Compliance/PureComplianceChecksShellComponent',
+  title: 'Valuations/Compliance/PureComplianceChecksShellComponent',
   component: PureComplianceChecksShellComponent,
   excludeStories: /.*Data$/,
   decorators: [

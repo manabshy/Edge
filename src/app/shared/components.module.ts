@@ -65,10 +65,6 @@ import { InfiniteScrollComponent } from "./components/infinite-scroll/infinite-s
 import { GenericMultiSelectControlComponent } from "./generic-multi-select-control/generic-multi-select-control.component";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { DialogService } from "primeng/dynamicdialog";
-import { ComplianceCardComponent } from "./compliance/compliance-card/compliance-card.component"
-import { DocumentInfoComponent } from "./components/document-info/document-info.component";
-import { ComplianceChecksShellComponent } from "./compliance/compliance-checks-shell/compliance-checks-shell.component";
-import { PureComplianceChecksShellComponent } from "./compliance/pure-compliance-checks-shell/pure-compliance-checks-shell.component"
 import { MessagesComponent } from './components/messages/messages.component'
 import { FileUploadComponent } from "./components/file-upload/file-upload.component";
 import { FileListComponent } from "./components/file-list/file-list.component";
@@ -125,10 +121,6 @@ const components = [
   CompanyFinderComponent,
   InfiniteScrollComponent,
   GenericMultiSelectControlComponent,
-  ComplianceCardComponent,
-  DocumentInfoComponent,
-  ComplianceChecksShellComponent,
-  PureComplianceChecksShellComponent,
   MessagesComponent,
   FileUploadComponent,
   FileListComponent,

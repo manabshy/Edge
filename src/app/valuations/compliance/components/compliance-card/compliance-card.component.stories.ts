@@ -4,13 +4,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // also exported from '@storybook/angular' if you can deal with breaking changes in 6.1
 import { Story, Meta } from '@storybook/angular/types-6-0';
 import { action } from '@storybook/addon-actions';
-import { VendorsModule } from '../../vendors.module';
+import { VendorsModule } from '../../../../shared/vendors.module';
 
 // component under test
 import { ComplianceCardComponent } from './compliance-card.component';
 
 // document-info component and stories
-import { DocumentInfoComponent } from '../../components/document-info/document-info.component'
+import { DocumentInfoComponent } from '../document-info/document-info.component'
 import { 
   IdBlank,
   IdUploadedValid,
@@ -23,11 +23,11 @@ import {
   AdditionalDocumentsBlank,
   AdditionalDocumentUploaded,
   MultipleAdditionalDocumentsUploaded
-} from '../../components/document-info/document-info.component.stories'
-import { FileUploadComponent } from '../../components/file-upload/file-upload.component';
+} from '../document-info/document-info.component.stories'
+import { FileUploadComponent } from '../../../../shared/components/file-upload/file-upload.component';
 
 export default {
-  title: 'Components/Shared/Compliance/ComplianceCard',
+  title: 'Valuations/Compliance/Components/ComplianceCard',
   excludeStories: /.*Data$/,
   component: ComplianceCardComponent,
   decorators: [
@@ -36,7 +36,7 @@ export default {
       imports: [CommonModule, VendorsModule, BrowserAnimationsModule],
     }),
     componentWrapperDecorator((story)=> `
-        <div class="m-10 w-1/2 mx-auto shadow-md">${story}</div>
+        <div class="m-10 w-full md:w-1/2 mx-auto shadow-md">${story}</div>
       `
     )
   ],

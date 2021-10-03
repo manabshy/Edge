@@ -8,7 +8,7 @@
   
   <div class="w-full flex flex-col lg:flex-row lg:flex-wrap px-0">
     <div *ngFor="let person of people; let i = index; let even = even;" 
-      class="w-full lg:w-1/2 border-gray-300" 
+      class="w-full lg:w-1/2" 
       [ngClass]="[even ? 'lg:border-r':'', ((i == 0 || i == 1) && people.length > 2) ? 'lg:border-b':'']">
       <app-compliance-card
         [person]="person"
