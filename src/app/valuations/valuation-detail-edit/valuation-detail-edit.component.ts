@@ -1,4 +1,7 @@
-import { ValuationCancellationReasons } from "./../shared/valuation";
+import {
+  ValuationCancellationReasons,
+  valuationNote,
+} from "./../shared/valuation";
 import {
   Component,
   OnInit,
@@ -240,6 +243,10 @@ export class ValuationDetailEditComponent
   isCancelled = false;
   cancelString: string = "";
   cancelReasonString: string = "";
+  saveValuationSubscription = new Subscription();
+  saveValuationNoteSubscription = new Subscription();
+  valuationNoteSubscription = new Subscription();
+  valuationNote: valuationNote;
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -382,6 +389,18 @@ export class ValuationDetailEditComponent
       .get("currentUser")
       .subscribe((currentStaffMember: StaffMember) => {
         if (currentStaffMember) {
+          this.currentStaffMember = currentStaffMember;
+
+          this.valuationNote = {
+            id: 0,
+            addressee: "",
+            text: "",
+            isImportant: false,
+            isPinned: false,
+            createDate: new Date(),
+            createdBy: this.currentStaffMember.staffMemberId,
+          };
+
           // for testing purposes
           if (currentStaffMember.activeDepartments[0].departmentId === 90) {
             this.isClientService = true;
@@ -1164,6 +1183,8 @@ export class ValuationDetailEditComponent
           console.log("this.valuation: ", this.valuation);
           this.getPropertyInformation(this.valuation.property.propertyId);
 
+          this.getValuationNote(this.valuation);
+
           this.valuation.valuationStatus === 3
             ? (this.canInstruct = true)
             : (this.canInstruct = false);
@@ -1184,11 +1205,9 @@ export class ValuationDetailEditComponent
               return;
             }
             this.isCancelled = true;
-            this.cancelString =
-              "Cancelled " +
-              moment(data.cancelledDate).format("Do MMM YYYY (HH:mm)") +
-              " by " +
-              data.cancelledBy?.fullName;
+            this.cancelString = `Cancelled ${moment(data.cancelledDate).format(
+              "Do MMM YYYY (HH:mm)"
+            )} by ${data.cancelledBy?.fullName} `;
             this.cancelReasonString =
               "Reason for cancellation: " +
               (data.cancellationTypeId == ValuationCancellationReasons.Other
@@ -1197,6 +1216,9 @@ export class ValuationDetailEditComponent
                     ValuationCancellationReasons[data.cancellationTypeId]
                   ));
           }
+
+          //this.setInitialValuesByStatus(this.valuation.valuationStatus);
+
           if (
             this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
             this.valuation.valuationStatus === ValuationStatusEnum.Valued ||
@@ -1308,6 +1330,50 @@ export class ValuationDetailEditComponent
         console.log("err: ", err);
       });
   }
+
+  getValuationNote(valuation: Valuation) {
+    this.valuationNoteSubscription = this.valuationService
+      .getValuationNote(this.valuation.valuationEventId)
+      .subscribe((data) => {
+        this.valuationNote = data;
+      });
+  }
+
+  // setInitialValuesByStatus(valuationStatus) {
+  //   switch (valuationStatus) {
+  //     case ValuationStatusEnum.Instructed: {
+  //       this.isEditable = false;
+  //       this.canSaveValuation = false;
+  //       break;
+  //     }
+  //     case ValuationStatusEnum.Booked: {
+  //       this.isEditable = false;
+  //       let valueIndex = this.statuses.find((x) => x.name == "values").value;
+  //       //this.setTabIndexActive(valueIndex);
+  //       break;
+  //     }
+  //     case ValuationStatusEnum.Valued: {
+  //       this.isEditable = false;
+  //       break;
+  //     }
+  //     case ValuationStatusEnum.Cancelled: {
+  //       this.isEditable = false;
+  //       this.canSaveValuation = false;
+  //       break;
+  //     }
+  //     default: {
+  //       this.isEditable = true;
+  //       this.canSaveValuation = true;
+  //     }
+  //   }
+  // }
+
+  // setTabIndexActive(index: number) {
+  //   let initState : boolean[] = [...this.activeState];
+  //   initState.forEach(x=> x =false);
+  //   initState[index]= true;
+  //   this.activeState[index] = true;
+  // }
 
   controlIsCancelled($event) {
     if (this.isCancelled) {
@@ -2700,34 +2766,53 @@ export class ValuationDetailEditComponent
     this.setValuers(valuation);
 
     if (this.isNewValuation) {
-      this.valuationService.addValuation(valuation).subscribe(
-        (data) => {
-          if (data) {
-            this.onSaveComplete(data);
+      this.saveValuationSubscription = this.valuationService
+        .addValuation(valuation)
+        .subscribe(
+          (data) => {
+            if (data) {
+              this.onSaveComplete(data);
+            }
+          },
+          (error: WedgeError) => {
+            this.messageService.add({
+              severity: "error",
+              summary: error.displayMessage,
+              closable: false,
+            });
+            this.isSubmitting = false;
           }
-        },
-        (error: WedgeError) => {
-          this.messageService.add({
-            severity: "error",
-            summary: error.displayMessage,
-            closable: false,
-          });
-          this.isSubmitting = false;
-        }
-      );
+        );
     } else {
-      this.valuationService.updateValuation(valuation).subscribe(
-        (data) => {
-          if (data) {
-            this.onSaveComplete(data);
+      this.saveValuationSubscription = this.valuationService
+        .updateValuation(valuation)
+        .subscribe(
+          (data) => {
+            if (data) {
+              this.onSaveComplete(data);
+            }
+          },
+          (error: WedgeError) => {
+            this.errorMessage = error;
+            this.isSubmitting = false;
           }
-        },
-        (error: WedgeError) => {
-          this.errorMessage = error;
-          this.isSubmitting = false;
-        }
-      );
+        );
     }
+  }
+
+  saveNote(note: valuationNote) {
+    note.valuationEventId = this.valuation.valuationEventId;
+    note.contactGroupId = this.contactId;
+    this.saveValuationNoteSubscription = this.valuationService
+      .saveValuationNote(note)
+      .subscribe((x) => {
+        this.valuationNote = x;
+        this.messageService.add({
+          severity: "success",
+          summary: "Valuation note successfully saved",
+          closable: false,
+        });
+      });
   }
 
   setValuers(valuation) {
@@ -3004,6 +3089,9 @@ export class ValuationDetailEditComponent
     this.cancelValuationSubscription.unsubscribe();
     this.propertySubsription.unsubscribe();
     this.contactGroupSubscription.unsubscribe();
+    this.saveValuationNoteSubscription.unsubscribe();
+    this.saveValuationSubscription.unsubscribe();
+    this.valuationNoteSubscription.unsubscribe();
     this.storage.delete(this.mainPersonId?.toString()).subscribe();
     this.destroy.unsubscribe();
   }

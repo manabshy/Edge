@@ -1,5 +1,5 @@
-import { Signer } from "src/app/contact-groups/shared/contact-group";
 import { StaffMember } from "./../../shared/models/staff-member";
+
 import { DiaryEvent } from "src/app/diary/shared/diary";
 import { BaseProperty } from "src/app/shared/models/base-property";
 import { BaseRequestOption } from "src/app/shared/models/base-request-option";
@@ -7,6 +7,7 @@ import { BaseStaffMember } from "src/app/shared/models/base-staff-member";
 import { Property } from "src/app/property/shared/property";
 import { Office } from "src/app/shared/models/staff-member";
 import { EdgeFile } from "src/app/shared/models/edgeFile";
+import { BaseNote, Signer } from "src/app/contact-groups/shared/contact-group";
 
 export interface ValuationInfo {
   reason?: string;
@@ -153,6 +154,13 @@ export interface ValuationBooking {
   totalHours?: number;
 }
 
+export interface valuationNote extends BaseNote {
+  dateLastUpdated?: Date;
+  lastUpdatedByFullName?: string;
+  contactGroupId?: number;
+  valuationEventId?: number;
+}
+
 export interface CancelValuation {
   valuationEventId?: number;
   typeId?: number;
@@ -180,12 +188,12 @@ export enum ValuationStatusEnum {
 }
 
 export enum ValuationCancellationReasons {
-  Tenant_Refusing_Access = 1,
-  Gone_With_Another_Agent = 2,
-  No_Show_No_Contact = 3,
-  Change_of_Circumstance = 4,
-  Agent_Not_Allowing_Access = 5,
-  Did_Not_Want_Sales_Let_Val = 6,
+  Tenant_refusing_access = 1,
+  Gone_with_another_agent = 2,
+  No_show_no_contact = 3,
+  Change_of_circumstance = 4,
+  Agent_not_allowing_access = 5,
+  Did_not_want_sales_or_lettings_val = 6,
   Other = 7,
 }
 

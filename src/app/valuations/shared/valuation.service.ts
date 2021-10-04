@@ -10,7 +10,9 @@ import {
   CalendarAvailibility,
   ValuationPricingInfo,
   CancelValuation,
-  ValuationStatusEnum
+  ValuationStatusEnum,
+  ValuationCancellationReasons,
+  valuationNote,
 } from "./valuation";
 import { AppConstants } from "src/app/core/shared/app-constants";
 import { map, tap } from "rxjs/operators";
@@ -35,13 +37,24 @@ export class ValuationService {
   landRegisterValid = new BehaviorSubject(false);
   doValuationSearchBs = new BehaviorSubject(false);
 
-  private readonly _valuationPricingInfo: BehaviorSubject<ValuationPricingInfo> = new BehaviorSubject({})
-  public readonly valuationPricingInfo$ = this._valuationPricingInfo.asObservable()
+  private readonly _valuationPricingInfo: BehaviorSubject<ValuationPricingInfo> = new BehaviorSubject(
+    {}
+  );
+  public readonly valuationPricingInfo$ = this._valuationPricingInfo.asObservable();
 
-  constructor(private http: HttpClient, private storage: StorageMap) { }
+  constructor(private http: HttpClient, private storage: StorageMap) {}
 
   valuationPageNumberChanged(page: number) {
     this.valuationPageNumberSubject.next(page);
+  }
+
+  getValuationNote(valuationEventId: number): Observable<any> {
+    const url = `${AppConstants.baseValuationUrl}/${valuationEventId}/note`;
+    return this.http
+      .get<any>(url, {
+        headers: { ignoreLoadingBar: "" },
+      })
+      .pipe(map((response) => response.result));
   }
 
   getValuationSuggestions(searchTerm: string): Observable<any> {
@@ -107,6 +120,14 @@ export class ValuationService {
     return this.http.put<any>(url, valuation).pipe(
       map((response) => response.result),
       tap((data) => console.log("added valuation", JSON.stringify(data)))
+    );
+  }
+
+  saveValuationNote(valuationNote: valuationNote): Observable<Valuation | any> {
+    const url = `${AppConstants.baseValuationUrl}/${valuationNote.valuationEventId}/note`;
+    return this.http.post<any>(url, valuationNote).pipe(
+      map((response) => response.result),
+      tap((data) => console.log("added valuation note", JSON.stringify(data)))
     );
   }
 
