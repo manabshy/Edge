@@ -1,8 +1,9 @@
 import { NgModule } from "@angular/core";
-import { TypeaheadModule } from "ngx-bootstrap/typeahead";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { NgPipesModule } from "ngx-pipes";
 
 // bootstrap
+import { TypeaheadModule } from "ngx-bootstrap/typeahead";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown/";
@@ -52,12 +53,14 @@ import { CheckboxModule } from "primeng/checkbox";
 import { FileUploadModule } from "@iplab/ngx-file-upload";
 
 const externalModules = [
+  ReactiveFormsModule, 
+  FormsModule,
   InfiniteScrollModule,
   CollapseModule,
   TabsModule,
   TypeaheadModule,
   BsDropdownModule,
-  BsDatepickerModule,
+  BsDatepickerModule.forRoot(),
   ModalModule,
   PopoverModule,
   NgPipesModule,
@@ -97,7 +100,7 @@ const externalModules = [
   TableModule,
   MenuModule,
   CheckboxModule,
-  FileUploadModule,
+  FileUploadModule
 ];
 
 @NgModule({

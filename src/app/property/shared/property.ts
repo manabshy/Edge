@@ -1,6 +1,6 @@
 import { Address } from "src/app/shared/models/address";
 import { SubNavItem, SubNav } from "src/app/shared/subnav";
-import { Signer } from "src/app/contactgroups/shared/contact-group";
+import { Signer } from "src/app/contact-groups/shared/contact-group";
 import { BaseStaffMember } from "src/app/shared/models/base-staff-member";
 
 export interface PropertyInfo {

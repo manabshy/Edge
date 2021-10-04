@@ -35,8 +35,8 @@ import {
   ContactNote,
   PersonSummaryFigures,
   BasicContactGroup,
-} from "src/app/contactgroups/shared/contact-group";
-import { ContactGroupsService } from "src/app/contactgroups/shared/contact-groups.service";
+} from "src/app/contact-groups/shared/contact-group";
+import { ContactGroupsService } from "src/app/contact-groups/shared/contact-groups.service";
 import { Person, PersonProperty } from "src/app/shared/models/person";
 import { ToastrService } from "ngx-toastr";
 import { takeUntil, debounceTime, map } from "rxjs/operators";

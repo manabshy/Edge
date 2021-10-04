@@ -1,10 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-
-import { HomeComponent } from "./home/home.component";
-import { AuthGuardService } from "./core/services/auth-guard.service";
 import { NotFoundComponent } from "./not-found/not-found.component";
-import { SelectiveStrategyService } from "./core/services/selective-strategy.service";
 import { ImpersonateMemberComponent } from "./impersonate-member/impersonate-member.component";
 import { MsalGuard } from "@azure/msal-angular";
 import { CalendarComponent } from "./calendar-shared/calendar/calendar.component";
@@ -39,8 +35,8 @@ const routes: Routes = [
   {
     path: "contact-centre",
     loadChildren: () =>
-      import("./contactgroups/contactgroups.module").then(
-        (m) => m.ContactgroupsModule
+      import("./contact-groups/contact-groups.module").then(
+        (m) => m.ContactGroupsModule
       ),
     canActivate: [MsalGuard],
   },

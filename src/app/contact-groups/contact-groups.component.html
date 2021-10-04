@@ -1,0 +1,104 @@
+<div class="row">
+  <div class="row__item row__item--aside">
+    <div class="wrapper--sticky">
+      <div class="card">
+        <div class="card__header"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+            class="icon icon--onLeft">
+            <path
+              d="M45.6 36.9c1.9-3.6 3.2-7.8 3.2-12.4C48.8 11.1 37.8 0 24.4 0S0 11.1 0 24.5 11 49 24.4 49c4.5 0 8.8-1 12.3-3.3L54.9 64l9.1-8.5L45.6 36.9zM24.5 40.8c-9.1 0-16.2-7.2-16.2-16.3S15.4 8.2 24.5 8.2s16.2 7.2 16.2 16.3C40.7 33.6 33.6 40.8 24.5 40.8z" />
+          </svg>Search contacts</div>
+        <div class="card__body">
+          <form [formGroup]="contactFinderForm" (ngSubmit)="contactGroupsResults(true)">
+            <fieldset class="mb-3">
+              <label for="">Name, email, phone or postcode</label>
+              <input class="p-2" type="search" formControlName="searchTerm" placeholder="Name, email, phone or postcode"
+                aria-label="Search criteria" (keyup)="onKeyup($event)" [ngbTypeahead]="suggestions" [focusFirst]="false"
+                (selectItem)="selectedSuggestion($event)">
+            </fieldset>
+
+            <fieldset>
+              <button class="btn btn--info">Search</button>
+            </fieldset>
+
+            <div id="advSearch" [collapse]="!advSearchCollapsed">
+              <div class="row">
+                <div class="col-md-auto pr-0">
+                  Must be one of:
+                </div>
+                <div class="col">
+                  <div class="form-group form-check">
+                    <div class="row">
+                      <div class="custom-control custom-checkbox col-6 col-md-auto">
+                        <input type="checkbox" class="custom-control-input" id="advLandlord">
+                        <label class="custom-control-label small" for="advLandlord">Landlord</label>
+                      </div>
+                      <div class="custom-control custom-checkbox col-6 col-md-auto">
+                        <input type="checkbox" class="custom-control-input" id="advTenant">
+                        <label class="custom-control-label small" for="advTenant">Tenant</label>
+                      </div>
+                      <div class="custom-control custom-checkbox col-6 col-md-auto">
+                        <input type="checkbox" class="custom-control-input" id="advVendor">
+                        <label class="custom-control-label small" for="advVendor">Vendor</label>
+                      </div>
+                      <div class="custom-control custom-checkbox col-6 col-md-auto">
+                        <input type="checkbox" class="custom-control-input" id="advBuyer">
+                        <label class="custom-control-label small" for="advBuyer">Buyer</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="text-center" *ngIf="isHintVisible">
+            <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card__header">
+          Actions
+        </div>
+        <div class="card__body card__body--list">
+          <ol class="list list--divider list--hover">
+            <li>
+              <a class="overall" (click)="navigateToNewGroup('personal')"></a>
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                <path
+                  d="M32 32c8.6 0 15.5-7 15.5-15.5C47.5 7.9 40.6 1 32 1S16.5 7.9 16.5 16.5C16.5 25 23.4 32 32 32zM32 39.8c-10.3 0-31 5.2-31 15.5V63h62v-7.8C63 44.9 42.3 39.8 32 39.8z">
+                </path>
+              </svg>New Personal Contact Group
+            </li>
+            <li>
+              <a class="overall" (click)="navigateToNewGroup('company')"></a>
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                <path
+                  d="M56.8 14.9H44.4V8.8c0-3.4-2.8-6.2-6.2-6.2H25.8c-3.4 0-6.2 2.8-6.2 6.2v6.2H7.2c-3.4 0-6.2 2.8-6.2 6.2l0 34.1c0 3.4 2.8 6.2 6.2 6.2h49.6c3.4 0 6.2-2.8 6.2-6.2V21.1C63 17.7 60.2 14.9 56.8 14.9zM38.2 14.9H25.8V8.8h12.4V14.9z">
+                </path>
+              </svg>New Company Contact Group
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row__item">
+    <app-contact-groups-list class="appWrapper" [originalContactGroups]='contactGroups' [pageNumber]="page"
+      [searchTerm]='contactFinderForm.value.searchTerm' [bottomReached]="bottomReached" *ngIf="!isHintVisible">
+    </app-contact-groups-list>
+
+    <ng-container *ngIf="isMessageVisible && !isHintVisible && page === 1">
+      <div class="text-center text-danger">
+        <i class="far fa-sad-tear"></i> No results for '<strong>{{contactFinderForm.value.searchTerm || ' '}}</strong>'
+      </div>
+      <div class="mt-3 text-left" *ngIf="differentSearchSuggestions?.length > 1">
+        <div class="mb-2" *ngFor="let sug of differentSearchSuggestions">
+          <a routerLink="./" [queryParams]="{searchTerm: sug}">
+            Search for <b>"{{sug}}"</b>
+          </a>
+        </div>
+      </div>
+    </ng-container>
+  </div>

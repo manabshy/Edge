@@ -58,7 +58,7 @@ import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown/";
 import { CollapseModule } from "ngx-bootstrap/collapse/";
 import { TabsModule } from "ngx-bootstrap/tabs/";
-import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
+// import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
 import { ModalModule } from "ngx-bootstrap/modal/";
 import { PopoverModule } from "ngx-bootstrap/popover";
 import { TooltipModule } from "ngx-bootstrap/tooltip";
@@ -76,8 +76,7 @@ import { LoadingBarHttpClientModule } from "@ngx-loading-bar/http-client";
 import { AngularStickyThingsModule } from "@w11k/angular-sticky-things";
 import { CalendarSharedModule } from "./calendar-shared/calendar-shared.module";
 
-import { MsalModule, MsalInterceptor } from "@azure/msal-angular";
-import { Logger, LogLevel } from "msal";
+import { MsalModule } from "@azure/msal-angular";
 import { HeaderComponent } from "./header/header.component";
 
 // SVG ICONS
@@ -124,7 +123,6 @@ const redirectUri = environment.baseRedirectUri
 import { defineLocale } from "ngx-bootstrap/chronos";
 import { deLocale, frLocale, plLocale, enGbLocale } from "ngx-bootstrap/locale";
 import { ProfileComponent } from "./profile/profile.component";
-import { Daterangepicker } from "ng2-daterangepicker";
 
 defineLocale("de", deLocale);
 defineLocale("fr", frLocale);
@@ -139,7 +137,7 @@ const externalModulesImports = [
   BsDropdownModule.forRoot(),
   CollapseModule.forRoot(),
   TabsModule.forRoot(),
-  BsDatepickerModule.forRoot(),
+  // BsDatepickerModule.forRoot(),
   TypeaheadModule.forRoot(),
   ModalModule.forRoot(),
   PopoverModule.forRoot(),
@@ -163,7 +161,7 @@ const externalModulesExports = [
   TabsModule,
   TypeaheadModule,
   BsDropdownModule,
-  BsDatepickerModule,
+  // BsDatepickerModule,
   ModalModule,
   PopoverModule,
   NgPipesModule,

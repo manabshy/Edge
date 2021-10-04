@@ -5,7 +5,7 @@ import { CommonModule } from "@angular/common";
 import { Story, Meta } from "@storybook/angular/types-6-0";
 
 export default {
-  title: "Components/Valuations/valuation-land-register",
+  title: "Valuations/LandRegister/valuation-land-register",
   component: ValuationsLandRegisterComponent,
   decorators: [
     moduleMetadata({

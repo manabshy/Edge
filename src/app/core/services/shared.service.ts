@@ -11,10 +11,8 @@ import { CurrencyPipe, Location } from "@angular/common";
 import { Title } from "@angular/platform-browser";
 import { AbstractControl, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
-import { HttpParams } from "@angular/common/http";
-import { CustomQueryEncoderHelper } from "../shared/custom-query-encoder-helper";
 import { StorageMap } from "@ngx-pwa/local-storage";
-import { ContactGroup } from "src/app/contactgroups/shared/contact-group";
+import { ContactGroup } from "src/app/contact-groups/shared/contact-group";
 import { ValidationMessages, FormErrors } from "../shared/app-constants";
 import {
   Valuation,

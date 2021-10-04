@@ -2,7 +2,7 @@ import { Address } from "./address";
 import {
   ContactNote,
   Signer,
-} from "src/app/contactgroups/shared/contact-group";
+} from "src/app/contact-groups/shared/contact-group";
 
 export interface Person extends PersonWarning {
   personId: number;

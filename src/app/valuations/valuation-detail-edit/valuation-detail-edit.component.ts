@@ -26,8 +26,8 @@ import {
   ContactNote,
   PersonSummaryFigures,
   Signer,
-} from "src/app/contactgroups/shared/contact-group";
-import { ContactGroupsService } from "src/app/contactgroups/shared/contact-groups.service";
+} from "src/app/contact-groups/shared/contact-group";
+import { ContactGroupsService } from "src/app/contact-groups/shared/contact-groups.service";
 import {
   DropdownListInfo,
   InfoDetail,
@@ -347,6 +347,7 @@ export class ValuationDetailEditComponent
     { name: "termsOfBusinessues", value: 4 },
     { name: "antiMoneyLaundering", value: 5 },
     { name: "landRegistery", value: 6 },
+    { name: "complianceChecks", value: 9 },
     { name: "status", value: 7 },
     { name: "instruct", value: 8 },
   ];
@@ -721,6 +722,7 @@ export class ValuationDetailEditComponent
       this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
         (result) => {
           this.contactGroup = result;
+          console.log('----------------------------------- contactGroupBs.next')
           this.valuationService.contactGroupBs.next(this.contactGroup);
           this.getSearchedPersonSummaryInfo(this.contactGroup);
         }
@@ -910,6 +912,7 @@ export class ValuationDetailEditComponent
     // this.valuers = result.valuers;
     this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
       this.contactGroup = result;
+      console.log('----------------------------------- contactGroupBs.next')
       this.valuationService.contactGroupBs.next(this.contactGroup);
       this.getSearchedPersonSummaryInfo(this.contactGroup);
     });
@@ -1247,6 +1250,7 @@ export class ValuationDetailEditComponent
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
               (result) => {
                 this.contactGroup = result;
+                console.log('----------------------------------- contactGroupBs.next')
                 this.valuationService.contactGroupBs.next(this.contactGroup);
                 this.getSearchedPersonSummaryInfo(this.contactGroup);
                 this.setAdminContact();
@@ -1722,6 +1726,7 @@ export class ValuationDetailEditComponent
       this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then(
         (result) => {
           this.contactGroup = result;
+          console.log('----------------------------------- contactGroupBs.next')
           this.valuationService.contactGroupBs.next(this.contactGroup);
           this.getSearchedPersonSummaryInfo(this.contactGroup);
         }
@@ -2569,6 +2574,8 @@ export class ValuationDetailEditComponent
   }
 
   saveValuation() {
+    console.log('saveValuation')
+    // return
     this.checkAvailabilityBooking();
     this.setValuersValidators();
     this.sharedService.logValidationErrors(this.valuationForm, true);

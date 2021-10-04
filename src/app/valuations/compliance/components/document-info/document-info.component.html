@@ -1,0 +1,68 @@
+<div class="rounded-sm border border-grey-100 p-2 cursor-pointer w-full py-2"
+  [ngClass]="idHasExpired ? 'border-red-500 bg-red-100':''">
+  <div *ngFor="let file of files" 
+    class="flex flex-row content-center my-1">
+    <i class="fa fa-file tracking-normal text-gray-400 mr-1 mt-1"></i>
+    <a class="mr-2 tracking-tight truncate" href="{{file.url}}" target="_blank">
+      {{ file.label || label }}
+    </a>
+    <span *ngIf="documentType == DOCUMENT_TYPE.ID" [ngClass]="idHasExpired ? 'text-red-500':'text-green-500'">Exp {{moment(file.IDValidationDateExpiry).format('DD/MM/YY')}}</span>
+    <span class="flex-1 text-right" [pTooltip]="'Upload Date'">{{moment(file.uploadDate).format('DD/MM/YY')}}</span>
+    <button (click)="deleteFile.emit({ id:file.fileStoreId, documentType: documentType })" [pTooltip]="'Delete Document'">
+      <svg aria-hidden="true" width="40" height="40" viewBox="0 0 64 64" class="icon ml-2 text-gray-400">
+        <path d="M11.4 56.1c0 3.8 3.1 6.9 6.9 6.9h27.4c3.8 0 6.9-3.1 6.9-6.9V14.8H11.4V56.1zM19.9 31.6l4.9-4.9L32 34l7.3-7.3 4.9 4.9 -7.3 7.3 7.3 7.3 -4.9 4.9L32 43.8l-7.3 7.3 -4.9-4.9 7.3-7.3L19.9 31.6zM44 4.4L40.6 1H23.4L20 4.4H8v6.9h48V4.4H44z"></path> 
+      </svg>
+    </button>
+  </div>
+  <button *ngIf="showFilesUploadButton()" 
+    (click)="openUploadDialog()"
+    class="py-2">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    <span class="underline ml-2">Upload {{label}}</span>
+  </button>
+</div>
+
+<p-dialog header="{{uploadDialogHeaderText}}" 
+  appendTo="body" 
+  [(visible)]="showFileUploadDialog" 
+  [modal]="true"
+  [draggable]="false">
+  <div class="flex flex-col" style="width: 500px;">
+     <app-file-upload 
+      [uploadedFiles]="files" 
+      [fileType]="fileType"
+      (getFiles)="getFiles($event)">
+    </app-file-upload>
+    <div *ngIf="showExpiryDatePicker" class="ml-2 mt-2 mb-0">
+      <div class="animate__animated animate__pulse">
+        <app-messages
+          [message]="expiryDateMessage">
+        </app-messages>
+      </div>
+      <form [formGroup]="idExpiryForm">
+        <fieldset [ngClass]="{'invalid': idHasExpired}">
+          <label for="">ID Expiry Date</label>
+          <input class="p-2 mt-2" 
+            type="text" 
+            id="idExpiryDate" 
+            placeholder="dd/mm/yyyy" 
+            formControlName="idExpiryDate"
+            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
+            (bsValueChange)="onDateChange($event)" 
+            bsDatepicker 
+            #datepicker="bsDatepicker"
+            [ngClass]="{'invalid': idHasExpired}"
+           />
+          <p class="message message--negative" *ngIf="idHasExpired">Invalid Expiry Date</p>
+        </fieldset>
+      </form>
+    </div>
+    <footer class="mt-10">
+      <div class="flex flex-row space-x-4">
+        <span class="flex-1"></span>
+        <button type="button" class="btn btn--ghost" (click)="showFileUploadDialog = false">Cancel</button>
+        <button type="button" class="btn btn--positive" (click)="setSelectedFile()" [disabled]="saveFileBtnDisabled" data-cy="addFiles">Upload</button>
+      </div>
+    </footer>
+  </div>
+</p-dialog>

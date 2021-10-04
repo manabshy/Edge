@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
+import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { Company, Signer } from 'src/app/contactgroups/shared/contact-group';
+import { Company, Signer } from 'src/app/contact-groups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
 import { debounceTime } from 'rxjs/operators';
 import { WedgeValidators } from 'src/app/shared/wedge-validators';

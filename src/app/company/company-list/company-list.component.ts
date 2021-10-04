@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core';
-import { CompanyAutoCompleteResult } from 'src/app/contactgroups/shared/contact-group';
+import { CompanyAutoCompleteResult } from 'src/app/contact-groups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
 import { ActivatedRoute, Router } from '@angular/router';
 

@@ -87,7 +87,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
     this.subscription = this.fileUploadControl.valueChanges.subscribe(
       (values: Array<File>) => {
-        console.log(values);
+        // console.log(values);
         if (values && values.length > 0) {
           this.hasValidFiles = true;
           this.getFiles.emit([...this.fileUploadControl.value]);

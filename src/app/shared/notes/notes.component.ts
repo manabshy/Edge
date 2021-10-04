@@ -13,9 +13,9 @@ import {
   BasicContactGroup,
   NoteType,
   JobTypes,
-} from "src/app/contactgroups/shared/contact-group";
+} from "src/app/contact-groups/shared/contact-group";
 import { SharedService } from "src/app/core/services/shared.service";
-import { ContactGroupsService } from "src/app/contactgroups/shared/contact-groups.service";
+import { ContactGroupsService } from "src/app/contact-groups/shared/contact-groups.service";
 import { Person } from "../models/person";
 import { PropertyNote } from "src/app/property/shared/property";
 import { PropertyService } from "src/app/property/shared/property.service";

@@ -5,8 +5,6 @@ import { AuthService } from '../core/services/auth.service';
 import { StaffMemberService } from '../core/services/staff-member.service';
 import { StaffMember, Impersonation, ApiRole, Permission, PermissionEnum } from '../shared/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { take } from 'rxjs/operators';
-import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -22,7 +20,6 @@ export class MainmenuComponent implements OnInit {
   impersonateToastr: any;
   isContactsCollapsed = true;
   isPropertiesCollapsed = true;
-
   collapsible: any = {
     contacts: true,
     properties: true

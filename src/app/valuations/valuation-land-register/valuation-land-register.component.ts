@@ -24,7 +24,7 @@ import { SharedService } from "src/app/core/services/shared.service";
 import {
   ContactGroup,
   ContactType,
-} from "src/app/contactgroups/shared/contact-group";
+} from "src/app/contact-groups/shared/contact-group";
 
 @Component({
   selector: "app-valuation-land-register",

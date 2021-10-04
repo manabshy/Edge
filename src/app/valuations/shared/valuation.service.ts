@@ -8,9 +8,9 @@ import {
   Valuer,
   ValuersAvailabilityOption,
   CalendarAvailibility,
+  ValuationPricingInfo,
   CancelValuation,
-  ValuationStatusEnum,
-  ValuationCancellationReasons,
+  ValuationStatusEnum
 } from "./valuation";
 import { AppConstants } from "src/app/core/shared/app-constants";
 import { map, tap } from "rxjs/operators";
@@ -26,6 +26,7 @@ export class ValuationService {
   valuationPageNumberChanges$ = this.valuationPageNumberSubject.asObservable();
 
   contactGroupBs = new BehaviorSubject(null);
+  public readonly contactGroup$ = this.contactGroupBs.asObservable();
 
   valuationValidationSubject = new Subject<boolean>();
   valuationValidation$ = this.valuationValidationSubject.asObservable();
@@ -34,7 +35,10 @@ export class ValuationService {
   landRegisterValid = new BehaviorSubject(false);
   doValuationSearchBs = new BehaviorSubject(false);
 
-  constructor(private http: HttpClient, private storage: StorageMap) {}
+  private readonly _valuationPricingInfo: BehaviorSubject<ValuationPricingInfo> = new BehaviorSubject({})
+  public readonly valuationPricingInfo$ = this._valuationPricingInfo.asObservable()
+
+  constructor(private http: HttpClient, private storage: StorageMap) { }
 
   valuationPageNumberChanged(page: number) {
     this.valuationPageNumberSubject.next(page);
