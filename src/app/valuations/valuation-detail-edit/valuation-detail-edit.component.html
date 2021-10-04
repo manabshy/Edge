@@ -4,7 +4,7 @@
       <app-contact-group-card class="appWrapper" [(adminContact)]="adminContact"
         [contactGroup]="adminContactGroup? adminContactGroup: contactGroup" *ngIf="contactGroup">
       </app-contact-group-card>
-      <div [ngClass]="{'opacity-75 pointer-events-none': isCancelled}" (click)="controlIsCancelled($event)">
+      <div>
         <app-sidenav-item class="appWrapper" [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals"
           (selectedItem)="getSelectedSideNavItem($event)">
         </app-sidenav-item>
