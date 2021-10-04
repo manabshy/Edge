@@ -34,7 +34,9 @@ export class StandAloneNoteComponent
   set note(value) {
     if (value && this._note != value) {
       this._note = value;
-      if (this._note && this._note.id > 0) this.isNewMode = false;
+      if (this._note && this._note.id > 0) {
+        this.isNewAddButtonVisible = false;
+      } else this.isNewAddButtonVisible = true;
     }
   }
 
@@ -44,7 +46,7 @@ export class StandAloneNoteComponent
 
   @Input() currentStaffMember: any;
   @Output() getNote: EventEmitter<any> = new EventEmitter();
-
+  isNewAddButtonVisible = false;
   isEditMode = false;
   isNewMode = false;
   noteForm: FormGroup;
@@ -83,6 +85,9 @@ export class StandAloneNoteComponent
     if (this.noteForm.valid) {
       this.note.text = this.noteForm.controls["text"].value;
       this.getNote.emit(this.note);
+      this.isEditMode = false;
+      this.isNewMode = false;
+      this.isNewAddButtonVisible = false;
     }
   }
 

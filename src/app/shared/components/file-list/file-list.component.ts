@@ -57,6 +57,8 @@ export class FileListComponent implements OnInit, OnDestroy {
   tmpFiles: File[];
   fileNames: string[];
 
+  @Output() afterFileOperation: EventEmitter<Boolean> = new EventEmitter();
+
   @ViewChild(FileUploadComponent) fileUploadComponent: FileUploadComponent;
 
   constructor(
@@ -173,6 +175,10 @@ export class FileListComponent implements OnInit, OnDestroy {
 
   getFiles(files) {
     this.tmpFiles = files;
+  }
+
+  closeFileList() {
+    this.afterFileOperation.emit(true);
   }
 
   getUploadedDate(date: Date): string {

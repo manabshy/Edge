@@ -1,12 +1,12 @@
 <div>
-  <button *ngIf="isNewMode" type="button" class="btn btn--positive" (click)="isNewMode = true"><svg aria-hidden="true"
-      width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+  <button *ngIf="isNewAddButtonVisible" type="button" class="btn btn--positive" (click)="isNewMode = true"><svg
+      aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
       <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
       <path class="plus-vertical"
         d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
     </svg>Add Note</button>
 
-  <ol class="timeline">
+  <ol class="timeline" *ngIf="note?.id || isNewMode || isEditMode">
     <li class="timeline__pinned">
       <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--type">
         <path
