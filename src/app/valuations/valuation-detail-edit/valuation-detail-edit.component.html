@@ -345,13 +345,13 @@
                     *ngIf="salesValuerControl.value || lettingsValuerControl.value">
                     <fieldset class="inline-child" *ngIf="valuation?.salesValuationBooking"
                       style="align-self: flex-start">
-                      <p-card [style]="{'width': '25rem', 'margin-bottom': '2em'}">
+                      <p-card class="mb-4 w-80 md:w-96">
                         <fieldset>
                           <label for="lettingsValuer">Sales Valuer</label>
                           <input class="p-2" type="text" id="lettingsValuer" disabled
                             [value]="salesValuerControl.value?.fullName">
                         </fieldset>
-                        <span class="inline-parent">
+                        <span class="flex flex-col md:flex-row inline-parent">
                           <fieldset class="inline-child">
                             <label for="dateTime">Date & Time</label>
                             <input class="p-2" type="text" id="dateTime" disabled
@@ -435,18 +435,19 @@
                       </p-card>
                     </fieldset>
 
-                    <fieldset style="align-self: center;margin-bottom: 8em" class="inline-child"
+                    <fieldset class="flex self-center justify-center mb-3 md:mb-8 inline-child"
                       *ngIf="(this.valuation.valuationStatus == 0 || this.valuation.valuationStatus == 2)">
                       <button [style]="{'width': '5rem'}" type="button" class="btn btn--positive"
                         (click)="isSalesEdit =false;isLettingsEdit = false;isBothEdit =true;getAvailability()"
                         data-cy="openAvailabilityBoth">{{valuation?.lettingsValuationBooking &&
-                        valuation?.salesValuationBooking ? 'Edit Both' : (valuation?.salesValuationBooking? 'Add
-                        Lettings':'Add Sales')}}</button>
+                        valuation?.salesValuationBooking ? 'Edit Both' :
+                        (valuation?.salesValuationBooking? 'Add Lettings':'Add Sales')}}
+                      </button>
                     </fieldset>
 
                     <fieldset class="inline-child" *ngIf="valuation?.lettingsValuationBooking"
                       style="align-self: flex-start">
-                      <p-card [style]="{'width': '25rem', 'margin-bottom': '2em'}">
+                      <p-card class="mb-4 w-80 md:w-96">
                         <fieldset>
                           <label for="lettingsValuer">Lettings Valuer</label>
                           <input class="p-2" type="text" id="lettingsValuer" disabled
@@ -546,7 +547,7 @@
 
               <p-accordionTab header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible"
                 data-cy="valuationValues">
-                <ol class="cards">
+                <ol class="mb-4 cards">
                   <li
                     *ngIf="valuation?.salesValuationBooking && isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
                     <h5 class="txt--title">Sales</h5>
@@ -632,6 +633,9 @@
                     </fieldset>
                   </li>
                 </ol>
+                <div class="w-auto md:w-8/12">
+                  <app-standalone-note (getNote)="saveNote($event)" [note]="valuationNote"></app-standalone-note>
+                </div>
               </p-accordionTab>
 
               <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
