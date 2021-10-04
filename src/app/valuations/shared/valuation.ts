@@ -71,6 +71,7 @@ export interface Valuation extends ValuationInfo {
   cancelledBy?: StaffMember;
   cancelledDate?: Date;
   cancellationTypeId?: number;
+  valuationNote?: valuationNote;
 }
 
 export interface ValuationPricingInfo {

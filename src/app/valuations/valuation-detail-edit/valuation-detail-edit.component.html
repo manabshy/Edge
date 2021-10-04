@@ -328,7 +328,7 @@
 
               <p-accordionTab header="Appointment" [(selected)]="activeState[2]">
 
-                <ng-container>
+                <div id="appointmentTab">
                   <fieldset *ngIf="isNewValuation && canBookAppointment">
                     <button class="btn btn--positive" type="button" (click)="isBothEdit = true;getAvailability()"
                       data-cy="getvailability">Book Availability</button>
@@ -542,104 +542,117 @@
                     </fieldset>
                   </div>
 
-                </ng-container>
+                </div>
               </p-accordionTab>
 
               <p-accordionTab header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible"
                 data-cy="valuationValues">
-                <ol class="mb-4 cards">
-                  <li
-                    *ngIf="valuation?.salesValuationBooking && isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
-                    <h5 class="txt--title">Sales</h5>
-                    <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
-                      <fieldset class="inline-child">
-                        <label for="sellValue">Value</label>
-                        <input class="p-2" type="text" autocomplete="off" name="sellValue" id="sellValue"
-                          formControlName="suggestedAskingPrice" *ngIf="!(!isEditable && !isNewValuation)"
-                          data-cy="sellValue">
+                <div id="valuesTab">
+                  <ol class="mb-4 cards">
+                    <li
+                      *ngIf="valuation?.salesValuationBooking && isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
+                      <h5 class="txt--title">Sales</h5>
+                      <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
+                        <fieldset class="inline-child">
+                          <label for="sellValue">Value</label>
+                          <input class="p-2" type="text" autocomplete="off" name="sellValue" id="sellValue"
+                            formControlName="suggestedAskingPrice" *ngIf="!(!isEditable && !isNewValuation)"
+                            data-cy="sellValue">
+                          <strong class="text-lg"
+                            *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingPrice').value
+                            }}</strong>
+                        </fieldset>
+                        <fieldset class="inline-child" *ngIf="!isEditable && !isNewValuation">
+                          <label style="width:max-content" for="sellValue">Age of valuation</label>
+                          <strong class="text-lg"
+                            [ngStyle]="{'color':ageColor(valuationForm.get('ageOfSuggestedAskingPrice').value)}">
+                            {{valuationForm.get('ageOfSuggestedAskingPrice').value
+                            +" months"}}</strong>
+                        </fieldset>
+                      </div>
+                    </li>
+                    <li
+                      *ngIf="valuation?.lettingsValuationBooking &&  isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentLongLet').value)">
+                      <h5 class="txt--title">Long Let</h5>
+                      <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
+                        <fieldset class="inline-child">
+                          <label style="width:max-content" for="longLetValue">Value (per week)</label>
+                          <input class="p-2" autocomplete="off" type="text" name="longLetValue" id="longLetValue"
+                            formControlName="suggestedAskingRentLongLet" *ngIf="!(!isEditable && !isNewValuation)"
+                            data-cy="longLetValue">
+                          <strong class="text-lg"
+                            *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentLongLet').value
+                            }}</strong>
+                        </fieldset>
+                        <fieldset class="inline-child"
+                          *ngIf="!isEditable && !isNewValuation && !valuationForm.get('suggestedAskingRentShortLet').value">
+                          <label style="width:max-content" for="sellValue">Age of valuation</label>
+                          <strong class="text-lg"
+                            [ngStyle]="{'color':ageColor(valuationForm.get('ageOfSuggestedAskingPrice').value)}">
+                            {{valuationForm.get('ageOfSuggestedAskingPrice').value
+                            +" months"}}</strong>
+                        </fieldset>
+                      </div>
+                      <fieldset>
+                        <label for="longLetMonthlyValue">Value (per month)</label>
+                        <input class="p-2" type="text" autocomplete="off" name="longLetMonthlyValue"
+                          id="longLetMonthlyValue" formControlName="suggestedAskingRentLongLetMonthly"
+                          *ngIf="!(!isEditable && !isNewValuation)" data-cy="longLetMonthlyValue">
                         <strong class="text-lg"
-                          *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingPrice').value
+                          *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentLongLetMonthly').value
                           }}</strong>
                       </fieldset>
-                      <fieldset class="inline-child" *ngIf="!isEditable && !isNewValuation">
-                        <label style="width:max-content" for="sellValue">Age of valuation</label>
+                    </li>
+                    <li
+                      *ngIf="valuation?.lettingsValuationBooking && isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentShortLet').value)">
+                      <h5 class="txt--title">Short Let</h5>
+                      <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
+                        <fieldset class="inline-child">
+                          <label style="width:max-content" for="shortLetValue">Value (per week)</label>
+                          <input class="p-2" autocomplete="off" type="text" name="shortLetValue" id="shortLetValue"
+                            formControlName="suggestedAskingRentShortLet" *ngIf="!(!isEditable && !isNewValuation)"
+                            data-cy="shortLetValue">
+                          <strong class="text-lg"
+                            *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentShortLet').value
+                            }}</strong>
+                        </fieldset>
+                        <fieldset class="inline-child" *ngIf="!isEditable && !isNewValuation">
+                          <label style="width:max-content" for="sellValue">Age of valuation</label>
+                          <strong class="text-lg"
+                            [ngStyle]="{'color':ageColor(valuationForm.get('ageOfSuggestedAskingPrice').value)}">
+                            {{valuationForm.get('ageOfSuggestedAskingPrice').value
+                            +" months"}}</strong>
+                        </fieldset>
+                      </div>
+                      <fieldset>
+                        <label for="shortLetMonthlyValue">Value (per month)</label>
+                        <input class="p-2" autocomplete="off" type="text" name="shortLetMonthlyValue"
+                          id="shortLetMonthlyValue" formControlName="suggestedAskingRentShortLetMonthly"
+                          *ngIf="!(!isEditable && !isNewValuation)" data-cy="shortLetMonthlyValue">
                         <strong class="text-lg"
-                          [ngStyle]="{'color':ageColor(valuationForm.get('ageOfSuggestedAskingPrice').value)}">
-                          {{valuationForm.get('ageOfSuggestedAskingPrice').value
-                          +" months"}}</strong>
+                          *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentShortLetMonthly').value}}</strong>
                       </fieldset>
-                    </div>
-                  </li>
-                  <li
-                    *ngIf="valuation?.lettingsValuationBooking &&  isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentLongLet').value)">
-                    <h5 class="txt--title">Long Let</h5>
-                    <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
-                      <fieldset class="inline-child">
-                        <label style="width:max-content" for="longLetValue">Value (per week)</label>
-                        <input class="p-2" autocomplete="off" type="text" name="longLetValue" id="longLetValue"
-                          formControlName="suggestedAskingRentLongLet" *ngIf="!(!isEditable && !isNewValuation)"
-                          data-cy="longLetValue">
-                        <strong class="text-lg"
-                          *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentLongLet').value
-                          }}</strong>
-                      </fieldset>
-                      <fieldset class="inline-child"
-                        *ngIf="!isEditable && !isNewValuation && !valuationForm.get('suggestedAskingRentShortLet').value">
-                        <label style="width:max-content" for="sellValue">Age of valuation</label>
-                        <strong class="text-lg"
-                          [ngStyle]="{'color':ageColor(valuationForm.get('ageOfSuggestedAskingPrice').value)}">
-                          {{valuationForm.get('ageOfSuggestedAskingPrice').value
-                          +" months"}}</strong>
-                      </fieldset>
-                    </div>
-                    <fieldset>
-                      <label for="longLetMonthlyValue">Value (per month)</label>
-                      <input class="p-2" type="text" autocomplete="off" name="longLetMonthlyValue"
-                        id="longLetMonthlyValue" formControlName="suggestedAskingRentLongLetMonthly"
-                        *ngIf="!(!isEditable && !isNewValuation)" data-cy="longLetMonthlyValue">
-                      <strong class="text-lg"
-                        *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentLongLetMonthly').value
-                        }}</strong>
-                    </fieldset>
-                  </li>
-                  <li
-                    *ngIf="valuation?.lettingsValuationBooking && isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentShortLet').value)">
-                    <h5 class="txt--title">Short Let</h5>
-                    <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
-                      <fieldset class="inline-child">
-                        <label style="width:max-content" for="shortLetValue">Value (per week)</label>
-                        <input class="p-2" autocomplete="off" type="text" name="shortLetValue" id="shortLetValue"
-                          formControlName="suggestedAskingRentShortLet" *ngIf="!(!isEditable && !isNewValuation)"
-                          data-cy="shortLetValue">
-                        <strong class="text-lg"
-                          *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentShortLet').value
-                          }}</strong>
-                      </fieldset>
-                      <fieldset class="inline-child" *ngIf="!isEditable && !isNewValuation">
-                        <label style="width:max-content" for="sellValue">Age of valuation</label>
-                        <strong class="text-lg"
-                          [ngStyle]="{'color':ageColor(valuationForm.get('ageOfSuggestedAskingPrice').value)}">
-                          {{valuationForm.get('ageOfSuggestedAskingPrice').value
-                          +" months"}}</strong>
-                      </fieldset>
-                    </div>
-                    <fieldset>
-                      <label for="shortLetMonthlyValue">Value (per month)</label>
-                      <input class="p-2" autocomplete="off" type="text" name="shortLetMonthlyValue"
-                        id="shortLetMonthlyValue" formControlName="suggestedAskingRentShortLetMonthly"
-                        *ngIf="!(!isEditable && !isNewValuation)" data-cy="shortLetMonthlyValue">
-                      <strong class="text-lg"
-                        *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentShortLetMonthly').value}}</strong>
-                    </fieldset>
-                  </li>
-                </ol>
-                <div class="w-auto md:w-8/12">
+                    </li>
+                  </ol>
+                  <!-- <div class="w-auto md:w-8/12">
                   <app-standalone-note (getNote)="saveNote($event)" [note]="valuationNote"></app-standalone-note>
+                </div> -->
+                  <div class="w-auto md:w-8/12"
+                    *ngIf="valuation?.salesValuationBooking || valuation?.lettingsValuationBooking">
+                    <fieldset class="mb-3 inline-child" [ngClass]="{'invalid': formErrors?.valuationNote}">
+                      <label for="valuationNote">Valuation Meeting Notes</label>
+                      <textarea class="p-2" name="valuationNote" id="valuationNote" cols="30" rows="3"
+                        formControlName="valuationNote" data-cy="valuationNote"
+                        [ngClass]="{'is-invalid': (formErrors?.valuationNote)}"></textarea>
+                      <p class="message message--negative"> {{formErrors?.valuationNote}}</p>
+                    </fieldset>
+                  </div>
                 </div>
               </p-accordionTab>
 
               <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
-                <div [ngClass]="{'opacity-75 pointer-events-none': isCancelled}" (click)="controlIsCancelled($event)">
+                <div id="termsOfBusinessTab" [ngClass]="{'opacity-75 pointer-events-none': isCancelled}"
+                  (click)="controlIsCancelled($event)">
                   <app-terms-of-business [valuationForm]="valuationForm" [interestList]="interestList"
                     [valuationFiles]="valuation.valuationFiles" [formErrors]="formErrors"
                     [tableType]="valuation.valuationType" [valuationStatus]="valuation.valuationStatus"
@@ -839,8 +852,8 @@
 </p-dialog>
 
 <!-- Appointment Modal -->
-<p-dialog #availabilityDialog [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false"
-  class="modal--xlarge" [closable]="false" [blockScroll]=true>
+<p-dialog #availabilityDialog (onHide)="hideAppointmentDialog()" [(visible)]="isAppointmentVisible" [modal]="true"
+  [draggable]="false" class="modal--xlarge" [closable]="false" [blockScroll]=true>
   <p-header class="row">
 
     <span class="w-screen inline-parent">Pick availability</span>

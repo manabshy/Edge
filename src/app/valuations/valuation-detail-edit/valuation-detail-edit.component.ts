@@ -8,6 +8,8 @@ import {
   OnDestroy,
   ViewChild,
   ElementRef,
+  AfterViewInit,
+  AfterViewChecked,
 } from "@angular/core";
 import {
   FormBuilder,
@@ -72,7 +74,7 @@ import { ResultData } from "src/app/shared/result-data";
 import { StaffMember } from "src/app/shared/models/staff-member";
 import { TabDirective } from "ngx-bootstrap/tabs/ngx-bootstrap-tabs";
 import format from "date-fns/format";
-import { Observable, Subject, Subscription } from "rxjs";
+import { BehaviorSubject, Observable, Subject, Subscription } from "rxjs";
 import { MessageService, PrimeNGConfig } from "primeng/api";
 import { addYears, differenceInCalendarYears, isThisHour } from "date-fns";
 import _ from "lodash";
@@ -96,7 +98,7 @@ import moment from "moment";
 })
 export class ValuationDetailEditComponent
   extends BaseComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, AfterViewInit, OnDestroy {
   showCalendar = false;
   valuationId: number;
   valuation: Valuation;
@@ -244,9 +246,6 @@ export class ValuationDetailEditComponent
   cancelString: string = "";
   cancelReasonString: string = "";
   saveValuationSubscription = new Subscription();
-  saveValuationNoteSubscription = new Subscription();
-  valuationNoteSubscription = new Subscription();
-  valuationNote: valuationNote;
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -359,6 +358,8 @@ export class ValuationDetailEditComponent
     { name: "instruct", value: 8 },
   ];
 
+  setRequirementValuationNoteBs = new BehaviorSubject(false);
+
   interestList: any[] = [];
 
   constructor(
@@ -391,17 +392,6 @@ export class ValuationDetailEditComponent
       .subscribe((currentStaffMember: StaffMember) => {
         if (currentStaffMember) {
           this.currentStaffMember = currentStaffMember;
-
-          this.valuationNote = {
-            id: 0,
-            addressee: "",
-            text: "",
-            isImportant: false,
-            isPinned: false,
-            createDate: new Date(),
-            createdBy: this.currentStaffMember.staffMemberId,
-          };
-
           // for testing purposes
           if (currentStaffMember.activeDepartments[0].departmentId === 90) {
             this.isClientService = true;
@@ -497,6 +487,16 @@ export class ValuationDetailEditComponent
         },
         { emitEvent: false }
       );
+      if (
+        this.areValuesVisible &&
+        this.isThereAPrice(data) &&
+        this.setRequirementValuationNoteBs.getValue() == false
+      ) {
+        this.setRequirementValuationNoteBs.next(true);
+        this.valuationForm.controls["valuationNote"].updateValueAndValidity();
+      } else {
+        this.formErrors.valuationNote = null;
+      }
       this.sharedService.logValidationErrors(this.valuationForm, false);
       this.setRentFigures();
       this.checkAvailabilityBooking();
@@ -643,8 +643,37 @@ export class ValuationDetailEditComponent
       });
   }
 
-  scrollSpecificElement(className: string) {
-    this.scroller.scrollToAnchor("landRegisterTab");
+  ngAfterViewInit(): void {
+    const interval = setTimeout(() => {
+      if (this.valuation.valuationStatus == ValuationStatusEnum.None)
+        this.scrollSpecificElement("appointmentTabs");
+      else if (this.valuation.valuationStatus == ValuationStatusEnum.Booked)
+        this.scrollSpecificElement("valuesTab");
+      else if (this.valuation.valuationStatus == ValuationStatusEnum.Valued)
+        this.scrollSpecificElement("termsOfBusinessTab");
+    }, 2000);
+  }
+
+  isThereAPrice(data) {
+    if (
+      data.suggestedAskingPrice > 0 ||
+      data.suggestedAskingRentLongLet > 0 ||
+      data.suggestedAskingRentShortLet > 0 ||
+      data.suggestedAskingRentLongLetMonthly > 0 ||
+      data.suggestedAskingRentShortLetMonthly > 0
+    ) {
+      this.valuationForm.controls["valuationNote"].setValidators(
+        Validators.required
+      );
+      return true;
+    }
+    this.valuationForm.controls["valuationNote"].setValidators(null);
+    this.setRequirementValuationNoteBs.next(false);
+    return false;
+  }
+
+  scrollSpecificElement(idName: string) {
+    this.scroller.scrollToAnchor(idName);
 
     // const scrollElement = document.getElementsByClassName(className);
     // if (scrollElement) {
@@ -1154,6 +1183,7 @@ export class ValuationDetailEditComponent
       isNewBuild: [false],
       hasDisabledAccess: [false],
       adminContact: [],
+      valuationNote: [],
     });
   }
 
@@ -1187,8 +1217,6 @@ export class ValuationDetailEditComponent
           this.valuation = data;
           console.log("this.valuation: ", this.valuation);
           this.getPropertyInformation(this.valuation.property.propertyId);
-
-          this.getValuationNote(this.valuation);
 
           this.valuation.valuationStatus === 3
             ? (this.canInstruct = true)
@@ -1335,14 +1363,6 @@ export class ValuationDetailEditComponent
       })
       .catch((err) => {
         console.log("err: ", err);
-      });
-  }
-
-  getValuationNote(valuation: Valuation) {
-    this.valuationNoteSubscription = this.valuationService
-      .getValuationNote(this.valuation.valuationEventId)
-      .subscribe((data) => {
-        this.valuationNote = data;
       });
   }
 
@@ -1592,6 +1612,7 @@ export class ValuationDetailEditComponent
             ? true
             : false
           : false,
+        valuationNote: valuation.valuationNote?.text,
       });
 
       if (!this.isEditable && !this.isNewValuation) {
@@ -2211,6 +2232,10 @@ export class ValuationDetailEditComponent
     this.oldClass = "null";
   }
 
+  hideAppointmentDialog() {
+    this.scrollSpecificElement("appointmentTab");
+  }
+
   selectCalendarDate(date: Date) {
     this.selectedCalendarDate = date;
     this.showCalendar = true;
@@ -2734,6 +2759,11 @@ export class ValuationDetailEditComponent
         ? this.adminContact?.ccOwner
         : false;
 
+    valuation.valuationNote = {
+      ...this.valuation.valuationNote,
+      text: this.valuationForm.controls["valuationNote"].value,
+    };
+
     valuation.suggestedAskingRentShortLetMonthly = this.sharedService.convertStringToNumber(
       valuation.suggestedAskingRentShortLetMonthly
     );
@@ -2818,21 +2848,6 @@ export class ValuationDetailEditComponent
           }
         );
     }
-  }
-
-  saveNote(note: valuationNote) {
-    note.valuationEventId = this.valuation.valuationEventId;
-    note.contactGroupId = this.contactId;
-    this.saveValuationNoteSubscription = this.valuationService
-      .saveValuationNote(note)
-      .subscribe((x) => {
-        this.valuationNote = x;
-        this.messageService.add({
-          severity: "success",
-          summary: "Valuation note successfully saved",
-          closable: false,
-        });
-      });
   }
 
   setValuers(valuation) {
@@ -3109,9 +3124,7 @@ export class ValuationDetailEditComponent
     this.cancelValuationSubscription.unsubscribe();
     this.propertySubsription.unsubscribe();
     this.contactGroupSubscription.unsubscribe();
-    this.saveValuationNoteSubscription.unsubscribe();
     this.saveValuationSubscription.unsubscribe();
-    this.valuationNoteSubscription.unsubscribe();
     this.storage.delete(this.mainPersonId?.toString()).subscribe();
     this.destroy.unsubscribe();
   }
