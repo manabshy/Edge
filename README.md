@@ -25,3 +25,13 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+
+## Developing with Storybook
+
+To run storybook in development run `npm run storybook` and once running open localhost:6060 in a browser to view storybook.  Open the component(s) you're working on from the sidebar and develop away. Use the .stories files of your components to manage the different states of your component for each story.
+
+For more information on storybook see src/stories/Introductions.stories.mdx
+
+## Storybook static site for team use
+Run `npm run storybook-build` to generate a static website of the component library that can be deployed to test/qa environments for team consumption and discussion. TODO: css style imports incomplete on build (some CSS needs importing from somewhere)

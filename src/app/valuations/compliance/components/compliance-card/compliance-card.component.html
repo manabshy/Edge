@@ -2,8 +2,8 @@
   <div class="flex flex-row ">
     <div>
       <div class="flex flex-row">
-        <span class="pill text-white" [ngClass]="pillClass">{{ person.pillLabel == 'lead' ? 'Lead Contact' : 'Associated Contact'  }}</span>
-        <span class="pill text-white bg-yellow-400" *ngIf="person.isUBO">UBO</span>
+        <span class="pill text-white h-6" [ngClass]="pillClass">{{ person.pillLabel == 'lead' ? 'Lead Contact' : 'Associated Contact'  }}</span>
+        <span class="pill text-white bg-yellow-400 h-6" *ngIf="person.isUBO">UBO</span>
       </div>
       <p class="text-lg tracking-normal mt-2 font-medium">{{ person.name }}</p>
       <p class="text-md tracking-normal mt-0 font-medium text-gray-500" *ngIf="person.position">{{ person.position }}</p>

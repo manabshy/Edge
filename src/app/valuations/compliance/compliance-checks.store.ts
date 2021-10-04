@@ -16,7 +16,6 @@ import {
   addFiles,
   identifyAmlOrKyc,
 } from "./compliance-checks.store-helpers";
-import { ToastrService } from "ngx-toastr";
 
 export interface ComplianceChecksState {
   checksAreValid: Boolean;
@@ -153,8 +152,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   constructor(
     private valuationSvc: ValuationService,
     private readonly fileService: FileService,
-    private peopleService: PeopleService,
-    private toastrService: ToastrService
+    private peopleService: PeopleService
   ) {
     super(defaultState);
     console.log("Compliance checks store under construction");
@@ -204,7 +202,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         text: ["AML Completed", "SmartSearch added: 7th Sep 2020 (11:45)"],
       },
     });
-    this.toastrService.success("Compliance Checks Passed");
     this.patchState({ checksAreValid: true });
   }
 
@@ -283,7 +280,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       .subscribe(
         (res) => {
           console.log("delete doc subscribe: ", res);
-          this.toastrService.success("Document removed");
         },
         (err) => console.error("Err!: ", err)
       );
