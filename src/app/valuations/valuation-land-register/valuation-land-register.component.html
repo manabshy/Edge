@@ -18,8 +18,9 @@
           <div class="flex flex-col">
             <fieldset [ngClass]="{'invalid': (showFileUploadForDeedError)}">
               <h1 class="mb-2 text-lg font-bold"> Title Deed </h1>
-              <app-file-list [type]="'D'" [header]="'Title Deed'" [edgeFileList]="deedLandReg?.files"
-                [isMultiple]="'false'" (getFileNames)="getFileNames($event)" [fileType]="fileType">
+              <app-file-list [type]="'D'" (afterFileOperation)="afterFileOperation.emit(true)" [header]="'Title Deed'"
+                [edgeFileList]="deedLandReg?.files" [isMultiple]="'false'" (getFileNames)="getFileNames($event)"
+                [fileType]="fileType">
               </app-file-list>
               <p class="mt-2 message message--negative"> Please Upload Title Deed File</p>
             </fieldset>

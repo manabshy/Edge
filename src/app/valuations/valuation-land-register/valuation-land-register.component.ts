@@ -226,7 +226,6 @@ export class ValuationsLandRegisterComponent
         this.nameChangeReg.files = [...fileObj.file];
       }
     }
-    //this.afterFileOperation.emit();
     this.controlFiles();
   }
 }

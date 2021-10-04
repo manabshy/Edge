@@ -33,8 +33,8 @@
   </ng-template>
 </div>
 
-<p-dialog header="Select File(s)" appendTo="body" [(visible)]="openFileDialog" #dialog [modal]="true"
-  [draggable]="false" class="modal--small modal--hasFooter">
+<p-dialog header="Select File(s)" (onHide)="closeFileList()" appendTo="body" [(visible)]="openFileDialog" #dialog
+  [modal]="true" [draggable]="false" class="modal--small modal--hasFooter">
   <div style="min-width:500px;min-height:400px">
     <div>
       <app-file-upload [uploadedFiles]="files" [isMultiple]="isMultiple" [fileType]="fileType"

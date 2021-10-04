@@ -76,7 +76,7 @@ import { Observable, Subject, Subscription } from "rxjs";
 import { MessageService, PrimeNGConfig } from "primeng/api";
 import { addYears, differenceInCalendarYears, isThisHour } from "date-fns";
 import _ from "lodash";
-import { CurrencyPipe } from "@angular/common";
+import { CurrencyPipe, ViewportScroller } from "@angular/common";
 import { CustomDateFormatter } from "src/app/calendar-shared/custom-date-formatter.provider";
 import { CustomEventTitleFormatter } from "src/app/calendar-shared/custom-event-title-formatter.provider";
 import {
@@ -377,7 +377,8 @@ export class ValuationDetailEditComponent
     private currencyPipe: CurrencyPipe,
     private primengConfig: PrimeNGConfig,
     private diaryEventService: DiaryEventService,
-    private sidenavService: SidenavService
+    private sidenavService: SidenavService,
+    private scroller: ViewportScroller
   ) {
     super();
   }
@@ -643,10 +644,12 @@ export class ValuationDetailEditComponent
   }
 
   scrollSpecificElement(className: string) {
-    const scrollElement = document.getElementsByClassName(className);
-    if (scrollElement) {
-      this.sharedService.scrollElIntoView(className);
-    }
+    this.scroller.scrollToAnchor("landRegisterTab");
+
+    // const scrollElement = document.getElementsByClassName(className);
+    // if (scrollElement) {
+    //   this.sharedService.scrollElIntoView(className);
+    // }
   }
 
   removeAdminContact() {
@@ -741,7 +744,9 @@ export class ValuationDetailEditComponent
       this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
         (result) => {
           this.contactGroup = result;
-          console.log('----------------------------------- contactGroupBs.next')
+          console.log(
+            "----------------------------------- contactGroupBs.next"
+          );
           this.valuationService.contactGroupBs.next(this.contactGroup);
           this.getSearchedPersonSummaryInfo(this.contactGroup);
         }
@@ -931,7 +936,7 @@ export class ValuationDetailEditComponent
     // this.valuers = result.valuers;
     this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
       this.contactGroup = result;
-      console.log('----------------------------------- contactGroupBs.next')
+      console.log("----------------------------------- contactGroupBs.next");
       this.valuationService.contactGroupBs.next(this.contactGroup);
       this.getSearchedPersonSummaryInfo(this.contactGroup);
     });
@@ -1272,7 +1277,9 @@ export class ValuationDetailEditComponent
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
               (result) => {
                 this.contactGroup = result;
-                console.log('----------------------------------- contactGroupBs.next')
+                console.log(
+                  "----------------------------------- contactGroupBs.next"
+                );
                 this.valuationService.contactGroupBs.next(this.contactGroup);
                 this.getSearchedPersonSummaryInfo(this.contactGroup);
                 this.setAdminContact();
@@ -1792,7 +1799,9 @@ export class ValuationDetailEditComponent
       this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then(
         (result) => {
           this.contactGroup = result;
-          console.log('----------------------------------- contactGroupBs.next')
+          console.log(
+            "----------------------------------- contactGroupBs.next"
+          );
           this.valuationService.contactGroupBs.next(this.contactGroup);
           this.getSearchedPersonSummaryInfo(this.contactGroup);
         }
@@ -2640,7 +2649,7 @@ export class ValuationDetailEditComponent
   }
 
   saveValuation() {
-    console.log('saveValuation')
+    console.log("saveValuation");
     // return
     this.checkAvailabilityBooking();
     this.setValuersValidators();
