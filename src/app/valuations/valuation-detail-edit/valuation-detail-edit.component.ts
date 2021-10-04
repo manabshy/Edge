@@ -2342,7 +2342,18 @@ export class ValuationDetailEditComponent
       this.activeState[4] = true;
       this.messageService.add({
         severity: "warn",
-        summary: "You must complete terms of business",
+        summary: "Please complete terms of business!",
+        closable: false,
+      });
+      return;
+    }
+
+    if (!this.valuationService.landRegisterValid.getValue()) {
+      this.accordionIndex = 5;
+      this.activeState[5] = true;
+      this.messageService.add({
+        severity: "warn",
+        summary: "Please complete land registration!",
         closable: false,
       });
       return;

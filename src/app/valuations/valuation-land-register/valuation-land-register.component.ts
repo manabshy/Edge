@@ -102,6 +102,7 @@ export class ValuationsLandRegisterComponent
   controlValidation = false;
   contactNamesQuestion = "";
   lengthOfContacts: number = 1;
+  controlFormValuesAndDocuments = false;
 
   constructor(
     private fb: FormBuilder,
@@ -142,19 +143,14 @@ export class ValuationsLandRegisterComponent
       this.leaseLandReg.leaseExpiryDate = data.leaseExpiryDate
         ? new Date(data.leaseExpiryDate)
         : null;
-      if (this.controlValidation) {
-        this._valuationService.validationControlBs.next(
-          this._sharedService.logValidationErrors(this.landRegistryForm, true)
-        );
-        this.controlFiles();
-      }
+      this.getValidationResult();
     });
 
     this.subscription = this._valuationService.valuationValidation$.subscribe(
       (data) => {
         this.controlValidation = data;
         if (data === true) {
-          this.controlFiles();
+          this._sharedService.logValidationErrors(this.landRegistryForm, true);
           this._valuationService.validationControlBs.next(
             this.getValidationResult()
           );
@@ -174,9 +170,16 @@ export class ValuationsLandRegisterComponent
             (contact) => !contact.isAdminContact
           );
           this.lengthOfContacts = contactListExceptAdmin.length;
+          let tmpLength = this.lengthOfContacts;
           if (this.lengthOfContacts <= 1) this.contactNamesQuestion = "Is";
           contactListExceptAdmin.forEach((x) => {
-            this.contactNamesQuestion += " " + x.firstName + " " + x.lastName;
+            this.contactNamesQuestion +=
+              " " +
+              x.firstName +
+              " " +
+              x.lastName +
+              (tmpLength > 1 ? " ," : "");
+            tmpLength--;
           });
         } else if (contactGroup.companyName) {
           this.contactNamesQuestion += " " + contactGroup.companyName;
@@ -189,31 +192,34 @@ export class ValuationsLandRegisterComponent
 
   getValidationResult(): boolean {
     let result: boolean = false;
-    result =
-      this._sharedService.logValidationErrors(this.landRegistryForm, true) &&
-      !this.showFileUploadForNameChangeError &&
-      !this.showFileUploadForLeaseError &&
-      !this.showFileUploadForDeedError;
+    result = this.landRegistryForm.valid && this.controlFiles();
 
     this._valuationService.landRegisterValid.next(result);
     return result;
   }
 
   controlFiles() {
-    if (this.controlValidation) {
-      if (!(this.deedLandReg.files && this.deedLandReg.files.length > 0)) {
-        this.showFileUploadForDeedError = true;
-      } else this.showFileUploadForDeedError = false;
-      if (!(this.leaseLandReg.files && this.leaseLandReg.files.length > 0)) {
-        this.showFileUploadForLeaseError = true;
-      } else this.showFileUploadForLeaseError = false;
-      if (
-        this.deedLandReg.ownerConfirmed == 3 &&
-        !(this.nameChangeReg.files && this.nameChangeReg.files.length > 0)
-      ) {
-        this.showFileUploadForNameChangeError = true;
-      } else this.showFileUploadForNameChangeError = false;
-    }
+    if (!(this.deedLandReg.files && this.deedLandReg.files.length > 0)) {
+      this.showFileUploadForDeedError = this.controlValidation ? true : false;
+      return false;
+    } else this.showFileUploadForDeedError = false;
+    if (
+      !(this.leaseLandReg.files && this.leaseLandReg.files.length > 0) &&
+      this.showLeaseExpiryDate
+    ) {
+      this.showFileUploadForLeaseError = this.controlValidation ? true : false;
+      return false;
+    } else this.showFileUploadForLeaseError = false;
+    if (
+      +this.deedLandReg.ownerConfirmed == 2 &&
+      !(this.nameChangeReg.files && this.nameChangeReg.files.length > 0)
+    ) {
+      this.showFileUploadForNameChangeError = this.controlValidation
+        ? true
+        : false;
+      return false;
+    } else this.showFileUploadForNameChangeError = false;
+    return true;
   }
 
   getFileNames(fileObj: any) {
@@ -227,5 +233,6 @@ export class ValuationsLandRegisterComponent
       }
     }
     this.controlFiles();
+    this.getValidationResult();
   }
 }
