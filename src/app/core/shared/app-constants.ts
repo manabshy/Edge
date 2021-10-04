@@ -173,6 +173,7 @@ export const FormErrors = {
   ownerConfirmed: "",
   cancelTypeId: "",
   cancelReason: "",
+  valuationNote: "",
 };
 
 export const ValidationMessages = {
@@ -415,6 +416,9 @@ export const ValidationMessages = {
   },
   cancelReason: {
     required: "Description is required",
+  },
+  valuationNote: {
+    required: "Values note is required",
   },
 };
 
