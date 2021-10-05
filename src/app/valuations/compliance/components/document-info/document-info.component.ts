@@ -67,7 +67,7 @@ export class DocumentInfoComponent implements OnInit {
 
   showFilesUploadButton() {
     return !this.files.length && this.documentType == DOCUMENT_TYPE.ID ||
-      this.documentType == DOCUMENT_TYPE.REPORT ||
+      !this.files.length && this.documentType == DOCUMENT_TYPE.REPORT ||
       !this.files.length && this.documentType == DOCUMENT_TYPE.PROOF_OF_ADDRESS ||
       this.documentType == DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS
   }

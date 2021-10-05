@@ -10,7 +10,7 @@ import {
   CalendarAvailibility,
   ValuationPricingInfo,
   CancelValuation,
-  ValuationStatusEnum
+  ValuationStatusEnum,
 } from "./valuation";
 import { AppConstants } from "src/app/core/shared/app-constants";
 import { map, tap } from "rxjs/operators";
@@ -35,10 +35,19 @@ export class ValuationService {
   landRegisterValid = new BehaviorSubject(false);
   doValuationSearchBs = new BehaviorSubject(false);
 
-  private readonly _valuationPricingInfo: BehaviorSubject<ValuationPricingInfo> = new BehaviorSubject({})
-  public readonly valuationPricingInfo$ = this._valuationPricingInfo.asObservable()
+  private readonly _valuation: BehaviorSubject<
+    Valuation | any
+  > = new BehaviorSubject({});
+  public readonly valuation$: Observable<
+    Valuation | any
+  > = this._valuation.asObservable();
 
-  constructor(private http: HttpClient, private storage: StorageMap) { }
+  private readonly _valuationPricingInfo: BehaviorSubject<ValuationPricingInfo> = new BehaviorSubject(
+    {}
+  );
+  public readonly valuationPricingInfo$ = this._valuationPricingInfo.asObservable();
+
+  constructor(private http: HttpClient, private storage: StorageMap) {}
 
   valuationPageNumberChanged(page: number) {
     this.valuationPageNumberSubject.next(page);
@@ -71,11 +80,13 @@ export class ValuationService {
     const url = `${AppConstants.baseValuationUrl}/${valuationId}`;
     return this.http.get<any>(url).pipe(
       map((response) => {
-        return {
+        const valuationObj = {
           ...response.result,
           valuationStatusDescription:
             ValuationStatusEnum[response.result.valuationStatus],
         };
+        this._valuation.next(valuationObj);
+        return valuationObj;
       })
       // tap(data => console.log('valuation', JSON.stringify(data)))
     );

@@ -11,6 +11,7 @@ export class PureComplianceChecksShellComponent {
   @Input() checksAreValid: boolean
   @Input() checkType: string // AML || KYC
   @Input() companyOrContact: string // company || contact
+  @Input() contactGroupDetails: any
   @Output() passComplianceChecks: EventEmitter<any> = new EventEmitter
   @Output() fileWasUploaded: EventEmitter<any> = new EventEmitter
   @Output() fileWasDeleted: EventEmitter<any> = new EventEmitter
@@ -25,6 +26,20 @@ export class PureComplianceChecksShellComponent {
   openDialog(dialog){
     console.log('open dialog: ', dialog)
     this.dialogs[dialog] = !this.dialogs[dialog]
+  }
+
+  searchTerm: string = '';
+  
+  getAddedPersonDetails($event) {
+    console.log('getAddedPersonDetails')
+  }
+
+  getSelectedPerson($event){
+    console.log('createNewPerson')
+  }
+  
+  createNewPerson(){
+    console.log('createNewPerson')
   }
 
 }

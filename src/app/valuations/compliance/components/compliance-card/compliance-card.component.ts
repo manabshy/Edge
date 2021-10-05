@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MenuItem } from "primeng/api";
+import moment from 'moment';
 
 /***
  * @description shows company or contact compliance data such as ID, proof of address, reports and additional documents
@@ -27,6 +28,7 @@ export class ComplianceCardComponent implements OnInit {
     showRemoveContactDialog: false,
     showEditContactDialog: false
   }
+  moment = moment
 
   constructor() { }
 

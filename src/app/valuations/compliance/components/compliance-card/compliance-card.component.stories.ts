@@ -63,6 +63,7 @@ LeadContactBlank.args = {
     pillLabel: 'lead',
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
+    personDateAmlcompleted: null,
     documents: {
       idDoc: IdBlank.args, 
       proofOfAddressDoc: ProofOfAddressBlank.args, 
@@ -78,8 +79,10 @@ LeadContactValid.args = {
   person: {
     id :456,
     pillLabel: 'lead',
+    isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
+    personDateAmlcompleted:new Date('04/01/2020'),
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -98,6 +101,7 @@ LeadContactAndUBO.args = {
     pillLabel: 'lead',
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
+    personDateAmlcompleted: new Date('03/01/2020'),
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -115,6 +119,7 @@ LeadContactInvalid.args = {
     pillLabel: 'lead',
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
+    personDateAmlcompleted: null,
     documents: {
       idDoc: IdUploadedInvalid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -132,6 +137,7 @@ LeadContactMixed.args = {
     pillLabel: 'lead',
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
+    personDateAmlcompleted:new Date('04/30/2020'),
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -150,6 +156,7 @@ AssociatedContactBlank.args = {
     pillLabel: 'Associated',
     name: 'Eddie Murphy',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
+    personDateAmlcompleted: null,
     documents: {
       idDoc: IdBlank.args, 
       proofOfAddressDoc: ProofOfAddressBlank.args, 
@@ -167,6 +174,7 @@ AssociatedContactValid.args = {
     pillLabel: 'Associated',
     name: 'Ian Blackford',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
+    personDateAmlcompleted:new Date('02/21/2021'),
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -184,6 +192,7 @@ AssociatedContactInvalid.args = {
     pillLabel: 'Associated',
     name: 'Jack Black',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
+    personDateAmlcompleted: null,
     documents: {
       idDoc: IdUploadedInvalid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -202,6 +211,7 @@ ContactWithMenu.args = {
     name: 'Jack Black',
     position: 'Director',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
+    personDateAmlcompleted:new Date('06/12/2020'),
     documents: {
       idDoc: IdUploadedInvalid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 

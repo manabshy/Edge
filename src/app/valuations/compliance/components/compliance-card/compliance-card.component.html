@@ -68,6 +68,11 @@
       </app-document-info>
     </div>
   </div>
+  <div class="p-2" *ngIf="person.personDateAmlcompleted">
+    <i class="fa text-md fa-info-circle text-gray-200"></i>
+    <span class="text-sm text-gray-200">
+      Passed: {{ moment(person.personDateAmlcompleted).format('Do MMM YYYY') }}
+    </span>
 </div>
 
 <p-dialog header="Edit Contact" 

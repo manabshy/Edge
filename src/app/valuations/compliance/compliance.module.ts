@@ -5,6 +5,7 @@ import { ComplianceCardComponent } from "./components/compliance-card/compliance
 import { DocumentInfoComponent } from "./components/document-info/document-info.component"
 import { PureComplianceChecksShellComponent } from "./components/pure-compliance-checks-shell/pure-compliance-checks-shell.component"
 import { ComplianceChecksShellComponent } from "./compliance-checks-shell.component"
+import { ContactGroupsComponentsModule } from '../../contact-groups/contact-groups.components.module'
 
 const components = [
   ComplianceCardComponent,
@@ -16,7 +17,8 @@ const components = [
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    ContactGroupsComponentsModule
   ],
   declarations: [
    components
