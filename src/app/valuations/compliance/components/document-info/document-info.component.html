@@ -6,7 +6,7 @@
     <a class="mr-2 tracking-tight truncate" href="{{file.url}}" target="_blank">
       {{ file.label || label }}
     </a>
-    <span *ngIf="documentType == DOCUMENT_TYPE.ID" [ngClass]="idHasExpired ? 'text-red-500':'text-green-500'">Exp {{moment(file.IDValidationDateExpiry).format('DD/MM/YY')}}</span>
+    <span *ngIf="documentType == DOCUMENT_TYPE.ID" [ngClass]="idHasExpired ? 'text-red-500':'text-green-500'">Exp {{moment(file.idValidationDateExpiry).format('DD/MM/YY')}}</span>
     <span class="flex-1 text-right" [pTooltip]="'Upload Date'">{{moment(file.uploadDate).format('DD/MM/YY')}}</span>
     <button (click)="deleteFile.emit({ id:file.fileStoreId, documentType: documentType })" [pTooltip]="'Delete Document'">
       <svg aria-hidden="true" width="40" height="40" viewBox="0 0 64 64" class="icon ml-2 text-gray-400">

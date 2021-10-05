@@ -74,8 +74,6 @@ export class PeopleService {
   }
 
   getPeopleDocs(contactGroupId: number): Observable<any> {
-    console.log('getPeopleForContactGroup: ', contactGroupId)
-
     const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}`;
     return this.http.get<any>(url).pipe(
       map((response) => response.result),
@@ -84,7 +82,7 @@ export class PeopleService {
 
   setPeopleDocs(people, contactGroupId: number): Observable<any> {
     const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}`
-    return this.http.post<any>(url, [people]).pipe(
+    return this.http.post<any>(url, people).pipe(
       switchMap((response) => response.result)
     )
   }
