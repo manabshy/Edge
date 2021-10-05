@@ -16,7 +16,7 @@ export enum DOCUMENT_TYPE {
 export interface EmitDocument {
   tmpFiles: Array<any>
   documentType?: DOCUMENT_TYPE
-  IDValidationDateExpiry?: Date
+  idValidationDateExpiry?: Date
 }
 
 @Component({
@@ -99,8 +99,8 @@ export class DocumentInfoComponent implements OnInit {
 
   private checkIdIsValid() {
     if (this.documentType == DOCUMENT_TYPE.ID && this.files.length) {
-      const docExpiryDate = new Date(this.files[0].IDValidationDateExpiry)
-      this.idHasExpired = new Date() > docExpiryDate
+      const docExpiryDate = this.files[0].idValidationDateExpiry
+      this.idHasExpired = new Date(docExpiryDate) <= new Date()
     }
   }
 
@@ -120,7 +120,7 @@ export class DocumentInfoComponent implements OnInit {
   setSelectedFile() {
     if (!this.tmpFiles.length) return
     const emitData: EmitDocument = { tmpFiles: this.tmpFiles, documentType: this.documentType }
-    if (this.documentType == DOCUMENT_TYPE.ID && !this.idHasExpired) emitData.IDValidationDateExpiry = this.idExpiryForm.get('idExpiryDate').value
+    if (this.documentType == DOCUMENT_TYPE.ID && !this.idHasExpired) emitData.idValidationDateExpiry = this.idExpiryForm.get('idExpiryDate').value
     this.onFileUploaded.emit(emitData)
     this.saveFileBtnDisabled = true
     this.showFileUploadDialog = false
@@ -128,9 +128,9 @@ export class DocumentInfoComponent implements OnInit {
 
   onDateChange(expiryDate) {
     if (expiryDate) {
-      this.idHasExpired = new Date(expiryDate) < new Date()
+      this.idHasExpired = new Date(expiryDate) <= new Date()
       this.saveFileBtnDisabled = this.idHasExpired
-      if (!this.idHasExpired && this.files.length === 1) this.files[0].IDValidationDateExpiry = new Date(expiryDate)
+      if (!this.idHasExpired && this.files.length === 1) this.files[0].idValidationDateExpiry = new Date(expiryDate)
     }
   }
 

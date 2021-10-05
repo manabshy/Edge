@@ -70,7 +70,7 @@ ContactAMLCompletedAndValid.args = {
   checkType: 'AML',
   message: {
     type: 'success',
-    text: ['AML Completed', 'SmartSearch added: 7th Sep 2020 (11:45)'],
+    text: ['AML Completed', '7th Sep 2020 (11:45)'],
   },
   people: [
     LeadContactValid.args.person,
@@ -104,8 +104,8 @@ ContactAMLIncompleteAndInvalid.args = {
   checksAreValid: false,
   checkType: 'AML',
   message: {
-    type: 'warn',
-    text: ['AML not yet completed', 'SmartSearch added: 7th Sep 2020 (11:45)'],
+    type: 'error',
+    text: ['AML not yet completed', 'Jack Black requires attention'],
   },
   people: [
     LeadContactValid.args.person,

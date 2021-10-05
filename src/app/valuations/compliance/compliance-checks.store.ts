@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { ComponentStore } from '@ngrx/component-store'
-import { combineLatest, Observable } from 'rxjs'
+import { combineLatest, Observable, of } from 'rxjs'
 import { ValuationService } from 'src/app/valuations/shared/valuation.service'
 import { FileService } from 'src/app/core/services/file.service'
 import { mergeMap, tap, filter, switchMap, take, map, flatMap } from 'rxjs/operators'
@@ -15,7 +15,7 @@ import {
   checkAllPeopleHaveValidDocs,
   addFiles,
   identifyAmlOrKyc,
-  checkComplianceChecksCompletedDates,
+  buildComplianceChecksStatusMessages,
 } from './compliance-checks.store-helpers'
 import moment from 'moment'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
@@ -49,7 +49,7 @@ export interface FileUpdateEvent {
   ev: {
     tmpFiles: Array<any>
     documentType?: DOCUMENT_TYPE
-    IDValidationDateExpiry?: Date
+    idValidationDateExpiry?: Date
   }
   person?: Person
 }
@@ -99,10 +99,26 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   )
 
   readonly contactGroupDetails$: Observable<any> = this.contactGroupId$.pipe(
-    filter(val => !!val),
+    filter((val) => !!val),
     switchMap((contactGroupId) => {
       return this.contactGroupService.getContactGroupById(contactGroupId, true)
-    })
+    }),
+  )
+
+  readonly validationMessage$: Observable<any> = combineLatest([
+    this.people$, this.checkType$
+  ]).pipe(
+    filter(([people]) => !!people.length),
+    tap(([people, checkType]) => {
+      const validationMessageData = buildComplianceChecksStatusMessages(people, checkType)
+      this.patchState({
+        checksAreValid: validationMessageData.valid,
+        message: {
+          type: validationMessageData.type,
+          text: validationMessageData.text,
+        },
+      })
+    }),
   )
 
   public complianceChecksVm$: Observable<any> = this.select(
@@ -150,6 +166,13 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     ),
   }))
 
+  readonly removeAmlCheckTimestampFromUser = this.updater((state, personId: string) => ({
+    ...state,
+    people: state.people.map((person) =>
+      person.personId === personId ? { ...person, personDateAmlcompleted: null } : person,
+    ),
+  }))
+
   constructor(
     private valuationSvc: ValuationService,
     private readonly fileService: FileService,
@@ -166,30 +189,24 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       .pipe(
         filter(([data]) => data && !!data.contactGroupId),
         tap(([data, pricingInformation]) => {
-          console.log('compliance-checks store loadStore() running. data: ', data)
+          console.log('data fw', data)
           this.patchState({
             contactGroupId: data.contactGroupId,
             checkType: identifyAmlOrKyc(pricingInformation),
-            companyOrContact: data.companyId ? 'company' : 'contact',
+            companyOrContact: data.companyId ? 'company' : 'contact', // is this a sufficient differentiator for company vs contact compliance checks? this property dictates whether the add buttons are shown in the UI
           })
         }),
-        mergeMap(([data]) => this.peopleService.getPeopleDocs(data.contactGroupId)),
+        mergeMap(([data]) => {
+          return this.peopleService.getPeopleDocs(data.contactGroupId)
+        }),
+        mergeMap((data) => {
+          return of(this.patchState({ people: setContactsForCompliance(data) }))
+        }),
+        mergeMap(() => this.validationMessage$),
       )
       .subscribe(
-        (data) => {
-          console.log('LOAD PEOPLE INTO COMPLIANCE STORE SUBSCRIBE: ', data)
-          if (!data) return
-          this.patchState({
-            people: setContactsForCompliance(data),
-          })
-          const complianceChecksMessage = checkComplianceChecksCompletedDates(data)
-          this.patchState({
-            checksAreValid: complianceChecksMessage.valid,
-            message: {
-              type: complianceChecksMessage.type,
-              text: complianceChecksMessage.text,
-            },
-          })
+        (validationMessageData) => {
+          console.log('LOAD PEOPLE INTO COMPLIANCE STORE SUBSCRIBE: ', validationMessageData)
         },
         (err) => {
           console.error('error!: ', err)
@@ -256,13 +273,17 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           ]
           return this.peopleService.setPeopleDocs(personForSave, contactGroupId)
         }),
-      )
-      .subscribe(
-        (person) => {
+        tap((person) => {
           return this.mergeUserDocsIntoStore({
             ...data,
             tmpFiles: person.documents,
           }) // merges complete file into relevant person
+        }),
+        mergeMap(() => this.validationMessage$),
+      )
+      .subscribe(
+        (person) => {
+          console.log('files added to person: ', person)
         },
         (err) => console.error(err),
       )
@@ -278,15 +299,22 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
 
     combineLatest([this.contactGroupId$, this.people$])
       .pipe(
+        take(1),
         mergeMap(([contactGroupId, people]) => {
           const person = people.filter((person) => person.personId === data.person.personId)
-          const personForSave = {
-            ...person[0],
-            documents: mapDocsForAPI(person[0].documents),
-            personDateAmlcompleted: null,
-          }
+          const personForSave = [
+            {
+              ...person[0],
+              documents: mapDocsForAPI(person[0].documents),
+              personDateAmlcompleted: null,
+            },
+          ]
           return this.peopleService.setPeopleDocs(personForSave, contactGroupId)
         }),
+        tap((person) => {
+          return this.removeAmlCheckTimestampFromUser(person.personId)
+        }),
+        mergeMap(() => this.validationMessage$),
       )
       .subscribe(
         (res) => {

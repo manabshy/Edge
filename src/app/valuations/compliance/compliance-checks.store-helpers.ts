@@ -38,7 +38,7 @@ export const addTmpFilesToFiles = (ev, files, person) => {
       case DOCUMENT_TYPE.ID:
         person.documents.idDoc.files[0] = {
           ...file,
-          IDValidationDateExpiry: ev.IDValidationDateExpiry,
+          idValidationDateExpiry: ev.idValidationDateExpiry,
           fileName: file.fileName,
           blobName: file.blobName,
           blobFileTypeId: 49,
@@ -90,7 +90,7 @@ export const mergeTmpFilesWithFiles = (ev, files, person) => {
       filesToMerge.forEach((file) => {
         person.documents.idDoc.files.push({
           ...file,
-          IDValidationDateExpiry: ev.IDValidationDateExpiry,
+          idValidationDateExpiry: ev.idValidationDateExpiry,
           fileName: file.fileName,
           blobName: file.blobName,
           blobFileTypeId: 49,
@@ -231,25 +231,25 @@ export const setContactsForCompliance = (personGroup) => {
 export const checkAllPeopleHaveValidDocs = (people, checkType) => {
   let checksAreValid
   if (checkType === 'AML') {
-    checksAreValid = people.some((person) => {
-      return (
-        idIsValid(person.documents.idDoc.files) &&
-        person.documents.reportDocs.files.length &&
-        person.documents.proofOfAddressDoc.files.length
-      )
-    })
+    checksAreValid = people.some((person) => personValidForAML(person.documents))
   } else if (checkType === 'KYC') {
-    checksAreValid = people.some((person) => {
-      return idIsValid(person.documents.idDoc.files) && person.documents.proofOfAddressDoc.files.length
-    })
+    checksAreValid = people.some((person) => personValidForKYC(person.documents))
   }
   return checksAreValid
 }
 
-const idIsValid = (files:any[]) => {
-  const hasIdDoc = !!files.length 
+const personValidForAML = (docs) => {
+  return idIsValid(docs.idDoc.files) && docs.reportDocs.files.length && docs.proofOfAddressDoc.files.length
+}
+
+const personValidForKYC = (docs) => {
+  return idIsValid(docs.idDoc.files) && docs.proofOfAddressDoc.files.length
+}
+
+const idIsValid = (files: any[]) => {
+  const hasIdDoc = !!files.length
+  if (!hasIdDoc) return false
   const hasValidExpiryDate = moment(files[0].idValidationDateExpiry) > moment()
-  console.log('hasValidExpiryDate: ', hasValidExpiryDate)
   return hasIdDoc && hasValidExpiryDate
 }
 
@@ -260,32 +260,72 @@ export const identifyAmlOrKyc = (pricingInformation): string => {
     : 'AML'
 }
 
-export const checkComplianceChecksCompletedDates = (data) => {
+export const buildComplianceChecksStatusMessages = (people, amlOrKyc) => {
   let messageObj = {
     type: '',
     text: [],
     valid: false,
   }
-  const passedDate = data.find((person) => person.personDateAmlcompleted)
-  if (passedDate) {
+  const validContacts = []
+  const invalidContacts = []
+  const contactsReadyForChecks = []
+  people.forEach((person) => {
+    if (person.personDateAmlcompleted && personValidForAML(person.documents)) {
+      validContacts.push(person)
+    } else if (!person.personDateAmlcompleted && personValidForAML(person.documents)) {
+      contactsReadyForChecks.push(person)
+    } else {
+      invalidContacts.push(person)
+    }
+  })
+
+  if (validContacts.length === people.length) {
     // const difference = moment(new Date('01/01/2020')).diff(Date.now(), 'months')
-    const difference = moment(passedDate.personDateAmlcompleted).diff(Date.now(), 'months')
+    const difference = moment(validContacts[0].personDateAmlcompleted).diff(Date.now(), 'months')
     if (difference <= -12) {
       console.log('last updated more than a year ago')
       messageObj.type = 'warn'
       messageObj.text = [
-        'Checks are more than a year old. Consider updating.',
-        'Last checks passed: ' + moment(passedDate.personDateAmlcompleted).format('Do MMM YYYY (HH:mm)'),
+        amlOrKyc + ' checks are more than a year old. Consider updating.',
+        'Last checks passed: ' + moment(validContacts[0].personDateAmlcompleted).format('Do MMM YYYY (HH:mm)'),
       ]
       messageObj.valid = true
     } else {
       messageObj.type = 'success'
-      messageObj.text = ['AML Completed', '' + moment(passedDate.personDateAmlcompleted).format('Do MMM YYYY (HH:mm)')]
+      messageObj.text = [
+        amlOrKyc + ' checks valid',
+        '' + moment(validContacts[0].personDateAmlcompleted).format('Do MMM YYYY (HH:mm)'),
+      ]
       messageObj.valid = true
     }
+  } else if (contactsReadyForChecks.length === people.length) {
+    messageObj.type = 'info'
+    messageObj.text = [
+      amlOrKyc + ' checks not passed.',
+      'Contacts in group have necessary documents and compliance checks are ready to run.',
+    ]
+    messageObj.valid = false
   } else {
+    let warningMessage = ''
+    if (invalidContacts.length > 1) {
+      /***
+       * invalidContacts = [{name: 'Dave'}, {name: 'Leanne'}, {name: 'John'}]
+       */
+      invalidContacts.forEach((person, ix) => {
+        if (ix == 0) {
+          warningMessage += person.name
+        } else if (ix == invalidContacts.length - 1) {
+          warningMessage += ' and ' + person.name
+        } else {
+          warningMessage += ', ' + person.name
+        }
+      })
+    } else {
+      warningMessage = invalidContacts[0].name
+    }
+    invalidContacts.length == 1 ? (warningMessage += ' requires attention.') : (warningMessage += ' require attention.')
     messageObj.type = 'warn'
-    messageObj.text = ['AML Checks Incomplete']
+    messageObj.text = [amlOrKyc + ' checks invalid. ', warningMessage]
     messageObj.valid = false
   }
   return messageObj

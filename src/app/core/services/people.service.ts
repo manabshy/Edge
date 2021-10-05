@@ -74,8 +74,6 @@ export class PeopleService {
   }
 
   getPeopleDocs(contactGroupId: number): Observable<any> {
-    console.log('getPeopleForContactGroup: ', contactGroupId)
-
     const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}`;
     return this.http.get<any>(url).pipe(
       map((response) => response.result),

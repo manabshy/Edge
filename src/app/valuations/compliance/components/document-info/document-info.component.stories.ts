@@ -54,7 +54,7 @@ IdUploadedValid.args = {
     id: 0,
     label: 'ID',
     uploadDate: '07/04/21',
-    IDValidationDateExpiry: '01/11/26',
+    idValidationDateExpiry: '01/11/26',
     url: 'https://google.com'
  }],
 };
@@ -66,7 +66,7 @@ IdUploadedInvalid.args = {
     id: 0,
     label: 'ID',
     uploadDate: '07/04/21',
-    IDValidationDateExpiry: '02/09/21',
+    idValidationDateExpiry: '02/09/21',
     url: 'https://google.com'
   }],
 };
