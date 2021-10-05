@@ -38,17 +38,17 @@
               <span class="font-black">{{contactNamesQuestion}} the legal owner{{lengthOfContacts>1?'s':''}} on the
                 title deed?</span>
               <span id="ownerConfirmed" class="mt-2 radio radio--inline">
-                <span>
+                <span class="mb-2">
                   <input class="p-2" type="radio" id="isLegalOwnerYes" value="1" name="ownerConfirmed"
                     formControlName="ownerConfirmed" data-cy="isLegalOwnerYes">
                   <label for="isLegalOwnerYes">Yes</label>
                 </span>
-                <span>
+                <span class="mb-2">
                   <input class="p-2" type="radio" id="isLegalOwnerNo" value="0" name="ownerConfirmed"
                     formControlName="ownerConfirmed" data-cy="isLegalOwnerNo">
                   <label for="isLegalOwnerNo">No</label>
                 </span>
-                <span>
+                <span class="mb-2">
                   <input class="p-2" type="radio" id="isLegalOwnerPartial" value="2" name="ownerConfirmed"
                     formControlName="ownerConfirmed" data-cy="isLegalOwnerPartial">
                   <label for="isLegalOwnerPartial">Partial Match (Name Change)</label>
@@ -59,8 +59,9 @@
             <div *ngIf="landRegistryForm.get('ownerConfirmed').value == '2'">
               <fieldset [ngClass]="{'invalid': (showFileUploadForNameChangeError)}">
                 <h1 class="mb-2 text-lg font-bold"> Proof of Name </h1>
-                <app-file-list [type]="'P'" [edgeFileList]="nameChangeReg?.files" [header]="'Proof of Name'"
-                  [isMultiple]="'false'" (getFileNames)="getFileNames($event)" [fileType]="fileType">
+                <app-file-list [type]="'P'" (afterFileOperation)="afterFileOperation.emit(true)"
+                  [edgeFileList]="nameChangeReg?.files" [header]="'Proof of Name'" [isMultiple]="'false'"
+                  (getFileNames)="getFileNames($event)" [fileType]="fileType">
                 </app-file-list>
                 <p class="mt-2 message message--negative"> Please Upload Proof of Name File</p>
               </fieldset>
@@ -74,8 +75,9 @@
             <div>
               <fieldset [ngClass]="{'invalid': (showFileUploadForLeaseError)}">
                 <h1 class="mb-2 text-lg font-bold"> Lease </h1>
-                <app-file-list [type]="'L'" [edgeFileList]="leaseLandReg?.files" [header]="'Lease'"
-                  [isMultiple]="'false'" (getFileNames)="getFileNames($event)" [fileType]="fileType">
+                <app-file-list [type]="'L'" (afterFileOperation)="afterFileOperation.emit(true)"
+                  [edgeFileList]="leaseLandReg?.files" [header]="'Lease'" [isMultiple]="'false'"
+                  (getFileNames)="getFileNames($event)" [fileType]="fileType">
                 </app-file-list>
                 <p class="mt-2 message message--negative"> Please Upload Lease File</p>
               </fieldset>

@@ -193,8 +193,10 @@ export class ValuationsLandRegisterComponent
   getValidationResult(): boolean {
     let result: boolean = false;
     result = this.landRegistryForm.valid && this.controlFiles();
-
-    this._valuationService.landRegisterValid.next(result);
+    let ownerConfirmed = this.landRegistryForm.controls["ownerConfirmed"].value;
+    this._valuationService.landRegisterValid.next(
+      result && ownerConfirmed != "0"
+    );
     return result;
   }
 
