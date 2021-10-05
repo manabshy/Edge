@@ -1,10 +1,15 @@
-import { ValuationCancellationReasons } from "./../shared/valuation";
+import {
+  ValuationCancellationReasons,
+  valuationNote,
+} from "./../shared/valuation";
 import {
   Component,
   OnInit,
   OnDestroy,
   ViewChild,
   ElementRef,
+  AfterViewInit,
+  AfterViewChecked,
 } from "@angular/core";
 import {
   FormBuilder,
@@ -69,11 +74,11 @@ import { ResultData } from "src/app/shared/result-data";
 import { StaffMember } from "src/app/shared/models/staff-member";
 import { TabDirective } from "ngx-bootstrap/tabs/ngx-bootstrap-tabs";
 import format from "date-fns/format";
-import { Observable, Subject, Subscription } from "rxjs";
+import { BehaviorSubject, Observable, Subject, Subscription } from "rxjs";
 import { MessageService, PrimeNGConfig } from "primeng/api";
 import { addYears, differenceInCalendarYears, isThisHour } from "date-fns";
 import _ from "lodash";
-import { CurrencyPipe } from "@angular/common";
+import { CurrencyPipe, ViewportScroller } from "@angular/common";
 import { CustomDateFormatter } from "src/app/calendar-shared/custom-date-formatter.provider";
 import { CustomEventTitleFormatter } from "src/app/calendar-shared/custom-event-title-formatter.provider";
 import {
@@ -93,7 +98,7 @@ import moment from "moment";
 })
 export class ValuationDetailEditComponent
   extends BaseComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, AfterViewInit, OnDestroy {
   showCalendar = false;
   valuationId: number;
   valuation: Valuation;
@@ -240,6 +245,7 @@ export class ValuationDetailEditComponent
   isCancelled = false;
   cancelString: string = "";
   cancelReasonString: string = "";
+  saveValuationSubscription = new Subscription();
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -352,6 +358,8 @@ export class ValuationDetailEditComponent
     { name: "instruct", value: 8 },
   ];
 
+  setRequirementValuationNoteBs = new BehaviorSubject(false);
+
   interestList: any[] = [];
 
   constructor(
@@ -370,7 +378,8 @@ export class ValuationDetailEditComponent
     private currencyPipe: CurrencyPipe,
     private primengConfig: PrimeNGConfig,
     private diaryEventService: DiaryEventService,
-    private sidenavService: SidenavService
+    private sidenavService: SidenavService,
+    private scroller: ViewportScroller
   ) {
     super();
   }
@@ -382,6 +391,7 @@ export class ValuationDetailEditComponent
       .get("currentUser")
       .subscribe((currentStaffMember: StaffMember) => {
         if (currentStaffMember) {
+          this.currentStaffMember = currentStaffMember;
           // for testing purposes
           if (currentStaffMember.activeDepartments[0].departmentId === 90) {
             this.isClientService = true;
@@ -477,6 +487,16 @@ export class ValuationDetailEditComponent
         },
         { emitEvent: false }
       );
+      if (
+        this.areValuesVisible &&
+        this.isThereAPrice(data) &&
+        this.setRequirementValuationNoteBs.getValue() == false
+      ) {
+        this.setRequirementValuationNoteBs.next(true);
+        this.valuationForm.controls["valuationNote"].updateValueAndValidity();
+      } else {
+        this.formErrors.valuationNote = null;
+      }
       this.sharedService.logValidationErrors(this.valuationForm, false);
       this.setRentFigures();
       this.checkAvailabilityBooking();
@@ -623,11 +643,46 @@ export class ValuationDetailEditComponent
       });
   }
 
-  scrollSpecificElement(className: string) {
-    const scrollElement = document.getElementsByClassName(className);
-    if (scrollElement) {
-      this.sharedService.scrollElIntoView(className);
+  ngAfterViewInit(): void {
+    this.setScrollInformation();
+  }
+
+  setScrollInformation() {
+    const interval = setTimeout(() => {
+      if (this.valuation.valuationStatus == ValuationStatusEnum.None)
+        this.scrollSpecificElement("appointmentTabs");
+      else if (this.valuation.valuationStatus == ValuationStatusEnum.Booked)
+        this.scrollSpecificElement("valuesTab");
+      else if (this.valuation.valuationStatus == ValuationStatusEnum.Valued)
+        this.scrollSpecificElement("termsOfBusinessTab");
+    }, 2000);
+  }
+
+  isThereAPrice(data) {
+    if (
+      data.suggestedAskingPrice > 0 ||
+      data.suggestedAskingRentLongLet > 0 ||
+      data.suggestedAskingRentShortLet > 0 ||
+      data.suggestedAskingRentLongLetMonthly > 0 ||
+      data.suggestedAskingRentShortLetMonthly > 0
+    ) {
+      this.valuationForm.controls["valuationNote"].setValidators(
+        Validators.required
+      );
+      return true;
     }
+    this.valuationForm.controls["valuationNote"].setValidators(null);
+    this.setRequirementValuationNoteBs.next(false);
+    return false;
+  }
+
+  scrollSpecificElement(idName: string) {
+    this.scroller.scrollToAnchor(idName);
+
+    // const scrollElement = document.getElementsByClassName(className);
+    // if (scrollElement) {
+    //   this.sharedService.scrollElIntoView(className);
+    // }
   }
 
   removeAdminContact() {
@@ -722,7 +777,9 @@ export class ValuationDetailEditComponent
       this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
         (result) => {
           this.contactGroup = result;
-          console.log('----------------------------------- contactGroupBs.next')
+          console.log(
+            "----------------------------------- contactGroupBs.next"
+          );
           this.valuationService.contactGroupBs.next(this.contactGroup);
           this.getSearchedPersonSummaryInfo(this.contactGroup);
         }
@@ -912,7 +969,7 @@ export class ValuationDetailEditComponent
     // this.valuers = result.valuers;
     this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
       this.contactGroup = result;
-      console.log('----------------------------------- contactGroupBs.next')
+      console.log("----------------------------------- contactGroupBs.next");
       this.valuationService.contactGroupBs.next(this.contactGroup);
       this.getSearchedPersonSummaryInfo(this.contactGroup);
     });
@@ -1130,6 +1187,7 @@ export class ValuationDetailEditComponent
       isNewBuild: [false],
       hasDisabledAccess: [false],
       adminContact: [],
+      valuationNote: [],
     });
   }
 
@@ -1184,11 +1242,9 @@ export class ValuationDetailEditComponent
               return;
             }
             this.isCancelled = true;
-            this.cancelString =
-              "Cancelled " +
-              moment(data.cancelledDate).format("Do MMM YYYY (HH:mm)") +
-              " by " +
-              data.cancelledBy?.fullName;
+            this.cancelString = `Cancelled ${moment(data.cancelledDate).format(
+              "Do MMM YYYY (HH:mm)"
+            )} by ${data.cancelledBy?.fullName} `;
             this.cancelReasonString =
               "Reason for cancellation: " +
               (data.cancellationTypeId == ValuationCancellationReasons.Other
@@ -1197,6 +1253,9 @@ export class ValuationDetailEditComponent
                     ValuationCancellationReasons[data.cancellationTypeId]
                   ));
           }
+
+          //this.setInitialValuesByStatus(this.valuation.valuationStatus);
+
           if (
             this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
             this.valuation.valuationStatus === ValuationStatusEnum.Valued ||
@@ -1250,7 +1309,9 @@ export class ValuationDetailEditComponent
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
               (result) => {
                 this.contactGroup = result;
-                console.log('----------------------------------- contactGroupBs.next')
+                console.log(
+                  "----------------------------------- contactGroupBs.next"
+                );
                 this.valuationService.contactGroupBs.next(this.contactGroup);
                 this.getSearchedPersonSummaryInfo(this.contactGroup);
                 this.setAdminContact();
@@ -1308,6 +1369,42 @@ export class ValuationDetailEditComponent
         console.log("err: ", err);
       });
   }
+
+  // setInitialValuesByStatus(valuationStatus) {
+  //   switch (valuationStatus) {
+  //     case ValuationStatusEnum.Instructed: {
+  //       this.isEditable = false;
+  //       this.canSaveValuation = false;
+  //       break;
+  //     }
+  //     case ValuationStatusEnum.Booked: {
+  //       this.isEditable = false;
+  //       let valueIndex = this.statuses.find((x) => x.name == "values").value;
+  //       //this.setTabIndexActive(valueIndex);
+  //       break;
+  //     }
+  //     case ValuationStatusEnum.Valued: {
+  //       this.isEditable = false;
+  //       break;
+  //     }
+  //     case ValuationStatusEnum.Cancelled: {
+  //       this.isEditable = false;
+  //       this.canSaveValuation = false;
+  //       break;
+  //     }
+  //     default: {
+  //       this.isEditable = true;
+  //       this.canSaveValuation = true;
+  //     }
+  //   }
+  // }
+
+  // setTabIndexActive(index: number) {
+  //   let initState : boolean[] = [...this.activeState];
+  //   initState.forEach(x=> x =false);
+  //   initState[index]= true;
+  //   this.activeState[index] = true;
+  // }
 
   controlIsCancelled($event) {
     if (this.isCancelled) {
@@ -1519,6 +1616,7 @@ export class ValuationDetailEditComponent
             ? true
             : false
           : false,
+        valuationNote: valuation.valuationContactNote?.text,
       });
 
       if (!this.isEditable && !this.isNewValuation) {
@@ -1726,7 +1824,9 @@ export class ValuationDetailEditComponent
       this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then(
         (result) => {
           this.contactGroup = result;
-          console.log('----------------------------------- contactGroupBs.next')
+          console.log(
+            "----------------------------------- contactGroupBs.next"
+          );
           this.valuationService.contactGroupBs.next(this.contactGroup);
           this.getSearchedPersonSummaryInfo(this.contactGroup);
         }
@@ -2136,6 +2236,10 @@ export class ValuationDetailEditComponent
     this.oldClass = "null";
   }
 
+  hideAppointmentDialog() {
+    this.scrollSpecificElement("appointmentTab");
+  }
+
   selectCalendarDate(date: Date) {
     this.selectedCalendarDate = date;
     this.showCalendar = true;
@@ -2267,7 +2371,18 @@ export class ValuationDetailEditComponent
       this.activeState[4] = true;
       this.messageService.add({
         severity: "warn",
-        summary: "You must complete terms of business",
+        summary: "Please complete terms of business!",
+        closable: false,
+      });
+      return;
+    }
+
+    if (!this.valuationService.landRegisterValid.getValue()) {
+      this.accordionIndex = 5;
+      this.activeState[5] = true;
+      this.messageService.add({
+        severity: "warn",
+        summary: "Please complete land registration!",
         closable: false,
       });
       return;
@@ -2574,7 +2689,7 @@ export class ValuationDetailEditComponent
   }
 
   saveValuation() {
-    console.log('saveValuation')
+    console.log("saveValuation");
     // return
     this.checkAvailabilityBooking();
     this.setValuersValidators();
@@ -2648,6 +2763,11 @@ export class ValuationDetailEditComponent
         ? this.adminContact?.ccOwner
         : false;
 
+    valuation.valuationContactNote = {
+      ...this.valuation.valuationContactNote,
+      text: this.valuationForm.controls["valuationNote"].value,
+    };
+
     valuation.suggestedAskingRentShortLetMonthly = this.sharedService.convertStringToNumber(
       valuation.suggestedAskingRentShortLetMonthly
     );
@@ -2700,33 +2820,37 @@ export class ValuationDetailEditComponent
     this.setValuers(valuation);
 
     if (this.isNewValuation) {
-      this.valuationService.addValuation(valuation).subscribe(
-        (data) => {
-          if (data) {
-            this.onSaveComplete(data);
+      this.saveValuationSubscription = this.valuationService
+        .addValuation(valuation)
+        .subscribe(
+          (data) => {
+            if (data) {
+              this.onSaveComplete(data);
+            }
+          },
+          (error: WedgeError) => {
+            this.messageService.add({
+              severity: "error",
+              summary: error.displayMessage,
+              closable: false,
+            });
+            this.isSubmitting = false;
           }
-        },
-        (error: WedgeError) => {
-          this.messageService.add({
-            severity: "error",
-            summary: error.displayMessage,
-            closable: false,
-          });
-          this.isSubmitting = false;
-        }
-      );
+        );
     } else {
-      this.valuationService.updateValuation(valuation).subscribe(
-        (data) => {
-          if (data) {
-            this.onSaveComplete(data);
+      this.saveValuationSubscription = this.valuationService
+        .updateValuation(valuation)
+        .subscribe(
+          (data) => {
+            if (data) {
+              this.onSaveComplete(data);
+            }
+          },
+          (error: WedgeError) => {
+            this.errorMessage = error;
+            this.isSubmitting = false;
           }
-        },
-        (error: WedgeError) => {
-          this.errorMessage = error;
-          this.isSubmitting = false;
-        }
-      );
+        );
     }
   }
 
@@ -3004,6 +3128,7 @@ export class ValuationDetailEditComponent
     this.cancelValuationSubscription.unsubscribe();
     this.propertySubsription.unsubscribe();
     this.contactGroupSubscription.unsubscribe();
+    this.saveValuationSubscription.unsubscribe();
     this.storage.delete(this.mainPersonId?.toString()).subscribe();
     this.destroy.unsubscribe();
   }

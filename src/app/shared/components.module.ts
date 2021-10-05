@@ -65,13 +65,19 @@ import { InfiniteScrollComponent } from "./components/infinite-scroll/infinite-s
 import { GenericMultiSelectControlComponent } from "./generic-multi-select-control/generic-multi-select-control.component";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { DialogService } from "primeng/dynamicdialog";
-import { MessagesComponent } from './components/messages/messages.component'
+import { MessagesComponent } from "./components/messages/messages.component";
 import { FileUploadComponent } from "./components/file-upload/file-upload.component";
 import { FileListComponent } from "./components/file-list/file-list.component";
-import { BigButtonComponent } from './components/big-button/big-button.component'
+import { BigButtonComponent } from "./components/big-button/big-button.component";
+
+// Vendors module
+// import { ContactComplianceCardComponent } from "./contact-compliance-card/contact-compliance-card.component";
+// import { DocumentInfoComponent } from "./document-info/document-info.component";
+// import { ContactComplianceCardsShellComponent } from "./contact-compliance-cards-shell/contact-compliance-cards-shell.component";
 
 // Vendors module
 import { VendorsModule } from "./vendors.module";
+import { StandAloneNoteComponent } from "./notes/standalone-note.component";
 
 const components = [
   BreadcrumbComponent,
@@ -124,7 +130,8 @@ const components = [
   MessagesComponent,
   FileUploadComponent,
   FileListComponent,
-  BigButtonComponent
+  BigButtonComponent,
+  StandAloneNoteComponent,
 ];
 const pipes = [
   RoundingPipe,
@@ -163,4 +170,4 @@ const directives = [AutocompleteOffDirective, NoDoubleTapDirective];
     SmsModalComponent,
   ],
 })
-export class ComponentsModule { }
+export class ComponentsModule {}
