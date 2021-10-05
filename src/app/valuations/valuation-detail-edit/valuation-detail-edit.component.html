@@ -547,7 +547,8 @@
 
               <p-accordionTab header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible"
                 data-cy="valuationValues">
-                <div id="valuesTab">
+                <div id="valuesTab" [ngClass]="{'opacity-75 pointer-events-none': isCancelled}"
+                  (click)="controlIsCancelled($event)">
                   <ol class="mb-4 cards">
                     <li
                       *ngIf="valuation?.salesValuationBooking && isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">

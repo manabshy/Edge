@@ -644,6 +644,10 @@ export class ValuationDetailEditComponent
   }
 
   ngAfterViewInit(): void {
+    this.setScrollInformation();
+  }
+
+  setScrollInformation() {
     const interval = setTimeout(() => {
       if (this.valuation.valuationStatus == ValuationStatusEnum.None)
         this.scrollSpecificElement("appointmentTabs");
@@ -1612,7 +1616,7 @@ export class ValuationDetailEditComponent
             ? true
             : false
           : false,
-        valuationNote: valuation.valuationNote?.text,
+        valuationNote: valuation.valuationContactNote?.text,
       });
 
       if (!this.isEditable && !this.isNewValuation) {
@@ -2759,8 +2763,8 @@ export class ValuationDetailEditComponent
         ? this.adminContact?.ccOwner
         : false;
 
-    valuation.valuationNote = {
-      ...this.valuation.valuationNote,
+    valuation.valuationContactNote = {
+      ...this.valuation.valuationContactNote,
       text: this.valuationForm.controls["valuationNote"].value,
     };
 
