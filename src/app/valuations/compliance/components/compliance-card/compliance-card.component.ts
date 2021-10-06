@@ -33,7 +33,7 @@ export class ComplianceCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.pillClass = this.person.pillLabel == 'lead' ? 'pill--positive' : 'bg-gray-400'
+    this.pillClass = this.person.isMain ? 'pill--positive' : 'bg-gray-400'
     this.setMenuItems()
   }
 

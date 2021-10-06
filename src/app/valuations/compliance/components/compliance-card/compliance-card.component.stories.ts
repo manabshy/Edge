@@ -60,7 +60,7 @@ LeadContactBlank.args = {
   hasMenuBtn: false,
   person: {
     id: 123,
-    pillLabel: 'lead',
+    isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
     personDateAmlcompleted: null,
@@ -78,7 +78,6 @@ LeadContactValid.args = {
   hasMenuBtn: false,
   person: {
     id :456,
-    pillLabel: 'lead',
     isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
@@ -98,7 +97,7 @@ LeadContactAndUBO.args = {
   person: {
     id :456,
     isUBO: true,
-    pillLabel: 'lead',
+    isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
     personDateAmlcompleted: new Date('03/01/2020'),
@@ -116,7 +115,7 @@ LeadContactInvalid.args = {
   hasMenuBtn: false,
   person: {
     id: 789,
-    pillLabel: 'lead',
+    isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
     personDateAmlcompleted: null,
@@ -134,7 +133,7 @@ LeadContactMixed.args = {
   hasMenuBtn: false,
   person: {
     id: 101,
-    pillLabel: 'lead',
+    isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
     personDateAmlcompleted:new Date('04/30/2020'),
@@ -153,7 +152,7 @@ AssociatedContactBlank.args = {
   hasMenuBtn: false,
   person: {
     id: 121,
-    pillLabel: 'Associated',
+    isMain: false,
     name: 'Eddie Murphy',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
     personDateAmlcompleted: null,
@@ -171,7 +170,7 @@ AssociatedContactValid.args = {
   hasMenuBtn: false,
   person: {
     id: 131,
-    pillLabel: 'Associated',
+    isMain: false,
     name: 'Ian Blackford',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
     personDateAmlcompleted:new Date('02/21/2021'),
@@ -189,7 +188,7 @@ AssociatedContactInvalid.args = {
   hasMenuBtn: false,
   person: {
     id: 415,
-    pillLabel: 'Associated',
+    isMain: false,
     name: 'Jack Black',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
     personDateAmlcompleted: null,
@@ -207,7 +206,7 @@ ContactWithMenu.args = {
   hasMenuBtn: true,
   person: {
     id: 161,
-    pillLabel: 'Associated',
+    isMain: false,
     name: 'Jack Black',
     position: 'Director',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
