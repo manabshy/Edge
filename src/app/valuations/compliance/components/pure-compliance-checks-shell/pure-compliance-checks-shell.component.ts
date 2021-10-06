@@ -12,6 +12,7 @@ export class PureComplianceChecksShellComponent {
   @Input() checkType: string // AML || KYC
   @Input() companyOrContact: string // company || contact
   @Input() contactGroupDetails: any
+
   @Output() passComplianceChecks: EventEmitter<any> = new EventEmitter
   @Output() fileWasUploaded: EventEmitter<any> = new EventEmitter
   @Output() fileWasDeleted: EventEmitter<any> = new EventEmitter
@@ -40,6 +41,19 @@ export class PureComplianceChecksShellComponent {
   
   createNewPerson(){
     console.log('createNewPerson')
+  }
+
+  getCompanyName(ev) {
+    console.log('getCompanyName: ', ev)
+  }
+
+  selectCompany(ev) {
+    console.log('selectCompany: ', ev)
+    console.log('Add this company to the valuation TODO')
+  }
+
+  setManualEntryFlag() {
+    console.log('setManualEntryFlag')
   }
 
 }

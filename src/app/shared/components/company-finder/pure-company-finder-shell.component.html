@@ -11,17 +11,17 @@
             id="company"
             formControlName="companyName"
             autofocus
-            (keydown.enter)="searchCompany.emit()"
+            (keydown.enter)="searchCompany($event)"
             [ngbTypeahead]="suggestions"
             [focusFirst]="false"
-            (selectItem)="selectedSuggestion.emit($event)"
+            (selectItem)="selectedSuggestion($event)"
           />
         </fieldset>
         <fieldset>
-          <button class="btn btn--info mt-3" (click)="searchCompany.emit()" data-cy="searchCompany">Search</button>
+          <button class="btn btn--info mt-3" (click)="searchCompany($event)" data-cy="searchCompany">Search</button>
         </fieldset>
       </form>
-      <p *ngIf="searchResults?.length">{{ searchResults?.length }} Results found</p>
+      <p *ngIf="searchResults?.length">{{ searchResults?.length }} {{ searchResults?.length === 1 ? 'Result found' : 'Results found' }}</p>
     </div>
     <div class="grid grid--75 grid--dividerLeft">
       <div class="table">
@@ -35,7 +35,7 @@
             <tr *ngIf="!searchResults?.length && hasBeenSearched">
               <td colspan="4">No {{ label }} found</td>
             </tr>
-            <tr *ngFor="let company of searchResults" (click)="selectCompany.emit(company)" class="cursor-pointer">
+            <tr *ngFor="let company of searchResults" (click)="selectCompany(company)" class="cursor-pointer">
               <td data-title="Name">
                 <span class="cell-content">
                   {{ company?.companyName }}
@@ -55,7 +55,7 @@
   <ng-container *ngIf="hasBeenSearched || noSuggestions">
     <footer class="footer footer--modal">
       <span class="btn--container">
-        <a class="btn btn--ghost" *ngIf="canCreateNewCompany" (click)="createNew.emit(true)">
+        <a class="btn btn--ghost" *ngIf="canCreateNewCompany" (click)="enterDetailsManually(true)">
           <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
             <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
             <path
@@ -65,7 +65,7 @@
           </svg>
           New Company
         </a>
-        <a class="btn btn--ghost" *ngIf="!canCreateNewCompany" (click)="createNew.emit()">
+        <a class="btn btn--ghost" *ngIf="!canCreateNewCompany" (click)="enterDetailsManually(false)">
           <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
             <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
             <path

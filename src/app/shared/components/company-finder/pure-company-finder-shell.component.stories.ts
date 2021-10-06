@@ -3,16 +3,19 @@ import { CommonModule } from '@angular/common'
 // also exported from '@storybook/angular' if you can deal with breaking changes in 6.1
 import { Story, Meta } from '@storybook/angular/types-6-0'
 import { action } from '@storybook/addon-actions'
+import { FormBuilder } from '@angular/forms'
+
 import { PureCompanyFinderShellComponent } from './pure-company-finder-shell.component'
 
 export default {
-  title: 'Components/PureCompanyFinderShellComponent/',
+  title: 'Components/Shared/CompanyFinder/PureCompanyFinderShell',
   component: PureCompanyFinderShellComponent,
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
       declarations: [PureCompanyFinderShellComponent],
       imports: [CommonModule],
+      providers: [FormBuilder],
     }),
     componentWrapperDecorator(
       (story) => `
@@ -38,17 +41,42 @@ const CompanyFinderTemplate: Story<PureCompanyFinderShellComponent> = (args: Pur
     isManualEntry: actionsData.isManualEntry,
     createNew: actionsData.createNew,
     searchCompany: actionsData.searchCompany,
-  }
+  },
 })
 
-export const Primary = CompanyFinderTemplate.bind({})
-Primary.args = {
-  // searchResults: Company[]
-  // existingCompany?: Company
-  // companyNameError
-  // canCreateNewCompany
-  // hasBeenSearched
-  // noSuggestions
-  // suggestions: any
-  // companyFinderForm
+export const SingleResult = CompanyFinderTemplate.bind({})
+SingleResult.args = {
+  searchResults: [
+    {
+      companyId: 7577,
+      companyName: 'Abacus Solicitors',
+      companyTypeId: 1,
+    },
+  ],
+  companyNameError: 'None',
+  canCreateNewCompany: true,
+  hasBeenSearched: false,
+  noSuggestions: true,
+  suggestions: [],
+}
+
+export const MultipleResults = CompanyFinderTemplate.bind({})
+MultipleResults.args = {
+  searchResults: [
+    {
+      companyId: 7577,
+      companyName: 'Abacus Solicitors',
+      companyTypeId: 1,
+    },
+    {
+      companyId: 7578,
+      companyName: 'Abracadabra Lawyers',
+      companyTypeId: 1,
+    },
+  ],
+  companyNameError: 'None',
+  canCreateNewCompany: true,
+  hasBeenSearched: false,
+  noSuggestions: true,
+  suggestions: [],
 }
