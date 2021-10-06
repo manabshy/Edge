@@ -90,6 +90,7 @@ import { DiaryEventService } from "src/app/diary/shared/diary-event.service";
 import { SidenavService } from "src/app/core/services/sidenav.service";
 import { Person } from "src/app/shared/models/person";
 import moment from "moment";
+import { eSignTypes } from "src/app/core/shared/eSignTypes";
 
 @Component({
   selector: "app-valuation-detail-edit",
@@ -427,6 +428,7 @@ export class ValuationDetailEditComponent
     } else {
       this.valuation = { valuationStatus: ValuationStatusEnum.None };
       this.sharedService.removeContactGroupChanged.next(false);
+      this.setHeaderDropdownList(ValuationStatusEnum.None, 0);
     }
 
     if (this.propertyId) {
@@ -628,9 +630,17 @@ export class ValuationDetailEditComponent
     });
 
     this.eSignSubscription = this.sharedService.eSignTriggerChanged.subscribe(
-      (data) => {
+      (data: eSignTypes) => {
         if (data) {
-          //this.valuationService.
+          this.valuationService
+            .createValuationESign(data, this.valuation.valuationEventId)
+            .subscribe((result) => {
+              this.messageService.add({
+                severity: "success",
+                summary: this.removeUnderLine(eSignTypes[data]) + " send",
+                closable: false,
+              });
+            });
         }
       }
     );
@@ -1231,7 +1241,10 @@ export class ValuationDetailEditComponent
           this.valuation = data;
           this.getPropertyInformation(this.valuation.property.propertyId);
 
-          this.setHeaderDropdownList();
+          this.setHeaderDropdownList(
+            this.valuation.valuationStatus,
+            this.valuation.valuationType
+          );
 
           this.valuation.valuationStatus === 3
             ? (this.canInstruct = true)
@@ -1381,11 +1394,9 @@ export class ValuationDetailEditComponent
       });
   }
 
-  setHeaderDropdownList() {
-    this.sharedService.valuationType.next(this.valuation.valuationType);
-    this.sharedService.valuationStatusChanged.next(
-      this.valuation.valuationStatus
-    );
+  setHeaderDropdownList(status, valuationType) {
+    this.sharedService.valuationType.next(valuationType);
+    this.sharedService.valuationStatusChanged.next(status);
   }
 
   // setInitialValuesByStatus(valuationStatus) {

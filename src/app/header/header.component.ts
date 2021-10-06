@@ -85,73 +85,77 @@ export class HeaderComponent
 
     this.primengConfig.ripple = true;
 
-    // valuation operations.
-    this.openContactGroupSubscription = this.sharedService.openContactGroupChanged.subscribe(
-      (value) => {
-        if (!value) {
-          this.filteredItems = [
-            ...this.items.filter((x) => x.id !== "addAdmin"),
-          ];
-        }
-      }
-    );
-    this.openContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe(
-      (value) => {
-        if (!value) {
-          this.filteredItems = [
-            ...this.items.filter((x) => x.id !== "removeAdmin"),
-          ];
-        }
-      }
-    );
-
     // Sales ToB, Lettings ToB, Sales Property Questionnaire, Lettings Property Questionnaire, Close Valuation
     combineLatest([
       this.sharedService.valuationStatusChanged,
       this.sharedService.valuationType,
-    ]).subscribe(([valuationStatus, valuationType]) => {
-      if (valuationStatus === ValuationStatusEnum.None) {
-        this.filteredItems = [...this.items.filter((x) => x.id === "addAdmin")];
-      } else if (valuationStatus === ValuationStatusEnum.Booked)
-        this.filteredItems = [
-          ...this.items.filter(
-            (x) => x.id === "cancelValuation" || x.id === "addAdmin"
-          ),
-        ];
-      else if (valuationStatus === ValuationStatusEnum.Valued) {
-        if (valuationType === ValuationTypeEnum.Lettings) {
-          this.filteredItems = [
-            ...this.items.filter(
-              (x) =>
-                x.id === "lettingsTermsOfBusiness" ||
-                x.id === "cancelValuation" ||
-                x.id === "addAdmin" ||
-                x.id === "landLordQuestionnaire"
-            ),
-          ];
-        } else if (valuationType === ValuationTypeEnum.Sales) {
-          this.filteredItems = [
-            ...this.items.filter(
-              (x) =>
-                x.id === "salesTermsOfBusiness" ||
-                x.id === "cancelValuation" ||
-                x.id === "addAdmin" ||
-                x.id === "vendorQuestionnaire"
-            ),
-          ];
-        }
-      } else if (valuationStatus === ValuationStatusEnum.Instructed) {
-        if (valuationType === ValuationTypeEnum.Lettings) {
-          this.filteredItems = [
-            ...this.items.filter((x) => x.id === "landLordQuestionnaire"),
-          ];
-        } else if (valuationType === ValuationTypeEnum.Sales) {
-          this.filteredItems = [
-            ...this.items.filter((x) => x.id === "vendorQuestionnaire"),
-          ];
+      this.sharedService.openContactGroupChanged,
+      this.sharedService.removeContactGroupChanged,
+    ]).subscribe(
+      ([
+        valuationStatus,
+        valuationType,
+        openContactGroup,
+        removeContactGroup,
+      ]) => {
+        if (this.items) {
+          if (valuationStatus === ValuationStatusEnum.None) {
+            this.filteredItems = [
+              ...this.items.filter((x) => x.id === "addAdmin"),
+            ];
+          } else if (valuationStatus === ValuationStatusEnum.Booked)
+            this.filteredItems = [
+              ...this.items.filter(
+                (x) => x.id === "cancelValuation" || x.id === "addAdmin"
+              ),
+            ];
+          else if (valuationStatus === ValuationStatusEnum.Valued) {
+            if (valuationType === ValuationTypeEnum.Lettings) {
+              this.filteredItems = [
+                ...this.items.filter(
+                  (x) =>
+                    x.id === "lettingsTermsOfBusiness" ||
+                    x.id === "cancelValuation" ||
+                    x.id === "addAdmin" ||
+                    x.id === "landLordQuestionnaire"
+                ),
+              ];
+            } else if (valuationType === ValuationTypeEnum.Sales) {
+              this.filteredItems = [
+                ...this.items.filter(
+                  (x) =>
+                    x.id === "salesTermsOfBusiness" ||
+                    x.id === "cancelValuation" ||
+                    x.id === "addAdmin" ||
+                    x.id === "vendorQuestionnaire"
+                ),
+              ];
+            }
+          } else if (valuationStatus === ValuationStatusEnum.Instructed) {
+            if (valuationType === ValuationTypeEnum.Lettings) {
+              this.filteredItems = [
+                ...this.items.filter((x) => x.id === "landLordQuestionnaire"),
+              ];
+            } else if (valuationType === ValuationTypeEnum.Sales) {
+              this.filteredItems = [
+                ...this.items.filter((x) => x.id === "vendorQuestionnaire"),
+              ];
+            }
+          }
+
+          if (removeContactGroup != null && !removeContactGroup) {
+            this.filteredItems = [
+              ...this.filteredItems.filter((x) => x.id !== "removeAdmin"),
+            ];
+          }
+          if (openContactGroup != null && !openContactGroup) {
+            this.filteredItems = [
+              ...this.filteredItems.filter((x) => x.id !== "addAdmin"),
+            ];
+          }
         }
       }
-    });
+    );
   }
 
   setItems(navTitle: string) {
@@ -179,7 +183,7 @@ export class HeaderComponent
           icon: "pi pi-file-pdf",
           command: () => {
             this.sharedService.eSignTriggerChanged.next(
-              eSignTypes.salesTermsOfBusiness
+              eSignTypes.Sales_Terms_Of_Business
             );
           },
         },
@@ -189,7 +193,7 @@ export class HeaderComponent
           icon: "pi pi-file-pdf",
           command: () => {
             this.sharedService.eSignTriggerChanged.next(
-              eSignTypes.lettingsTermsOfBusiness
+              eSignTypes.Lettings_Terms_Of_Business
             );
           },
         },
@@ -199,7 +203,7 @@ export class HeaderComponent
           icon: "pi pi-file-pdf",
           command: () => {
             this.sharedService.eSignTriggerChanged.next(
-              eSignTypes.propertyQuestionnaire
+              eSignTypes.Property_Questionnaire
             );
           },
         },
@@ -209,7 +213,7 @@ export class HeaderComponent
           icon: "pi pi-file-pdf",
           command: () => {
             this.sharedService.eSignTriggerChanged.next(
-              eSignTypes.salesPropertyQuestionnaire
+              eSignTypes.Sales_Property_Questionnaire
             );
           },
         },
@@ -222,8 +226,6 @@ export class HeaderComponent
           },
         },
       ];
-
-      this.filteredItems = this.items.slice();
     }
   }
 
