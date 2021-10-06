@@ -39,6 +39,16 @@ export class ValuationsLandRegisterComponent
   set showLeaseExpiryDate(value) {
     if (this._showLeaseExpiryDate != value) {
       this._showLeaseExpiryDate = value;
+      if (this._showLeaseExpiryDate === true) {
+        this.landRegistryForm.controls["leaseExpiryDate"].setValidators(
+          Validators.required
+        );
+      } else {
+        this.landRegistryForm.controls["leaseExpiryDate"].setValidators(null);
+      }
+      this.landRegistryForm.controls[
+        "leaseExpiryDate"
+      ].updateValueAndValidity();
     }
   }
   @Input() get showLeaseExpiryDate(): boolean {
@@ -110,10 +120,6 @@ export class ValuationsLandRegisterComponent
     private _sharedService: SharedService
   ) {}
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
   ngOnInit(): void {
     this.landRegistryForm = this.fb.group({
       userEnteredOwner: [
@@ -128,9 +134,11 @@ export class ValuationsLandRegisterComponent
         this.leaseLandReg.leaseExpiryDate
           ? new Date(this.leaseLandReg.leaseExpiryDate)
           : null,
-        Validators.required,
+        this.showLeaseExpiryDate ? Validators.required : null,
       ],
     });
+
+    this.getValidationResult();
 
     this.landRegistryForm.controls["leaseExpiryDate"].valueChanges.subscribe(
       (data: Date) => {
@@ -236,5 +244,9 @@ export class ValuationsLandRegisterComponent
     }
     this.controlFiles();
     this.getValidationResult();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

@@ -17,9 +17,11 @@ import { ValidationMessages, FormErrors } from "../shared/app-constants";
 import {
   Valuation,
   ValuationStatusEnum,
+  ValuationTypeEnum,
 } from "src/app/valuations/shared/valuation";
 import { DialogService, DynamicDialogRef } from "primeng/dynamicdialog";
 import { InfoDetail } from "./info.service";
+import { eSignTypes } from "../shared/eSignTypes";
 
 @Injectable({
   providedIn: "root",
@@ -34,6 +36,13 @@ export class SharedService {
 
   openContactGroupChanged = new Subject<boolean>();
   removeContactGroupChanged = new Subject<boolean>();
+  eSignTriggerChanged = new Subject<eSignTypes>();
+  valuationStatusChanged = new BehaviorSubject<ValuationStatusEnum>(
+    ValuationStatusEnum.None
+  );
+  valuationType = new BehaviorSubject<ValuationTypeEnum>(
+    ValuationTypeEnum.None
+  );
   cancelValuationOperationChanged = new BehaviorSubject<boolean>(false);
 
   constructor(
