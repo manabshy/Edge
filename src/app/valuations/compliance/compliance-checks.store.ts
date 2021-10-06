@@ -35,9 +35,12 @@ export interface ComplianceChecksState {
 export interface ComplianceChecksPeople {
   personId: String
   name: String
+  address?: String
+  position?: String
   documents: Array<any>
   isMain: Boolean
-
+  isUBO?: Boolean
+  personDateAmlcompleted?: Date
 }
 
 export interface ComplianceDocTypes {

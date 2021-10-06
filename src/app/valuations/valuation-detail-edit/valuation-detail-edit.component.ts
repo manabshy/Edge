@@ -344,7 +344,8 @@ export class ValuationDetailEditComponent
     }
   }
 
-  activeState: boolean[] = [true, true, true, true, true, false, false];
+  // activeState: boolean[] = [true, true, true, true, true, false, false];
+  activeState: boolean[] = [false, false, false, false, false, false, true];
   statuses = [
     { name: "valuationNotes", value: 0 },
     { name: "propertyInfo", value: 1 },

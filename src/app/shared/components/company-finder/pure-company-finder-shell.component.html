@@ -4,17 +4,24 @@
       <form [formGroup]="companyFinderForm" autocomplete="off">
         <fieldset>
           <!-- <label for="searchTerm">Find Company</label> -->
-          <input class="p-2" #companyNameInput type="search" id="company" formControlName="companyName" autofocus
-            (keydown.enter)="searchCompany()" [ngbTypeahead]="suggestions" [focusFirst]="false"
-            (selectItem)="selectedSuggestion($event)">
+          <input
+            class="p-2"
+            #companyNameInput
+            type="search"
+            id="company"
+            formControlName="companyName"
+            autofocus
+            (keydown.enter)="searchCompany.emit()"
+            [ngbTypeahead]="suggestions"
+            [focusFirst]="false"
+            (selectItem)="selectedSuggestion.emit($event)"
+          />
         </fieldset>
         <fieldset>
-          <button class="btn btn--info mt-3" (click)="searchCompany()" data-cy="searchCompany">Search</button>
+          <button class="btn btn--info mt-3" (click)="searchCompany.emit()" data-cy="searchCompany">Search</button>
         </fieldset>
       </form>
-      <p *ngIf="foundCompanies?.length">
-        {{foundCompanies?.length}} Results found
-      </p>
+      <p *ngIf="searchResults?.length">{{ searchResults?.length }} Results found</p>
     </div>
     <div class="grid grid--75 grid--dividerLeft">
       <div class="table">
@@ -25,15 +32,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngIf="!foundCompanies?.length && hasBeenSearched">
-              <td colspan="4">
-                No {{label}} found
-              </td>
+            <tr *ngIf="!searchResults?.length && hasBeenSearched">
+              <td colspan="4">No {{ label }} found</td>
             </tr>
-            <tr *ngFor="let company of foundCompanies" (click)="selectCompany(company)"  class="cursor-pointer">
+            <tr *ngFor="let company of searchResults" (click)="selectCompany.emit(company)" class="cursor-pointer">
               <td data-title="Name">
                 <span class="cell-content">
-                  {{company?.companyName}}
+                  {{ company?.companyName }}
                 </span>
               </td>
               <td class="hide--mobile">
@@ -50,19 +55,25 @@
   <ng-container *ngIf="hasBeenSearched || noSuggestions">
     <footer class="footer footer--modal">
       <span class="btn--container">
-        <a class="btn btn--ghost" *ngIf="canCreateNewCompany" (click)="enterDetailsManually(true)">
+        <a class="btn btn--ghost" *ngIf="canCreateNewCompany" (click)="createNew.emit(true)">
           <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
             <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
-            <path class="plus-vertical"
-              d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
-          </svg>New Company
+            <path
+              class="plus-vertical"
+              d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"
+            />
+          </svg>
+          New Company
         </a>
-        <a class="btn btn--ghost" *ngIf="!canCreateNewCompany" (click)="enterDetailsManually()">
+        <a class="btn btn--ghost" *ngIf="!canCreateNewCompany" (click)="createNew.emit()">
           <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
             <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
-            <path class="plus-vertical"
-              d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
-          </svg>Enter Name Manually
+            <path
+              class="plus-vertical"
+              d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"
+            />
+          </svg>
+          Enter Name Manually
         </a>
       </span>
     </footer>

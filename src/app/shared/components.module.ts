@@ -61,6 +61,7 @@ import { EmailComponent } from "./components/email/email.component";
 import { EmailSignatureComponent } from "./components/email-signature/email-signature.component";
 import { RedactedCardComponent } from "./components/redacted-card/redacted-card.component";
 import { CompanyFinderComponent } from "./components/company-finder/company-finder.component";
+import { PureCompanyFinderShellComponent } from './components/company-finder/pure-company-finder-shell.component'
 import { InfiniteScrollComponent } from "./components/infinite-scroll/infinite-scroll.component";
 import { GenericMultiSelectControlComponent } from "./generic-multi-select-control/generic-multi-select-control.component";
 import { ConfirmationService, MessageService } from "primeng/api";
@@ -125,6 +126,7 @@ const components = [
   EmailSignatureComponent,
   RedactedCardComponent,
   CompanyFinderComponent,
+  PureCompanyFinderShellComponent,
   InfiniteScrollComponent,
   GenericMultiSelectControlComponent,
   MessagesComponent,
