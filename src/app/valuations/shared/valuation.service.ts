@@ -8,7 +8,6 @@ import {
   Valuer,
   ValuersAvailabilityOption,
   CalendarAvailibility,
-  ValuationPricingInfo,
   CancelValuation,
   ValuationStatusEnum,
   ValuationCancellationReasons,
@@ -39,9 +38,6 @@ export class ValuationService {
 
   private readonly _valuation: BehaviorSubject<Valuation | any> = new BehaviorSubject({})
   public readonly valuation$: Observable<Valuation | any> = this._valuation.asObservable()
-
-  private readonly _valuationPricingInfo: BehaviorSubject<ValuationPricingInfo> = new BehaviorSubject({})
-  public readonly valuationPricingInfo$ = this._valuationPricingInfo.asObservable()
 
   constructor(private http: HttpClient, private storage: StorageMap) {}
 

@@ -126,6 +126,9 @@ export const mergeTmpFilesWithFiles = (ev, files, person) => {
   return person.documents
 }
 
+/***
+ * maps array of documents to docsObject model used by the view
+ */
 export const mapDocumentsForView = (documents): ComplianceDocTypes => {
   let docsObject = {
     idDoc: {
@@ -169,6 +172,9 @@ export const mapDocumentsForView = (documents): ComplianceDocTypes => {
   return docsObject
 }
 
+/***
+ * maps docsObject model back into documents array for sending to the API
+ */
 export const mapDocsForAPI = (docs) => {
   let docsArray = []
   // add ID doc
@@ -220,7 +226,7 @@ export const setContactsForCompliance = (personGroup) => {
     return {
       personId: person.personId,
       name: person.name,
-      pillLabel: person.isMain ? 'lead' : 'associated',
+      isMain: person.isMain,
       address: person.address,
       personDateAmlcompleted: person.personDateAmlcompleted,
       documents: mapDocumentsForView(person.documents),
@@ -253,9 +259,9 @@ const idIsValid = (files: any[]) => {
   return hasIdDoc && hasValidExpiryDate
 }
 
-export const identifyAmlOrKyc = (pricingInformation): string => {
-  return pricingInformation.suggestedAskingRentLongLetMonthly < 7500 ||
-    pricingInformation.suggestedAskingRentShortLetMonthly < 7500
+export const identifyAmlOrKyc = (valuation): string => {
+  return valuation.suggestedAskingRentLongLetMonthly < 7500 ||
+  valuation.suggestedAskingRentShortLetMonthly < 7500
     ? 'KYC'
     : 'AML'
 }

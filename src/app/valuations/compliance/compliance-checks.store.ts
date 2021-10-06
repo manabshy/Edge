@@ -22,14 +22,22 @@ import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-grou
 
 export interface ComplianceChecksState {
   checksAreValid: Boolean
-  checkType: String
+  checkType: String // 'AML' || 'KYC'
   contactGroupId: Number
-  companyOrContact?: String
+  companyOrContact?: String // 'company' || 'contact'
   message?: {
-    type: String
+    type: String // 'warn' || 'info' || 'error'
     text: Array<string>
   }
-  people: Array<any>
+  people: Array<ComplianceChecksPeople>
+}
+
+export interface ComplianceChecksPeople {
+  personId: String
+  name: String
+  documents: Array<any>
+  isMain: Boolean
+
 }
 
 export interface ComplianceDocTypes {
@@ -185,19 +193,18 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   }
 
   loadStore = () => {
-    combineLatest([this.valuationSvc.contactGroup$, this.valuationSvc.valuationPricingInfo$])
+    combineLatest([this.valuationSvc.contactGroup$, this.valuationSvc.valuation$])
       .pipe(
-        filter(([data]) => data && !!data.contactGroupId),
-        tap(([data, pricingInformation]) => {
-          console.log('data fw', data)
+        filter(([contactGroupData, valuation]) => contactGroupData && !!contactGroupData.contactGroupId && !!valuation),
+        tap(([contactGroupData, valuation]) => {
           this.patchState({
-            contactGroupId: data.contactGroupId,
-            checkType: identifyAmlOrKyc(pricingInformation),
-            companyOrContact: data.companyId ? 'company' : 'contact', // is this a sufficient differentiator for company vs contact compliance checks? this property dictates whether the add buttons are shown in the UI
+            contactGroupId: contactGroupData.contactGroupId,
+            checkType: identifyAmlOrKyc(valuation),
+            companyOrContact: contactGroupData.companyId ? 'company' : 'contact',
           })
         }),
-        mergeMap(([data]) => {
-          return this.peopleService.getPeopleDocs(data.contactGroupId)
+        mergeMap(([contactGroupData]) => {
+          return this.peopleService.getPeopleDocs(contactGroupData.contactGroupId)
         }),
         mergeMap((data) => {
           return of(this.patchState({ people: setContactsForCompliance(data) }))
@@ -205,9 +212,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         mergeMap(() => this.validationMessage$),
       )
       .subscribe(
-        (validationMessageData) => {
-          console.log('LOAD PEOPLE INTO COMPLIANCE STORE SUBSCRIBE: ', validationMessageData)
-        },
+        () => {},
         (err) => {
           console.error('error!: ', err)
         },
@@ -235,6 +240,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       )
       .subscribe(
         (res) => {
+          // move to above out of subscribe like others
           this.patchState({
             message: {
               type: 'success',
@@ -279,12 +285,10 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
             tmpFiles: person.documents,
           }) // merges complete file into relevant person
         }),
-        mergeMap(() => this.validationMessage$),
+        mergeMap(() => this.validationMessage$)
       )
       .subscribe(
-        (person) => {
-          console.log('files added to person: ', person)
-        },
+        () => {},
         (err) => console.error(err),
       )
   }
