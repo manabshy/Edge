@@ -40,13 +40,13 @@ export class ValuationsLandRegisterComponent
     if (this._showLeaseExpiryDate != value) {
       this._showLeaseExpiryDate = value;
       if (this._showLeaseExpiryDate === true) {
-        this.landRegistryForm.controls["leaseExpiryDate"].setValidators(
+        this.landRegistryForm?.controls["leaseExpiryDate"].setValidators(
           Validators.required
         );
       } else {
-        this.landRegistryForm.controls["leaseExpiryDate"].setValidators(null);
+        this.landRegistryForm?.controls["leaseExpiryDate"].setValidators(null);
       }
-      this.landRegistryForm.controls[
+      this.landRegistryForm?.controls[
         "leaseExpiryDate"
       ].updateValueAndValidity();
     }

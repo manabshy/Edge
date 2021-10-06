@@ -34,8 +34,8 @@ export class SharedService {
   private removeStickySubject = new Subject<boolean>();
   removeSticky$ = this.removeStickySubject.asObservable();
 
-  openContactGroupChanged = new Subject<boolean>();
-  removeContactGroupChanged = new Subject<boolean>();
+  openContactGroupChanged = new BehaviorSubject<boolean | null>(null);
+  removeContactGroupChanged = new BehaviorSubject<boolean | null>(null);
   eSignTriggerChanged = new Subject<eSignTypes>();
   valuationStatusChanged = new BehaviorSubject<ValuationStatusEnum>(
     ValuationStatusEnum.None
