@@ -19,10 +19,10 @@ export interface Property extends PropertyInfo {
   propertyTypeId: PropertyType;
   propertyStyleId: PropertyStyle;
   address: Address;
-  propertyFloorId: number;
+  propertyFloorId?: number;
   floorOther: string;
   floorType: string;
-  numberOfFloors: number;
+  numberOfFloors?: number;
   regionId: number;
   areaId: number;
   subAreaId: number;
@@ -220,12 +220,13 @@ export const PropertyStyles = new Map([
 
 export const PropertyDetailsSubNav = ["instructions", "offers", "valuations"];
 
-export const PropertyDetailsSubNavItems: SubNavItem[] =
-  PropertyDetailsSubNav.map((x) => ({
+export const PropertyDetailsSubNavItems: SubNavItem[] = PropertyDetailsSubNav.map(
+  (x) => ({
     link: x,
     label: SubNav.subNavLabel(x),
     value: SubNav.subNavValue(x),
-  }));
+  })
+);
 
 export enum PropertySearchEnum {
   SalesInstruction = 1,

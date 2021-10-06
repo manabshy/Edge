@@ -227,6 +227,7 @@ export class ValuationDetailEditComponent
   openContactGroupSubscription = new Subscription();
   cancelValuationSubscription = new Subscription();
   removeContactGroupSubscription = new Subscription();
+  eSignSubscription = new Subscription();
   moreInfo = (this.sidenavService.selectedItem = "valuationTicket");
   summaryTotals: PersonSummaryFigures;
   sideNavItems = this.sidenavService.valuationSideNavItems;
@@ -385,6 +386,7 @@ export class ValuationDetailEditComponent
   }
 
   ngOnInit() {
+    this.valuationService.landRegisterValid.next(false);
     this.primengConfig.ripple = true;
     this.setupForm();
     this.storage
@@ -624,6 +626,14 @@ export class ValuationDetailEditComponent
         }
       }
     });
+
+    this.eSignSubscription = this.sharedService.eSignTriggerChanged.subscribe(
+      (data) => {
+        if (data) {
+          //this.valuationService.
+        }
+      }
+    );
 
     this.valuationService.contactGroupBs.subscribe((result: ContactGroup) => {
       if (result?.contactGroupId && this.contactId != result?.contactGroupId) {
@@ -1219,8 +1229,9 @@ export class ValuationDetailEditComponent
       .then((data) => {
         if (data) {
           this.valuation = data;
-          console.log("this.valuation: ", this.valuation);
           this.getPropertyInformation(this.valuation.property.propertyId);
+
+          this.setHeaderDropdownList();
 
           this.valuation.valuationStatus === 3
             ? (this.canInstruct = true)
@@ -1368,6 +1379,13 @@ export class ValuationDetailEditComponent
       .catch((err) => {
         console.log("err: ", err);
       });
+  }
+
+  setHeaderDropdownList() {
+    this.sharedService.valuationType.next(this.valuation.valuationType);
+    this.sharedService.valuationStatusChanged.next(
+      this.valuation.valuationStatus
+    );
   }
 
   // setInitialValuesByStatus(valuationStatus) {
@@ -2771,8 +2789,11 @@ export class ValuationDetailEditComponent
     valuation.suggestedAskingRentShortLetMonthly = this.sharedService.convertStringToNumber(
       valuation.suggestedAskingRentShortLetMonthly
     );
-    valuation.property.propertyTypeId = valuation.propertyTypeId;
-    valuation.property.propertyStyleId = valuation.propertyStyleId;
+    // TODO: here
+    if (!valuation.propertyTypeId) return;
+
+    valuation.property.propertyTypeId = +valuation.propertyTypeId;
+    valuation.property.propertyStyleId = +valuation.propertyStyleId;
     valuation.property.propertyFloorId = valuation.propertyFloorId;
     valuation.property.floorOther = valuation.floorOther;
     valuation.otherFeatures = [];
@@ -3125,6 +3146,7 @@ export class ValuationDetailEditComponent
     this.storage.delete("valuationFormData").subscribe();
     this.openContactGroupSubscription.unsubscribe();
     this.removeContactGroupSubscription.unsubscribe();
+    this.eSignSubscription.unsubscribe();
     this.cancelValuationSubscription.unsubscribe();
     this.propertySubsription.unsubscribe();
     this.contactGroupSubscription.unsubscribe();
