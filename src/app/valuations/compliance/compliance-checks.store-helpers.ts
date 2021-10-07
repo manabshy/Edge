@@ -229,6 +229,7 @@ export const setContactsForCompliance = (personGroup) => {
       isMain: person.isMain,
       address: person.address,
       personDateAmlcompleted: person.personDateAmlcompleted,
+      complianceChecksRunBy: 'Dave Beazer',
       documents: mapDocumentsForView(person.documents),
     }
   })
@@ -293,14 +294,16 @@ export const buildComplianceChecksStatusMessages = (people, amlOrKyc) => {
       messageObj.type = 'warn'
       messageObj.text = [
         amlOrKyc + ' checks are more than a year old. Consider updating.',
-        'Last checks passed: ' + moment(validContacts[0].personDateAmlcompleted).format('Do MMM YYYY (HH:mm)'),
+        'Last checks passed: ' + moment(validContacts[0].personDateAmlcompleted).format('Do MMM YYYY (HH:mm)')
+        + ' by ' + validContacts[0].complianceChecksRunBy,
       ]
       messageObj.valid = true
     } else {
       messageObj.type = 'success'
       messageObj.text = [
         amlOrKyc + ' checks valid',
-        '' + moment(validContacts[0].personDateAmlcompleted).format('Do MMM YYYY (HH:mm)'),
+        '' + moment(validContacts[0].personDateAmlcompleted).format('Do MMM YYYY (HH:mm)')
+        + ' by ' + validContacts[0].complianceChecksRunBy,
       ]
       messageObj.valid = true
     }

@@ -32,7 +32,7 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges {
   }
   
   ngOnChanges(changes): void {
-    if(!changes.valuationFiles.firstChange){
+    if(changes.valuationFiles && !changes.valuationFiles.firstChange){
       this.valuationFiles = changes.valuationFiles.currentValue
       this.checkToBIsSigned()
     }

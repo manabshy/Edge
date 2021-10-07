@@ -14,7 +14,10 @@
         [person]="person"
         [hasMenuBtn]="companyOrContact == 'company'"
         (fileUploaded)="fileWasUploaded.emit($event)"
-        (fileDeleted)="fileWasDeleted.emit($event)">
+        (fileDeleted)="fileWasDeleted.emit($event)"
+        (toggleIsUBO)="toggleIsUBO.emit($event)"
+        (removeContact)="removeContact.emit($event)"
+        (saveContact)="saveContact.emit($event)">
       </app-compliance-card>
     </div>
   </div>

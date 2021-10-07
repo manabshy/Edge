@@ -17,7 +17,12 @@ import { ComplianceChecksStore, ComplianceChecksState } from './compliance-check
         [companyOrContact]="vm.companyOrContact"
         (fileWasUploaded)="onFileUploaded($event)"
         (fileWasDeleted)="onFileDeleted($event)"
-        (passComplianceChecks)="onPassComplianceChecks($event)">
+        (passComplianceChecks)="onPassComplianceChecks($event)"
+        (toggleIsUBO)="onToggleIsUBO($event)"
+        (removeContact)="onRemoveContact($event)"
+        (saveContact)="onSaveContact($event)"
+        (addContact)="onAddContact($event)"
+        (addCompany)="onAddCompany($event)">
       </app-pure-compliance-checks-shell>
     </div>`,
   providers: [ComplianceChecksStore]
@@ -43,5 +48,24 @@ export class ComplianceChecksShellComponent {
   onFileDeleted(ev): void {
     this._complianceChecksStore.deleteFileFromPerson(ev)
   }
+  
+  onAddContact(ev): void {
+    this._complianceChecksStore.addContact(ev)
+  }
+  
+  onAddCompany(ev): void {
+    this._complianceChecksStore.addCompany(ev)
+  }
 
+  onToggleIsUBO(ev): void {
+    this._complianceChecksStore.toggleIsUBO(ev)
+  }
+  
+  onSaveContact(ev) :void {
+    this._complianceChecksStore.saveContact(ev)
+  }
+
+  onRemoveContact(ev) :void {
+    this._complianceChecksStore.removeContact(ev)
+  }
 }

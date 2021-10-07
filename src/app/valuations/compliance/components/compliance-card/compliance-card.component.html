@@ -70,7 +70,7 @@
   </div>
   <div class="p-2" *ngIf="person.personDateAmlcompleted">
     <i class="fa text-md fa-info-circle text-gray-200"></i>
-    <span class="text-sm text-gray-200">
+    <span class="text-sm text-gray-200"  [pTooltip]="'By '+ person.complianceChecksRunBy">
       Passed: {{ moment(person.personDateAmlcompleted).format('Do MMM YYYY') }}
     </span>
 </div>
