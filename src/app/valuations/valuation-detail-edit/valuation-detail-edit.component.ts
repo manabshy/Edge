@@ -90,6 +90,7 @@ import { DiaryEventService } from "src/app/diary/shared/diary-event.service";
 import { SidenavService } from "src/app/core/services/sidenav.service";
 import { Person } from "src/app/shared/models/person";
 import moment from "moment";
+import { eSignTypes } from "src/app/core/shared/eSignTypes";
 
 @Component({
   selector: "app-valuation-detail-edit",
@@ -227,6 +228,7 @@ export class ValuationDetailEditComponent
   openContactGroupSubscription = new Subscription();
   cancelValuationSubscription = new Subscription();
   removeContactGroupSubscription = new Subscription();
+  eSignSubscription = new Subscription();
   moreInfo = (this.sidenavService.selectedItem = "valuationTicket");
   summaryTotals: PersonSummaryFigures;
   sideNavItems = this.sidenavService.valuationSideNavItems;
@@ -386,6 +388,7 @@ export class ValuationDetailEditComponent
   }
 
   ngOnInit() {
+    this.valuationService.landRegisterValid.next(false);
     this.primengConfig.ripple = true;
     this.setupForm();
     this.storage
@@ -426,6 +429,7 @@ export class ValuationDetailEditComponent
     } else {
       this.valuation = { valuationStatus: ValuationStatusEnum.None };
       this.sharedService.removeContactGroupChanged.next(false);
+      this.setHeaderDropdownList(ValuationStatusEnum.None, 0);
     }
 
     if (this.propertyId) {
@@ -625,6 +629,22 @@ export class ValuationDetailEditComponent
         }
       }
     });
+
+    this.eSignSubscription = this.sharedService.eSignTriggerChanged.subscribe(
+      (data: eSignTypes) => {
+        if (data) {
+          this.valuationService
+            .createValuationESign(data, this.valuation.valuationEventId)
+            .subscribe((result) => {
+              this.messageService.add({
+                severity: "success",
+                summary: this.removeUnderLine(eSignTypes[data]) + " send",
+                closable: false,
+              });
+            });
+        }
+      }
+    );
 
     this.valuationService.contactGroupBs.subscribe((result: ContactGroup) => {
       if (result?.contactGroupId && this.contactId != result?.contactGroupId) {
@@ -1220,8 +1240,12 @@ export class ValuationDetailEditComponent
       .then((data) => {
         if (data) {
           this.valuation = data;
-          console.log("this.valuation: ", this.valuation);
           this.getPropertyInformation(this.valuation.property.propertyId);
+
+          this.setHeaderDropdownList(
+            this.valuation.valuationStatus,
+            this.valuation.valuationType
+          );
 
           this.valuation.valuationStatus === 3
             ? (this.canInstruct = true)
@@ -1369,6 +1393,11 @@ export class ValuationDetailEditComponent
       .catch((err) => {
         console.log("err: ", err);
       });
+  }
+
+  setHeaderDropdownList(status, valuationType) {
+    this.sharedService.valuationType.next(valuationType);
+    this.sharedService.valuationStatusChanged.next(status);
   }
 
   // setInitialValuesByStatus(valuationStatus) {
@@ -2772,8 +2801,11 @@ export class ValuationDetailEditComponent
     valuation.suggestedAskingRentShortLetMonthly = this.sharedService.convertStringToNumber(
       valuation.suggestedAskingRentShortLetMonthly
     );
-    valuation.property.propertyTypeId = valuation.propertyTypeId;
-    valuation.property.propertyStyleId = valuation.propertyStyleId;
+    // TODO: here
+    if (!valuation.propertyTypeId) return;
+
+    valuation.property.propertyTypeId = +valuation.propertyTypeId;
+    valuation.property.propertyStyleId = +valuation.propertyStyleId;
     valuation.property.propertyFloorId = valuation.propertyFloorId;
     valuation.property.floorOther = valuation.floorOther;
     valuation.otherFeatures = [];
@@ -3126,6 +3158,7 @@ export class ValuationDetailEditComponent
     this.storage.delete("valuationFormData").subscribe();
     this.openContactGroupSubscription.unsubscribe();
     this.removeContactGroupSubscription.unsubscribe();
+    this.eSignSubscription.unsubscribe();
     this.cancelValuationSubscription.unsubscribe();
     this.propertySubsription.unsubscribe();
     this.contactGroupSubscription.unsubscribe();

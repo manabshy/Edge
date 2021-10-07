@@ -1,4 +1,8 @@
 import {
+  ValuationStatusEnum,
+  ValuationTypeEnum,
+} from "./../valuations/shared/valuation";
+import {
   Component,
   ElementRef,
   HostListener,
@@ -18,7 +22,8 @@ import { BaseStaffMember } from "../shared/models/base-staff-member";
 import { StaffMember } from "../shared/models/staff-member";
 import { Menu } from "primeng/menu";
 import { SharedService } from "../core/services/shared.service";
-import { Subscription } from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
+import { eSignTypes } from "../core/shared/eSignTypes";
 
 @Component({
   selector: "app-header",
@@ -39,6 +44,7 @@ export class HeaderComponent
   items: MenuItem[];
   filteredItems: MenuItem[];
   openContactGroupSubscription = new Subscription();
+  valuationStatusSubscription = new Subscription();
 
   @HostListener("document:click", ["$event"])
   clickout(event) {
@@ -79,26 +85,77 @@ export class HeaderComponent
 
     this.primengConfig.ripple = true;
 
-    // valuation operations.
-    this.openContactGroupSubscription = this.sharedService.openContactGroupChanged.subscribe(
-      (value) => {
-        if (!value) {
-          this.filteredItems = [
-            ...this.items.filter((x) => x.id !== "addAdmin"),
-          ];
+    // Sales ToB, Lettings ToB, Sales Property Questionnaire, Lettings Property Questionnaire, Close Valuation
+    combineLatest([
+      this.sharedService.valuationStatusChanged,
+      this.sharedService.valuationType,
+      this.sharedService.openContactGroupChanged,
+      this.sharedService.removeContactGroupChanged,
+    ]).subscribe(
+      ([
+        valuationStatus,
+        valuationType,
+        openContactGroup,
+        removeContactGroup,
+      ]) => {
+        if (this.items) {
+          if (valuationStatus === ValuationStatusEnum.None) {
+            this.filteredItems = [
+              ...this.items.filter((x) => x.id === "addAdmin"),
+            ];
+          } else if (valuationStatus === ValuationStatusEnum.Booked)
+            this.filteredItems = [
+              ...this.items.filter(
+                (x) => x.id === "cancelValuation" || x.id === "addAdmin"
+              ),
+            ];
+          else if (valuationStatus === ValuationStatusEnum.Valued) {
+            if (valuationType === ValuationTypeEnum.Lettings) {
+              this.filteredItems = [
+                ...this.items.filter(
+                  (x) =>
+                    x.id === "lettingsTermsOfBusiness" ||
+                    x.id === "cancelValuation" ||
+                    x.id === "addAdmin" ||
+                    x.id === "landLordQuestionnaire"
+                ),
+              ];
+            } else if (valuationType === ValuationTypeEnum.Sales) {
+              this.filteredItems = [
+                ...this.items.filter(
+                  (x) =>
+                    x.id === "salesTermsOfBusiness" ||
+                    x.id === "cancelValuation" ||
+                    x.id === "addAdmin" ||
+                    x.id === "vendorQuestionnaire"
+                ),
+              ];
+            }
+          } else if (valuationStatus === ValuationStatusEnum.Instructed) {
+            if (valuationType === ValuationTypeEnum.Lettings) {
+              this.filteredItems = [
+                ...this.items.filter((x) => x.id === "landLordQuestionnaire"),
+              ];
+            } else if (valuationType === ValuationTypeEnum.Sales) {
+              this.filteredItems = [
+                ...this.items.filter((x) => x.id === "vendorQuestionnaire"),
+              ];
+            }
+          }
+
+          if (removeContactGroup != null && !removeContactGroup) {
+            this.filteredItems = [
+              ...this.filteredItems.filter((x) => x.id !== "removeAdmin"),
+            ];
+          }
+          if (openContactGroup != null && !openContactGroup) {
+            this.filteredItems = [
+              ...this.filteredItems.filter((x) => x.id !== "addAdmin"),
+            ];
+          }
         }
       }
     );
-    this.openContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe(
-      (value) => {
-        if (!value) {
-          this.filteredItems = [
-            ...this.items.filter((x) => x.id !== "removeAdmin"),
-          ];
-        }
-      }
-    );
-    //
   }
 
   setItems(navTitle: string) {
@@ -121,35 +178,43 @@ export class HeaderComponent
           },
         },
         {
-          id: "salesTermsofBusiness",
+          id: "salesTermsOfBusiness",
           label: "Sales Terms of Business",
           icon: "pi pi-file-pdf",
           command: () => {
-            this.sharedService.openContactGroupChanged.next(true);
+            this.sharedService.eSignTriggerChanged.next(
+              eSignTypes.Sales_Terms_Of_Business
+            );
           },
         },
         {
-          id: "lettingsTermsofBusiness",
+          id: "lettingsTermsOfBusiness",
           label: "Lettings Terms of Business",
           icon: "pi pi-file-pdf",
           command: () => {
-            this.sharedService.openContactGroupChanged.next(true);
+            this.sharedService.eSignTriggerChanged.next(
+              eSignTypes.Lettings_Terms_Of_Business
+            );
           },
         },
         {
           id: "landLordQuestionnaire",
           label: "Land Lord Questionnaire",
-          icon: "pi pi-chart-bar",
+          icon: "pi pi-file-pdf",
           command: () => {
-            this.sharedService.openContactGroupChanged.next(true);
+            this.sharedService.eSignTriggerChanged.next(
+              eSignTypes.Property_Questionnaire
+            );
           },
         },
         {
           id: "vendorQuestionnaire",
           label: "Vendor Questionnaire",
-          icon: "pi pi-chart-bar",
+          icon: "pi pi-file-pdf",
           command: () => {
-            this.sharedService.openContactGroupChanged.next(true);
+            this.sharedService.eSignTriggerChanged.next(
+              eSignTypes.Sales_Property_Questionnaire
+            );
           },
         },
         {
@@ -161,8 +226,6 @@ export class HeaderComponent
           },
         },
       ];
-
-      this.filteredItems = this.items.slice();
     }
   }
 
@@ -182,5 +245,6 @@ export class HeaderComponent
 
   ngOnDestroy() {
     this.openContactGroupSubscription.unsubscribe();
+    this.valuationStatusSubscription.unsubscribe();
   }
 }
