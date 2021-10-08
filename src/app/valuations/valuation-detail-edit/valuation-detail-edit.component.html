@@ -670,8 +670,9 @@
                 <div id="landRegisterTab" [ngClass]="{'opacity-75 pointer-events-none': isCancelled}"
                   (click)="controlIsCancelled($event)">
                   <app-valuation-land-register [showLeaseExpiryDate]="showLeaseExpiryDate"
-                    [deedLandReg]="valuation?.deedLandReg" [nameChangeReg]="valuation?.nameChangeReg"
-                    [leaseLandReg]="valuation?.leaseLandReg"
+                    [deedLandReg]="valuation?.property?.deedLandReg"
+                    [nameChangeReg]="valuation?.property?.nameChangeReg"
+                    [leaseLandReg]="valuation?.property?.leaseLandReg" [valuation]="valuation"
                     (afterFileOperation)="scrollSpecificElement('landRegisterTab')">
                   </app-valuation-land-register>
                 </div>

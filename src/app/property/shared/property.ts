@@ -2,6 +2,7 @@ import { Address } from "src/app/shared/models/address";
 import { SubNavItem, SubNav } from "src/app/shared/subnav";
 import { Signer } from "src/app/contact-groups/shared/contact-group";
 import { BaseStaffMember } from "src/app/shared/models/base-staff-member";
+import { EdgeFile } from "src/app/shared/models/edgeFile";
 
 export interface PropertyInfo {
   bedrooms?: number;
@@ -33,6 +34,23 @@ export interface Property extends PropertyInfo {
   lastKnownOwner: Signer;
   valuer?: BaseStaffMember;
   valuers?: BaseStaffMember[];
+  deedLandReg?: DeedLandReg;
+  leaseLandReg?: LeaseLandReg;
+  nameChangeReg?: NameChangeReg;
+}
+
+export interface DeedLandReg {
+  userEnteredOwner?: string;
+  files?: EdgeFile[];
+}
+
+export interface LeaseLandReg {
+  leaseExpiryDate?: Date;
+  files?: EdgeFile[];
+}
+
+export interface NameChangeReg {
+  files?: EdgeFile[];
 }
 
 export interface MapCentre {

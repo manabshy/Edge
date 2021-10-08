@@ -86,76 +86,79 @@ export class HeaderComponent
     this.primengConfig.ripple = true;
 
     // Sales ToB, Lettings ToB, Sales Property Questionnaire, Lettings Property Questionnaire, Close Valuation
+
+    this.sharedService.removeContactGroupChanged.subscribe((data) => {
+      if (data != null && !data) {
+        if (this.filteredItems.some((x) => x.id === "addAdmin") === false)
+          this.filteredItems.unshift(
+            this.items.find((x) => x.id === "addAdmin")
+          );
+        this.filteredItems = [
+          ...this.filteredItems.filter((x) => x.id !== "removeAdmin"),
+        ];
+      }
+    });
+
+    this.sharedService.openContactGroupChanged.subscribe((data) => {
+      if (data != null && !data) {
+        if (this.filteredItems.some((x) => x.id === "removeAdmin") === false)
+          this.filteredItems.push(
+            this.items.find((x) => x.id === "removeAdmin")
+          );
+        this.filteredItems = [
+          ...this.filteredItems.filter((x) => x.id !== "addAdmin"),
+        ];
+      }
+    });
+
     combineLatest([
       this.sharedService.valuationStatusChanged,
       this.sharedService.valuationType,
-      this.sharedService.openContactGroupChanged,
-      this.sharedService.removeContactGroupChanged,
-    ]).subscribe(
-      ([
-        valuationStatus,
-        valuationType,
-        openContactGroup,
-        removeContactGroup,
-      ]) => {
-        if (this.items) {
-          if (valuationStatus === ValuationStatusEnum.None) {
-            this.filteredItems = [
-              ...this.items.filter((x) => x.id === "addAdmin"),
-            ];
-          } else if (valuationStatus === ValuationStatusEnum.Booked)
+    ]).subscribe(([valuationStatus, valuationType]) => {
+      if (this.items) {
+        if (valuationStatus === ValuationStatusEnum.None) {
+          this.filteredItems = [
+            ...this.items.filter((x) => x.id === "addAdmin"),
+          ];
+        } else if (valuationStatus === ValuationStatusEnum.Booked)
+          this.filteredItems = [
+            ...this.items.filter(
+              (x) => x.id === "cancelValuation" || x.id === "addAdmin"
+            ),
+          ];
+        else if (valuationStatus === ValuationStatusEnum.Valued) {
+          if (valuationType === ValuationTypeEnum.Lettings) {
             this.filteredItems = [
               ...this.items.filter(
-                (x) => x.id === "cancelValuation" || x.id === "addAdmin"
+                (x) =>
+                  x.id === "lettingsTermsOfBusiness" ||
+                  x.id === "addAdmin" ||
+                  x.id === "landLordQuestionnaire"
               ),
             ];
-          else if (valuationStatus === ValuationStatusEnum.Valued) {
-            if (valuationType === ValuationTypeEnum.Lettings) {
-              this.filteredItems = [
-                ...this.items.filter(
-                  (x) =>
-                    x.id === "lettingsTermsOfBusiness" ||
-                    x.id === "cancelValuation" ||
-                    x.id === "addAdmin" ||
-                    x.id === "landLordQuestionnaire"
-                ),
-              ];
-            } else if (valuationType === ValuationTypeEnum.Sales) {
-              this.filteredItems = [
-                ...this.items.filter(
-                  (x) =>
-                    x.id === "salesTermsOfBusiness" ||
-                    x.id === "cancelValuation" ||
-                    x.id === "addAdmin" ||
-                    x.id === "vendorQuestionnaire"
-                ),
-              ];
-            }
-          } else if (valuationStatus === ValuationStatusEnum.Instructed) {
-            if (valuationType === ValuationTypeEnum.Lettings) {
-              this.filteredItems = [
-                ...this.items.filter((x) => x.id === "landLordQuestionnaire"),
-              ];
-            } else if (valuationType === ValuationTypeEnum.Sales) {
-              this.filteredItems = [
-                ...this.items.filter((x) => x.id === "vendorQuestionnaire"),
-              ];
-            }
-          }
-
-          if (removeContactGroup != null && !removeContactGroup) {
+          } else if (valuationType === ValuationTypeEnum.Sales) {
             this.filteredItems = [
-              ...this.filteredItems.filter((x) => x.id !== "removeAdmin"),
+              ...this.items.filter(
+                (x) =>
+                  x.id === "salesTermsOfBusiness" ||
+                  x.id === "addAdmin" ||
+                  x.id === "vendorQuestionnaire"
+              ),
             ];
           }
-          if (openContactGroup != null && !openContactGroup) {
+        } else if (valuationStatus === ValuationStatusEnum.Instructed) {
+          if (valuationType === ValuationTypeEnum.Lettings) {
             this.filteredItems = [
-              ...this.filteredItems.filter((x) => x.id !== "addAdmin"),
+              ...this.items.filter((x) => x.id === "landLordQuestionnaire"),
+            ];
+          } else if (valuationType === ValuationTypeEnum.Sales) {
+            this.filteredItems = [
+              ...this.items.filter((x) => x.id === "vendorQuestionnaire"),
             ];
           }
         }
       }
-    );
+    });
   }
 
   setItems(navTitle: string) {
