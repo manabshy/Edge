@@ -12,12 +12,7 @@ import {
   Output,
 } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import {
-  DeedLandReg,
-  LeaseLandReg,
-  NameChangeReg,
-  ValuationTypeEnum,
-} from "../shared/valuation";
+import { ValuationTypeEnum } from "../shared/valuation";
 import { FileTypeEnum } from "src/app/core/services/file.service";
 import { Observable, Subscription } from "rxjs";
 import { SharedService } from "src/app/core/services/shared.service";
@@ -25,6 +20,11 @@ import {
   ContactGroup,
   ContactType,
 } from "src/app/contact-groups/shared/contact-group";
+import {
+  DeedLandReg,
+  LeaseLandReg,
+  NameChangeReg,
+} from "src/app/property/shared/property";
 
 @Component({
   selector: "app-valuation-land-register",
@@ -54,6 +54,8 @@ export class ValuationsLandRegisterComponent
   @Input() get showLeaseExpiryDate(): boolean {
     return this._showLeaseExpiryDate;
   }
+
+  @Input() valuation;
 
   private _nameChangeReg: NameChangeReg;
   set nameChangeReg(value) {
@@ -127,7 +129,7 @@ export class ValuationsLandRegisterComponent
         Validators.required,
       ],
       ownerConfirmed: [
-        this.deedLandReg.ownerConfirmed?.toString(),
+        this.valuation.ownerConfirmed?.toString(),
         Validators.required,
       ],
       leaseExpiryDate: [
@@ -147,7 +149,7 @@ export class ValuationsLandRegisterComponent
     );
     this.landRegistryForm.valueChanges.subscribe((data) => {
       this.deedLandReg.userEnteredOwner = data.userEnteredOwner;
-      this.deedLandReg.ownerConfirmed = data.ownerConfirmed;
+      this.valuation.ownerConfirmed = data.ownerConfirmed;
       this.leaseLandReg.leaseExpiryDate = data.leaseExpiryDate
         ? new Date(data.leaseExpiryDate)
         : null;
@@ -221,7 +223,7 @@ export class ValuationsLandRegisterComponent
       return false;
     } else this.showFileUploadForLeaseError = false;
     if (
-      +this.deedLandReg.ownerConfirmed == 2 &&
+      +this.valuation.ownerConfirmed == 2 &&
       !(this.nameChangeReg.files && this.nameChangeReg.files.length > 0)
     ) {
       this.showFileUploadForNameChangeError = this.controlValidation
