@@ -136,6 +136,13 @@ export class ValuationService {
     );
   }
 
+  setComplianceChecksPassedState(valuationEventId: Number, payload: any): Observable<any> {
+    const url = `${AppConstants.baseValuationUrl}/${valuationEventId}/compliance`;
+    return this.http.put<any>(url, payload).pipe(
+      map((response) => response.result)
+    );
+  }
+
   updateValuation(valuation: Valuation): Observable<Valuation | any> {
     const url = `${AppConstants.baseValuationUrl}/${valuation.valuationEventId}`;
     return this.http.put<any>(url, valuation).pipe(

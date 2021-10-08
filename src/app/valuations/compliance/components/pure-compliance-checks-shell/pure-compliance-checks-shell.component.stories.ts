@@ -22,6 +22,7 @@ import {
 } from '../compliance-card/compliance-card.component.stories'
 import { BigButtonComponent } from '../../../../shared/components/big-button/big-button.component'
 import { FileUploadComponent } from '../../../../shared/components/file-upload/file-upload.component'
+import { PureCompanyFinderShellComponent } from 'src/app/shared/components/company-finder/pure-company-finder-shell.component'
 
 export default {
   title: 'Valuations/Compliance/PureComplianceChecksShellComponent',
@@ -37,6 +38,7 @@ export default {
         CompanyFinderComponent,
         BigButtonComponent,
         FileUploadComponent,
+        PureCompanyFinderShellComponent
       ],
       imports: [CommonModule, VendorsModule, BrowserAnimationsModule],
     }),

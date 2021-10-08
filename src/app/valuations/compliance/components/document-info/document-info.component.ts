@@ -26,6 +26,7 @@ export interface EmitDocument {
 export class DocumentInfoComponent implements OnInit {
 
   @Input() files: Array<any>
+  @Input() personName: String
   @Input() documentType: DOCUMENT_TYPE
   @Input() fileType: FileTypeEnum
   @Input() fileLimit = 50
@@ -77,7 +78,7 @@ export class DocumentInfoComponent implements OnInit {
     let label
     switch (this.documentType) {
       case DOCUMENT_TYPE.ID:
-        label = 'Upload ID Document'
+        label = 'Upload ID Document for '  + this.personName
         break;
 
       case DOCUMENT_TYPE.PROOF_OF_ADDRESS:

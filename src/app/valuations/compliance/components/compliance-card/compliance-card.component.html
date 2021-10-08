@@ -1,23 +1,28 @@
 <div class="w-full border-0 border-grey-100 p-4 rounded-sm">
-  <div class="flex flex-row ">
+  <div class="flex flex-row">
     <div>
       <div class="flex flex-row">
-        <span class="pill text-white h-6" [ngClass]="pillClass">{{ person.isMain ? 'Lead Contact' : 'Associated Contact'  }}</span>
+        <span class="pill text-white h-6" [ngClass]="pillClass">
+          {{pillLabel }}
+        </span>
         <span class="pill text-white bg-yellow-400 h-6" *ngIf="person.isUBO">UBO</span>
       </div>
       <p class="text-lg tracking-normal mt-2 font-medium">{{ person.name }}</p>
-      <p class="text-md tracking-normal mt-0 font-medium text-gray-500" *ngIf="person.position">{{ person.position }}</p>
+      <p class="text-md tracking-normal mt-0 font-medium text-gray-500" *ngIf="person.position">
+        {{ person.position }}
+      </p>
       <p class="txt--small text-gray-500 w-full mt-1" *ngIf="person.address">
         <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
-          <path d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z" />
+          <path
+            d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z"
+          />
         </svg>
         {{ person.address }}
       </p>
     </div>
-    <ng-template #menuTrigger>
-    </ng-template>
+    <ng-template #menuTrigger></ng-template>
     <span class="flex-1"></span>
-    <button *ngIf="hasMenuBtn" class="hover:shadow-md w-10 h-10 rounded-full" (click)="menu.toggle($event);">
+    <button *ngIf="hasMenuBtn" class="hover:shadow-md w-10 h-10 rounded-full" (click)="menu.toggle($event)">
       <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
         <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
         <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
@@ -33,19 +38,21 @@
       <app-document-info
         [label]="person.documents.idDoc.label"
         [documentType]="person.documents.idDoc.documentType"
+        [personName]="person.personName"
         [files]="person.documents.idDoc.files"
-        (onFileUploaded)="fileUploaded.emit({person: person, ev: $event })"
-        (deleteFile)="fileDeleted.emit({person: person, ev: $event})">
-      </app-document-info>
+        (onFileUploaded)="fileUploaded.emit({ person: person, ev: $event })"
+        (deleteFile)="fileDeleted.emit({ person: person, ev: $event })"
+      ></app-document-info>
     </div>
     <div class="w-100 md:w-1/2">
       <app-document-info
         [label]="person.documents.proofOfAddressDoc.label"
+        [personName]="person.personName"
         [documentType]="person.documents.proofOfAddressDoc.documentType"
         [files]="person.documents.proofOfAddressDoc.files"
-        (onFileUploaded)="fileUploaded.emit({person: person, ev: $event })"
-        (deleteFile)="fileDeleted.emit({person: person, ev: $event})">
-      </app-document-info>
+        (onFileUploaded)="fileUploaded.emit({ person: person, ev: $event })"
+        (deleteFile)="fileDeleted.emit({ person: person, ev: $event })"
+      ></app-document-info>
     </div>
   </div>
   <div class="flex flex-col md:flex-row mt-2 gap-x-2 gap-y-2 w-100">
@@ -54,68 +61,63 @@
         [label]="person.documents.reportDocs.label"
         [documentType]="person.documents.reportDocs.documentType"
         [files]="person.documents.reportDocs.files"
-        (onFileUploaded)="fileUploaded.emit({person: person, ev: $event })"
-        (deleteFile)="fileDeleted.emit({person: person, ev: $event})">
-      </app-document-info>
+        [personName]="person.personName"
+        (onFileUploaded)="fileUploaded.emit({ person: person, ev: $event })"
+        (deleteFile)="fileDeleted.emit({ person: person, ev: $event })"
+      ></app-document-info>
     </div>
     <div class="w-100 md:w-1/2">
       <app-document-info
         [label]="person.documents.additionalDocs.label"
         [documentType]="person.documents.additionalDocs.documentType"
         [files]="person.documents.additionalDocs.files"
-        (onFileUploaded)="fileUploaded.emit({person: person, ev: $event })"
-        (deleteFile)="fileDeleted.emit({person: person, ev: $event})">
-      </app-document-info>
+        [personName]="person.personName"
+        (onFileUploaded)="fileUploaded.emit({ person: person, ev: $event })"
+        (deleteFile)="fileDeleted.emit({ person: person, ev: $event })"
+      ></app-document-info>
     </div>
   </div>
   <div class="p-2" *ngIf="person.personDateAmlcompleted">
-    <i class="fa text-md fa-info-circle text-gray-200"></i>
-    <span class="text-sm text-gray-200">
-      Passed: {{ moment(person.personDateAmlcompleted).format('Do MMM YYYY') }}
-    </span>
+    <i class="fa text-md fa-check text-gray-200"></i>
+    <span class="ml-2 text-sm text-gray-200">Passed: {{ moment(person.personDateAmlcompleted).format('Do MMM YYYY') }}</span>
+  </div>
+
+  <p-dialog
+    header="Edit Contact"
+    [(visible)]="dialogs.showEditContactDialog"
+    [modal]="true"
+    [draggable]="false"
+    class="modal--small"
+  >
+    <form [formGroup]="contactForm">
+      <fieldset class="form-control p-2">
+        <label for="name">Name:</label>
+        <input id="name" class="px-2" type="text" formControlName="name" [ngModel]="person.name" />
+      </fieldset>
+      <fieldset class="form-control p-2">
+        <label for="position">Position:</label>
+        <input id="name" class="px-2" type="text" formControlName="position" [ngModel]="person.position" />
+      </fieldset>
+      <fieldset class="form-control p-2">
+        <label for="address">Address:</label>
+        <input id="name" class="px-2" type="text" formControlName="address" [ngModel]="person.address" />
+      </fieldset>
+    </form>
+    <div class="flex flex-row -mb-3">
+      <span class="flex-1"></span>
+      <button (click)="dialogs.showEditContactDialog = false" type="button" class="btn btn--ghost">Cancel</button>
+      <button type="submit" class="btn btn--positive ml-2" (click)="saveContactChanges()">Save</button>
+    </div>
+  </p-dialog>
+
+  <p-dialog header="Remove Contact" [(visible)]="dialogs.showRemoveContactDialog" [modal]="true" [draggable]="false">
+    <div class="p-4">
+      <h1>Delete {{ person.name }} from this [thing]?</h1>
+    </div>
+    <div class="flex flex-row mt-4 -mb-1">
+      <span class="flex-1"></span>
+      <button (click)="dialogs.showRemoveContactDialog = false" type="button" class="btn btn--ghost">Cancel</button>
+      <button class="btn btn--positive ml-2" (click)="confirmContactDelete()">Delete</button>
+    </div>
+  </p-dialog>
 </div>
-
-<p-dialog header="Edit Contact" 
-  [(visible)]="dialogs.showEditContactDialog" 
-  [modal]="true" 
-  [draggable]="false"
-  class="modal--small">
-  <form [formGroup]="contactForm">
-    <fieldset class="form-control p-2">
-      <label for="name">Name: </label>
-      <input id="name" class="px-2" type="text" formControlName="name" [ngModel]="person.name" />
-    </fieldset>
-    <fieldset class="form-control p-2">
-      <label for="position">Position: </label>
-      <input id="name" class="px-2" type="text" formControlName="position" [ngModel]="person.position" />
-    </fieldset>
-    <fieldset class="form-control p-2">
-      <label for="address">Address: </label>
-      <input id="name" class="px-2" type="text" formControlName="address" [ngModel]="person.address" />
-    </fieldset>
-  </form>
-  <div class="flex flex-row -mb-3">
-    <span class="flex-1"></span>
-    <button (click)="dialogs.showEditContactDialog = false" type="button" class="btn btn--ghost">Cancel</button>
-    <button type="submit" class="btn btn--positive ml-2" (click)="saveContactChanges()">
-      Save
-    </button>
-  </div>
-
-</p-dialog>
-
-<p-dialog header="Remove Contact" 
-  [(visible)]="dialogs.showRemoveContactDialog" 
-  [modal]="true" 
-  [draggable]="false">
-  <div class="p-4">
-    <h1>Delete {{person.name}} from this [thing]?</h1>
-  </div>
-  <div class="flex flex-row mt-4 -mb-1">
-    <span class="flex-1"></span>
-    <button (click)="dialogs.showRemoveContactDialog = false" type="button" class="btn btn--ghost">Cancel</button>
-    <button class="btn btn--positive ml-2" (click)="confirmContactDelete()">
-      Delete
-    </button>
-  </div>
-</p-dialog>

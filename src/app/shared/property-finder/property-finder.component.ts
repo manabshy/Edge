@@ -108,7 +108,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log("%c searchType in finder", "color: purple", this.searchType);
+    // console.log("%c searchType in finder", "color: purple", this.searchType);
     if (this.propertyList && this.propertyList.length) {
       this.selectedProperties = this.propertyList;
     }
@@ -145,11 +145,11 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   }
 
   selectProperty(propertyId: number) {
-    console.log("multiple should be true here", this.isMultiple);
+    // console.log("multiple should be true here", this.isMultiple);
     this.isMultiple
       ? (this.isSearchVisible = true)
       : (this.isSearchVisible = false);
-    console.log("search visible should be true here", this.isSearchVisible);
+    // console.log("search visible should be true here", this.isSearchVisible);
     this.property = null;
     if (propertyId) {
       this.propertyService
@@ -163,7 +163,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
         .subscribe((data) => {
           if (data) {
             if (this.isMultiple) {
-              console.log("selected prop here", data);
+              // console.log("selected prop here", data);
               this.getSelectedProperties(data);
             } else {
               this.selectedPropertyDetails = data;
@@ -181,7 +181,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
     );
     if (this.selectedProperties) {
       this.selectedProperties.push(property);
-      console.log("selected props list here ZZZZZx", this.selectedProperties);
+      // console.log("selected props list here ZZZZZx", this.selectedProperties);
       this.selectedPropertyList.emit(this.selectedProperties);
       this.propertyFinderForm.get("searchTerm").setValue("");
     }

@@ -94,13 +94,13 @@
   ></div>
 
   <app-terms-of-business-table-sales
-    *ngIf="tableType == valuationType.Sales && valuationFiles.length"
+    *ngIf="tableType == valuationType.Sales"
     [data]="valuationFiles"
   >
   </app-terms-of-business-table-sales>
 
   <app-terms-of-business-table-lettings
-    *ngIf="tableType == valuationType.Lettings && valuationFiles.length"
+    *ngIf="tableType == valuationType.Lettings"
     [data]="valuationFiles"
   >
   </app-terms-of-business-table-lettings>

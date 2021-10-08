@@ -83,7 +83,7 @@
     "prefer-const": true,
     "radix": true,
     "semicolon": [
-      true,
+      false,
       "always"
     ],
     "triple-equals": [
