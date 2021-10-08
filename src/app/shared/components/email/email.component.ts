@@ -133,7 +133,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
         this.staffMemberService.getCurrentStaffMember().subscribe(res => this.currentStaffMember = res);
       }
       this.emailForm.patchValue({ senderEmail: this.currentStaffMember?.email.toString() })
-      console.log('current user from storage in email....', this.currentStaffMember, 'form here', this.emailForm.value);
+      // console.log('current user from storage in email....', this.currentStaffMember, 'form here', this.emailForm.value);
     });
 
     this.storage.get('signature').subscribe((data: string) => {
@@ -276,7 +276,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
       value: { personId, contactId: this.contactGroup.contactGroupId, emailAddress: x.email } as EmailInfo,
       isPreferred: x.isPreferred
     }));
-    console.log({ emails });
+    // console.log({ emails });
 
     return emails;
   }

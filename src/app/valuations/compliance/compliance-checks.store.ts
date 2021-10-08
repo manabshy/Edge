@@ -3,8 +3,7 @@ import { ComponentStore } from '@ngrx/component-store'
 import { combineLatest, Observable, of } from 'rxjs'
 import { ValuationService } from 'src/app/valuations/shared/valuation.service'
 import { FileService } from 'src/app/core/services/file.service'
-import { mergeMap, tap, filter, switchMap, take, map, flatMap } from 'rxjs/operators'
-import { DOCUMENT_TYPE } from './components/document-info/document-info.component'
+import { mergeMap, tap, filter, switchMap, take, first } from 'rxjs/operators'
 import { PeopleService } from 'src/app/core/services/people.service'
 import { Person } from '../../shared/models/person'
 import {
@@ -14,77 +13,26 @@ import {
   removeDocFromDocumentsObject,
   checkAllPeopleHaveValidDocs,
   addFiles,
-  identifyAmlOrKyc,
+  buildPartialLoadState,
   buildComplianceChecksStatusMessages,
+  personValidForAML,
+  personValidForKYC,
+  workOutDataShapeForApi,
+  addDocsShell,
 } from './compliance-checks.store-helpers'
-import moment from 'moment'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
-import { StorageMap } from '@ngx-pwa/local-storage'
-
-export interface ComplianceChecksState {
-  checksAreValid: Boolean
-  checkType: String // 'AML' || 'KYC'
-  contactGroupId: Number
-  companyOrContact?: String // 'company' || 'contact'
-  message?: {
-    type: String // 'warn' || 'info' || 'error'
-    text: Array<string>
-  }
-  people: Array<ComplianceChecksPeople>
-}
-
-export interface ComplianceChecksPeople {
-  personId: String
-  name: String
-  address?: String
-  position?: String
-  documents: Array<any>
-  isMain: Boolean
-  isUBO?: Boolean
-  personDateAmlcompleted?: Date
-  complianceChecksRunBy?: String
-}
-
-export interface ComplianceDocTypes {
-  idDoc: ComplianceDocs
-  proofOfAddressDoc: ComplianceDocs
-  reportDocs: ComplianceDocs
-  additionalDocs: ComplianceDocs
-}
-
-export interface ComplianceDocs {
-  label: String
-  documentType: DOCUMENT_TYPE
-  files: Array<any>
-}
-
-export interface FileUpdateEvent {
-  ev: {
-    tmpFiles: Array<any>
-    documentType?: DOCUMENT_TYPE
-    idValidationDateExpiry?: Date
-  }
-  person?: Person
-}
-
-export interface FileUpdate {
-  tmpFiles: Array<any>
-}
-
-export interface FileDeletionPayload {
-  ev: {
-    id: Number
-    documentType: DOCUMENT_TYPE
-  }
-  person: Person
-}
+import { ComplianceChecksState, FileUpdateEvent, FileDeletionPayload } from './compliance-checks.interfaces'
 
 const defaultState: ComplianceChecksState = {
   contactGroupId: null,
   companyOrContact: null,
   checksAreValid: null,
+  compliancePassedDate: null,
+  compliancePassedBy: '',
   checkType: '',
   people: [],
+  valuationEventId: null,
+  companyId: null,
 }
 
 @Injectable()
@@ -96,33 +44,37 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   readonly checksAreValid$: Observable<any> = this.select(this.people$, this.checkType$, (people, checkType) =>
     checkAllPeopleHaveValidDocs(people, checkType),
   )
-  readonly currentUser$: Observable<any> = this.storage.get('currentUser').pipe()
   readonly companyOrContact$: Observable<any> = this.select(({ companyOrContact }) => companyOrContact)
   readonly message$: Observable<any> = this.select(({ message }) => message)
-  readonly checksReadyToRun$: Observable<any> = this.checksAreValid$.pipe(
-    filter((val) => !!val),
-    map((val) => {
-      console.log('val: ', val)
-      this.patchState({
-        message: {
-          type: 'info',
-          text: ['Necessary documents present to run compliance checks'],
-        },
-      })
-    }),
-  )
-
   readonly contactGroupDetails$: Observable<any> = this.contactGroupId$.pipe(
     filter((val) => !!val),
     switchMap((contactGroupId) => {
       return this.contactGroupService.getContactGroupById(contactGroupId, true)
     }),
   )
+  readonly compliancePassedBy$: Observable<any> = this.select(({ compliancePassedBy }) => compliancePassedBy).pipe()
 
-  readonly validationMessage$: Observable<any> = combineLatest([this.people$, this.checkType$]).pipe(
+  readonly compliancePassedDate$: Observable<any> = this.select(
+    ({ compliancePassedDate }) => compliancePassedDate,
+  ).pipe()
+
+  readonly valuationEventId$: Observable<any> = this.select(({ valuationEventId }) => valuationEventId).pipe()
+  readonly companyId$: Observable<any> = this.select(({ companyId }) => companyId).pipe()
+
+  readonly validationMessage$: Observable<any> = combineLatest([
+    this.people$,
+    this.checkType$,
+    this.compliancePassedDate$,
+    this.compliancePassedBy$,
+  ]).pipe(
     filter(([people]) => !!people.length),
-    tap(([people, checkType]) => {
-      const validationMessageData = buildComplianceChecksStatusMessages(people, checkType)
+    tap(([people, checkType, compliancePassedDate, compliancePassedBy]) => {
+      const validationMessageData = buildComplianceChecksStatusMessages(
+        people,
+        checkType,
+        compliancePassedDate,
+        compliancePassedBy,
+      )
       this.patchState({
         checksAreValid: validationMessageData.valid,
         message: {
@@ -130,6 +82,17 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           text: validationMessageData.text,
         },
       })
+    }),
+  )
+
+  public peopleArrayShapedForApi$: Observable<any> = combineLatest([
+    this.people$,
+    this.companyOrContact$,
+    this.companyId$,
+    this.contactGroupId$,
+  ]).pipe(
+    mergeMap(([people, companyOrContact, companyId, contactGroupId]) => {
+      return of(workOutDataShapeForApi(people, companyOrContact, companyId, contactGroupId))
     }),
   )
 
@@ -185,46 +148,67 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     ),
   }))
 
+  readonly addAmlCheckTimestampToUsers = this.updater((state) => ({
+    ...state,
+    people: state.people.map((person) => {
+      return { ...person, personDateAmlcompleted: new Date() }
+    }),
+  }))
+
+  readonly addFilesToUser = this.updater((state, params: any) => ({
+    ...state,
+    people: state.people.map((person) =>
+      person.originalId === params.data.person.originalId
+        ? addFiles({ ev: params.data.ev, files: params.tmpFiles.files }, person)
+        : person,
+    ),
+  }))
+
+  readonly addCompanyToValuation = this.updater((state, companyToAdd: any) => ({
+    ...state,
+    people: [...state.people, { ...companyToAdd, documents: addDocsShell() }],
+  }))
+
   constructor(
     private valuationSvc: ValuationService,
     private readonly fileService: FileService,
     private peopleService: PeopleService,
     private contactGroupService: ContactGroupsService,
-    private storage: StorageMap,
   ) {
     super(defaultState)
-    console.log('Compliance checks store under construction')
     this.loadStore()
   }
 
   loadStore = () => {
     combineLatest([this.valuationSvc.contactGroup$, this.valuationSvc.valuation$])
       .pipe(
-        filter(([contactGroupData, valuation]) => contactGroupData && !!contactGroupData.contactGroupId && !!valuation),
+        filter(([contactGroupData, valuation]) => !!valuation && !!contactGroupData),
         take(1),
-        tap(([contactGroupData, valuation]) => {
-          this.patchState({
-            contactGroupId: contactGroupData.contactGroupId,
-            checkType: identifyAmlOrKyc(valuation),
-            companyOrContact: contactGroupData.companyId ? 'company' : 'contact',
-          })
-        }),
-        mergeMap(([contactGroupData]) => {
-          console.log('contactGroupData: ', contactGroupData)
-          if(contactGroupData.companyId){
+        tap(([contactGroupData, valuationData]) =>
+          this.patchState(buildPartialLoadState(contactGroupData, valuationData)),
+        ),
+        mergeMap(([contactGroupData, valuation]) => {
+          if (contactGroupData.companyId) {
             return this.peopleService.getCompanyPeopleDocs(contactGroupData.contactGroupId)
           } else {
-            return this.peopleService.getPeopleDocs(contactGroupData.contactGroupId)
+            return this.peopleService.getPeopleDocs(valuation.propertyOwner.contactGroupId)
           }
         }),
-        mergeMap((data) => {
-          console.log('data: ', data)
-          return of(this.patchState({ people: setContactsForCompliance(data) }))
+        tap((data) => {
+          let peopleData
+          if (data.companyDocuments) {
+            peopleData = data.companyDocuments.concat(data.personDocuments)
+            return of(this.patchState({ people: setContactsForCompliance(peopleData) }))
+          } else {
+            return of(this.patchState({ people: setContactsForCompliance(data) }))
+          }
         }),
-        mergeMap(() => this.validationMessage$),
+        mergeMap(() => this.validationMessage$.pipe(take(1))),
       )
       .subscribe(
-        () => {},
+        (res) => {
+          console.log('store loaded: ', res)
+        },
         (err) => {
           console.error('error!: ', err)
         },
@@ -235,39 +219,42 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    * @description this function can only run if checks criteria has been met see this.checksAreValid$
    * it loops all people and stamps their personDateAmlcompleted property saving to API. Displays a message to user that AML checks have passed.
    */
-  public passComplianceChecks(data) {
+  public passComplianceChecks() {
     this.complianceChecksVm$
       .pipe(
         take(1),
+        filter((vm) => !!vm.checksAreValid),
         switchMap((vm: any) => {
-          const peopleForSave = vm.people.map((person) => {
-            return {
-              ...person,
-              documents: mapDocsForAPI(person.documents),
-              personDateAmlcompleted: new Date(),
-              complianceChecksRunBy: this.currentUser$.pipe(take(1)),
-            }
-          })
-          console.log('peopleForSave: ', peopleForSave)
-          return this.peopleService.setPeopleDocs(peopleForSave, vm.contactGroupId)
+          // console.log('passComplianceChecks', vm)
+          this.addAmlCheckTimestampToUsers()
+          return this.peopleArrayShapedForApi$
         }),
+        mergeMap((userDataForApi) => {
+          if (userDataForApi.peopleToSave) {
+            return this.peopleService.setPeopleDocs(userDataForApi.peopleToSave, userDataForApi.contactGroupId)
+          } else {
+            return this.peopleService.setCompanyPeopleDocs(userDataForApi.savePayload, userDataForApi.contactGroupId)
+          }
+        }),
+        mergeMap(() => this.valuationEventId$),
+        // take(1),
+        mergeMap((valuationEventId) => {
+          return this.valuationSvc.setComplianceChecksPassedState(valuationEventId, {
+            customPassedDate: new Date(),
+            isPassed: true,
+          })
+        }),
+        tap((res) => {
+          return this.patchState({
+            compliancePassedBy: res.compliancePassedByFullName,
+            compliancePassedDate: res.compliancePassedDate,
+          })
+        }),
+        // mergeMap(() => this.validationMessage$.pipe(take(1))),
       )
       .subscribe(
         (res) => {
-          // move to above out of subscribe like others
-          this.patchState({
-            message: {
-              type: 'success',
-              text: [
-                'AML Completed',
-                '' +
-                  moment(res.personDateAmlcompleted).format('Do MMM YYYY (HH:mm)') +
-                  ' by ' +
-                  res.complianceChecksRunBy,
-              ],
-            },
-          })
-          return this.patchState({ checksAreValid: true })
+          console.log('AML checks passed ')
         },
         (err) => {
           console.error('err: ', err)
@@ -285,30 +272,35 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       formData.append('files', x, x.name)
     })
 
-    return combineLatest([this.fileService.saveFileTemp(formData), this.contactGroupId$, this.people$.pipe(take(1))])
+    return this.fileService
+      .saveFileTemp(formData)
       .pipe(
-        filter(([tmpFiles]) => !!tmpFiles.files.length),
-        switchMap(([tmpFiles, contactGroupId, people]) => {
-          const personToAddFilesTo = people.filter((person) => person.personId === data.person.personId)
-          const mergedDocsForPerson = addFiles({ ev: data.ev, files: tmpFiles.files }, personToAddFilesTo[0])
-          const personForSave = [
-            {
-              ...personToAddFilesTo[0],
-              documents: mapDocsForAPI(mergedDocsForPerson.documents),
-            },
-          ]
-          return this.peopleService.setPeopleDocs(personForSave, contactGroupId)
+        filter((tmpFiles) => !!tmpFiles.files.length),
+        mergeMap((tmpFiles) => {
+          this.addFilesToUser({ tmpFiles, data })
+          return this.peopleArrayShapedForApi$
         }),
-        tap((person) => {
-          return this.mergeUserDocsIntoStore({
-            ...data,
-            tmpFiles: person.documents,
-          }) // merges complete file into relevant person
+        mergeMap((userDataForApi) => {
+          if (userDataForApi.peopleToSave) {
+            return this.peopleService.setPeopleDocs(userDataForApi.peopleToSave, userDataForApi.contactGroupId)
+          } else {
+            return this.peopleService.setCompanyPeopleDocs(userDataForApi.savePayload, userDataForApi.contactGroupId)
+          }
         }),
-        mergeMap(() => this.validationMessage$),
+        tap((data) => {
+          if (data.companyDocuments) {
+            let peopleData = data.companyDocuments.concat(data.personDocuments)
+            return this.patchState({ people: setContactsForCompliance(peopleData) })
+          } else {
+            return this.patchState({ people: setContactsForCompliance(data) })
+          }
+        }),
+        take(1),
       )
       .subscribe(
-        () => {},
+        (res) => {
+          console.log('Doc added to person', res)
+        },
         (err) => console.error(err),
       )
   }
@@ -321,30 +313,63 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   public deleteFileFromPerson = (data: FileDeletionPayload) => {
     this.removeUserDocsFromStore(data)
 
-    combineLatest([this.contactGroupId$, this.people$])
+    combineLatest([this.contactGroupId$, this.people$, this.checkType$])
       .pipe(
         take(1),
-        mergeMap(([contactGroupId, people]) => {
-          const person = people.filter((person) => person.personId === data.person.personId)
-          const personForSave = [
-            {
-              ...person[0],
-              documents: mapDocsForAPI(person[0].documents),
-              personDateAmlcompleted: null,
-            },
-          ]
-          return this.peopleService.setPeopleDocs(personForSave, contactGroupId)
+        mergeMap(([contactGroupId, people, checkType]) => {
+          const peopleToSave = people.map((person) => {
+            if (person.personId === data.person.personId) {
+              const validDocs =
+                checkType === 'AML' ? personValidForAML(person.documents) : personValidForKYC(person.documents)
+              if (!validDocs) {
+                this.removeAmlCheckTimestampFromUser(person.personId) // updates store values
+              }
+              return {
+                personId: person.personId,
+                name: person.name,
+                address: person.address,
+                documents: mapDocsForAPI(person.documents),
+                isMain: person.isMain,
+                position: person.position,
+                isPassed: false,
+              }
+            } else {
+              return {
+                personId: person.personId,
+                name: person.name,
+                address: person.address,
+                documents: mapDocsForAPI(person.documents),
+                isMain: person.isMain,
+                position: person.position,
+                personDateAmlcompleted: person.personDateAmlcompleted,
+              }
+            }
+          })
+          // TODO split and send to relevant endpoints company/contact
+          return this.peopleService.setPeopleDocs(peopleToSave, contactGroupId)
         }),
-        tap((person) => {
-          return this.removeAmlCheckTimestampFromUser(person.personId)
+        switchMap(() => this.valuationEventId$),
+        mergeMap((valuationEventId) => {
+          return this.valuationSvc.setComplianceChecksPassedState(valuationEventId, {
+            customPassedDate: new Date(),
+            personDateAmlcompleted: null,
+          })
         }),
-        mergeMap(() => this.validationMessage$),
+        take(1),
+        tap(() => {
+          return this.patchState({
+            checksAreValid: false,
+            compliancePassedDate: null,
+            compliancePassedBy: null,
+          })
+        }),
+        mergeMap(() => this.validationMessage$.pipe()),
       )
       .subscribe(
         (res) => {
-          console.log('delete doc subscribe: ', res)
+          console.log('Doc deleted')
         },
-        (err) => console.error('Err!: ', err)
+        (err) => console.error('Err!: ', err),
       )
   }
 
@@ -354,6 +379,33 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
 
   public addCompany = (data: any) => {
     console.log('TODO: addCompany: ', data)
+    of(
+      this.addCompanyToValuation({
+        id: data.companyId,
+        companyId: data.companyId,
+        name: data.companyName,
+        address: data.companyAddress?.addressLines,
+      }),
+    )
+      .pipe(
+        mergeMap(() => {
+          return this.peopleArrayShapedForApi$
+        }),
+        mergeMap((userDataForApi) => {
+          if (userDataForApi.peopleToSave) {
+            return this.peopleService.setPeopleDocs(userDataForApi.peopleToSave, userDataForApi.contactGroupId)
+          } else {
+            // this.addAssociatedCompanyId(userDataForApi.savePayload)
+            return this.peopleService.setCompanyPeopleDocs(userDataForApi.savePayload, userDataForApi.contactGroupId)
+          }
+        }),
+      )
+      .subscribe(
+        () => {},
+        (err) => {
+          console.error('addCompanyErr! ', err)
+        },
+      )
   }
 
   public toggleIsUBO = (data: Person) => {
@@ -365,6 +417,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   }
 
   public saveContact = (data: any) => {
-    console.log('saveContact: ' , data)
+    console.log('saveContact: ', data)
   }
 }

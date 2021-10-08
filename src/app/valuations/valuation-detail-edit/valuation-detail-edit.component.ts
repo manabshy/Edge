@@ -346,8 +346,8 @@ export class ValuationDetailEditComponent
     }
   }
 
-  // activeState: boolean[] = [true, true, true, true, true, false, false];
-  activeState: boolean[] = [false, false, false, false, false, false, true];
+  activeState: boolean[] = [true, true, true, true, true, false, false];
+  // activeState: boolean[] = [false, false, false, false, false, false, true];
   statuses = [
     { name: "valuationNotes", value: 0 },
     { name: "propertyInfo", value: 1 },
@@ -529,7 +529,7 @@ export class ValuationDetailEditComponent
 
     this.valuationForm.controls["propertyFloorId"].valueChanges.subscribe(
       (data) => {
-        console.log("propertyFloorId = ", data);
+        // console.log("propertyFloorId = ", data);
         if (+data === 10) {
           this.setValidationForPropertyFloorOther(true);
         } else {
@@ -727,7 +727,7 @@ export class ValuationDetailEditComponent
   }
 
   addNote() {
-    console.log(this.dataNote, "data note...");
+    // console.log(this.dataNote, "data note...");
 
     this.sharedService.addNote(this.dataNote);
   }
@@ -798,9 +798,9 @@ export class ValuationDetailEditComponent
       this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
         (result) => {
           this.contactGroup = result;
-          console.log(
-            "----------------------------------- contactGroupBs.next"
-          );
+          // console.log(
+          //   "----------------------------------- contactGroupBs.next"
+          // );
           this.valuationService.contactGroupBs.next(this.contactGroup);
           this.getSearchedPersonSummaryInfo(this.contactGroup);
         }
@@ -863,7 +863,7 @@ export class ValuationDetailEditComponent
   }
 
   setValidationForPropertyFloorOther(isRequired: boolean) {
-    console.log("setValidationForPropertyFloorOther: ", isRequired);
+    // console.log("setValidationForPropertyFloorOther: ", isRequired);
     this.valuationForm.controls["floorOther"].setValidators(
       isRequired ? Validators.required : []
     );
@@ -990,7 +990,7 @@ export class ValuationDetailEditComponent
     // this.valuers = result.valuers;
     this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
       this.contactGroup = result;
-      console.log("----------------------------------- contactGroupBs.next");
+      // console.log("----------------------------------- contactGroupBs.next");
       this.valuationService.contactGroupBs.next(this.contactGroup);
       this.getSearchedPersonSummaryInfo(this.contactGroup);
     });
@@ -1029,7 +1029,7 @@ export class ValuationDetailEditComponent
         this.adminContactGroup.contactPeople = this.adminContactGroup.contactPeople.concat(
           this.contactGroup?.contactPeople
         );
-        console.log(this.adminContactGroup.contactPeople);
+        // console.log(this.adminContactGroup.contactPeople);
       });
   }
 
@@ -1334,9 +1334,9 @@ export class ValuationDetailEditComponent
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
               (result) => {
                 this.contactGroup = result;
-                console.log(
-                  "----------------------------------- contactGroupBs.next"
-                );
+                // console.log(
+                //   "----------------------------------- contactGroupBs.next"
+                // );
                 this.valuationService.contactGroupBs.next(this.contactGroup);
                 this.getSearchedPersonSummaryInfo(this.contactGroup);
                 this.setAdminContact();
@@ -1452,7 +1452,7 @@ export class ValuationDetailEditComponent
       (x) => x.isMainPerson
     ).personId;
     this.contactId = contactGroup.contactGroupId;
-    console.log(this.contactId);
+    // console.log(this.contactId);
     this.storage
       .get(this.mainPersonId.toString())
       .subscribe((data: PersonSummaryFigures) => {
@@ -1854,9 +1854,9 @@ export class ValuationDetailEditComponent
       this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then(
         (result) => {
           this.contactGroup = result;
-          console.log(
-            "----------------------------------- contactGroupBs.next"
-          );
+          // console.log(
+          //   "----------------------------------- contactGroupBs.next"
+          // );
           this.valuationService.contactGroupBs.next(this.contactGroup);
           this.getSearchedPersonSummaryInfo(this.contactGroup);
         }
@@ -2124,7 +2124,7 @@ export class ValuationDetailEditComponent
     let newData = [];
     if (allData && allData.length > 0) {
       weekData = this.sharedService.groupByDate(allData);
-      console.log(weekData);
+      // console.log(weekData);
       for (let key in weekData) {
         hours = [];
         let defaultHours = [...this.defaultHours];
@@ -2719,7 +2719,7 @@ export class ValuationDetailEditComponent
   }
 
   saveValuation() {
-    console.log("saveValuation");
+    // console.log("saveValuation");
     // return
     this.checkAvailabilityBooking();
     this.setValuersValidators();

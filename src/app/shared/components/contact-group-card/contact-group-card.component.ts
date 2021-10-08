@@ -35,7 +35,7 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("contact groups in the card", this.contactGroup);
+    // console.log("contact groups in the card", this.contactGroup);
 
     this.numOfPeople = this.contactGroup?.contactPeople?.length;
     this.numOfPeople > 1

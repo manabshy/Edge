@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { Observable } from 'rxjs'
-import { ComplianceChecksStore, ComplianceChecksState } from './compliance-checks.store'
+import { ComplianceChecksStore } from './compliance-checks.store'
+import { ComplianceChecksState } from './compliance-checks.interfaces'
 
 /***
  * @description The outermost component for Company & Contact compliance checks. Uses compliance checks store for all server/service/biz logic interactions
@@ -17,7 +18,7 @@ import { ComplianceChecksStore, ComplianceChecksState } from './compliance-check
         [companyOrContact]="vm.companyOrContact"
         (fileWasUploaded)="onFileUploaded($event)"
         (fileWasDeleted)="onFileDeleted($event)"
-        (passComplianceChecks)="onPassComplianceChecks($event)"
+        (passComplianceChecks)="onPassComplianceChecks()"
         (toggleIsUBO)="onToggleIsUBO($event)"
         (removeContact)="onRemoveContact($event)"
         (saveContact)="onSaveContact($event)"
@@ -37,8 +38,8 @@ export class ComplianceChecksShellComponent {
     this.vm$ = this._complianceChecksStore.complianceChecksVm$
   }
 
-  onPassComplianceChecks(ev): void {
-    this._complianceChecksStore.passComplianceChecks(ev)
+  onPassComplianceChecks(): void {
+    this._complianceChecksStore.passComplianceChecks()
   }
 
   onFileUploaded(ev): void {
