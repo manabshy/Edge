@@ -74,7 +74,7 @@ import { ResultData } from "src/app/shared/result-data";
 import { StaffMember } from "src/app/shared/models/staff-member";
 import { TabDirective } from "ngx-bootstrap/tabs/ngx-bootstrap-tabs";
 import format from "date-fns/format";
-import { BehaviorSubject, Observable, Subject, Subscription } from "rxjs";
+import { BehaviorSubject, Observable, of, Subject, Subscription } from "rxjs";
 import { MessageService, PrimeNGConfig } from "primeng/api";
 import { addYears, differenceInCalendarYears, isThisHour } from "date-fns";
 import _ from "lodash";
@@ -974,13 +974,6 @@ export class ValuationDetailEditComponent
       });
   }
 
-  getPropertyDetailsPromise(propertyId: number) {
-    return this.propertyService
-      .getProperty(propertyId, true, true, false, true)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .toPromise();
-  }
-
   setPropertyDetail(propertyDetails) {
     if (propertyDetails.lastKnownOwner)
       this.lastKnownOwner = propertyDetails.lastKnownOwner;
@@ -1240,142 +1233,137 @@ export class ValuationDetailEditComponent
       .then((data) => {
         if (data) {
           this.valuation = data;
-          this.getPropertyInformation(this.valuation.property.propertyId);
+          return of(
+            this.getPropertyInformation(this.valuation.property.propertyId)
+          ).toPromise();
+        }
+      })
+      .then(() => {
+        console.log(this.valuation.property);
 
-          this.setHeaderDropdownList(
-            this.valuation.valuationStatus,
-            this.valuation.valuationType
+        this.setHeaderDropdownList(
+          this.valuation.valuationStatus,
+          this.valuation.valuationType
+        );
+
+        this.valuation.valuationStatus === 3
+          ? (this.canInstruct = true)
+          : (this.canInstruct = false);
+        this.valuation.approxLeaseExpiryDate
+          ? (this.showLeaseExpiryDate = true)
+          : (this.showLeaseExpiryDate = false);
+
+        if (this.valuation.valuationStatus === ValuationStatusEnum.Cancelled) {
+          if (this.route.snapshot.routeConfig?.path?.indexOf("edit") > -1) {
+            let path = [
+              "valuations-register/detail",
+              this.valuation.valuationEventId,
+              "cancelled",
+            ];
+            this.router.navigate(path);
+            return;
+          }
+          this.isCancelled = true;
+          this.cancelString = `Cancelled ${moment(
+            this.valuation.cancelledDate
+          ).format("Do MMM YYYY (HH:mm)")} by ${
+            this.valuation.cancelledBy?.fullName
+          } `;
+          this.cancelReasonString =
+            "Reason for cancellation: " +
+            (this.valuation.cancellationTypeId ==
+            ValuationCancellationReasons.Other
+              ? this.valuation.cancellationReason
+              : this.removeUnderLine(
+                  ValuationCancellationReasons[
+                    this.valuation.cancellationTypeId
+                  ]
+                ));
+        }
+
+        if (
+          this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Valued ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
+        ) {
+          this.isEditable = false;
+        } else {
+          this.isEditable = true;
+        }
+
+        if (
+          this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
+        ) {
+          this.canSaveValuation = false;
+        } else {
+          this.canSaveValuation = true;
+        }
+
+        if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
+          if (this.isEditable) {
+            if (this.valuation.valuationDate) {
+              this.showDateAndDuration = true;
+            } else {
+              this.showDateAndDuration = false;
+            }
+          }
+          this.salesValuerIdControl.setValue(
+            this.valuation.salesValuer
+              ? this.valuation.salesValuer.staffMemberId
+              : null
           );
+          this.lettingsValuerIdControl.setValue(
+            this.valuation.salesValuer
+              ? this.valuation.salesValuer.staffMemberId
+              : null
+          );
+          if (this.valuation.combinedValuationBooking) {
+            this.valuation.salesValuationBooking = {
+              ...this.valuation.combinedValuationBooking,
+            };
+            this.valuation.lettingsValuationBooking = {
+              ...this.valuation.combinedValuationBooking,
+            };
+          }
+        }
 
-          this.valuation.valuationStatus === 3
-            ? (this.canInstruct = true)
-            : (this.canInstruct = false);
-          this.valuation.approxLeaseExpiryDate
-            ? (this.showLeaseExpiryDate = true)
-            : (this.showLeaseExpiryDate = false);
-
-          if (
-            this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
-          ) {
-            if (this.route.snapshot.routeConfig?.path?.indexOf("edit") > -1) {
-              let path = [
-                "valuations-register/detail",
-                data.valuationEventId,
-                "cancelled",
-              ];
-              this.router.navigate(path);
-              return;
+        if (this.valuation.property) {
+          this.lastKnownOwner = this.valuation.property.lastKnownOwner;
+          this.property = this.property;
+          this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
+            (result) => {
+              this.contactGroup = result;
+              console.log(
+                "----------------------------------- contactGroupBs.next"
+              );
+              this.valuationService.contactGroupBs.next(this.contactGroup);
+              this.getSearchedPersonSummaryInfo(this.contactGroup);
+              this.setAdminContact();
             }
-            this.isCancelled = true;
-            this.cancelString = `Cancelled ${moment(data.cancelledDate).format(
-              "Do MMM YYYY (HH:mm)"
-            )} by ${data.cancelledBy?.fullName} `;
-            this.cancelReasonString =
-              "Reason for cancellation: " +
-              (data.cancellationTypeId == ValuationCancellationReasons.Other
-                ? data.cancellationReason
-                : this.removeUnderLine(
-                    ValuationCancellationReasons[data.cancellationTypeId]
-                  ));
-          }
+          ); // get contact group for last know owner
+        }
 
-          //this.setInitialValuesByStatus(this.valuation.valuationStatus);
+        if (this.property?.propertyId) {
+          this.getValuers(this.property.propertyId);
+        }
 
-          if (
-            this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
-            this.valuation.valuationStatus === ValuationStatusEnum.Valued ||
-            this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
-          ) {
-            this.isEditable = false;
-          } else {
-            this.isEditable = true;
-          }
+        this.setValuationType(this.valuation);
+        this.populateForm(this.valuation);
+        this.setupInitialRentFigures(this.valuation);
 
-          if (
-            this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
-            this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
-          ) {
-            this.canSaveValuation = false;
-          } else {
-            this.canSaveValuation = true;
-          }
+        if (this.valuation && this.allOrigins) {
+          this.activeOriginId = this.allOrigins.find(
+            (x) => x.id === +this.valuation.originId
+          );
+          this.activeOriginId && !this.isEditable
+            ? (this.showOriginId = true)
+            : (this.showOriginId = false);
+          this.setOriginIdValue(this.valuation.originId);
+        }
 
-          if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
-            if (this.isEditable) {
-              if (this.valuation.valuationDate) {
-                this.showDateAndDuration = true;
-              } else {
-                this.showDateAndDuration = false;
-              }
-            }
-            this.salesValuerIdControl.setValue(
-              this.valuation.salesValuer
-                ? this.valuation.salesValuer.staffMemberId
-                : null
-            );
-            this.lettingsValuerIdControl.setValue(
-              this.valuation.salesValuer
-                ? this.valuation.salesValuer.staffMemberId
-                : null
-            );
-            if (this.valuation.combinedValuationBooking) {
-              this.valuation.salesValuationBooking = {
-                ...this.valuation.combinedValuationBooking,
-              };
-              this.valuation.lettingsValuationBooking = {
-                ...this.valuation.combinedValuationBooking,
-              };
-            }
-          }
-
-          if (this.property) {
-            this.lastKnownOwner = this.property.lastKnownOwner;
-            this.property = this.property;
-            this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
-              (result) => {
-                this.contactGroup = result;
-                // console.log(
-                //   "----------------------------------- contactGroupBs.next"
-                // );
-                this.valuationService.contactGroupBs.next(this.contactGroup);
-                this.getSearchedPersonSummaryInfo(this.contactGroup);
-                this.setAdminContact();
-              }
-            ); // get contact group for last know owner
-          } else {
-            this.lastKnownOwner = this.valuation.propertyOwner;
-            // this.property = this.valuation.property; // Fix this with Gabor on the API
-            this.getPropertyDetailsPromise(
-              this.valuation.property.propertyId
-            ).then((result) => {
-              if (result) {
-                this.setPropertyDetail(result);
-                this.setAdminContact();
-              }
-            });
-          }
-
-          if (this.property?.propertyId) {
-            this.getValuers(this.property.propertyId);
-          }
-
-          this.setValuationType(data);
-          this.populateForm(data);
-          this.setupInitialRentFigures(data);
-
-          if (this.valuation && this.allOrigins) {
-            this.activeOriginId = this.allOrigins.find(
-              (x) => x.id === +this.valuation.originId
-            );
-            this.activeOriginId && !this.isEditable
-              ? (this.showOriginId = true)
-              : (this.showOriginId = false);
-            this.setOriginIdValue(this.valuation.originId);
-          }
-
-          if (this.valuation && this.allOrigins && this.originTypes) {
-            this.setOriginTypeId(this.valuation.originId);
-          }
+        if (this.valuation && this.allOrigins && this.originTypes) {
+          this.setOriginTypeId(this.valuation.originId);
         }
       })
       .then(() => {
@@ -2801,13 +2789,19 @@ export class ValuationDetailEditComponent
     valuation.suggestedAskingRentShortLetMonthly = this.sharedService.convertStringToNumber(
       valuation.suggestedAskingRentShortLetMonthly
     );
-    // TODO: here
-    if (!valuation.propertyTypeId) return;
 
-    valuation.property.propertyTypeId = +valuation.propertyTypeId;
-    valuation.property.propertyStyleId = +valuation.propertyStyleId;
-    valuation.property.propertyFloorId = valuation.propertyFloorId;
-    valuation.property.floorOther = valuation.floorOther;
+    if (!this.valuationForm.get("propertyTypeId").value) return;
+
+    valuation.property.propertyTypeId = +this.valuationForm.get(
+      "propertyTypeId"
+    ).value;
+    valuation.property.propertyStyleId = +this.valuationForm.get(
+      "propertyStyleId"
+    ).value;
+    valuation.property.propertyFloorId = this.valuationForm.get(
+      "propertyFloorId"
+    ).value;
+    valuation.property.floorOther = this.valuationForm.get("floorOther").value;
     valuation.otherFeatures = [];
     valuation.propertyFeature = [];
 

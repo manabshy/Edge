@@ -58,9 +58,6 @@ export interface Valuation extends ValuationInfo {
   salesValuationBooking?: ValuationBooking;
   lettingsValuationBooking?: ValuationBooking;
   queryResultCount?: number;
-  deedLandReg?: DeedLandReg;
-  leaseLandReg?: LeaseLandReg;
-  nameChangeReg?: NameChangeReg;
   isPowerOfAttorney?: boolean;
   ccOwner?: boolean;
   adminContact?: Signer;
@@ -72,6 +69,7 @@ export interface Valuation extends ValuationInfo {
   cancelledDate?: Date;
   cancellationTypeId?: number;
   valuationContactNote?: valuationNote;
+  ownerConfirmed?: number;
 }
 
 export interface ValuationPricingInfo {
@@ -97,21 +95,6 @@ export interface ValuationPropertyInfo {
   outsideSpace?: any;
   propertyFeature?: any;
   valuers: BaseStaffMember[];
-}
-
-export interface DeedLandReg {
-  userEnteredOwner?: string;
-  ownerConfirmed?: number;
-  files?: EdgeFile[];
-}
-
-export interface LeaseLandReg {
-  leaseExpiryDate?: Date;
-  files?: EdgeFile[];
-}
-
-export interface NameChangeReg {
-  files?: EdgeFile[];
 }
 
 export interface OfficeMember {
@@ -226,24 +209,4 @@ export enum SalesAgencyTypeEnum {
 export enum LettingsAgencyTypeEnum {
   Sole = 1,
   Multi = 2,
-}
-
-export interface deedLandReg {
-  nameChangeFileStoreId: number;
-  blobName: string;
-  updateDate: Date;
-  userEnteredOwner: string;
-  ownerConfirmed: number;
-}
-
-export interface leaseLandReg {
-  nameChangeFileStoreId: number;
-  blobName: string;
-  updateDate: Date;
-  leaseExpiryDate: Date;
-}
-
-export interface landReg {
-  deedLandReg: deedLandReg;
-  leaseLandReg: leaseLandReg;
 }
