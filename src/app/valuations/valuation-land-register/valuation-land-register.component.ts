@@ -20,11 +20,7 @@ import {
   ContactGroup,
   ContactType,
 } from "src/app/contact-groups/shared/contact-group";
-import {
-  DeedLandReg,
-  LeaseLandReg,
-  NameChangeReg,
-} from "src/app/property/shared/property";
+import { Property } from "src/app/property/shared/property";
 
 @Component({
   selector: "app-valuation-land-register",
@@ -34,6 +30,7 @@ export class ValuationsLandRegisterComponent
   implements OnInit, AfterViewInit, OnDestroy {
   @Input() interestList: any[] = [];
   @Input() valuationStatus: number;
+  @Input() property: Property;
 
   private _showLeaseExpiryDate: boolean;
   set showLeaseExpiryDate(value) {
@@ -56,42 +53,6 @@ export class ValuationsLandRegisterComponent
   }
 
   @Input() valuation;
-
-  private _nameChangeReg: NameChangeReg;
-  set nameChangeReg(value) {
-    if (value && this._nameChangeReg != value) {
-      this._nameChangeReg = value;
-    } else {
-      this._nameChangeReg = {};
-    }
-  }
-  @Input() get nameChangeReg(): NameChangeReg {
-    return this._nameChangeReg;
-  }
-
-  private _deedLandReg: DeedLandReg;
-  set deedLandReg(value) {
-    if (value && this._deedLandReg != value) {
-      this._deedLandReg = value;
-    } else {
-      this._deedLandReg = {};
-    }
-  }
-  @Input() get deedLandReg(): DeedLandReg {
-    return this._deedLandReg;
-  }
-
-  private _leaseLandReg: LeaseLandReg;
-  set leaseLandReg(value) {
-    if (value && this._leaseLandReg != value) {
-      this._leaseLandReg = value;
-    } else {
-      this._leaseLandReg = {};
-    }
-  }
-  @Input() get leaseLandReg(): LeaseLandReg {
-    return this._leaseLandReg;
-  }
 
   @Output() afterFileOperation: EventEmitter<any> = new EventEmitter();
   isValid$: Observable<boolean> = this._valuationService.landRegisterValid;
@@ -124,17 +85,14 @@ export class ValuationsLandRegisterComponent
 
   ngOnInit(): void {
     this.landRegistryForm = this.fb.group({
-      userEnteredOwner: [
-        this.deedLandReg.userEnteredOwner,
-        Validators.required,
-      ],
+      userEnteredOwner: [this.property.userEnteredOwner, Validators.required],
       ownerConfirmed: [
         this.valuation.ownerConfirmed?.toString(),
         Validators.required,
       ],
       leaseExpiryDate: [
-        this.leaseLandReg.leaseExpiryDate
-          ? new Date(this.leaseLandReg.leaseExpiryDate)
+        this.property.leaseExpiryDate
+          ? new Date(this.property.leaseExpiryDate)
           : null,
         this.showLeaseExpiryDate ? Validators.required : null,
       ],
@@ -148,9 +106,9 @@ export class ValuationsLandRegisterComponent
       }
     );
     this.landRegistryForm.valueChanges.subscribe((data) => {
-      this.deedLandReg.userEnteredOwner = data.userEnteredOwner;
+      this.property.userEnteredOwner = data.userEnteredOwner;
       this.valuation.ownerConfirmed = data.ownerConfirmed;
-      this.leaseLandReg.leaseExpiryDate = data.leaseExpiryDate
+      this.property.leaseExpiryDate = data.leaseExpiryDate
         ? new Date(data.leaseExpiryDate)
         : null;
       this.getValidationResult();
@@ -211,12 +169,20 @@ export class ValuationsLandRegisterComponent
   }
 
   controlFiles() {
-    if (!(this.deedLandReg.files && this.deedLandReg.files.length > 0)) {
+    if (
+      !(
+        this.property.deedLandRegFiles &&
+        this.property.deedLandRegFiles.length > 0
+      )
+    ) {
       this.showFileUploadForDeedError = this.controlValidation ? true : false;
       return false;
     } else this.showFileUploadForDeedError = false;
     if (
-      !(this.leaseLandReg.files && this.leaseLandReg.files.length > 0) &&
+      !(
+        this.property.leaseLandRegFiles &&
+        this.property.leaseLandRegFiles.length > 0
+      ) &&
       this.showLeaseExpiryDate
     ) {
       this.showFileUploadForLeaseError = this.controlValidation ? true : false;
@@ -224,7 +190,10 @@ export class ValuationsLandRegisterComponent
     } else this.showFileUploadForLeaseError = false;
     if (
       +this.valuation.ownerConfirmed == 2 &&
-      !(this.nameChangeReg.files && this.nameChangeReg.files.length > 0)
+      !(
+        this.property.nameChangeRegFiles &&
+        this.property.nameChangeRegFiles.length > 0
+      )
     ) {
       this.showFileUploadForNameChangeError = this.controlValidation
         ? true
@@ -237,11 +206,11 @@ export class ValuationsLandRegisterComponent
   getFileNames(fileObj: any) {
     if (fileObj) {
       if (fileObj.type == "L") {
-        this.leaseLandReg.files = [...fileObj.file];
+        this.property.leaseLandRegFiles = [...fileObj.file];
       } else if (fileObj.type == "D") {
-        this.deedLandReg.files = [...fileObj.file];
+        this.property.deedLandRegFiles = [...fileObj.file];
       } else if (fileObj.type == "P") {
-        this.nameChangeReg.files = [...fileObj.file];
+        this.property.nameChangeRegFiles = [...fileObj.file];
       }
     }
     this.controlFiles();

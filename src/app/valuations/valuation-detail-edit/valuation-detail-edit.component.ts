@@ -430,10 +430,9 @@ export class ValuationDetailEditComponent
       this.valuation = { valuationStatus: ValuationStatusEnum.None };
       this.sharedService.removeContactGroupChanged.next(false);
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0);
-    }
-
-    if (this.propertyId) {
-      this.getPropertyInformation(this.propertyId);
+      if (this.propertyId) {
+        this.getPropertyInformation(this.propertyId);
+      }
     }
 
     this.storage.get("info").subscribe((info: DropdownListInfo) => {
@@ -964,7 +963,7 @@ export class ValuationDetailEditComponent
   }
 
   getPropertyDetails(propertyId: number) {
-    this.propertySubsription = this.propertyService
+    return this.propertyService
       .getProperty(propertyId, true, true, false, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((result) => {
@@ -977,6 +976,9 @@ export class ValuationDetailEditComponent
   setPropertyDetail(propertyDetails) {
     if (propertyDetails.lastKnownOwner)
       this.lastKnownOwner = propertyDetails.lastKnownOwner;
+    else {
+      this.lastKnownOwner = this.valuation?.propertyOwner;
+    }
     this.property = propertyDetails;
     this.valuation.property = { ...this.property };
     this.valuation.officeId = this.property.officeId;
@@ -1233,10 +1235,19 @@ export class ValuationDetailEditComponent
       .then((data) => {
         if (data) {
           this.valuation = data;
-          return of(
-            this.getPropertyInformation(this.valuation.property.propertyId)
-          ).toPromise();
+          this.propertyId = this.valuation.property.propertyId;
+          if (this.propertyId) {
+            return this.propertyService
+              .getProperty(this.propertyId, true, true, false, true)
+              .toPromise();
+          }
+          return of(this.valuation.property).toPromise();
         }
+      })
+      .then((result) => {
+        this.setPropertyDetail(result);
+        this.getValuationPropertyInfo(this.propertyId);
+        this.getValuers(this.propertyId);
       })
       .then(() => {
         console.log(this.valuation.property);
@@ -1329,8 +1340,9 @@ export class ValuationDetailEditComponent
         }
 
         if (this.valuation.property) {
-          this.lastKnownOwner = this.valuation.property.lastKnownOwner;
-          this.property = this.property;
+          this.lastKnownOwner = this.valuation.property.lastKnownOwner
+            ? this.valuation.property.lastKnownOwner
+            : this.valuation.propertyOwner;
           this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
             (result) => {
               this.contactGroup = result;
@@ -2789,6 +2801,8 @@ export class ValuationDetailEditComponent
     valuation.suggestedAskingRentShortLetMonthly = this.sharedService.convertStringToNumber(
       valuation.suggestedAskingRentShortLetMonthly
     );
+
+    valuation.property = this.valuation.property;
 
     if (!this.valuationForm.get("propertyTypeId").value) return;
 

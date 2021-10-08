@@ -34,23 +34,11 @@ export interface Property extends PropertyInfo {
   lastKnownOwner: Signer;
   valuer?: BaseStaffMember;
   valuers?: BaseStaffMember[];
-  deedLandReg?: DeedLandReg;
-  leaseLandReg?: LeaseLandReg;
-  nameChangeReg?: NameChangeReg;
-}
-
-export interface DeedLandReg {
+  deedLandRegFiles?: EdgeFile[];
+  leaseLandRegFiles?: EdgeFile[];
+  nameChangeRegFiles?: EdgeFile[];
   userEnteredOwner?: string;
-  files?: EdgeFile[];
-}
-
-export interface LeaseLandReg {
   leaseExpiryDate?: Date;
-  files?: EdgeFile[];
-}
-
-export interface NameChangeReg {
-  files?: EdgeFile[];
 }
 
 export interface MapCentre {
