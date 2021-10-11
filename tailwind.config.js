@@ -11,6 +11,9 @@ module.exports = {
       fontSize: {
         'xs': '.65rem'
       },
+      margin: {
+        '0.3': '0.15rem',
+       },
       fontFamily: {
         // https://tailwindcss.com/docs/font-family#customizing
         sans: [
@@ -20,7 +23,8 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+    },
   },
   plugins: [],
 }

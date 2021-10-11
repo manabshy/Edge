@@ -8,7 +8,7 @@ import { ValuationTypeEnum } from '../shared/valuation'
  */
 export const buildPartialLoadState = (contactGroupData, valuationData) => {
   return {
-    contactGroupId: valuationData.propertyOwner.contactGroupId,
+    contactGroupId: valuationData.propertyOwner?.contactGroupId,
     companyOrContact: contactGroupData.companyId ? 'company' : 'contact',
     checkType: identifyAmlOrKyc(valuationData),
     compliancePassedBy: valuationData.complianceCheck?.compliancePassedByFullName,
