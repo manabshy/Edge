@@ -190,7 +190,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         mergeMap(([contactGroupData, valuation]) => {
           if (contactGroupData.companyId) {
             return this.peopleService.getCompanyPeopleDocs(contactGroupData.contactGroupId)
-          } else {
+          } else if (valuation && valuation.propertyOwner) {
             return this.peopleService.getPeopleDocs(valuation.propertyOwner.contactGroupId)
           }
         }),

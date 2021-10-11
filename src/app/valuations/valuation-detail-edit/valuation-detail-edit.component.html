@@ -15,9 +15,15 @@
               {{valuation?.valuationStatusDescription}}</span>
           </div>
           <div class=" card__body">
-            <ol class="timeline timeline--condensed">
-              <li *ngFor="let item of statuses index as i">
-                <a (click)="toggleAccordion(i)">{{item?.name|toPascalCase}}</a>
+            <ol>
+              <li *ngFor="let item of statuses">
+                <div class="flex flex-row">
+                  <div class="flex items-center w-4 h-4 mr-2 text-center rounded-full" [ngClass]="{'opacity-75 bg-gray-500': !item.isValid,
+                               'bg-green-600': item.isValid}">
+                    <i *ngIf="item.isValid" class="ml-0.3 text-white pi pi-check"></i>
+                  </div>
+                  <a (click)="toggleAccordion(item.value)">{{item?.name|toPascalCase}}</a>
+                </div>
               </li>
             </ol>
           </div>
@@ -134,7 +140,7 @@
               <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]"
                 *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">
 
-                <div class="grid grid--9">
+                <div id="valuationNotesTab" class="grid grid--9">
                   <div>
                     <fieldset class="mb-3 inline-child" [ngClass]="{'invalid': formErrors?.reason}"
                       *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
@@ -172,158 +178,160 @@
 
               <p-accordionTab header="Property Info" [(selected)]="activeState[1]">
 
-                <div class="inline-parent inline-parent__hasLabels">
-                  <fieldset class="inline-child">
-                    <label for="propertyTypeId">Property Type</label>
-                    <span class="select">
-                      <select name="propertyTypeId" id="propertyTypeId" formControlName="propertyTypeId"
-                        (change)="onPropertyType($event.target.value)">
-                        <option *ngFor="let propertyType of propertyTypes" [value]='propertyType.id'>
-                          {{propertyType.value}}
-                        </option>
-                      </select>
-                    </span>
-                  </fieldset>
-                  <fieldset class="inline-child">
-                    <label for="propertyStyleId">Property Style</label>
-                    <span class="select">
-                      <select name="propertyStyleId" id="propertyStyleId" formControlName="propertyStyleId">
-                        <option selected value="0"></option>
-                        <option *ngFor="let propertyStyle of propertyStyles" [value]='propertyStyle.id'>
-                          {{propertyStyle.value}}
-                        </option>
-                      </select>
-                    </span>
-                  </fieldset>
-                  <fieldset class="inline-child" *ngIf="valuationForm.get('propertyTypeId').value == 2">
-                    <label for="propertyFloorId">Floor</label>
-                    <span class="select">
-                      <select name="propertyFloorId" id="propertyFloorId" formControlName="propertyFloorId">
-                        <option selected value="0"></option>
-                        <option *ngFor="let propertyFloor of propertyFloors" [value]='propertyFloor.id'>
-                          {{propertyFloor.value}}
-                        </option>
-                      </select>
-                    </span>
-                  </fieldset>
-                  <fieldset class="inline-child" *ngIf="valuationForm.get('propertyFloorId').value == '10'"
-                    [ngClass]="{'invalid': formErrors?.floorOther}">
-                    <label for="floorOther">Other</label>
-                    <input class="px-2" type="text" name="floorOther" id="floorOther" formControlName="floorOther"
-                      [ngClass]="{'is-invalid': (formErrors?.floorOther)}" />
-                    <p class="message message--negative"> {{formErrors?.floorOther}}</p>
-                  </fieldset>
-                </div>
+                <div id="propertyInfoTab">
+                  <div class="inline-parent inline-parent__hasLabels">
+                    <fieldset class="inline-child">
+                      <label for="propertyTypeId">Property Type</label>
+                      <span class="select">
+                        <select name="propertyTypeId" id="propertyTypeId" formControlName="propertyTypeId"
+                          (change)="onPropertyType($event.target.value)">
+                          <option *ngFor="let propertyType of propertyTypes" [value]='propertyType.id'>
+                            {{propertyType.value}}
+                          </option>
+                        </select>
+                      </span>
+                    </fieldset>
+                    <fieldset class="inline-child">
+                      <label for="propertyStyleId">Property Style</label>
+                      <span class="select">
+                        <select name="propertyStyleId" id="propertyStyleId" formControlName="propertyStyleId">
+                          <option selected value="0"></option>
+                          <option *ngFor="let propertyStyle of propertyStyles" [value]='propertyStyle.id'>
+                            {{propertyStyle.value}}
+                          </option>
+                        </select>
+                      </span>
+                    </fieldset>
+                    <fieldset class="inline-child" *ngIf="valuationForm.get('propertyTypeId').value == 2">
+                      <label for="propertyFloorId">Floor</label>
+                      <span class="select">
+                        <select name="propertyFloorId" id="propertyFloorId" formControlName="propertyFloorId">
+                          <option selected value="0"></option>
+                          <option *ngFor="let propertyFloor of propertyFloors" [value]='propertyFloor.id'>
+                            {{propertyFloor.value}}
+                          </option>
+                        </select>
+                      </span>
+                    </fieldset>
+                    <fieldset class="inline-child" *ngIf="valuationForm.get('propertyFloorId').value == '10'"
+                      [ngClass]="{'invalid': formErrors?.floorOther}">
+                      <label for="floorOther">Other</label>
+                      <input class="px-2" type="text" name="floorOther" id="floorOther" formControlName="floorOther"
+                        [ngClass]="{'is-invalid': (formErrors?.floorOther)}" />
+                      <p class="message message--negative"> {{formErrors?.floorOther}}</p>
+                    </fieldset>
+                  </div>
 
-                <div class="inline-parent inline-parent__hasLabels">
+                  <div class="inline-parent inline-parent__hasLabels">
+                    <fieldset class="pb-4 checkbox">
+                      <span>
+                        <input class="p-2" type="checkbox" id="isNewBuild" name="isNewBuild"
+                          formControlName="isNewBuild" data-cy="isNewBuild">
+                        <label style="font-weight: bolder;" for="isNewBuild">New Build</label>
+                      </span>
+                    </fieldset>
+                    <fieldset class="pb-4 checkbox">
+                      <span>
+                        <input class="p-2" type="checkbox" id="isRetirementHome" name="isRetirementHome"
+                          formControlName="isRetirementHome" data-cy="isRetirementHome">
+                        <label style="font-weight: bolder;" for="isRetirementHome">Retirement Home</label>
+                      </span>
+                    </fieldset>
+                  </div>
+
+                  <div class="inline-parent inline-parent__hasLabels">
+                    <fieldset class="inline-child">
+                      <label for="bedrooms"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                          class="icon icon--onLeft">
+                          <path
+                            d="M17.9 33.4c4.7 0 8.5-3.8 8.5-8.5s-3.8-8.5-8.5-8.5S9.5 20.3 9.5 25 13.2 33.4 17.9 33.4zM51.7 16.5H29.2v19.7H6.6V10.9H1v42.3h5.6v-8.5h50.7v8.5H63V27.8C63 21.5 58 16.5 51.7 16.5z" />
+                        </svg>Bedrooms</label>
+                      <span>
+                        <input class="p-2" style="margin-top:0px;" type="number" name="bedrooms" id="bedrooms"
+                          formControlName="bedrooms" min="0" max="99" [ngClass]="{'is-invalid': (formErrors?.bedrooms)}"
+                          *ngIf="!showStudioLabel" (blur)="studioLabelCheck($event.target.value)" />
+                        <input class="p-2" style="margin-top:0px;" type="text" name="studio"
+                          *ngIf="valuationForm.get('bedrooms').value == 0 && showStudioLabel" value="Studio"
+                          (click)="showStudioLabel = !showStudioLabel" />
+                        {{formErrors?.bedrooms}}
+                      </span>
+                    </fieldset>
+
+                    <fieldset class="inline-child">
+                      <label for="bathrooms"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                          class="icon icon--onLeft">
+                          <circle cx="16.5" cy="16.5" r="6.2" />
+                          <path
+                            d="M56.8 35.1V9.8C56.8 4.9 52.9 1 48 1c-2.3 0-4.6 0.9-6.2 2.6L38 7.4c-0.5-0.2-1-0.2-1.6-0.2 -1.2 0-2.4 0.4-3.3 1l8.6 8.6c0.6-1 1-2.1 1-3.3 0-0.6-0.1-1.1-0.2-1.6l3.9-3.9c0.5-0.5 1.1-0.7 1.8-0.7 1.4 0 2.6 1.1 2.6 2.6v25.3H29.4c-0.9-0.7-1.8-1.4-2.5-2.2l-4.3-4.8c-0.6-0.7-1.3-1.2-2.1-1.5 -1-0.5-2-0.7-3.1-0.7 -3.8 0-6.9 3.1-6.9 7v2.3H1v18.6c0 3.4 2.8 6.2 6.2 6.2 0 1.7 1.4 3.1 3.1 3.1h43.4c1.7 0 3.1-1.4 3.1-3.1 3.4 0 6.2-2.8 6.2-6.2V35.1H56.8z" />
+                        </svg>Bathrooms</label>
+                      <input class="p-2" type="number" name="bathrooms" id="bathrooms" formControlName="bathrooms"
+                        min="0" max="99" [ngClass]="{'is-invalid': (formErrors?.bathrooms)}" />
+                      {{formErrors?.bathrooms}}
+                    </fieldset>
+
+                    <fieldset class="inline-child">
+                      <label for="receptions"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                          class="icon icon--onLeft">
+                          <path
+                            d="M58.2 26.2c-3.2 0-5.8 2.6-5.8 5.8v8.7H11.6V32c0-3.2-2.6-5.8-5.8-5.8S0 28.8 0 32v14.5c0 3.2 2.6 5.8 5.8 5.8h52.4c3.2 0 5.8-2.6 5.8-5.8V32C64 28.8 61.4 26.2 58.2 26.2zM49.5 11.6h-35c-3.2 0-5.8 2.6-5.8 5.8v6.3c3.4 1.2 5.8 4.4 5.8 8.2v5.9h34.9v-5.9c0-3.8 2.4-7 5.8-8.2v-6.3C55.3 14.3 52.7 11.6 49.5 11.6z" />
+                        </svg>Receptions</label>
+                      <input class="p-2" type="number" name="receptions" id="receptions" formControlName="receptions"
+                        min="0" max="99" [ngClass]="{'is-invalid': (formErrors?.receptions)}" />
+                      {{formErrors?.receptions}}
+                    </fieldset>
+
+                    <fieldset class="inline-child">
+                      <label for="sqFt"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                          class="icon icon--onLeft">
+                          <path
+                            d="M53.9 53.9L49.8 58l-2.8-2.8 4.1-4.1 -7.5-7.5 -4.1 4.1L36.8 45l4.1-4.1 -7.5-7.5 -4.1 4.1 -2.8-2.8 4.1-4.1 -7.6-7.6L19 27.2l-2.8-2.8 4.1-4.1 -7.5-7.5 -4.1 4.1L6 14.2l4.1-4.1L1 1v54.2C1 59.5 4.5 63 8.8 63H63L53.9 53.9zM12.6 51.4V29.1l22.3 22.3H12.6z" />
+                        </svg>Approx sq. ft</label>
+                      <input class="p-2" type="text" name="sqFt" id="sqFt" formControlName="sqFt">
+                    </fieldset>
+                  </div>
+
+                  <div class="inline-parent inline-parent__hasLabels">
+                    <fieldset class="inline-child">
+                      <label for="tenureId">Tenure</label>
+                      <span class="select">
+                        <select name="tenureId" id="tenureId" formControlName="tenureId"
+                          (change)="onTenureChange($event.target.value)">
+                          <option value="0">Not Known</option>
+                          <option *ngFor="let tenure of tenures" [value]='tenure.id'> {{tenure.value}}</option>
+                        </select>
+                      </span>
+                    </fieldset>
+                    <fieldset class="inline-child" *ngIf="showLeaseExpiryDate"
+                      [ngClass]="{'invalid': formErrors?.approxLeaseExpiryDate}">
+                      <input class="p-2" [style]="{'height': '1.5em'}" type="number" name="approxLeaseExpiryDate"
+                        autocomplete="off" id="approxLeaseExpiryDate" formControlName="approxLeaseExpiryDate"
+                        placeholder="Approx Lease Length" />
+                      <p class="message message--negative"> {{formErrors?.approxLeaseExpiryDate}}</p>
+                    </fieldset>
+                  </div>
+
+                  <fieldset class="mb-3"
+                    *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('outsideSpace').value)">
+                    <label for="outsideSpace">Outside Space</label>
+                    <p-multiSelect [options]="outsideSpaces" formControlName="outsideSpace" optionLabel="value"
+                      display="chip"></p-multiSelect>
+                  </fieldset>
+
+                  <fieldset class="mb-3"
+                    *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('parking').value)">
+                    <label for="parking">Parking</label>
+                    <p-multiSelect [options]="parkings" formControlName="parking" optionLabel="value" display="chip">
+                    </p-multiSelect>
+                  </fieldset>
+
                   <fieldset class="pb-4 checkbox">
                     <span>
-                      <input class="p-2" type="checkbox" id="isNewBuild" name="isNewBuild" formControlName="isNewBuild"
-                        data-cy="isNewBuild">
-                      <label style="font-weight: bolder;" for="isNewBuild">New Build</label>
-                    </span>
-                  </fieldset>
-                  <fieldset class="pb-4 checkbox">
-                    <span>
-                      <input class="p-2" type="checkbox" id="isRetirementHome" name="isRetirementHome"
-                        formControlName="isRetirementHome" data-cy="isRetirementHome">
-                      <label style="font-weight: bolder;" for="isRetirementHome">Retirement Home</label>
+                      <input class="p-2" type="checkbox" id="hasDisabledAccess" name="hasDisabledAccess"
+                        formControlName="hasDisabledAccess" data-cy="hasDisabledAccess">
+                      <label style="font-weight: bolder;" for="hasDisabledAccess">Disabled Access</label>
                     </span>
                   </fieldset>
                 </div>
-
-                <div class="inline-parent inline-parent__hasLabels">
-                  <fieldset class="inline-child">
-                    <label for="bedrooms"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                        class="icon icon--onLeft">
-                        <path
-                          d="M17.9 33.4c4.7 0 8.5-3.8 8.5-8.5s-3.8-8.5-8.5-8.5S9.5 20.3 9.5 25 13.2 33.4 17.9 33.4zM51.7 16.5H29.2v19.7H6.6V10.9H1v42.3h5.6v-8.5h50.7v8.5H63V27.8C63 21.5 58 16.5 51.7 16.5z" />
-                      </svg>Bedrooms</label>
-                    <span>
-                      <input class="p-2" style="margin-top:0px;" type="number" name="bedrooms" id="bedrooms"
-                        formControlName="bedrooms" min="0" max="99" [ngClass]="{'is-invalid': (formErrors?.bedrooms)}"
-                        *ngIf="!showStudioLabel" (blur)="studioLabelCheck($event.target.value)" />
-                      <input class="p-2" style="margin-top:0px;" type="text" name="studio"
-                        *ngIf="valuationForm.get('bedrooms').value == 0 && showStudioLabel" value="Studio"
-                        (click)="showStudioLabel = !showStudioLabel" />
-                      {{formErrors?.bedrooms}}
-                    </span>
-                  </fieldset>
-
-                  <fieldset class="inline-child">
-                    <label for="bathrooms"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                        class="icon icon--onLeft">
-                        <circle cx="16.5" cy="16.5" r="6.2" />
-                        <path
-                          d="M56.8 35.1V9.8C56.8 4.9 52.9 1 48 1c-2.3 0-4.6 0.9-6.2 2.6L38 7.4c-0.5-0.2-1-0.2-1.6-0.2 -1.2 0-2.4 0.4-3.3 1l8.6 8.6c0.6-1 1-2.1 1-3.3 0-0.6-0.1-1.1-0.2-1.6l3.9-3.9c0.5-0.5 1.1-0.7 1.8-0.7 1.4 0 2.6 1.1 2.6 2.6v25.3H29.4c-0.9-0.7-1.8-1.4-2.5-2.2l-4.3-4.8c-0.6-0.7-1.3-1.2-2.1-1.5 -1-0.5-2-0.7-3.1-0.7 -3.8 0-6.9 3.1-6.9 7v2.3H1v18.6c0 3.4 2.8 6.2 6.2 6.2 0 1.7 1.4 3.1 3.1 3.1h43.4c1.7 0 3.1-1.4 3.1-3.1 3.4 0 6.2-2.8 6.2-6.2V35.1H56.8z" />
-                      </svg>Bathrooms</label>
-                    <input class="p-2" type="number" name="bathrooms" id="bathrooms" formControlName="bathrooms" min="0"
-                      max="99" [ngClass]="{'is-invalid': (formErrors?.bathrooms)}" />
-                    {{formErrors?.bathrooms}}
-                  </fieldset>
-
-                  <fieldset class="inline-child">
-                    <label for="receptions"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                        class="icon icon--onLeft">
-                        <path
-                          d="M58.2 26.2c-3.2 0-5.8 2.6-5.8 5.8v8.7H11.6V32c0-3.2-2.6-5.8-5.8-5.8S0 28.8 0 32v14.5c0 3.2 2.6 5.8 5.8 5.8h52.4c3.2 0 5.8-2.6 5.8-5.8V32C64 28.8 61.4 26.2 58.2 26.2zM49.5 11.6h-35c-3.2 0-5.8 2.6-5.8 5.8v6.3c3.4 1.2 5.8 4.4 5.8 8.2v5.9h34.9v-5.9c0-3.8 2.4-7 5.8-8.2v-6.3C55.3 14.3 52.7 11.6 49.5 11.6z" />
-                      </svg>Receptions</label>
-                    <input class="p-2" type="number" name="receptions" id="receptions" formControlName="receptions"
-                      min="0" max="99" [ngClass]="{'is-invalid': (formErrors?.receptions)}" />
-                    {{formErrors?.receptions}}
-                  </fieldset>
-
-                  <fieldset class="inline-child">
-                    <label for="sqFt"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                        class="icon icon--onLeft">
-                        <path
-                          d="M53.9 53.9L49.8 58l-2.8-2.8 4.1-4.1 -7.5-7.5 -4.1 4.1L36.8 45l4.1-4.1 -7.5-7.5 -4.1 4.1 -2.8-2.8 4.1-4.1 -7.6-7.6L19 27.2l-2.8-2.8 4.1-4.1 -7.5-7.5 -4.1 4.1L6 14.2l4.1-4.1L1 1v54.2C1 59.5 4.5 63 8.8 63H63L53.9 53.9zM12.6 51.4V29.1l22.3 22.3H12.6z" />
-                      </svg>Approx sq. ft</label>
-                    <input class="p-2" type="text" name="sqFt" id="sqFt" formControlName="sqFt">
-                  </fieldset>
-                </div>
-
-                <div class="inline-parent inline-parent__hasLabels">
-                  <fieldset class="inline-child">
-                    <label for="tenureId">Tenure</label>
-                    <span class="select">
-                      <select name="tenureId" id="tenureId" formControlName="tenureId"
-                        (change)="onTenureChange($event.target.value)">
-                        <option value="0">Not Known</option>
-                        <option *ngFor="let tenure of tenures" [value]='tenure.id'> {{tenure.value}}</option>
-                      </select>
-                    </span>
-                  </fieldset>
-                  <fieldset class="inline-child" *ngIf="showLeaseExpiryDate"
-                    [ngClass]="{'invalid': formErrors?.approxLeaseExpiryDate}">
-                    <input class="p-2" [style]="{'height': '1.5em'}" type="number" name="approxLeaseExpiryDate"
-                      autocomplete="off" id="approxLeaseExpiryDate" formControlName="approxLeaseExpiryDate"
-                      placeholder="Approx Lease Length" />
-                    <p class="message message--negative"> {{formErrors?.approxLeaseExpiryDate}}</p>
-                  </fieldset>
-                </div>
-
-                <fieldset class="mb-3"
-                  *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('outsideSpace').value)">
-                  <label for="outsideSpace">Outside Space</label>
-                  <p-multiSelect [options]="outsideSpaces" formControlName="outsideSpace" optionLabel="value"
-                    display="chip"></p-multiSelect>
-                </fieldset>
-
-                <fieldset class="mb-3"
-                  *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('parking').value)">
-                  <label for="parking">Parking</label>
-                  <p-multiSelect [options]="parkings" formControlName="parking" optionLabel="value" display="chip">
-                  </p-multiSelect>
-                </fieldset>
-
-                <fieldset class="pb-4 checkbox">
-                  <span>
-                    <input class="p-2" type="checkbox" id="hasDisabledAccess" name="hasDisabledAccess"
-                      formControlName="hasDisabledAccess" data-cy="hasDisabledAccess">
-                    <label style="font-weight: bolder;" for="hasDisabledAccess">Disabled Access</label>
-                  </span>
-                </fieldset>
               </p-accordionTab>
 
               <p-accordionTab header="Appointment" [(selected)]="activeState[2]">
@@ -651,7 +659,8 @@
                 </div>
               </p-accordionTab>
 
-              <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
+              <p-accordionTab header="Terms Of Business" *ngIf="isTermsOfBusinessVisible" [(selected)]="activeState[4]"
+                data-cy="termsOfBusiness">
                 <div id="termsOfBusinessTab" [ngClass]="{'opacity-75 pointer-events-none': isCancelled}"
                   (click)="controlIsCancelled($event)">
                   <app-terms-of-business [valuationForm]="valuationForm" [interestList]="interestList"
@@ -662,11 +671,8 @@
                 </div>
               </p-accordionTab>
 
-
-              <p-accordionTab *ngIf="false" header="Anti Money Laundering" [(selected)]="activeState[5]">
-              </p-accordionTab>
-
-              <p-accordionTab class="landRegister" header="Land Register" [(selected)]="activeState[6]">
+              <p-accordionTab class="landRegister" *ngIf="isTermsOfBusinessVisible" header="Land Register"
+                [(selected)]="activeState[6]">
                 <div id="landRegisterTab" [ngClass]="{'opacity-75 pointer-events-none': isCancelled}"
                   (click)="controlIsCancelled($event)">
                   <app-valuation-land-register [showLeaseExpiryDate]="showLeaseExpiryDate" [valuation]="valuation"
@@ -675,9 +681,11 @@
                 </div>
               </p-accordionTab>
 
-              <p-accordionTab header="Compliance Checks" [(selected)]="activeState[9]">
-                <app-compliance-checks-shell>
-                </app-compliance-checks-shell>
+              <p-accordionTab header="Compliance Checks" *ngIf="isTermsOfBusinessVisible" [(selected)]="activeState[9]">
+                <div id="complianceChecksTab">
+                  <app-compliance-checks-shell>
+                  </app-compliance-checks-shell>
+                </div>
               </p-accordionTab>
 
               <!-- <p-accordionTab header="Status" [(selected)]="activeState[7]"></p-accordionTab>
