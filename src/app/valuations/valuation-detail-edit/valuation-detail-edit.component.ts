@@ -2421,9 +2421,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       valuation.leaseLandReg = {};
     }
 
-    if (valuation.isNewBuild) valuation.otherFeatures.push(OtherFeatures.New_Build);
-    if (valuation.isRetirementHome) valuation.otherFeatures.push(OtherFeatures.Retirement_Home);
-    if (valuation.hasDisabledAccess) valuation.propertyFeature.push(PropertyFeatures.Disabled_Access);
+    if (this.valuationForm.get('isNewBuild').value) valuation.otherFeatures.push(OtherFeatures.New_Build);
+    if (this.valuationForm.get('isRetirementHome').value) valuation.otherFeatures.push(OtherFeatures.Retirement_Home);
+    if (this.valuationForm.get('hasDisabledAccess').value)
+      valuation.propertyFeature.push(PropertyFeatures.Disabled_Access);
 
     valuation.suggestedAskingRentLongLetMonthly = this.sharedService.convertStringToNumber(
       valuation.suggestedAskingRentLongLetMonthly,
