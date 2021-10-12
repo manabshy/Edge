@@ -19,8 +19,8 @@
             <fieldset [ngClass]="{'invalid': (showFileUploadForDeedError)}">
               <h1 class="mb-2 text-lg font-bold"> Title Deed </h1>
               <app-file-list [type]="'D'" (afterFileOperation)="afterFileOperation.emit(true)" [header]="'Title Deed'"
-                [edgeFileList]="property?.deedLandRegFiles" [isMultiple]="'false'" (getFileNames)="getFileNames($event)"
-                [fileType]="fileType">
+                [edgeFileList]="valuation?.deedLandRegFiles" [isMultiple]="'false'"
+                (getFileNames)="getFileNames($event)" [fileType]="fileType">
               </app-file-list>
               <p class="mt-2 message message--negative"> Please Upload Title Deed File</p>
             </fieldset>
@@ -60,7 +60,7 @@
               <fieldset [ngClass]="{'invalid': (showFileUploadForNameChangeError)}">
                 <h1 class="mb-2 text-lg font-bold"> Proof of Name </h1>
                 <app-file-list [type]="'P'" (afterFileOperation)="afterFileOperation.emit(true)"
-                  [edgeFileList]="property?.nameChangeRegFiles" [header]="'Proof of Name'" [isMultiple]="'false'"
+                  [edgeFileList]="valuation?.nameChangeRegFiles" [header]="'Proof of Name'" [isMultiple]="'false'"
                   (getFileNames)="getFileNames($event)" [fileType]="fileType">
                 </app-file-list>
                 <p class="mt-2 message message--negative"> Please Upload Proof of Name File</p>
@@ -76,7 +76,7 @@
               <fieldset [ngClass]="{'invalid': (showFileUploadForLeaseError)}">
                 <h1 class="mb-2 text-lg font-bold"> Lease </h1>
                 <app-file-list [type]="'L'" (afterFileOperation)="afterFileOperation.emit(true)"
-                  [edgeFileList]="property?.leaseLandRegFiles" [header]="'Lease'" [isMultiple]="'false'"
+                  [edgeFileList]="valuation?.leaseLandRegFiles" [header]="'Lease'" [isMultiple]="'false'"
                   (getFileNames)="getFileNames($event)" [fileType]="fileType">
                 </app-file-list>
                 <p class="mt-2 message message--negative"> Please Upload Lease File</p>

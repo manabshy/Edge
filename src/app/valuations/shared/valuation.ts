@@ -1,13 +1,13 @@
-import { StaffMember } from "./../../shared/models/staff-member";
+import { StaffMember } from './../../shared/models/staff-member';
 
-import { DiaryEvent } from "src/app/diary/shared/diary";
-import { BaseProperty } from "src/app/shared/models/base-property";
-import { BaseRequestOption } from "src/app/shared/models/base-request-option";
-import { BaseStaffMember } from "src/app/shared/models/base-staff-member";
-import { Property } from "src/app/property/shared/property";
-import { Office } from "src/app/shared/models/staff-member";
-import { EdgeFile } from "src/app/shared/models/edgeFile";
-import { BaseNote, Signer } from "src/app/contact-groups/shared/contact-group";
+import { DiaryEvent } from 'src/app/diary/shared/diary';
+import { BaseProperty } from 'src/app/shared/models/base-property';
+import { BaseRequestOption } from 'src/app/shared/models/base-request-option';
+import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
+import { Property } from 'src/app/property/shared/property';
+import { Office } from 'src/app/shared/models/staff-member';
+import { EdgeFile } from 'src/app/shared/models/edgeFile';
+import { BaseNote, Signer } from 'src/app/contact-groups/shared/contact-group';
 
 export interface ValuationInfo {
   reason?: string;
@@ -70,6 +70,9 @@ export interface Valuation extends ValuationInfo {
   cancellationTypeId?: number;
   valuationContactNote?: valuationNote;
   ownerConfirmed?: number;
+  deedLandRegFiles?: EdgeFile[];
+  leaseLandRegFiles?: EdgeFile[];
+  nameChangeRegFiles?: EdgeFile[];
 }
 
 export interface ValuationPricingInfo {
@@ -157,10 +160,10 @@ export interface ValuationStatus {
 }
 
 export const ValuationStatuses = <ValuationStatus[]>[
-  { id: 2, value: "Booked" },
-  { id: 3, value: "Valued" },
-  { id: 4, value: "Instructed" },
-  { id: 5, value: "Cancelled" },
+  { id: 2, value: 'Booked' },
+  { id: 3, value: 'Valued' },
+  { id: 4, value: 'Instructed' },
+  { id: 5, value: 'Cancelled' },
 ];
 
 export enum ValuationStatusEnum {

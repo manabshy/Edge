@@ -874,6 +874,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       .subscribe((result) => {
         if (result) {
           this.setPropertyDetail(result);
+          if (!this.valuation.valuationEventId || this.valuation.valuationEventId === 0) {
+            this.valuation.deedLandRegFiles = result.deedLandRegFiles;
+            this.valuation.leaseLandRegFiles = result.leaseLandRegFiles;
+            this.valuation.nameChangeRegFiles = result.nameChangeRegFiles;
+          }
         }
       });
   }
