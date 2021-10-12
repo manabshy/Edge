@@ -358,6 +358,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   ngOnInit() {
     this.valuationService.landRegisterValid.next(false);
+    this.sharedService.openContactGroupChanged.next(false);
+    this.sharedService.removeContactGroupChanged.next(false);
     this.primengConfig.ripple = true;
     this.setupForm();
     this.storage.get('currentUser').subscribe((currentStaffMember: StaffMember) => {
@@ -595,7 +597,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.statuses.find((x) => x.value == 0).isValid = false;
         }
         if (
-          data.bedrooms &&
           data.bathrooms &&
           data.receptions &&
           data.propertyTypeId &&
@@ -1336,7 +1337,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   studioLabelCheck(bedroomCount) {
-    this.showStudioLabel = bedroomCount == 0;
+    this.showStudioLabel = !bedroomCount || bedroomCount == 0;
   }
 
   populateForm(valuation: Valuation) {
@@ -1436,6 +1437,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuationForm.get('reason').disable();
         this.valuationForm.get('propertyTypeId').disable();
         this.valuationForm.get('propertyFloorId').disable();
+        this.valuationForm.get('floorOther').disable();
         this.valuationForm.get('propertyStyleId').disable();
         this.valuationForm.get('isNewBuild').disable();
         this.valuationForm.get('isRetirementHome').disable();

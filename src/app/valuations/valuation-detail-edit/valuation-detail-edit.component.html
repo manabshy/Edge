@@ -31,7 +31,7 @@
       </div>
     </div>
   </div>
-  <div #mainRowItem class="row__item">
+  <div #mainRowItem class="w-screen row__item">
     <div class="wrapper--sticky wrapper--stickyTop">
       <div *ngIf="!isNoteSelected" class="row__item">
         <div class="wrapper--redacted" *ngIf="!property">
@@ -251,8 +251,8 @@
                           formControlName="bedrooms" min="0" max="99" [ngClass]="{'is-invalid': (formErrors?.bedrooms)}"
                           *ngIf="!showStudioLabel" (blur)="studioLabelCheck($event.target.value)" />
                         <input class="p-2" style="margin-top:0px;" type="text" name="studio"
-                          *ngIf="valuationForm.get('bedrooms').value == 0 && showStudioLabel" value="Studio"
-                          (click)="showStudioLabel = !showStudioLabel" />
+                          *ngIf="(!valuationForm.get('bedrooms').value || valuationForm.get('bedrooms').value == 0) && showStudioLabel"
+                          value="Studio" (focus)="showStudioLabel = !showStudioLabel" />
                         {{formErrors?.bedrooms}}
                       </span>
                     </fieldset>
