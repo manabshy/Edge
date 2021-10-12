@@ -643,14 +643,13 @@
                       </fieldset>
                     </li>
                   </ol>
-                  <!-- <div class="w-auto md:w-8/12">
-                  <app-standalone-note (getNote)="saveNote($event)" [note]="valuationNote"></app-standalone-note>
-                </div> -->
                   <div class="w-auto md:w-8/12"
                     *ngIf="valuation?.salesValuationBooking || valuation?.lettingsValuationBooking">
                     <fieldset class="mb-3 inline-child" [ngClass]="{'invalid': formErrors?.valuationNote}">
                       <label for="valuationNote">Valuation Meeting Notes</label>
-                      <textarea class="p-2" name="valuationNote" id="valuationNote" cols="30" rows="3"
+                      <textarea
+                        [attr.disabled]="!(valuation?.valuationStatus == 0 || valuation?.valuationStatus == 1 || valuation?.valuationStatus == 2)?true:null"
+                        class="p-2" name="valuationNote" id="valuationNote" cols="30" rows="3"
                         formControlName="valuationNote" data-cy="valuationNote"
                         [ngClass]="{'is-invalid': (formErrors?.valuationNote)}"></textarea>
                       <p class="message message--negative"> {{formErrors?.valuationNote}}</p>

@@ -574,30 +574,42 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   controlStatus(data) {
     if (data) {
-      if (data.timeFrame && data.generalNotes && data.reason) {
-        this.statuses.find((x) => x.value == 0).isValid = true;
-      } else {
-        this.statuses.find((x) => x.value == 0).isValid = false;
-      }
       if (
-        data.bedrooms &&
-        data.bathrooms &&
-        data.receptions &&
-        data.propertyTypeId &&
-        data.propertyStyleId &&
-        !(data.propertyStyleId == 2 && !data.propertyFloorId) &&
-        !(data.propertyFloorId == '10' && !data.floorOther) &&
-        (!this.showLeaseExpiryDate || !data.approxLeaseExpiryDate)
+        this.valuation &&
+        (this.valuation.valuationStatus === ValuationStatusEnum.None ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Booked)
       ) {
+        if (data.timeFrame && data.generalNotes && data.reason) {
+          this.statuses.find((x) => x.value == 0).isValid = true;
+        } else {
+          this.statuses.find((x) => x.value == 0).isValid = false;
+        }
+        if (
+          data.bedrooms &&
+          data.bathrooms &&
+          data.receptions &&
+          data.propertyTypeId &&
+          data.propertyStyleId &&
+          !(data.propertyStyleId == 2 && !data.propertyFloorId) &&
+          !(data.propertyFloorId == '10' && !data.floorOther) &&
+          (!this.showLeaseExpiryDate || !data.approxLeaseExpiryDate)
+        ) {
+          this.statuses.find((x) => x.value == 1).isValid = true;
+        } else {
+          this.statuses.find((x) => x.value == 1).isValid = false;
+        }
+        if (data.salesValuer || data.lettingsValuer) {
+          this.statuses.find((x) => x.value == 2).isValid = true;
+        } else {
+          this.statuses.find((x) => x.value == 2).isValid = false;
+        }
+      } else {
+        // if it is already in valued status that means before status will be done
+        this.statuses.find((x) => x.value == 0).isValid = true;
         this.statuses.find((x) => x.value == 1).isValid = true;
-      } else {
-        this.statuses.find((x) => x.value == 1).isValid = false;
-      }
-      if (data.salesValuer || data.lettingsValuer) {
         this.statuses.find((x) => x.value == 2).isValid = true;
-      } else {
-        this.statuses.find((x) => x.value == 2).isValid = false;
       }
+
       if (this.isThereAPrice(data) && data.valuationNote) {
         this.statuses.find((x) => x.value == 3).isValid = true;
       } else {
@@ -622,11 +634,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   isThereAPrice(data) {
     if (
-      data.suggestedAskingPrice > 0 ||
-      data.suggestedAskingRentLongLet > 0 ||
-      data.suggestedAskingRentShortLet > 0 ||
-      data.suggestedAskingRentLongLetMonthly > 0 ||
-      data.suggestedAskingRentShortLetMonthly > 0
+      data.suggestedAskingPrice ||
+      data.suggestedAskingRentLongLet ||
+      data.suggestedAskingRentShortLet ||
+      data.suggestedAskingRentLongLetMonthly ||
+      data.suggestedAskingRentShortLetMonthly
     ) {
       this.valuationForm.controls['valuationNote'].setValidators(Validators.required);
       return true;

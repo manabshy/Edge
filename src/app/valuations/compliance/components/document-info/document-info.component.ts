@@ -1,7 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter, Inject } from '@angular/core';
-import {
-  FileTypeEnum,
-} from "../../../../core/services/file.service";
+import { FileTypeEnum } from '../../../../core/services/file.service';
 import moment from 'moment';
 import { FormControl, FormGroup } from '@angular/forms';
 // import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -10,49 +8,49 @@ export enum DOCUMENT_TYPE {
   PROOF_OF_ADDRESS = 48,
   ID = 49,
   ADDITIONAL_DOCUMENTS = 50,
-  REPORT = 51
+  REPORT = 51,
 }
 
 export interface EmitDocument {
-  tmpFiles: Array<any>
-  documentType?: DOCUMENT_TYPE
-  idValidationDateExpiry?: Date
+  tmpFiles: Array<any>;
+  documentType?: DOCUMENT_TYPE;
+  idValidationDateExpiry?: Date;
 }
 
 @Component({
   selector: 'app-document-info',
-  templateUrl: './document-info.component.html'
+  templateUrl: './document-info.component.html',
 })
 export class DocumentInfoComponent implements OnInit {
+  @Input() files: Array<any>;
+  @Input() personName: String;
+  @Input() documentType: DOCUMENT_TYPE;
+  @Input() fileType: FileTypeEnum;
+  @Input() fileLimit = 50;
+  @Input() isMultiple: boolean = true;
+  @Input() label: String;
+  @Output() deleteFile: EventEmitter<any> = new EventEmitter();
+  @Output() onFileUploaded: EventEmitter<any> = new EventEmitter();
 
-  @Input() files: Array<any>
-  @Input() personName: String
-  @Input() documentType: DOCUMENT_TYPE
-  @Input() fileType: FileTypeEnum
-  @Input() fileLimit = 50
-  @Input() label: String
-  @Output() deleteFile: EventEmitter<any> = new EventEmitter()
-  @Output() onFileUploaded: EventEmitter<any> = new EventEmitter()
-
-  DOCUMENT_TYPE = DOCUMENT_TYPE
-  idHasExpired: boolean = false
-  showFileUploadDialog: boolean = false
-  saveFileBtnDisabled: boolean = true
-  tmpFiles: File[]
-  uploadDialogHeaderText: string
-  moment = moment
+  DOCUMENT_TYPE = DOCUMENT_TYPE;
+  idHasExpired: boolean = false;
+  showFileUploadDialog: boolean = false;
+  saveFileBtnDisabled: boolean = true;
+  tmpFiles: File[];
+  uploadDialogHeaderText: string;
+  moment = moment;
   idExpiryForm = new FormGroup({
-    idExpiryDate: new FormControl()
-  })
-  showExpiryDatePicker = false
+    idExpiryDate: new FormControl(),
+  });
+  showExpiryDatePicker = false;
   expiryDateMessage = {
     type: 'info',
-    text: ['Please enter the ID expiry date below']
-  }
+    text: ['Please enter the ID expiry date below'],
+  };
   // constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.checkIdIsValid()
+    this.checkIdIsValid();
   }
 
   // openDialog(): void {
@@ -67,74 +65,75 @@ export class DocumentInfoComponent implements OnInit {
   // }
 
   showFilesUploadButton() {
-    return !this.files.length && this.documentType == DOCUMENT_TYPE.ID ||
-      !this.files.length && this.documentType == DOCUMENT_TYPE.REPORT ||
-      !this.files.length && this.documentType == DOCUMENT_TYPE.PROOF_OF_ADDRESS ||
+    return (
+      (!this.files.length && this.documentType == DOCUMENT_TYPE.ID) ||
+      (!this.files.length && this.documentType == DOCUMENT_TYPE.REPORT) ||
+      (!this.files.length && this.documentType == DOCUMENT_TYPE.PROOF_OF_ADDRESS) ||
       this.documentType == DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS
+    );
   }
 
   openUploadDialog() {
-    this.showFileUploadDialog = true
-    let label
+    this.showFileUploadDialog = true;
+    let label;
     switch (this.documentType) {
       case DOCUMENT_TYPE.ID:
-        label = 'Upload ID Document for '  + this.personName
+        label = 'Upload ID Document for ' + this.personName;
         break;
 
       case DOCUMENT_TYPE.PROOF_OF_ADDRESS:
-        label = 'Upload Proof of Address'
+        label = 'Upload Proof of Address';
         break;
 
       case DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS:
-        label = 'Upload Additional Documents'
+        label = 'Upload Additional Documents';
         break;
 
       case DOCUMENT_TYPE.REPORT:
-        label = 'Upload Report'
+        label = 'Upload Report';
         break;
-
     }
-    this.uploadDialogHeaderText = label
-    return
+    this.uploadDialogHeaderText = label;
+    return;
   }
 
   private checkIdIsValid() {
     if (this.documentType == DOCUMENT_TYPE.ID && this.files.length) {
-      const docExpiryDate = this.files[0].idValidationDateExpiry
-      this.idHasExpired = new Date(docExpiryDate) <= new Date()
+      const docExpiryDate = this.files[0].idValidationDateExpiry;
+      this.idHasExpired = new Date(docExpiryDate) <= new Date();
     }
   }
 
   getFiles(files) {
-    this.tmpFiles = files
-    this.validate()
+    this.tmpFiles = files;
+    this.validate();
   }
 
   validate() {
     if (this.documentType === DOCUMENT_TYPE.ID) {
-      this.showExpiryDatePicker = !!this.tmpFiles.length
+      this.showExpiryDatePicker = !!this.tmpFiles.length;
     } else {
-      this.saveFileBtnDisabled = false
+      this.saveFileBtnDisabled = false;
     }
   }
 
   setSelectedFile() {
-    if (!this.tmpFiles.length) return
-    const emitData: EmitDocument = { tmpFiles: this.tmpFiles, documentType: this.documentType }
-    if (this.documentType == DOCUMENT_TYPE.ID && !this.idHasExpired) emitData.idValidationDateExpiry = this.idExpiryForm.get('idExpiryDate').value
-    this.onFileUploaded.emit(emitData)
-    this.saveFileBtnDisabled = true
-    this.showFileUploadDialog = false
+    if (!this.tmpFiles.length) return;
+    const emitData: EmitDocument = { tmpFiles: this.tmpFiles, documentType: this.documentType };
+    if (this.documentType == DOCUMENT_TYPE.ID && !this.idHasExpired)
+      emitData.idValidationDateExpiry = this.idExpiryForm.get('idExpiryDate').value;
+    this.onFileUploaded.emit(emitData);
+    this.saveFileBtnDisabled = true;
+    this.showFileUploadDialog = false;
   }
 
   onDateChange(expiryDate) {
     if (expiryDate) {
-      this.idHasExpired = new Date(expiryDate) <= new Date()
-      this.saveFileBtnDisabled = this.idHasExpired
-      if (!this.idHasExpired && this.files.length === 1) this.files[0].idValidationDateExpiry = new Date(expiryDate)
+      this.idHasExpired = new Date(expiryDate) <= new Date();
+      this.saveFileBtnDisabled = this.idHasExpired;
+      if (!this.idHasExpired && this.files.length === 1) this.files[0].idValidationDateExpiry = new Date(expiryDate);
     }
   }
-
 }
 
 // @Component({
