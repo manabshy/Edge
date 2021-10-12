@@ -670,7 +670,7 @@
                 </div>
               </p-accordionTab>
 
-              <p-accordionTab class="landRegister" *ngIf="isTermsOfBusinessVisible" header="Land Register"
+              <p-accordionTab class="landRegister" *ngIf="isLandRegisterVisible" header="Land Register"
                 [(selected)]="activeState[6]">
                 <div id="landRegisterTab" [ngClass]="{'opacity-75 pointer-events-none': isCancelled}"
                   (click)="controlIsCancelled($event)">
@@ -680,7 +680,7 @@
                 </div>
               </p-accordionTab>
 
-              <p-accordionTab header="Compliance Checks" *ngIf="isTermsOfBusinessVisible" [(selected)]="activeState[9]">
+              <p-accordionTab header="Compliance Checks" *ngIf="isLandRegisterVisible" [(selected)]="activeState[9]">
                 <div id="complianceChecksTab">
                   <app-compliance-checks-shell>
                   </app-compliance-checks-shell>

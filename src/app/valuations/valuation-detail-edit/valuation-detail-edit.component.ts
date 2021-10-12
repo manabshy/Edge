@@ -299,6 +299,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   get isTermsOfBusinessVisible() {
+    return true;
+    // if (this.valuation) {
+    //   return !(
+    //     this.valuation.valuationStatus === ValuationStatusEnum.None ||
+    //     this.valuation.valuationStatus === ValuationStatusEnum.Booked
+    //   );
+    // }
+  }
+
+  get isLandRegisterVisible() {
     if (this.valuation) {
       return !(
         this.valuation.valuationStatus === ValuationStatusEnum.None ||
