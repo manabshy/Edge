@@ -847,32 +847,31 @@
   [draggable]="false" class="modal--xlarge" [closable]="false" [blockScroll]=true>
   <p-header class="row">
 
-    <span class="w-screen inline-parent">Pick availability</span>
+    <span class="mt-auto w-96">Pick availability</span>
 
-    <span class=" inline-parent checkbox" *ngIf="isSalesAndLettings">
-      <span class="text-sm">
-        <input class="p-2" type="checkbox" id="splitAppointment" name="splitAppointment"
-          [(ngModel)]="isSplitAppointment" (change)="onSplitAppointmentChange($event.target)"
-          data-cy="splitAppointment">
+    <span class="pt-4 md:pt-0 checkbox w-96 " *ngIf="isSalesAndLettings">
+      <span class="text-sm ">
+        <input type="checkbox" id="splitAppointment" name="splitAppointment" [(ngModel)]="isSplitAppointment"
+          (change)="onSplitAppointmentChange($event.target)" data-cy="splitAppointment">
         <label style="font-weight: bolder;" for="splitAppointment">Split Appointment</label>
       </span>
     </span>
 
-    <span class="w-screen" *ngIf="!isLettingsOnly && salesValuer">
-      <div class="inline-parent">
-        <span class="pr-2 text-sm">{{salesValuer?.fullName}}
+    <span class="md:mt-auto w-96" *ngIf="!isLettingsOnly && salesValuer">
+      <div class="flex pt-3 md:pt-0">
+        <span class="flex-initial pr-2 mt-auto text-sm">{{salesValuer?.fullName}}
         </span>
-        <div class="badges" style="font-size:xx-large">
+        <div class="flex-initial badges" style="font-size:xx-large">
           <p-badge severity="info"></p-badge>
         </div>
       </div>
     </span>
 
-    <span class="w-screen mt-auto" *ngIf="!isSalesOnly && salesValuer?.staffMemberId != lettingsValuer?.staffMemberId">
-      <div class="inline-parent">
-        <span class="pr-2 text-sm">{{lettingsValuer?.fullName}}
+    <span class="mt-auto w-96" *ngIf="!isSalesOnly && salesValuer?.staffMemberId != lettingsValuer?.staffMemberId">
+      <div class="flex pt-3 md:pt-0">
+        <span class="flex-initial pr-2 mt-auto text-sm">{{lettingsValuer?.fullName}}
         </span>
-        <div class="badges" style="font-size:xx-large">
+        <div class="flex-initial badges" style="font-size:xx-large">
           <p-badge severity="success"></p-badge>
         </div>
       </div>
@@ -911,7 +910,7 @@
             </fieldset>
 
             <span *ngIf="(isSalesOnly || isSalesAndLettings)" class="inline-parent">
-              <fieldset class="w-screen" [ngClass]="{'invalid': formErrors?.salesValuerId}">
+              <fieldset class="md:w-screen" [ngClass]="{'invalid': formErrors?.salesValuerId}">
                 <label for="salesValuer">Sales Valuer</label>
                 <ng-select [ngClass]="{'invalid': formErrors?.salesValuerId}" placeholder="Select Valuer"
                   [items]="salesValuers" bindLabel="fullName" bindValue="staffMemberId" groupBy="staffMembers"
@@ -933,7 +932,7 @@
             </span>
 
             <span class="inline-parent" *ngIf="(isLettingsOnly || isSalesAndLettings)">
-              <fieldset [ngClass]="{'invalid': formErrors?.lettingsValuerId}" class="w-screen">
+              <fieldset [ngClass]="{'invalid': formErrors?.lettingsValuerId}" class="md:w-screen">
                 <label for="lettingsValuer">Lettings Valuer</label>
                 <ng-select [ngClass]="{'invalid': formErrors?.lettingsValuerId}" placeholder="Select Valuer"
                   [items]="lettingsValuers" bindLabel="fullName" bindValue="staffMemberId" groupBy="staffMembers"
@@ -971,7 +970,7 @@
         <button type="button" class="btn h-2.5 mb-2 btn--positive" (click)="selectValuersClick()">Valuers</button>
       </div>
 
-      <div class="grid grid--62 grid--dividerLeft">
+      <div class="grid md:h-148 h-96 grid--62 grid--dividerLeft">
         <p-messages *ngIf="isSplitAppointment && !selectedSalesDate" severity="warn">
           <ng-template pTemplate>
             <div data-cy="selectSalesMessage" class="p-ml-2">Please select a slot for sales </div>
@@ -982,7 +981,7 @@
             <div data-cy="selectLettingsMessage" class="p-ml-2">Please select a slot for lettings </div>
           </ng-template>
         </p-messages>
-        <p-scrollPanel [style]="{width: '100%', height: '530px'}">
+        <p-scrollPanel [style]="{width: '100%', height: '100%'}">
           <app-subnav>
             <p class="txt--title" *ngIf="thisWeek">This Week</p>
             <ol class="list list--dates" *ngIf="thisWeek">
@@ -1037,7 +1036,7 @@
 
       </div>
 
-      <div class="grid--38 grid--dividerLeft" *ngIf="showCalendar">
+      <div class="hidden md:block grid--38 grid--dividerLeft" *ngIf="showCalendar">
         <h2 class="mb-2 txt--title">{{selectedCalendarDate | date:'fullDate'}}</h2>
         <p-scrollPanel [style]="{width: '100%', height: '480px'}">
           <app-calendar [isOnlyShowPurposes]="true" [view]="'day'" [viewDate]="selectedCalendarDate"
