@@ -182,36 +182,24 @@
                   <div class="inline-parent inline-parent__hasLabels">
                     <fieldset class="inline-child">
                       <label for="propertyTypeId">Property Type</label>
-                      <span class="select">
-                        <select name="propertyTypeId" id="propertyTypeId" formControlName="propertyTypeId"
-                          (change)="onPropertyType($event.target.value)">
-                          <option *ngFor="let propertyType of propertyTypes" [value]='propertyType.id'>
-                            {{propertyType.value}}
-                          </option>
-                        </select>
-                      </span>
+                      <p-dropdown name="propertyTypeId" id="propertyTypeId" [options]="propertyTypes"
+                        formControlName="propertyTypeId" optionLabel="value" optionValue="id" [filter]="false"
+                        data-cy="propertyTypeId">
+                      </p-dropdown>
                     </fieldset>
                     <fieldset class="inline-child">
                       <label for="propertyStyleId">Property Style</label>
-                      <span class="select">
-                        <select name="propertyStyleId" id="propertyStyleId" formControlName="propertyStyleId">
-                          <option selected value="0"></option>
-                          <option *ngFor="let propertyStyle of propertyStyles" [value]='propertyStyle.id'>
-                            {{propertyStyle.value}}
-                          </option>
-                        </select>
-                      </span>
+                      <p-dropdown name="propertyStyleId" id="propertyStyleId" [options]="propertyStyles"
+                        formControlName="propertyStyleId" optionLabel="value" optionValue="id" [filter]="false"
+                        data-cy="propertyStyleId">
+                      </p-dropdown>
                     </fieldset>
                     <fieldset class="inline-child" *ngIf="valuationForm.get('propertyTypeId').value == 2">
                       <label for="propertyFloorId">Floor</label>
-                      <span class="select">
-                        <select name="propertyFloorId" id="propertyFloorId" formControlName="propertyFloorId">
-                          <option selected value="0"></option>
-                          <option *ngFor="let propertyFloor of propertyFloors" [value]='propertyFloor.id'>
-                            {{propertyFloor.value}}
-                          </option>
-                        </select>
-                      </span>
+                      <p-dropdown name="propertyFloorId" id="propertyFloorId" [options]="propertyFloors"
+                        formControlName="propertyFloorId" optionLabel="value" optionValue="id" [filter]="false"
+                        data-cy="propertyFloorId">
+                      </p-dropdown>
                     </fieldset>
                     <fieldset class="inline-child" *ngIf="valuationForm.get('propertyFloorId').value == '10'"
                       [ngClass]="{'invalid': formErrors?.floorOther}">
