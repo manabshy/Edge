@@ -11,15 +11,16 @@
         <div class="flexRight">
 
           <div dropdown placement="bottom right">
-            <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle (click)="$event.stopPropagation(); false"
-              [attr.aria-controls]="'dropdown'">
+            <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle
+              (click)="$event.stopPropagation();menu.toggle($event); false" [attr.aria-controls]="'dropdown'">
               <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
                 <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
                 <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
                 <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
               </svg>
             </a>
-            <ul [id]="'dropdown'" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+            <p-menu [appendTo]="'body'" #menu [popup]="true" [model]="items"></p-menu>
+            <!-- <ul [id]="'dropdown'" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
               [attr.aria-labelledby]="'button'">
               <li role="menuitem">
                 <a [routerLink]="['/contact-centre/detail/0/people/', contactGroup?.contactGroupId]"
@@ -49,7 +50,7 @@
                     Questionnaire</a>
                 </li>
               </ng-container>
-            </ul>
+            </ul> -->
           </div>
         </div>
       </li>

@@ -863,7 +863,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private setupListInfo(info: DropdownListInfo) {
-    this.tenures = info.tenures;
+    this.tenures = [{ id: 0, value: 'Not Known' }, ...info.tenures];
     this.outsideSpaces = info.outsideSpaces;
     this.parkings = info.parkings;
     this.features = info.propertyFeatures;
@@ -1035,7 +1035,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       bathrooms: [0, Validators.max(99)],
       receptions: [0, Validators.max(99)],
       sqFt: [0],
-      tenureId: [0],
+      tenureId: [],
       outsideSpace: [],
       parking: [],
       propertyFeature: [''],
@@ -1431,6 +1431,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         valuationNote: valuation.valuationContactNote?.text,
       });
 
+      this.onTenureChange(this.valuationForm.get('tenureId').value);
+
       if (!this.isEditable && !this.isNewValuation) {
         this.valuationForm.get('generalNotes').disable();
         this.valuationForm.get('timeFrame').disable();
@@ -1481,8 +1483,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         bedrooms: info.bedrooms || 0,
         bathrooms: info.bathrooms || 0,
         receptions: info.receptions || 0,
-        tenureId: info.tenureId || 0,
-        approxLeaseExpiryDate: this.changeLeaseExpiryDateToYears(info.approxLeaseExpiryDate),
+        //tenureId: info.tenureId || this.valuationForm.get('tenureId').value,
+        //approxLeaseExpiryDate: this.changeLeaseExpiryDateToYears(info.approxLeaseExpiryDate),
         sqFt: info.sqFt || 0,
         outsideSpace: this.getInfoDetailValues(info.outsideSpace, this.outsideSpaces),
         parking: this.getInfoDetailValues(info.parking, this.parkings),
@@ -1671,12 +1673,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   private getValuationPropertyInfo(propertyId: number) {
     this.valuationService.getValuationPropertyInfo(propertyId).subscribe((res) => {
       if (res) {
-        if (+res.tenureId === 3 || +res.tenureId === 2 || res.approxLeaseExpiryDate) {
-          this.showLeaseExpiryDate = true;
-          //this.setApproxLeaseLengthValidator();
-        } else {
-          this.showLeaseExpiryDate = false;
-        }
         this.displayValuationPropInfo(res);
       }
     });

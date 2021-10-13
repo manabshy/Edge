@@ -1,23 +1,15 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from "@angular/core";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import {
-  ContactGroup,
-  ContactNote,
-  Signer,
-} from "src/app/contact-groups/shared/contact-group";
-import { ContactGroupsService } from "src/app/contact-groups/shared/contact-groups.service";
-import { Person } from "../../models/person";
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
+import { MenuItem, PrimeNGConfig } from 'primeng/api';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ContactGroup, ContactNote, Signer } from 'src/app/contact-groups/shared/contact-group';
+import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
+import { Person } from '../../models/person';
 
 @Component({
-  selector: "app-contact-group-card",
-  templateUrl: "./contact-group-card.component.html"
+  selector: 'app-contact-group-card',
+  templateUrl: './contact-group-card.component.html',
 })
 export class ContactGroupCardComponent implements OnInit, OnChanges {
   @Input() contactGroup: ContactGroup;
@@ -29,18 +21,82 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
   showAdditionalPeople = false;
   firstPerson: Person;
   importantNotes$: Observable<ContactNote[]>;
+  filteredItems: MenuItem[];
+  items: MenuItem[];
 
-  constructor(private contactGroupService: ContactGroupsService) {}
+  constructor(
+    private contactGroupService: ContactGroupsService,
+    private primengConfig: PrimeNGConfig,
+    private router: Router,
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.primengConfig.ripple = true;
+    this.items = [
+      {
+        id: 'editContact',
+        label: 'Edit Contact',
+        icon: 'pi pi-pencil',
+        command: () => {
+          this.router.navigate(['/contact-centre/detail/0/people/', this.contactGroup?.contactGroupId]);
+        },
+      },
+      // {
+      //   id: 'removeAdmin',
+      //   label: 'Remove Admin Contact',
+      //   icon: 'pi pi-minus',
+      //   command: () => {
+      //     this.sharedService.removeContactGroupChanged.next(true);
+      //   },
+      // },
+      // {
+      //   id: 'salesTermsOfBusiness',
+      //   label: 'Sales Terms of Business',
+      //   icon: 'pi pi-file-pdf',
+      //   command: () => {
+      //     this.sharedService.eSignTriggerChanged.next(eSignTypes.Sales_Terms_Of_Business);
+      //   },
+      // },
+      // {
+      //   id: 'lettingsTermsOfBusiness',
+      //   label: 'Lettings Terms of Business',
+      //   icon: 'pi pi-file-pdf',
+      //   command: () => {
+      //     this.sharedService.eSignTriggerChanged.next(eSignTypes.Lettings_Terms_Of_Business);
+      //   },
+      // },
+      // {
+      //   id: 'landLordQuestionnaire',
+      //   label: 'Land Lord Questionnaire',
+      //   icon: 'pi pi-file-pdf',
+      //   command: () => {
+      //     this.sharedService.eSignTriggerChanged.next(eSignTypes.Property_Questionnaire);
+      //   },
+      // },
+      // {
+      //   id: 'vendorQuestionnaire',
+      //   label: 'Vendor Questionnaire',
+      //   icon: 'pi pi-file-pdf',
+      //   command: () => {
+      //     this.sharedService.eSignTriggerChanged.next(eSignTypes.Sales_Property_Questionnaire);
+      //   },
+      // },
+      // {
+      //   id: 'cancelValuation',
+      //   label: 'Cancel Valuation',
+      //   icon: 'pi pi-ban',
+      //   command: () => {
+      //     this.sharedService.cancelValuationOperationChanged.next(true);
+      //   },
+      // },
+    ];
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     // console.log("contact groups in the card", this.contactGroup);
 
     this.numOfPeople = this.contactGroup?.contactPeople?.length;
-    this.numOfPeople > 1
-      ? (this.showAdditionalPeople = true)
-      : (this.showAdditionalPeople = false);
+    this.numOfPeople > 1 ? (this.showAdditionalPeople = true) : (this.showAdditionalPeople = false);
     this.firstPerson = this.contactGroup?.contactPeople[0];
     if (this.firstPerson?.personId) {
       this.getPersonNotes(this.firstPerson?.personId);
