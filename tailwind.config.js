@@ -20,7 +20,8 @@ module.exports = {
        },
        height:{
         '124': '30rem',
-        '148': '34rem'
+        '148': '34rem',
+        '160': '40rem'
        },
       fontFamily: {
         // https://tailwindcss.com/docs/font-family#customizing
