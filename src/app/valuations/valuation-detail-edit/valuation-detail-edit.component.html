@@ -281,13 +281,10 @@
                   <div class="inline-parent inline-parent__hasLabels">
                     <fieldset class="inline-child">
                       <label for="tenureId">Tenure</label>
-                      <span class="select">
-                        <select name="tenureId" id="tenureId" formControlName="tenureId"
-                          (change)="onTenureChange($event.target.value)">
-                          <option value="0">Not Known</option>
-                          <option *ngFor="let tenure of tenures" [value]='tenure.id'> {{tenure.value}}</option>
-                        </select>
-                      </span>
+                      <p-dropdown name="tenureId" id="tenureId" [options]="tenures" formControlName="tenureId"
+                        optionLabel="value" optionValue="id" [filter]="false" data-cy="tenureId"
+                        (onChange)="onTenureChange($event.value)">
+                      </p-dropdown>
                     </fieldset>
                     <fieldset class="inline-child" *ngIf="showLeaseExpiryDate"
                       [ngClass]="{'invalid': formErrors?.approxLeaseExpiryDate}">
