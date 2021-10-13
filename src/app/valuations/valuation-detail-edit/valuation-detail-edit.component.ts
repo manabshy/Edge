@@ -601,9 +601,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           data.receptions &&
           data.propertyTypeId &&
           data.propertyStyleId &&
-          !(data.propertyStyleId == 2 && !data.propertyFloorId) &&
-          !(data.propertyFloorId == '10' && !data.floorOther) &&
-          (!this.showLeaseExpiryDate || !data.approxLeaseExpiryDate)
+          (data.propertyStyleId != 2 || (data.propertyStyleId == 2 && !data.propertyFloorId)) &&
+          (data.propertyFloorId != '10' || (data.propertyFloorId == '10' && data.floorOther)) &&
+          (!this.showLeaseExpiryDate || (this.showLeaseExpiryDate == true && data.approxLeaseExpiryDate))
         ) {
           this.statuses.find((x) => x.value == 1).isValid = true;
         } else {
