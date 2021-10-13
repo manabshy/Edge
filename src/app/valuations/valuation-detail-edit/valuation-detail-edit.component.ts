@@ -636,9 +636,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   setScrollInformation() {
     const interval = setTimeout(() => {
-      if (this.valuation.valuationStatus == ValuationStatusEnum.None) this.scrollSpecificElement('appointmentTabs');
-      else if (this.valuation.valuationStatus == ValuationStatusEnum.Booked) this.scrollSpecificElement('valuesTab');
-      else if (this.valuation.valuationStatus == ValuationStatusEnum.Valued)
+      if (this.valuation?.valuationStatus == ValuationStatusEnum.None) this.scrollSpecificElement('appointmentTabs');
+      else if (this.valuation?.valuationStatus == ValuationStatusEnum.Booked) this.scrollSpecificElement('valuesTab');
+      else if (this.valuation?.valuationStatus == ValuationStatusEnum.Valued)
         this.scrollSpecificElement('termsOfBusinessTab');
     }, 2000);
   }
@@ -2418,6 +2418,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     valuation.propertyOwner = this.lastKnownOwner;
     valuation.OfficeId = this.property.officeId;
 
+    if (valuation.approxLeaseExpiryDate === 0) {
+      valuation.approxLeaseExpiryDate = null;
+    }
+
     valuation.isPowerOfAttorney =
       this.adminContact && this.adminContact.contactGroupId > 0 ? this.adminContact?.isPowerOfAttorney : false;
     valuation.ccOwner = this.adminContact && this.adminContact.contactGroupId > 0 ? this.adminContact?.ccOwner : false;
@@ -2559,9 +2563,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private setLeaseExpiryDate() {
-    if (this.valuationForm.get('approxLeaseExpiryDate').value) {
+    if (
+      this.valuationForm.get('approxLeaseExpiryDate').value &&
+      this.valuationForm.get('approxLeaseExpiryDate').value > 0
+    ) {
       const leaseExpiryDateInYears = +this.valuationForm.get('approxLeaseExpiryDate').value;
       this.approxLeaseExpiryDate = addYears(new Date(), leaseExpiryDateInYears);
+    } else {
+      this.approxLeaseExpiryDate = null;
     }
   }
 
