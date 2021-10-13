@@ -14,6 +14,10 @@ module.exports = {
       margin: {
         '0.3': '0.15rem',
        },
+       width:{
+        '124': '40rem',
+        '180': '60rem'
+       },
       fontFamily: {
         // https://tailwindcss.com/docs/font-family#customizing
         sans: [
