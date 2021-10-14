@@ -1,23 +1,29 @@
 <ng-container *ngIf="!selectedPersonId && !isCreateNewPerson; else createNewPerson">
   <div class="row">
-    <div class="grid grid--25">
-      <form [formGroup]="personFinderForm" autocomplete="off">
-        <fieldset class="mb-3">
-          <label for="fullName">Full Name</label>
-          <input class="p-2" type="text" id="fullName" autofocus formControlName="fullName">
-        </fieldset>
-        <fieldset class="mb-3">
-          <label for="phone">Phone</label>
-          <input class="p-2" type="text" id="phone" (keypress)="phoneNumberOnly($event)" formControlName="phoneNumber">
-        </fieldset>
-        <fieldset class="mb-3">
-          <label for="email">Email</label>
-          <input class="p-2" type="text" id="email" formControlName="emailAddress">
-        </fieldset>
-      </form>
-      <p *ngIf="potentialDuplicatePeople?.matches?.length">
-        {{potentialDuplicatePeople?.matches?.length}} Results found
-      </p>
+    <div class="grid h-full grid--25">
+      <div>
+        <form [formGroup]="personFinderForm" autocomplete="off">
+          <fieldset class="mb-3">
+            <label for="fullName">Full Name</label>
+            <input class="p-2" type="text" id="fullName" autofocus formControlName="fullName">
+          </fieldset>
+          <fieldset class="mb-3">
+            <label for="phone">Phone</label>
+            <input class="p-2" type="text" id="phone" (keypress)="phoneNumberOnly($event)"
+              formControlName="phoneNumber">
+          </fieldset>
+          <fieldset class="mb-3">
+            <label for="email">Email</label>
+            <input class="p-2" type="text" id="email" formControlName="emailAddress">
+          </fieldset>
+        </form>
+      </div>
+      <div *ngIf="potentialDuplicatePeople?.matches?.length">
+        <p>
+          {{potentialDuplicatePeople?.matches?.length}} Results found
+        </p>
+      </div>
+
     </div>
     <div class="grid grid--75 grid--dividerLeft">
       <div class="table">

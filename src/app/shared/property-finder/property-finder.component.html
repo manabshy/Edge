@@ -1,36 +1,41 @@
 <ng-container>
   <div class="row">
-    <div class="grid grid--25">
-      <form [formGroup]="propertyFinderForm" autocomplete="off">
-        <fieldset class="mb-3">
-          <label for="searchTerm">Property Address or Id</label>
-          <input class="p-2" #searchPropertyInput type="search" id="searchTerm" autofocus formControlName="searchTerm"
-            (keydown.enter)="searchProperty()" [ngbTypeahead]="suggestions" [focusFirst]="false"
-            (selectItem)="selectedSuggestion($event)" data-cy="propSearchTerm">
-        </fieldset>
+    <div class="grid h-full grid--25">
+      <div>
+        <form [formGroup]="propertyFinderForm" autocomplete="off">
+          <fieldset class="mb-3">
+            <label for="searchTerm">Property Address or Id</label>
+            <input class="p-2" #searchPropertyInput type="search" id="searchTerm" autofocus formControlName="searchTerm"
+              (keydown.enter)="searchProperty()" [ngbTypeahead]="suggestions" [focusFirst]="false"
+              (selectItem)="selectedSuggestion($event)" data-cy="propSearchTerm">
+          </fieldset>
 
-        <div class="col-sm-10 offset-sm-2" *ngIf="isMultiple && selectedProperties">
-          <div class="form-group d-flex d-sm-block" *ngFor="let property of selectedProperties">
-            <a class="small mobile-btn" [routerLink]="['/property-centre/detail/', property?.propertyId]">
-              {{property?.address | formatAddress}}
-            </a>
-            <button class="btn btn-light btn-sm ml-2" type="button" (click)="removeProperty(property?.propertyId)">
-              Remove
-            </button>
-            <button *ngIf="canRebook" class="btn btn-light btn-sm ml-2" type="button"
-              (click)="rebookProperty(property?.propertyId)">
-              Rebook
-            </button>
+          <div class="col-sm-10 offset-sm-2" *ngIf="isMultiple && selectedProperties">
+            <div class="form-group d-flex d-sm-block" *ngFor="let property of selectedProperties">
+              <a class="small mobile-btn" [routerLink]="['/property-centre/detail/', property?.propertyId]">
+                {{property?.address | formatAddress}}
+              </a>
+              <button class="ml-2 btn btn-light btn-sm" type="button" (click)="removeProperty(property?.propertyId)">
+                Remove
+              </button>
+              <button *ngIf="canRebook" class="ml-2 btn btn-light btn-sm" type="button"
+                (click)="rebookProperty(property?.propertyId)">
+                Rebook
+              </button>
+            </div>
           </div>
-        </div>
 
-        <fieldset>
-          <button class="btn btn--info" (click)="searchProperty()" data-cy="searchProperty">Search</button>
-        </fieldset>
-      </form>
-      <p *ngIf="properties?.length">
-        {{properties?.length}} Results found
-      </p>
+          <fieldset>
+            <button class="btn btn--info" (click)="searchProperty()" data-cy="searchProperty">Search</button>
+          </fieldset>
+        </form>
+      </div>
+      <div *ngIf="properties?.length">
+        <p>
+          {{properties?.length}} Results found
+        </p>
+      </div>
+
     </div>
     <div class="grid grid--75 grid--dividerLeft">
       <div class="table">
@@ -48,7 +53,8 @@
                 No Property {{label}} found
               </td>
             </tr>
-            <tr *ngFor="let property of properties" (click)="selectProperty(property?.propertyId); properties = null" class="cursor-pointer">
+            <tr *ngFor="let property of properties" (click)="selectProperty(property?.propertyId); properties = null"
+              class="cursor-pointer">
               <td data-title="Address">
                 <span class="cell-content">
                   {{property?.propertyAddress}}
@@ -65,7 +71,7 @@
         <ng-container *ngIf="hasBeenSearched || noSuggestions">
           <a [routerLink]="['/property-centre/detail/0', 'edit']" *ngIf="!hideCreateNewProperty"
             [queryParams]="{isNewProperty: true, searchedAddress: propertyFinderForm.get('searchTerm').value, getBack: 1}"
-            (click)="CreateNewProperty()" class="list-group-item list-group-item-action text-center py-4">
+            (click)="CreateNewProperty()" class="py-4 text-center list-group-item list-group-item-action">
             <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
               <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
               <path class="plus-vertical"
@@ -95,7 +101,7 @@
           <a class="small mobile-btn" *ngIf="!selectedPropertyDetails">
             {{selectedPropertyDetails?.address | formatAddress}}
           </a>
-          <button class="btn btn-light btn-sm ml-2" *ngIf="!readOnly" type="button" (click)="setProperties()">
+          <button class="ml-2 btn btn-light btn-sm" *ngIf="!readOnly" type="button" (click)="setProperties()">
             Change
           </button>
         </div>
@@ -105,10 +111,10 @@
           <a class="small mobile-btn" [routerLink]="['/property-centre/detail/', property?.propertyId]">
             {{property?.address | formatAddress}}
           </a>
-          <button class="btn btn-light btn-sm ml-2" type="button" (click)="removeProperty(property?.propertyId)">
+          <button class="ml-2 btn btn-light btn-sm" type="button" (click)="removeProperty(property?.propertyId)">
             Remove
           </button>
-          <button *ngIf="canRebook" class="btn btn-light btn-sm ml-2" type="button"
+          <button *ngIf="canRebook" class="ml-2 btn btn-light btn-sm" type="button"
             (click)="rebookProperty(property?.propertyId)">
             Rebook
           </button>
@@ -120,7 +126,7 @@
         <div class="form-group">
           <button type="button" class="btn btn-light btn-sm btn-block"
             [ngClass]="{'is-invalid': propertyRequiredWarning}" (click)="setProperties()" data-cy="addProperty">
-            <i class="fas fa-plus mr-2"></i>
+            <i class="mr-2 fas fa-plus"></i>
             Property {{label}}
           </button>
           <div class="invalid-feedback w-100">{{propertyRequiredWarning}}</div>
@@ -130,9 +136,9 @@
       <div class="col-sm-8 col-xl-6 offset-sm-2">
         <div class="off-canvas" [hidden]="!properties" (click)="properties = null">
           <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
-            <h4 class="page-title text-left pt-3">
+            <h4 class="pt-3 text-left page-title">
               Property {{label}}
-              <button type="button" class="close mr-2" aria-label="Close" (click)="properties = null">
+              <button type="button" class="mr-2 close" aria-label="Close" (click)="properties = null">
                 <span aria-hidden="true">&times;</span>
               </button>
             </h4>
@@ -148,11 +154,11 @@
                 </div>
               </div>
             </div>
-            <a class="small d-block mb-3" [routerLink]="['/property-centre/detail/0', 'edit']"
+            <a class="mb-3 small d-block" [routerLink]="['/property-centre/detail/0', 'edit']"
               *ngIf="noSuggestions && !hideCreateNewProperty"
               [queryParams]="{isNewProperty: true, searchedAddress: propertyFinderForm.get('searchTerm').value, getBack: 1}"
               (click)="CreateNewProperty()">
-              <i class="fas fa-plus mr-2"></i> Add Property
+              <i class="mr-2 fas fa-plus"></i> Add Property
             </a>
             <app-subnav *ngIf='hasBeenSearched'>
               <ng-container *ngIf="properties">
@@ -164,14 +170,14 @@
                     </div>
                   </div>
                 </app-subnav-item>
-                <div class="list-group-item text-center text-danger" *ngIf="!properties?.length">
+                <div class="text-center list-group-item text-danger" *ngIf="!properties?.length">
                   No Property {{label}} found
                 </div>
                 <a [routerLink]="['/property-centre/detail/0', 'edit']" *ngIf="!hideCreateNewProperty"
                   [queryParams]="{isNewProperty: true, searchedAddress: propertyFinderForm.get('searchTerm').value, getBack: 1}"
-                  (click)="CreateNewProperty()" class="list-group-item list-group-item-action text-center py-4">
+                  (click)="CreateNewProperty()" class="py-4 text-center list-group-item list-group-item-action">
                   <span class="btn-link">
-                    <i class="fas fa-plus mr-2"></i> Add Property
+                    <i class="mr-2 fas fa-plus"></i> Add Property
                   </span>
                 </a>
               </ng-container>

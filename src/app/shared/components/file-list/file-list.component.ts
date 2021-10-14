@@ -1,25 +1,14 @@
-import { FileUploadComponent } from "./../file-upload/file-upload.component";
-import {
-  FileService,
-  FileTypeEnum,
-} from "./../../../core/services/file.service";
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from "@angular/core";
-import moment from "moment";
-import { MessageService, PrimeNGConfig } from "primeng/api";
-import { EdgeFile } from "../../models/edgeFile";
+import { FileUploadComponent } from './../file-upload/file-upload.component';
+import { FileService, FileTypeEnum } from './../../../core/services/file.service';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import moment from 'moment';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { EdgeFile } from '../../models/edgeFile';
 
 @Component({
-  selector: "app-file-list",
-  templateUrl: "./file-list.component.html",
-  styleUrls: ["./file-list.component.scss"],
+  selector: 'app-file-list',
+  templateUrl: './file-list.component.html',
+  styleUrls: ['./file-list.component.scss'],
 })
 export class FileListComponent implements OnInit, OnDestroy {
   @Input() header;
@@ -64,7 +53,7 @@ export class FileListComponent implements OnInit, OnDestroy {
   constructor(
     private fileService: FileService,
     private primengConfig: PrimeNGConfig,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {}
 
   ngOnInit(): void {
@@ -73,44 +62,30 @@ export class FileListComponent implements OnInit, OnDestroy {
 
   setSelectedFile() {
     if (this.tmpFiles && this.tmpFiles.length > 0) {
-      if (
-        this.fileType === FileTypeEnum.OnlyImage &&
-        this.tmpFiles.some((x) => x.type.indexOf("Image") == -1)
-      ) {
-        this.showWarningMessage(
-          "This file operation accepts only image files. Please try again!"
-        );
+      if (this.fileType === FileTypeEnum.OnlyImage && this.tmpFiles.some((x) => x.type.indexOf('Image') == -1)) {
+        this.showWarningMessage('This file operation accepts only image files. Please try again!');
         return;
       }
       if (
         this.fileType === FileTypeEnum.OnlyDocument &&
-        this.tmpFiles.some(
-          (x) => x.type.indexOf("document") == -1 && x.type.indexOf("pdf") == -1
-        )
+        this.tmpFiles.some((x) => x.type.indexOf('document') == -1 && x.type.indexOf('pdf') == -1)
       ) {
-        this.showWarningMessage(
-          "This file operation accepts only document files. Please try again!"
-        );
+        this.showWarningMessage('This file operation accepts only document files. Please try again!');
         return;
       }
       if (
         this.fileType === FileTypeEnum.ImageAndDocument &&
         this.tmpFiles.some(
-          (x) =>
-            x.type.indexOf("document") == -1 &&
-            x.type.indexOf("pdf") == -1 &&
-            x.type.indexOf("image") == -1
+          (x) => x.type.indexOf('document') == -1 && x.type.indexOf('pdf') == -1 && x.type.indexOf('image') == -1,
         )
       ) {
-        this.showWarningMessage(
-          "This file operation accepts only document and image files. Please try again!"
-        );
+        this.showWarningMessage('This file operation accepts only document and image files. Please try again!');
         return;
       }
 
       const formData = new FormData();
       this.tmpFiles.forEach((x) => {
-        formData.append("files", x, x.name);
+        formData.append('files', x, x.name);
       });
 
       this.fileService.saveFileTemp(formData).subscribe(
@@ -125,7 +100,7 @@ export class FileListComponent implements OnInit, OnDestroy {
             this.openFileDialog = false;
           } else {
             this.tmpFiles = [];
-            this.showWarningMessage("Adding file gets error, please try again");
+            this.showWarningMessage('Adding file gets error, please try again');
             return;
           }
         },
@@ -133,11 +108,11 @@ export class FileListComponent implements OnInit, OnDestroy {
           this.tmpFiles = [];
           this.showWarningMessage(err.message);
           return;
-        }
+        },
       );
     } else {
       this.files = [...this.tmpFiles];
-      this.showWarningMessage("You must add valid documents");
+      this.showWarningMessage('You must add valid documents');
       return;
     }
   }
@@ -148,10 +123,14 @@ export class FileListComponent implements OnInit, OnDestroy {
 
   showWarningMessage(message) {
     this.messageService.add({
-      severity: "error",
+      severity: 'error',
       summary: message,
       closable: false,
     });
+  }
+
+  openFile(url) {
+    window.open(url);
   }
 
   cancel() {
@@ -164,9 +143,7 @@ export class FileListComponent implements OnInit, OnDestroy {
   deleteFile(fileName: string) {
     if (this.files && this.files.length > 0) {
       this.files = this.files.filter((x) => x.name != fileName);
-      this.edgeFileList = this.edgeFileList.filter(
-        (x) => x.fileName != fileName
-      );
+      this.edgeFileList = this.edgeFileList.filter((x) => x.fileName != fileName);
       this.getFileNames.emit({ file: [...this.edgeFileList], type: this.type });
       // let file = this.files.find((c) => c.name == fileName);
       // if (file) this.fileUploadComponent.removeFile(file);
@@ -182,7 +159,7 @@ export class FileListComponent implements OnInit, OnDestroy {
   }
 
   getUploadedDate(date: Date): string {
-    if (date) return moment(date).format("Do MMM YYYY (HH:mm)");
-    return "-";
+    if (date) return moment(date).format('Do MMM YYYY (HH:mm)');
+    return '-';
   }
 }
