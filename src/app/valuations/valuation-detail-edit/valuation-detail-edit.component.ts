@@ -1155,6 +1155,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
         ) {
           this.canSaveValuation = false;
+          this.property.leaseExpiryDate = this.valuation.leaseExpiryDate;
+          this.property.userEnteredOwner = this.valuation.userEnteredOwner;
         } else {
           this.canSaveValuation = true;
         }
