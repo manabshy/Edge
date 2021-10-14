@@ -73,6 +73,8 @@ export interface Valuation extends ValuationInfo {
   deedLandRegFiles?: EdgeFile[];
   leaseLandRegFiles?: EdgeFile[];
   nameChangeRegFiles?: EdgeFile[];
+  userEnteredOwner?: string;
+  leaseExpiryDate?: Date;
 }
 
 export interface ValuationPricingInfo {
