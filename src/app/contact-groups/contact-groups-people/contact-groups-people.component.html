@@ -479,10 +479,10 @@
         <!--Duplicate Person Checker Modal-->
         <p-dialog header="Find Person" [(visible)]="isOffCanvasVisible" [modal]="true" [draggable]="false"
           class="modal--medium modal--hasFooter">
-          <app-person-duplicate-checker [contactGroupDetails]="contactGroupDetails" [searchTerm]="searchTerm"
+          <app-contact-duplicate-checker [contactGroupDetails]="contactGroupDetails" [searchTerm]="searchTerm"
             (addedPersonDetails)="getAddedPersonDetails($event)" (selectedPerson)="getSelectedPerson($event)"
             (creatingNewPerson)="createNewPerson()">
-          </app-person-duplicate-checker>
+          </app-contact-duplicate-checker>
         </p-dialog>
 
         <!--Company Finder Modal -->
