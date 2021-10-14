@@ -1,14 +1,7 @@
-import {
-  Component,
-  OnInit,
-  Renderer2,
-  ViewChild,
-  ElementRef,
-  OnDestroy,
-} from "@angular/core";
-import { ContactGroupsService } from "../shared/contact-groups.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Person, BasicPerson } from "src/app/shared/models/person";
+import { Component, OnInit, Renderer2, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { ContactGroupsService } from '../shared/contact-groups.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Person, BasicPerson } from 'src/app/shared/models/person';
 import {
   ContactGroup,
   PeopleAutoCompleteResult,
@@ -18,43 +11,33 @@ import {
   Company,
   PotentialDuplicateResult,
   ContactNote,
-} from "../shared/contact-group";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import {
-  distinctUntilChanged,
-  switchMap,
-  catchError,
-  tap,
-  takeUntil,
-  take,
-} from "rxjs/operators";
-import { Subject, Observable, EMPTY } from "rxjs";
-import { BsModalService } from "ngx-bootstrap/modal/";
-import { ConfirmModalComponent } from "src/app/shared/confirm-modal/confirm-modal.component";
-import { Location } from "@angular/common";
-import {
-  WedgeError,
-  SharedService,
-} from "src/app/core/services/shared.service";
-import { FormErrors } from "src/app/core/shared/app-constants";
-import { AppUtils } from "src/app/core/shared/utils";
-import { ToastrService } from "ngx-toastr";
-import * as _ from "lodash";
-import { StorageMap } from "@ngx-pwa/local-storage";
-import { DialogService, DynamicDialogRef } from "primeng/dynamicdialog";
-import { MessageService } from "primeng/api";
-import { HeaderService } from "src/app/core/services/header.service";
-import { CompanyService } from "src/app/company/shared/company.service";
+} from '../shared/contact-group';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { distinctUntilChanged, switchMap, catchError, tap, takeUntil, take } from 'rxjs/operators';
+import { Subject, Observable, EMPTY } from 'rxjs';
+import { BsModalService } from 'ngx-bootstrap/modal/';
+import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
+import { Location } from '@angular/common';
+import { WedgeError, SharedService } from 'src/app/core/services/shared.service';
+import { FormErrors } from 'src/app/core/shared/app-constants';
+import { AppUtils } from 'src/app/core/shared/utils';
+import { ToastrService } from 'ngx-toastr';
+import * as _ from 'lodash';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api';
+import { HeaderService } from 'src/app/core/services/header.service';
+import { CompanyService } from 'src/app/company/shared/company.service';
 @Component({
-  selector: "app-contact-groups-people",
-  templateUrl: "./contact-groups-people.component.html"
+  selector: 'app-contact-groups-people',
+  templateUrl: './contact-groups-people.component.html',
 })
 export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   listInfo: any;
   warnings: any;
   isCollapsed = {};
   isSelectedCollapsed = false;
-  @ViewChild("offCanvasContent", { static: true }) offCanvasContent: ElementRef;
+  @ViewChild('offCanvasContent', { static: true }) offCanvasContent: ElementRef;
   isOffCanvasVisible = false;
   contactGroupTypes: any;
   personId: number;
@@ -83,14 +66,14 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   initialContactGroupLength = 0;
   isSubmitting = false;
   isSearchCompanyVisible = true;
-  orderFoundPeople = "matchScore";
+  orderFoundPeople = 'matchScore';
   reverse = true;
   isTypePicked = false;
   isNewCompanyContact = false;
   foundCompanies: CompanyAutoCompleteResult[];
-  @ViewChild("selectedCompanyInput") selectedCompanyInput: ElementRef;
-  @ViewChild("companyNameInput") companyNameInput: ElementRef;
-  selectedCompany = "";
+  @ViewChild('selectedCompanyInput') selectedCompanyInput: ElementRef;
+  @ViewChild('companyNameInput') companyNameInput: ElementRef;
+  selectedCompany = '';
   companyDetails: Company;
   selectedCompanyId: number;
   companyFinderForm: FormGroup;
@@ -104,8 +87,8 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   bottomReached: boolean;
   pageSize = 10;
   suggestions: (text$: Observable<string>) => Observable<any[]>;
-  suggestedTerm = "";
-  searchTerm = "";
+  suggestedTerm = '';
+  searchTerm = '';
   noSuggestions = false;
   isExistingCompany = false;
   existingCompanyId: number;
@@ -146,34 +129,29 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     return false;
   }
   get companyAlert() {
-    return (
-      this.contactGroupDetails.contactType === ContactType.CompanyContact &&
-      !this.companyDetails
-    );
+    return this.contactGroupDetails.contactType === ContactType.CompanyContact && !this.companyDetails;
   }
 
   get isCompanyPerson() {
     return (
-      this.contactGroupDetails.contactType === ContactType.CompanyContact &&
-      !this.contactGroupDetails.contactPeople
+      this.contactGroupDetails.contactType === ContactType.CompanyContact && !this.contactGroupDetails.contactPeople
     );
   }
 
   get isAMLCompleted() {
     return (
       this.contactGroupDetails &&
-      (!!this.contactGroupDetails.companyAmlCompletedDate ||
-        this.contactGroupDetails.isAmlCompleted)
+      (!!this.contactGroupDetails.companyAmlCompletedDate || this.contactGroupDetails.isAmlCompleted)
     );
   }
 
   public keepOriginalOrder = (a) => a.key;
   isLastPerson = false;
-  newContactGroupLabel = "New Contact Group";
-  info = "";
+  newContactGroupLabel = 'New Contact Group';
+  info = '';
   infoTypes: { name: string; isCurrent: boolean }[] = [
-    { name: "contactGroup", isCurrent: true },
-    { name: "notes", isCurrent: false },
+    { name: 'contactGroup', isCurrent: true },
+    { name: 'notes', isCurrent: false },
   ];
   dialogRef: DynamicDialogRef;
   constructor(
@@ -190,15 +168,15 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     private messageService: MessageService,
     private renderer: Renderer2,
-    private headerService: HeaderService
+    private headerService: HeaderService,
   ) {}
 
   ngOnInit() {
     this.contactGroupTypes = ContactGroupsTypes;
     this.route.params.subscribe((params) => {
-      this.contactGroupId = +params["contactGroupId"] || 0;
-      this.groupPersonId = +params["groupPersonId"] || 0;
-      this.personId = +params["personId"] || 0;
+      this.contactGroupId = +params['contactGroupId'] || 0;
+      this.groupPersonId = +params['groupPersonId'] || 0;
+      this.personId = +params['personId'] || 0;
       if (this.personId) {
         this.getContactGroupFirstPerson(this.personId, false);
       } // Delete isCompanyContactGroup() on confirmation
@@ -216,12 +194,10 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.contactGroupService.contactNotePageChanges$
-      .pipe(takeUntil(this.destroy))
-      .subscribe((newPageNumber) => {
-        this.page = newPageNumber;
-        this.getNextContactNotesPage(this.page);
-      });
+    this.contactGroupService.contactNotePageChanges$.pipe(takeUntil(this.destroy)).subscribe((newPageNumber) => {
+      this.page = newPageNumber;
+      this.getNextContactNotesPage(this.page);
+    });
 
     // Get newly added person
     this.getNewlyAddedPerson();
@@ -231,53 +207,53 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   private getContactNotes() {
-    this.contactGroupService
-      .getContactGroupById(this.contactGroupId)
-      .subscribe((x) => {
-        this.contactGroupDetails.contactNotes = x.contactNotes;
-        this.setImportantNotes();
-      });
+    this.contactGroupService.getContactGroupById(this.contactGroupId).subscribe((x) => {
+      this.contactGroupDetails.contactNotes = x.contactNotes;
+      this.setImportantNotes();
+    });
   }
 
   init() {
-    this.storage.get("info").subscribe((data) => {
+    this.storage.get('info').subscribe((data) => {
       if (data) {
         this.listInfo = data;
         this.setDropdownLists();
-        console.log("list info in contact people....", this.listInfo);
+        console.log('list info in contact people....', this.listInfo);
       }
     });
     this.removedPersonIds = [];
     this.selectedPeople = [];
 
     this.route.queryParams.subscribe((params) => {
-      this.isNewContactGroup =
-        (!AppUtils.holdingSelectedPeople && params["isNewContactGroup"]) ||
-        false;
-      this.isNewPersonalContact = params["isNewPersonalContact"] || false;
-      this.isNewCompanyContact = params["isNewCompanyContact"] || false;
-      this.isSigner = params["isSigner"] || false;
-      this.isExistingCompany = params["isExistingCompany"] || false;
-      this.existingCompanyId = params["existingCompanyId"] || 0;
-      this.signer = params["signer"] || "";
-      this.searchTerm = params["searchTerm"] || "";
-      this.backToOrigin = params["backToOrigin"] || false;
+      this.isNewContactGroup = (!AppUtils.holdingSelectedPeople && params['isNewContactGroup']) || false;
+      this.isNewPersonalContact = params['isNewPersonalContact'] || false;
+      this.isNewCompanyContact = !!params['isNewCompanyContact'] || false;
+      this.isSigner = params['isSigner'] || false;
+      this.isExistingCompany = params['isExistingCompany'] || false;
+      this.existingCompanyId = params['existingCompanyId'] || 0;
+      this.signer = params['signer'] || '';
+      this.searchTerm = params['searchTerm'] || '';
+      this.backToOrigin = params['backToOrigin'] || false;
 
       if (this.isExistingCompany || this.isNewPersonalContact) {
         this.isOffCanvasVisible = true;
+      }
+
+      if (this.isNewCompanyContact === true) {
+        this.showCompanyFinder = true;
       }
     });
     this.setPageLabel();
     this.isSubmitting = false;
     this.companyFinderForm = this.fb.group({
-      companyName: [""],
-      selectedCompany: ["", Validators.required],
+      companyName: [''],
+      selectedCompany: ['', Validators.required],
     });
 
     this.contactGroupDetailsForm = this.fb.group({
-      salutation: [""],
-      addressee: [""],
-      comments: [""],
+      salutation: [''],
+      addressee: [''],
+      comments: [''],
       isRelocationAgent: false,
       isSolicitor: false,
       isInventoryClerk: false,
@@ -312,17 +288,14 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
         this.isOffCanvasVisible = false;
         this.setSalutation();
       }
-      this.contactGroupDetails.contactType =
-        AppUtils.holdingContactType || ContactType.Individual;
+      this.contactGroupDetails.contactType = AppUtils.holdingContactType || ContactType.Individual;
       if (this.isNewCompanyContact && this.isExistingCompany) {
         this.isTypePicked = true;
         this.contactGroupDetails.contactType = ContactType.CompanyContact;
         this.getCompanyDetails(this.existingCompanyId);
       }
       if (this.isNewCompanyContact) {
-        const newCompany = JSON.parse(
-          localStorage.getItem("newCompany")
-        ) as Company;
+        const newCompany = JSON.parse(localStorage.getItem('newCompany')) as Company;
         this.isTypePicked = true;
         this.contactGroupDetails.contactType = ContactType.CompanyContact;
         if (newCompany) {
@@ -345,21 +318,19 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
 
   setPageLabel(clearLabel?: boolean) {
     let label: string;
-    const isPersonal =
-      this.contactGroupDetails?.contactType === ContactType.Individual;
-    const isCompany =
-      this.contactGroupDetails?.contactType === ContactType.CompanyContact;
+    const isPersonal = this.contactGroupDetails?.contactType === ContactType.Individual;
+    const isCompany = this.contactGroupDetails?.contactType === ContactType.CompanyContact;
 
     if (isPersonal || this.isNewPersonalContact) {
-      label = "Personal Contact Group";
-      this.groupType = "personal";
-      console.log("personal here...,", this.groupType);
+      label = 'Personal Contact Group';
+      this.groupType = 'personal';
+      console.log('personal here...,', this.groupType);
     }
 
     if (isCompany || this.isNewCompanyContact) {
-      label = "Company Contact Group";
-      this.groupType = "company";
-      console.log("company here...,", this.groupType);
+      label = 'Company Contact Group';
+      this.groupType = 'company';
+      console.log('company here...,', this.groupType);
     }
 
     if (clearLabel) {
@@ -374,10 +345,10 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     if (isSelectedTypeCompany) {
       this.contactGroupDetails.contactType = ContactType.CompanyContact;
       this.isNewCompanyContact = true;
-      this.newContactGroupLabel = "Company Contact Group";
+      this.newContactGroupLabel = 'Company Contact Group';
     } else {
       this.contactGroupDetails.contactType = ContactType.Individual;
-      this.newContactGroupLabel = "Personal Contact Group";
+      this.newContactGroupLabel = 'Personal Contact Group';
       this.isOffCanvasVisible = true;
     }
     if (this.personId) {
@@ -391,17 +362,13 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       if (person) {
         person.isNewPerson = true;
         this.isOffCanvasVisible = false;
-        if (
-          (this.contactGroupDetails &&
-            this.contactGroupDetails.contactPeople.length) ||
-          this.isExistingCompany
-        ) {
+        if ((this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) || this.isExistingCompany) {
           this.contactGroupDetails?.contactPeople?.push(person);
           this.storeContactPeople(this.contactGroupDetails.contactPeople);
         } else {
           const people: Person[] = [];
           people.push(person);
-          console.log({ person }, "new herer", { people });
+          console.log({ person }, 'new herer', { people });
           this.storeContactPeople(people);
         }
       }
@@ -410,16 +377,16 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
 
   getNewlyAddedCompany() {
     this.companyService.newCompanyChanges$.subscribe((company) =>
-      localStorage.setItem("newCompany", JSON.stringify(company))
+      localStorage.setItem('newCompany', JSON.stringify(company)),
     );
   }
 
   storeContactPeople(contactPeople: Person[]) {
-    localStorage.setItem("contactPeople", JSON.stringify(contactPeople));
+    localStorage.setItem('contactPeople', JSON.stringify(contactPeople));
   }
 
   getContactPeopleFromStorage() {
-    const data = localStorage.getItem("contactPeople");
+    const data = localStorage.getItem('contactPeople');
     let people = [];
     people = JSON.parse(data) as Person[];
     return people;
@@ -427,49 +394,43 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
 
   getContactGroupById(contactGroupId: number) {
     const contactPeople = this.getContactPeopleFromStorage();
-    this.contactGroupService
-      .getContactGroupById(contactGroupId, true)
-      .subscribe((data) => {
-        this.contactGroupDetails = data;
-        if (contactPeople?.length) {
-          this.pendingChanges = true;
-          this.contactGroupDetails.contactPeople = [...contactPeople];
-          console.log(
-            this.contactGroupDetails.contactPeople,
-            "new group from merged with stroage",
-            contactPeople,
-            "from storage"
-          );
-        }
-        this.setImportantNotes();
-        this.initialContactGroupLength =
-          this.contactGroupDetails.contactPeople.length;
-        console.log("contact details", this.contactGroupDetails);
+    this.contactGroupService.getContactGroupById(contactGroupId, true).subscribe((data) => {
+      this.contactGroupDetails = data;
+      if (contactPeople?.length) {
+        this.pendingChanges = true;
+        this.contactGroupDetails.contactPeople = [...contactPeople];
+        console.log(
+          this.contactGroupDetails.contactPeople,
+          'new group from merged with stroage',
+          contactPeople,
+          'from storage',
+        );
+      }
+      this.setImportantNotes();
+      this.initialContactGroupLength = this.contactGroupDetails.contactPeople.length;
+      console.log('contact details', this.contactGroupDetails);
 
-        this.populateFormDetails(this.contactGroupDetails);
-        this.setSalutation();
-        // this.addSelectedPeople();
-        if (this.isCloned) {
-          this.contactGroupDetails.referenceCount = 0;
-          this.contactGroupDetails.contactGroupId = 0;
-        }
-        this.isTypePicked = true;
+      this.populateFormDetails(this.contactGroupDetails);
+      this.setSalutation();
+      // this.addSelectedPeople();
+      if (this.isCloned) {
+        this.contactGroupDetails.referenceCount = 0;
+        this.contactGroupDetails.contactGroupId = 0;
+      }
+      this.isTypePicked = true;
 
-        this.setPageLabel();
-      });
+      this.setPageLabel();
+    });
   }
 
-  getContactGroupFirstPerson(
-    personId: number,
-    isSelectedTypeCompany?: boolean
-  ) {
+  getContactGroupFirstPerson(personId: number, isSelectedTypeCompany?: boolean) {
     const contactPeople = this.getContactPeopleFromStorage();
     this.contactGroupService.getPerson(personId).subscribe((data) => {
       data.isMainPerson = true;
       this.firstContactGroupPerson = data;
       if (this.contactGroupId === 0) {
         if (this.contactGroupDetails) {
-          console.log("details hre...", this.contactGroupDetails);
+          console.log('details hre...', this.contactGroupDetails);
 
           if (!isSelectedTypeCompany) {
             this.contactGroupDetails.contactType = ContactType.Individual;
@@ -479,15 +440,13 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
             this.contactGroupDetails.contactPeople = [...contactPeople];
             console.log(
               this.contactGroupDetails.contactPeople,
-              "new group from merged with stroage",
+              'new group from merged with stroage',
               contactPeople,
-              "from storage"
+              'from storage',
             );
           } else {
             this.contactGroupDetails.contactPeople = [];
-            this.contactGroupDetails.contactPeople.push(
-              this.firstContactGroupPerson
-            );
+            this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
           }
           this.showPersonWarning();
           this.setSalutation();
@@ -509,9 +468,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       this.contactGroupDetailsForm.reset();
     }
     if (contactGroup.companyName) {
-      this.companyFinderForm
-        .get("selectedCompany")
-        .setValue(contactGroup.companyName);
+      this.companyFinderForm.get('selectedCompany').setValue(contactGroup.companyName);
       this.getCompanyDetails(contactGroup.companyId);
     }
     this.contactGroupDetails = contactGroup;
@@ -552,15 +509,11 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
 
   setImportantNotes() {
     this.importantContactNotes = this.contactGroupDetails.contactNotes.filter(
-      (x) => x.isImportant && +x.contactGroupId === this.contactGroupId
+      (x) => x.isImportant && +x.contactGroupId === this.contactGroupId,
     );
-    this.importantPeopleNotes = this.contactGroupDetails.contactNotes.filter(
-      (x) => x.isImportant
-    );
+    this.importantPeopleNotes = this.contactGroupDetails.contactNotes.filter((x) => x.isImportant);
     this.contactGroupDetails.contactPeople.forEach((x) => {
-      x.personNotes = this.importantPeopleNotes.filter(
-        (p) => p.personId === x.personId
-      );
+      x.personNotes = this.importantPeopleNotes.filter((p) => p.personId === x.personId);
     });
   }
 
@@ -571,12 +524,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
 
   private getNextContactNotesPage(page) {
     this.contactGroupService
-      .getContactGroupNotes(
-        this.contactGroupId,
-        this.pageSize,
-        page,
-        this.showOnlyMyNotes
-      )
+      .getContactGroupNotes(this.contactGroupId, this.pageSize, page, this.showOnlyMyNotes)
       .subscribe((data) => {
         if (data) {
           this.contactNotes = _.concat(this.contactNotes, data);
@@ -593,9 +541,9 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     this.contactGroupBackUp();
     let companyName;
     if (newCompany) {
-      companyName = this.companyFinderForm.get("companyName").value;
+      companyName = this.companyFinderForm.get('companyName').value;
     }
-    this._router.navigate(["/company-centre/detail", id, "edit"], {
+    this._router.navigate(['/company-centre/detail', id, 'edit'], {
       queryParams: {
         isNewCompany: newCompany,
         isEditingSelectedCompany: true,
@@ -609,7 +557,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     event.preventDefault();
     this.isEditingSelectedPerson = true;
     this.contactGroupBackUp();
-    this._router.navigate(["../../edit"], {
+    this._router.navigate(['../../edit'], {
       queryParams: { groupPersonId: id, isEditingSelectedPerson: true },
       relativeTo: this.route,
     });
@@ -630,32 +578,23 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   removePerson(id: number, isDialogVisible = false) {
     event.preventDefault();
     event.stopPropagation();
-    const isCompanyContact =
-      this.contactGroupDetails.contactType === ContactType.CompanyContact;
-    if (
-      this.contactGroupDetails?.contactPeople?.length === 1 &&
-      !isCompanyContact
-    ) {
+    const isCompanyContact = this.contactGroupDetails.contactType === ContactType.CompanyContact;
+    if (this.contactGroupDetails?.contactPeople?.length === 1 && !isCompanyContact) {
       this.isLastPerson = true;
       return;
     }
     let index: number;
-    index = this.contactGroupDetails.contactPeople.findIndex(
-      (x) => x.personId === id
-    );
+    index = this.contactGroupDetails.contactPeople.findIndex((x) => x.personId === id);
     const fullName =
       this.contactGroupDetails.contactPeople[index] !== undefined
         ? this.contactGroupDetails.contactPeople[index].firstName +
-          " " +
+          ' ' +
           this.contactGroupDetails.contactPeople[index].lastName
-        : "";
+        : '';
     if (isDialogVisible) {
       this.confirmRemove(fullName).subscribe((res) => {
         if (res) {
-          this.removeSelectedPeople(
-            this.contactGroupDetails.contactPeople,
-            index
-          );
+          this.removeSelectedPeople(this.contactGroupDetails.contactPeople, index);
           this.removedPersonIds.push(id);
           this.pendingChanges = true;
         }
@@ -671,12 +610,12 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   confirmRemove(fullName: string) {
     const subject = new Subject<boolean>();
     const data = {
-      title: "Are you sure you want to remove " + fullName + "?",
-      actions: ["No", "Remove"],
+      title: 'Are you sure you want to remove ' + fullName + '?',
+      actions: ['No', 'Remove'],
     };
     this.dialogRef = this.dialogService.open(ConfirmModalComponent, {
       data,
-      styleClass: "dialog dialog--hasFooter",
+      styleClass: 'dialog dialog--hasFooter',
       showHeader: false,
     });
     this.dialogRef.onClose.subscribe((res) => {
@@ -702,15 +641,15 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     this.foundCompanies = null;
     this.companyDetails = company;
     this.isCompanyAdded = true;
-    this.companyFinderForm.get("selectedCompany").setValue(company.companyName);
-    this.selectedCompany = this.companyFinderForm.get("selectedCompany").value;
+    this.companyFinderForm.get('selectedCompany').setValue(company.companyName);
+    this.selectedCompany = this.companyFinderForm.get('selectedCompany').value;
     this.isSearchCompanyVisible = false;
     this.showCompanyFinder = false;
     this.showSetMainPerson = false;
     setTimeout(() => {
       if (this.selectedCompanyInput) {
         this.selectedCompanyInput.nativeElement.scrollIntoView({
-          block: "center",
+          block: 'center',
         });
       }
     });
@@ -719,7 +658,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   getCompanyDetails(companyId: number) {
     this.contactGroupService.getCompany(companyId).subscribe((data) => {
       this.companyDetails = data;
-      console.log(this.companyDetails, "company details");
+      console.log(this.companyDetails, 'company details');
       this.isSearchCompanyVisible = false;
       this.showSetMainPerson = false;
     });
@@ -750,30 +689,19 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   getSelectedPerson(person: Person) {
     if (person) {
       if (this.removedPersonIds.indexOf(person.personId) >= 0) {
-        this.removedPersonIds.splice(
-          this.removedPersonIds.indexOf(person.personId),
-          1
-        );
+        this.removedPersonIds.splice(this.removedPersonIds.indexOf(person.personId), 1);
       }
       if (
         person &&
         person.personId !== 0 &&
-        !this.sharedService.checkDuplicateInContactGroup(
-          this.contactGroupDetails,
-          person.personId
-        )
+        !this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, person.personId)
       ) {
         this.selectedPersonId = person.personId;
         this.collectSelectedPeople(person);
-        console.log(
-          "selected pople",
-          this.selectedPeople,
-          "contact people",
-          this.contactGroupDetails?.contactPeople
-        );
+        console.log('selected pople', this.selectedPeople, 'contact people', this.contactGroupDetails?.contactPeople);
       }
       this.isOffCanvasVisible = false;
-      this.renderer.removeClass(document.body, "no-scroll");
+      this.renderer.removeClass(document.body, 'no-scroll');
       window.scrollTo(0, 0);
       this.selectedPersonId = 0;
       this.contactGroupDetailsForm.markAsDirty();
@@ -790,23 +718,14 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
 
   showPersonWarning() {
     this.contactGroupDetails.contactPeople.forEach((x) => {
-      x.warning = this.sharedService.showWarning(
-        x.warningStatusId,
-        this.warnings,
-        x.warningStatusComment
-      );
+      x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
     });
   }
 
   addSelectedPeople() {
     if (this.selectedPeople.length) {
       this.selectedPeople.forEach((x) => {
-        if (
-          !this.sharedService.checkDuplicateInContactGroup(
-            this.contactGroupDetails,
-            x.personId
-          )
-        ) {
+        if (!this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, x.personId)) {
           this.contactGroupDetails.contactPeople?.push(x);
           this.setSalutation();
         }
@@ -837,7 +756,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   cloneContactGroup() {
-    console.log("contact to clone", this.contactGroupDetails);
+    console.log('contact to clone', this.contactGroupDetails);
     this.isCloned = true;
     if (this.isCloned) {
       this.contactGroupDetails.contactGroupId = 0;
@@ -847,7 +766,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   saveContactGroup() {
-    console.log("contact details", this.contactGroupDetailsForm.dirty);
+    console.log('contact details', this.contactGroupDetailsForm.dirty);
     const validForm = this.contactGroupDetailsForm.valid;
 
     if (this.contactGroupDetailsForm.invalid) {
@@ -896,7 +815,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
           },
           (error: WedgeError) => {
             this.isSubmitting = false;
-          }
+          },
         );
       } else {
         this.contactGroupDetails.contactPeople.push(this.selectedPerson);
@@ -911,7 +830,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
         },
         (error: WedgeError) => {
           this.isSubmitting = false;
-        }
+        },
       );
     }
   }
@@ -921,27 +840,27 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       contactGroup.companyId = this.companyDetails.companyId;
       contactGroup.companyName = this.companyDetails.companyName;
     }
-    console.log("contact to update", contactGroup);
+    console.log('contact to update', contactGroup);
     this.contactGroupService.updateContactGroup(contactGroup).subscribe(
       (res) => {
-        console.log({ res }, "results from update");
+        console.log({ res }, 'results from update');
 
         this.onSaveComplete(res.result.contactGroupId);
       },
       (error: WedgeError) => {
         this.isSubmitting = false;
-      }
+      },
     );
   }
 
   onSaveComplete(contactGroupId): void {
-    localStorage.removeItem("contactPeople");
-    localStorage.removeItem("newCompany");
+    localStorage.removeItem('contactPeople');
+    localStorage.removeItem('newCompany');
     this.pendingChanges = false;
     this.isSubmitting = false;
     this.messageService.add({
-      severity: "success",
-      summary: "Contact Group successfully saved",
+      severity: 'success',
+      summary: 'Contact Group successfully saved',
       closable: false,
     });
     if (this.backToOrigin) {
@@ -953,29 +872,22 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     if (!contactGroupId) {
       this.sharedService.back();
     } else {
-      this._router.navigate(
-        ["/contact-centre/detail/", 0, "people", contactGroupId],
-        { replaceUrl: true }
-      );
+      this._router.navigate(['/contact-centre/detail/', 0, 'people', contactGroupId], { replaceUrl: true });
       if (this.isExistingCompany && this.existingCompanyId) {
-        this._router.navigate([
-          "/company-centre/detail",
-          this.existingCompanyId,
-        ]);
+        this._router.navigate(['/company-centre/detail', this.existingCompanyId]);
       }
     }
   }
 
   setSalutation() {
     const people = this.contactGroupDetails.contactPeople;
-    let salutation = "";
-    let addressee = "";
+    let salutation = '';
+    let addressee = '';
     let counter = 0;
-    let seperator = "";
+    let seperator = '';
     let type = ContactType.Individual;
     people.forEach((person) => {
-      seperator =
-        counter === 0 ? "" : counter === people.length - 1 ? " & " : " , ";
+      seperator = counter === 0 ? '' : counter === people.length - 1 ? ' & ' : ' , ';
       addressee += seperator + person.addressee;
       salutation += seperator + person.salutation;
       counter++;
@@ -991,7 +903,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
         contactType: type,
         comments: this.contactGroupDetails.comments,
       },
-      { onlySelf: false }
+      { onlySelf: false },
     );
     this.contactGroupDetailsForm.markAsDirty();
   }
@@ -1000,13 +912,13 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     this.info = type;
     this.infoTypes.map((t) => (t.isCurrent = false));
     this.infoTypes[index].isCurrent = true;
-    console.log("info type", this.info);
+    console.log('info type', this.info);
   }
 
   hideCanvas(event) {
     this.isOffCanvasVisible = event;
     this.personFinderForm.reset();
-    this.renderer.removeClass(document.body, "no-scroll");
+    this.renderer.removeClass(document.body, 'no-scroll');
   }
 
   showHideMarkPrefs(event, i) {
@@ -1024,9 +936,9 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     this.isOffCanvasVisible = !this.isOffCanvasVisible;
     if (this.isOffCanvasVisible) {
-      this.renderer.addClass(document.body, "no-scroll");
+      this.renderer.addClass(document.body, 'no-scroll');
     } else {
-      this.renderer.removeClass(document.body, "no-scroll");
+      this.renderer.removeClass(document.body, 'no-scroll');
     }
   }
 
@@ -1036,11 +948,11 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
 
   toggleNewPersonVisibility(condition) {
     this.isCreateNewPersonVisible = condition;
-    console.log({ condition }, "in people", this.isCreateNewPersonVisible);
+    console.log({ condition }, 'in people', this.isCreateNewPersonVisible);
   }
 
   addNote() {
-    console.log(this.dataNote, "data note...");
+    console.log(this.dataNote, 'data note...');
 
     this.sharedService.addNote(this.dataNote);
   }
@@ -1063,13 +975,13 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   cancel() {
-    localStorage.removeItem("newCompany");
+    localStorage.removeItem('newCompany');
     this.sharedService.back();
   }
 
   ngOnDestroy() {
     this.setPageLabel(true);
     this.destroy.next();
-    console.log("destroy component now");
+    console.log('destroy component now');
   }
 }
