@@ -6,7 +6,7 @@
         <i class="mr-1 fa fa-file"></i>
         <span>
           <p class="tracking-tight truncate w-44">
-            <a *ngIf="file.url" href="{{file.url}}" target="_blank">{{file?.name}}</a>
+            <a *ngIf="file.url" (click)="openFile(file.url)">{{file?.name}}</a>
             <span *ngIf="!file.url">{{file?.name}}</span>
           </p>
         </span>

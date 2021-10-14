@@ -1,9 +1,11 @@
 <div class="row">,
   <div class="row__item row__item--aside">
     <div class="wrapper--sticky">
-      <app-contact-group-card class="appWrapper" [(adminContact)]="adminContact"
-        [contactGroup]="adminContactGroup? adminContactGroup: contactGroup" *ngIf="contactGroup">
-      </app-contact-group-card>
+      <div>
+        <app-contact-group-card class="appWrapper" [(adminContact)]="adminContact"
+          [contactGroup]="adminContactGroup? adminContactGroup: contactGroup" *ngIf="contactGroup">
+        </app-contact-group-card>
+      </div>
       <div>
         <app-sidenav-item class="appWrapper" [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals"
           (selectedItem)="getSelectedSideNavItem($event)">
@@ -547,7 +549,7 @@
                 data-cy="valuationValues">
                 <div id="valuesTab" [ngClass]="{'opacity-75 pointer-events-none': isCancelled}"
                   (click)="controlIsCancelled($event)">
-                  <ol class="mb-4 cards">
+                  <ol class="mb-4 cards" style="grid-gap: 20px !important;">
                     <li
                       *ngIf="valuation?.salesValuationBooking && isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
                       <h5 class="txt--title">Sales</h5>
@@ -561,7 +563,7 @@
                             *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingPrice').value
                             }}</strong>
                         </fieldset>
-                        <fieldset class="inline-child" *ngIf="!isEditable && !isNewValuation">
+                        <fieldset class="ml-14 inline-child" *ngIf="!isEditable && !isNewValuation">
                           <label style="width:max-content" for="sellValue">Age of valuation</label>
                           <strong class="text-lg"
                             [ngStyle]="{'color':ageColor(valuationForm.get('ageOfSuggestedAskingPrice').value)}">
@@ -583,7 +585,8 @@
                             *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentLongLet').value
                             }}</strong>
                         </fieldset>
-                        <fieldset class="inline-child"
+
+                        <fieldset class="ml-14 inline-child"
                           *ngIf="!isEditable && !isNewValuation && !valuationForm.get('suggestedAskingRentShortLet').value">
                           <label style="width:max-content" for="sellValue">Age of valuation</label>
                           <strong class="text-lg"
@@ -615,7 +618,7 @@
                             *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentShortLet').value
                             }}</strong>
                         </fieldset>
-                        <fieldset class="inline-child" *ngIf="!isEditable && !isNewValuation">
+                        <fieldset class="ml-14 inline-child" *ngIf="!isEditable && !isNewValuation">
                           <label style="width:max-content" for="sellValue">Age of valuation</label>
                           <strong class="text-lg"
                             [ngStyle]="{'color':ageColor(valuationForm.get('ageOfSuggestedAskingPrice').value)}">
