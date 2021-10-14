@@ -4,8 +4,9 @@
       <li class="title">
         <span>
           <p class="txt--title">
-            <a
-              [routerLink]="['/contact-centre/detail/0/people/', contactGroup?.contactGroupId]">{{contactGroup?.addressee}}</a>
+            <a [routerLink]="['/contact-centre/detail/0/people/', contactGroup?.contactGroupId]">
+              {{contactGroup?.contactType == 4?'('+contactGroup?.companyName.trim()+')':''}} {{contactGroup?.addressee}}
+            </a>
           </p>
         </span>
         <div class="flexRight">
