@@ -79,6 +79,9 @@ export class ValuationsLandRegisterComponent implements OnInit, AfterViewInit, O
 
     this.getValidationResult();
 
+    if (this.property?.leaseExpiryDate)
+      this.leaseYear = differenceInCalendarYears(new Date(this.property.leaseExpiryDate), new Date());
+
     this.landRegistryForm.controls['leaseExpiryDate'].valueChanges.subscribe((data: Date) => {
       this.leaseYear = differenceInCalendarYears(data, new Date());
     });
