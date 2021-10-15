@@ -5,7 +5,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ContactGroup, ContactNote, Signer } from 'src/app/contact-groups/shared/contact-group';
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
-import { Person } from '../../models/person';
+import { InfoDetail } from 'src/app/core/services/info.service';
+import { SharedService } from 'src/app/core/services/shared.service';
+import { Person, Referral } from '../../models/person';
 
 @Component({
   selector: 'app-contact-group-card',
@@ -16,6 +18,10 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
   @Input() showEmailModal = false;
   @Input() showValuationActions = true;
   @Input() adminContact: Signer;
+  contactReferrals: Referral[] = [];
+  referralCompanies: InfoDetail[];
+  selectedReferralCompany: Referral;
+  showRefDialog = false;
 
   numOfPeople: number;
   showAdditionalPeople = false;
@@ -28,6 +34,7 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
     private contactGroupService: ContactGroupsService,
     private primengConfig: PrimeNGConfig,
     private router: Router,
+    private sharedService: SharedService,
   ) {}
 
   ngOnInit(): void {
@@ -101,6 +108,33 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
     if (this.firstPerson?.personId) {
       this.getPersonNotes(this.firstPerson?.personId);
     }
+  }
+
+  private setReferralCompanies() {
+    const refs = [];
+    this.referralCompanies?.forEach((x) => {
+      const ref: Referral = { referralCompanyId: x.id, referralCompany: x.value, referralDate: null };
+      refs.push(ref);
+      this.contactReferrals = refs;
+    });
+    // this.setPersonReferrals(this.personDetails?.referrals);
+    // console.log('person refs', this.personReferrals);
+  }
+
+  // setPersonReferrals(referrals: Referral[]) {
+  //   if (referrals?.length) {
+  //     referrals.forEach(r => {
+  //       this.personReferrals?.forEach(p => {
+  //         if (r.referralCompanyId === p.referralCompanyId) { p.referralDate = r.referralDate; }
+  //       });
+  //     });
+  //   }
+  // }
+
+  startReferral(company: Referral) {
+    this.showRefDialog = true;
+    this.sharedService.setRemoveSticky(this.showRefDialog);
+    this.selectedReferralCompany = company;
   }
 
   viewDetails(personId: number) {

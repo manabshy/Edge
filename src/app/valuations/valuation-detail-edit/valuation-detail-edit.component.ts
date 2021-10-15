@@ -1155,8 +1155,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
         ) {
           this.canSaveValuation = false;
-          this.property.leaseExpiryDate = this.valuation.leaseExpiryDate;
-          this.property.userEnteredOwner = this.valuation.userEnteredOwner;
+          this.property = {
+            ...this.property,
+            leaseExpiryDate: this.valuation.leaseExpiryDate,
+            userEnteredOwner: this.valuation.userEnteredOwner,
+          };
+          this.valuation.property = this.property;
         } else {
           this.canSaveValuation = true;
         }
@@ -1183,6 +1187,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
               ...this.valuation.combinedValuationBooking,
             };
           }
+
+          this.selectedLettingsDate = this.valuation.lettingsValuationBooking?.startDateTime
+            ? new Date(this.valuation.lettingsValuationBooking?.startDateTime)
+            : null;
+          this.selectedSalesDate = this.valuation.salesValuationBooking?.startDateTime
+            ? new Date(this.valuation.salesValuationBooking?.startDateTime)
+            : null;
         }
 
         if (this.valuation.property) {
@@ -2661,8 +2672,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.selectedLettingsDate = this.selectedDate;
       }
     } else {
-      this.selectedLettingsDate = this.selectedDate;
-      this.selectedSalesDate = this.selectedDate;
+      if (this.isSalesAndLettings) {
+        this.selectedLettingsDate = this.selectedDate;
+        this.selectedSalesDate = this.selectedDate;
+      } else if (this.isSalesOnly) {
+        this.selectedSalesDate = this.selectedDate;
+      } else if (this.isLettingsOnly) {
+        this.selectedLettingsDate = this.selectedDate;
+      }
     }
 
     this.oldClass = 'null';
@@ -2678,7 +2695,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         startDateTime: this.selectedSalesDate,
         totalHours: 1,
       };
-      this.getTimeSalesValuationDate = this.selectedSalesDate?.getTime();
     }
     if (this.lettingsValuer && (this.isLettingsOnly || this.isSalesAndLettings)) {
       this.lettingsValuerControl.setValue(this.lettingsValuer);
@@ -2687,7 +2703,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         startDateTime: this.selectedLettingsDate,
         totalHours: 1,
       };
-      this.getTimeLettingsValuationDate = this.selectedLettingsDate?.getTime();
     }
 
     if (this.isBothEdit) {
@@ -2703,6 +2718,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.getTimeSalesValuationDate = null;
       }
     }
+    this.selectedLettingsDate = this.valuation.lettingsValuationBooking?.startDateTime
+      ? new Date(this.valuation.lettingsValuationBooking?.startDateTime)
+      : null;
+    this.selectedSalesDate = this.valuation.salesValuationBooking?.startDateTime
+      ? new Date(this.valuation.salesValuationBooking?.startDateTime)
+      : null;
+
+    this.getTimeSalesValuationDate = this.selectedSalesDate?.getTime();
+    this.getTimeLettingsValuationDate = this.selectedLettingsDate?.getTime();
 
     this.setCloseState();
 

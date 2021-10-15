@@ -18,7 +18,14 @@ import { Property } from 'src/app/property/shared/property';
 export class ValuationsLandRegisterComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() interestList: any[] = [];
   @Input() valuationStatus: number;
-  @Input() property: Property;
+
+  private _property: Property;
+  set property(value) {
+    this._property = value;
+  }
+  @Input() get property(): Property {
+    return this._property;
+  }
 
   private _showLeaseExpiryDate: boolean;
   set showLeaseExpiryDate(value) {
