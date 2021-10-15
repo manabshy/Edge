@@ -345,6 +345,7 @@
                     *ngIf="salesValuerControl.value || lettingsValuerControl.value">
                     <fieldset class="inline-child" *ngIf="valuation?.salesValuationBooking"
                       style="align-self: flex-start">
+
                       <p-card class="mb-4 w-80 md:w-96">
                         <fieldset>
                           <label for="lettingsValuer">Sales Valuer</label>
@@ -369,70 +370,73 @@
                             data-cy="openAvailabilitySales">Edit</button>
                         </fieldset>
                         <ng-template pTemplate="footer">
-                          <fieldset>
-                            <label>Are we meeting the Owner ?</label>
-                            <span class="radio radio--inline">
-                              <span>
-                                <input class="p-2" type="radio" id="salesMeetingOwnerYes" [value]="true"
-                                  name="salesMeetingOwner" formControlName="salesMeetingOwner"
-                                  data-cy="salesMeetingOwner">
-                                <label for="salesMeetingOwnerYes">Yes</label>
-                              </span>
-                              <span>
-                                <input class="p-2" type="radio" id="salesMeetingOwnerNo" [value]="false"
-                                  name="salesMeetingOwner" formControlName="salesMeetingOwner">
-                                <label for="salesMeetingOwnerNo">No</label>
-                              </span>
-                            </span>
-                          </fieldset>
-                          <div *ngIf="valuationForm.get('salesMeetingOwner').value === false">
-                            <span class="inline-parent inline-parent__hasLabels">
-                              <fieldset class="inline-child"
-                                [ngClass]="{'invalid': formErrors?.salesOwnerAssociateName}">
-                                <label for="salesOwnerAssociateName">Name</label>
-                                <input class="p-2" type="text" name="salesOwnerAssociateName"
-                                  id="salesOwnerAssociateName" formControlName="salesOwnerAssociateName"
-                                  [ngClass]="{'is-invalid':formErrors.salesOwnerAssociateName}">
-                                <p class="message message--negative"> {{formErrors?.salesOwnerAssociateName}}</p>
-                              </fieldset>
-                              <fieldset class="inline-child"
-                                [ngClass]="{'invalid': formErrors?.salesOwnerAssociateContactNumber}">
-                                <label for="salesOwnerAssociateContactNumber">Contact Number</label>
-                                <input class="p-2" type="text" pattern="[0-9*#+]+$"
-                                  name="salesOwnerAssociateContactNumber" id="salesOwnerAssociateContactNumber"
-                                  formControlName="salesOwnerAssociateContactNumber"
-                                  [ngClass]="{'is-invalid':formErrors.salesOwnerAssociateContactNumber}">
-                                <p class="message message--negative"> {{formErrors?.salesOwnerAssociateContactNumber}}
-                                </p>
-                              </fieldset>
-                            </span>
-                            <span class="inline-parent inline-parent__hasLabels">
-                              <fieldset class="inline-child"
-                                [ngClass]="{'invalid': formErrors?.salesOwnerAssociateEmail}">
-                                <label for="salesOwnerAssociateEmail">Email Address</label>
-                                <input class="p-2" type="email" name="salesOwnerAssociateEmail"
-                                  id="salesOwnerAssociateEmail" formControlName="salesOwnerAssociateEmail"
-                                  [ngClass]="{'is-invalid':formErrors.salesOwnerAssociateEmail}">
-                                <p class="message message--negative"> {{formErrors?.salesOwnerAssociateEmail}}</p>
-
-                              </fieldset>
-
-                              <fieldset class="inline-child">
-                                <label for="salesOwnerAssociateType">Association</label>
-                                <span class="select">
-                                  <select id="salesOwnerAssociateType" formControlName="salesOwnerAssociateType">
-                                    <option selected *ngFor="let associateType of associateTypes"
-                                      [value]='associateType?.id'>
-                                      {{associateType?.value}}
-                                    </option>
-                                  </select>
+                          <div *ngIf="getTimeSalesValuationDate !== getTimeLettingsValuationDate">
+                            <fieldset>
+                              <label>Are we meeting the Owner ?</label>
+                              <span class="radio radio--inline">
+                                <span>
+                                  <input class="p-2" type="radio" id="salesMeetingOwnerYes" [value]="true"
+                                    name="salesMeetingOwner" formControlName="salesMeetingOwner"
+                                    data-cy="salesMeetingOwner">
+                                  <label for="salesMeetingOwnerYes">Yes</label>
                                 </span>
-                                <p class="message message--negative"> {{formErrors?.salesOwnerAssociateType}}</p>
-                              </fieldset>
-                            </span>
+                                <span>
+                                  <input class="p-2" type="radio" id="salesMeetingOwnerNo" [value]="false"
+                                    name="salesMeetingOwner" formControlName="salesMeetingOwner">
+                                  <label for="salesMeetingOwnerNo">No</label>
+                                </span>
+                              </span>
+                            </fieldset>
+                            <div *ngIf="valuationForm.get('salesMeetingOwner').value === false">
+                              <span class="inline-parent inline-parent__hasLabels">
+                                <fieldset class="inline-child"
+                                  [ngClass]="{'invalid': formErrors?.salesOwnerAssociateName}">
+                                  <label for="salesOwnerAssociateName">Name</label>
+                                  <input class="p-2" type="text" name="salesOwnerAssociateName"
+                                    id="salesOwnerAssociateName" formControlName="salesOwnerAssociateName"
+                                    [ngClass]="{'is-invalid':formErrors.salesOwnerAssociateName}">
+                                  <p class="message message--negative"> {{formErrors?.salesOwnerAssociateName}}</p>
+                                </fieldset>
+                                <fieldset class="inline-child"
+                                  [ngClass]="{'invalid': formErrors?.salesOwnerAssociateContactNumber}">
+                                  <label for="salesOwnerAssociateContactNumber">Contact Number</label>
+                                  <input class="p-2" type="text" pattern="[0-9*#+]+$"
+                                    name="salesOwnerAssociateContactNumber" id="salesOwnerAssociateContactNumber"
+                                    formControlName="salesOwnerAssociateContactNumber"
+                                    [ngClass]="{'is-invalid':formErrors.salesOwnerAssociateContactNumber}">
+                                  <p class="message message--negative"> {{formErrors?.salesOwnerAssociateContactNumber}}
+                                  </p>
+                                </fieldset>
+                              </span>
+                              <span class="inline-parent inline-parent__hasLabels">
+                                <fieldset class="inline-child"
+                                  [ngClass]="{'invalid': formErrors?.salesOwnerAssociateEmail}">
+                                  <label for="salesOwnerAssociateEmail">Email Address</label>
+                                  <input class="p-2" type="email" name="salesOwnerAssociateEmail"
+                                    id="salesOwnerAssociateEmail" formControlName="salesOwnerAssociateEmail"
+                                    [ngClass]="{'is-invalid':formErrors.salesOwnerAssociateEmail}">
+                                  <p class="message message--negative"> {{formErrors?.salesOwnerAssociateEmail}}</p>
+
+                                </fieldset>
+
+                                <fieldset class="inline-child">
+                                  <label for="salesOwnerAssociateType">Association</label>
+                                  <span class="select">
+                                    <select id="salesOwnerAssociateType" formControlName="salesOwnerAssociateType">
+                                      <option selected *ngFor="let associateType of associateTypes"
+                                        [value]='associateType?.id'>
+                                        {{associateType?.value}}
+                                      </option>
+                                    </select>
+                                  </span>
+                                  <p class="message message--negative"> {{formErrors?.salesOwnerAssociateType}}</p>
+                                </fieldset>
+                              </span>
+                            </div>
                           </div>
                         </ng-template>
                       </p-card>
+
                     </fieldset>
 
                     <fieldset class="flex self-center justify-center mb-3 md:mb-8 inline-child"
@@ -447,6 +451,7 @@
 
                     <fieldset class="inline-child" *ngIf="valuation?.lettingsValuationBooking"
                       style="align-self: flex-start">
+
                       <p-card class="mb-4 w-80 md:w-96">
                         <fieldset>
                           <label for="lettingsValuer">Lettings Valuer</label>
@@ -539,10 +544,79 @@
                           </div>
                         </ng-template>
                       </p-card>
+
                     </fieldset>
                   </div>
 
+                  <div class="max-w-4xl" *ngIf="getTimeSalesValuationDate === getTimeLettingsValuationDate">
+                    <div class="grid justify-center col-auto">
+                      <div class="grid justify-center">
+                        <fieldset>
+                          <label>Are we meeting the Owner ?</label>
+                          <span class="radio radio--inline">
+                            <span>
+                              <input class="p-2" type="radio" id="salesMeetingOwnerYes" [value]="true"
+                                name="salesMeetingOwner" formControlName="salesMeetingOwner"
+                                data-cy="salesMeetingOwner">
+                              <label for="salesMeetingOwnerYes">Yes</label>
+                            </span>
+                            <span>
+                              <input class="p-2" type="radio" id="salesMeetingOwnerNo" [value]="false"
+                                name="salesMeetingOwner" formControlName="salesMeetingOwner">
+                              <label for="salesMeetingOwnerNo">No</label>
+                            </span>
+                          </span>
+                        </fieldset>
+                      </div>
+                      <div *ngIf="valuationForm.get('salesMeetingOwner').value === false">
+                        <span class="inline-parent inline-parent__hasLabels">
+                          <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.salesOwnerAssociateName}">
+                            <label for="salesOwnerAssociateName">Name</label>
+                            <input class="p-2" type="text" name="salesOwnerAssociateName" id="salesOwnerAssociateName"
+                              formControlName="salesOwnerAssociateName"
+                              [ngClass]="{'is-invalid':formErrors.salesOwnerAssociateName}">
+                            <p class="message message--negative"> {{formErrors?.salesOwnerAssociateName}}</p>
+                          </fieldset>
+                          <fieldset class="inline-child"
+                            [ngClass]="{'invalid': formErrors?.salesOwnerAssociateContactNumber}">
+                            <label for="salesOwnerAssociateContactNumber">Contact Number</label>
+                            <input class="p-2" type="text" pattern="[0-9*#+]+$" name="salesOwnerAssociateContactNumber"
+                              id="salesOwnerAssociateContactNumber" formControlName="salesOwnerAssociateContactNumber"
+                              [ngClass]="{'is-invalid':formErrors.salesOwnerAssociateContactNumber}">
+                            <p class="message message--negative"> {{formErrors?.salesOwnerAssociateContactNumber}}
+                            </p>
+                          </fieldset>
+                        </span>
+                        <span class="inline-parent inline-parent__hasLabels">
+                          <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.salesOwnerAssociateEmail}">
+                            <label for="salesOwnerAssociateEmail">Email Address</label>
+                            <input class="p-2" type="email" name="salesOwnerAssociateEmail"
+                              id="salesOwnerAssociateEmail" formControlName="salesOwnerAssociateEmail"
+                              [ngClass]="{'is-invalid':formErrors.salesOwnerAssociateEmail}">
+                            <p class="message message--negative"> {{formErrors?.salesOwnerAssociateEmail}}</p>
+
+                          </fieldset>
+
+                          <fieldset class="inline-child">
+                            <label for="salesOwnerAssociateType">Association</label>
+                            <span class="select">
+                              <select id="salesOwnerAssociateType" formControlName="salesOwnerAssociateType">
+                                <option selected *ngFor="let associateType of associateTypes"
+                                  [value]='associateType?.id'>
+                                  {{associateType?.value}}
+                                </option>
+                              </select>
+                            </span>
+                            <p class="message message--negative"> {{formErrors?.salesOwnerAssociateType}}</p>
+                          </fieldset>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+
                 </div>
+
               </p-accordionTab>
 
               <p-accordionTab header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible"
