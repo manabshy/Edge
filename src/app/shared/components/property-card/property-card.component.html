@@ -108,11 +108,11 @@
                 d="M32 0L0 36.1h8V64h6.8v-4.3c0-5.7 11.5-8.6 17.2-8.6s17.2 2.8 17.2 8.5V64H56V36.1h8L32 0zM32 46.8c-4.8 0-8.6-3.9-8.6-8.6 0-4.8 3.8-8.6 8.6-8.6s8.6 3.8 8.6 8.6C40.6 42.9 36.8 46.8 32 46.8z" />
             </svg>
             <a [routerLink]="['/contact-centre/detail/0/people/', propertyDetails?.lastKnownOwner?.contactGroupId]">
-              {{(propertyDetails?.lastKnownOwner?.companyName?
-              '('+propertyDetails?.lastKnownOwner?.companyName.trim()+') '
-              :'')
-              +
-              propertyDetails?.lastKnownOwner?.contactNames}}
+              {{
+              (propertyDetails?.lastKnownOwner?.companyName?
+              propertyDetails?.lastKnownOwner?.companyName + '(' + propertyDetails?.lastKnownOwner?.contactNames + ')'
+              :propertyDetails?.lastKnownOwner?.contactNames)
+              }}
             </a>
           </li>
         </ol>
