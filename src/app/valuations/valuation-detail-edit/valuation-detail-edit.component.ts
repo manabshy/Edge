@@ -1194,6 +1194,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.selectedSalesDate = this.valuation.salesValuationBooking?.startDateTime
             ? new Date(this.valuation.salesValuationBooking?.startDateTime)
             : null;
+
+          this.getTimeSalesValuationDate = this.selectedSalesDate?.getTime();
+          this.getTimeLettingsValuationDate = this.selectedLettingsDate?.getTime();
         }
 
         if (this.valuation.property) {
