@@ -183,19 +183,21 @@
 
                   <div id="propertyInfoTab">
                     <div class="inline-parent inline-parent__hasLabels">
-                      <fieldset class="inline-child">
+                      <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.propertyTypeId}">
                         <label for="propertyTypeId">Property Type</label>
                         <p-dropdown name="propertyTypeId" id="propertyTypeId" [options]="propertyTypes"
                           formControlName="propertyTypeId" optionLabel="value" optionValue="id" [filter]="false"
                           data-cy="propertyTypeId">
                         </p-dropdown>
+                        <p class="message message--negative"> {{formErrors?.propertyTypeId}}</p>
                       </fieldset>
-                      <fieldset class="inline-child">
+                      <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.propertyStyleId}">
                         <label for="propertyStyleId">Property Style</label>
                         <p-dropdown name="propertyStyleId" id="propertyStyleId" [options]="propertyStyles"
                           formControlName="propertyStyleId" optionLabel="value" optionValue="id" [filter]="false"
                           data-cy="propertyStyleId">
                         </p-dropdown>
+                        <p class="message message--negative"> {{formErrors?.propertyStyleId}}</p>
                       </fieldset>
                       <fieldset class="inline-child" *ngIf="valuationForm.get('propertyTypeId').value == 2">
                         <label for="propertyFloorId">Floor</label>

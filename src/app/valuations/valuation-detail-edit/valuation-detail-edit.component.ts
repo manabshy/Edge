@@ -602,8 +602,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           data.receptions &&
           data.propertyTypeId &&
           data.propertyStyleId &&
-          (data.propertyStyleId != 2 || (data.propertyStyleId == 2 && !data.propertyFloorId)) &&
-          (data.propertyFloorId != '10' || (data.propertyFloorId == '10' && data.floorOther)) &&
+          (data.propertyTypeId != 2 || (data.propertyTypeId == 2 && !data.propertyFloorId)) &&
+          (data.propertyTypeId != 2 ||
+            data.propertyFloorId != '10' ||
+            (data.propertyTypeId == 2 && data.propertyFloorId == '10' && data.floorOther)) &&
           (!this.showLeaseExpiryDate || (this.showLeaseExpiryDate == true && data.approxLeaseExpiryDate))
         ) {
           this.statuses.find((x) => x.value == 1).isValid = true;
@@ -873,9 +875,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.setOriginTypes(info.originTypes); // TODO: Issue on refresh
     this.interestList = info.section21Statuses;
     this.associateTypes = info.associations;
-    this.propertyTypes = info.propertyTypes;
-    this.allPropertyStyles = info.propertyStyles;
-    this.propertyStyles = info.propertyStyles;
+    this.propertyTypes = [{ id: 0, value: ' ' }, ...info.propertyTypes];
+    this.allPropertyStyles = [info.propertyStyles];
+    this.propertyStyles = [{ id: 0, value: ' ' }, ...info.propertyStyles];
     this.propertyFloors = info.propertyFloors;
   }
 
@@ -1064,8 +1066,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       lettingsOwnerAssociateContactNumber: [''],
       lettingsOwnerAssociateEmail: [''],
       lettingsOwnerAssociateType: ['6'],
-      propertyStyleId: [],
-      propertyTypeId: [],
+      propertyStyleId: [null, Validators.required],
+      propertyTypeId: [null, Validators.required],
       propertyFloorId: [],
       floorOther: [],
       isRetirementHome: [false],
@@ -2385,6 +2387,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     ) {
       this.valuationForm.get('valuationNote').setValidators(null);
     }
+
+    if (this.valuationForm.controls['propertyTypeId'].value === 0)
+      this.valuationForm.controls['propertyTypeId'].setValue(null);
+    if (this.valuationForm.controls['propertyStyleId'].value === 0)
+      this.valuationForm.controls['propertyStyleId'].setValue(null);
 
     this.sharedService.logValidationErrors(this.valuationForm, true);
 
