@@ -56,6 +56,10 @@ export class ContactGroupsService {
   signer$ = this.signerSubject.asObservable();
   newPerson$ = this.newPersonSubject.asObservable();
 
+  addAdminContactBs = new BehaviorSubject<boolean>(false);
+  addLastOwnerBs = new BehaviorSubject<boolean>(false);
+  addedContactBs = new BehaviorSubject<ContactGroup | null>(null);
+
   constructor(private http: HttpClient) {}
 
   getAutocompleteContactGroups(
@@ -238,7 +242,10 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseContactGroupUrl}`;
     return this.http.post(url, contactGroup).pipe(
       map((response) => response),
-      tap((data) => console.log('updated contact details here...', JSON.stringify(data))),
+      tap((data) => {
+        this.addedContactBs.next(data);
+        console.log('updated contact details here...', JSON.stringify(data));
+      }),
     );
   }
 
@@ -246,7 +253,10 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroup.contactGroupId}`;
     return this.http.put(url, contactGroup).pipe(
       map((response) => response),
-      tap((data) => console.log('updated contact details here...', JSON.stringify(data))),
+      tap((data) => {
+        this.addedContactBs.next(data);
+        console.log('updated contact details here...', JSON.stringify(data));
+      }),
     );
   }
 

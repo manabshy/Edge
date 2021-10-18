@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { ToastrService } from 'ngx-toastr';
-import { debounceTime, takeUntil, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, takeUntil, distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { ContactGroup, ContactNote, PersonSummaryFigures, Signer } from 'src/app/contact-groups/shared/contact-group';
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
@@ -35,7 +35,7 @@ import { ResultData } from 'src/app/shared/result-data';
 import { StaffMember } from 'src/app/shared/models/staff-member';
 import { TabDirective } from 'ngx-bootstrap/tabs/ngx-bootstrap-tabs';
 import format from 'date-fns/format';
-import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, Subscription, combineLatest } from 'rxjs';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { addYears, differenceInCalendarYears, isThisHour } from 'date-fns';
 import _ from 'lodash';
@@ -529,8 +529,24 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.openContactGroupSubscription = this.sharedService.openContactGroupChanged.subscribe((value) => {
       if (value) {
         this.isAdminContactVisible = value;
+        this.contactGroupService.addAdminContactBs.next(true);
       }
     });
+
+    // this.contactGroupService.addedContactBs.subscribe(() => {
+    //   console.log('ramoooo');
+    // });
+
+    // combineLatest([this.contactGroupService.addedContactBs, this.contactGroupService.addAdminContactBs]).pipe(
+    //   map(([addedContact, addAdminContact]) => {
+    //     if (addAdminContact == true && addedContact?.contactGroupId > 0) {
+    //       //TODO adding the admin contact
+    //       this.contactGroupService.addAdminContactBs.next(false);
+    //       this.contactGroupService.addedContactBs.next(null);
+    //     }
+    //   }),
+    //   tap(() => console.log('come hereeeee')),
+    // );
 
     this.removeContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe((value) => {
       if (value) {
