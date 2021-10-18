@@ -1,13 +1,15 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuItem, PrimeNGConfig } from 'primeng/api';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { MenuItem, MessageService, PrimeNGConfig } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ContactGroup, ContactNote, Signer } from 'src/app/contact-groups/shared/contact-group';
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
-import { InfoDetail } from 'src/app/core/services/info.service';
+import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { Person, Referral } from '../../models/person';
+import { ResultData } from '../../result-data';
 
 @Component({
   selector: 'app-contact-group-card',
@@ -34,7 +36,10 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
     private contactGroupService: ContactGroupsService,
     private primengConfig: PrimeNGConfig,
     private router: Router,
+    private storage: StorageMap,
     private sharedService: SharedService,
+    private infoService: InfoService,
+    private messageService: MessageService,
   ) {}
 
   ngOnInit(): void {
@@ -97,6 +102,8 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
       //   },
       // },
     ];
+
+    this.getInfo();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -110,6 +117,60 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
     }
   }
 
+  getInfo() {
+    this.storage.get('info').subscribe((data: DropdownListInfo) => {
+      if (data) {
+        this.referralCompanies = data.referralCompanies;
+      } else {
+        this.infoService.getDropdownListInfo().subscribe((info: DropdownListInfo) => {
+          if (info) {
+            this.referralCompanies = info.referralCompanies;
+          }
+        });
+      }
+      this.setReferralCompanies();
+    });
+  }
+
+  cancelReferral() {
+    this.showRefDialog = false;
+    this.sharedService.setRemoveSticky(this.showRefDialog);
+  }
+
+  sendReferral() {
+    if (this.firstPerson?.personId && this.selectedReferralCompany?.referralCompanyId) {
+      this.contactGroupService
+        .createPersonReferral(this.firstPerson, this.selectedReferralCompany.referralCompanyId)
+        .subscribe((res: ResultData) => this.onSaveComplete(res.result));
+    }
+  }
+
+  onSaveComplete(res: Referral[]): void {
+    if (res) {
+      this.setPersonReferrals(res);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Referral successfully sent',
+        closable: false,
+        key: 'referralMessage',
+      });
+      this.showRefDialog = false;
+      this.sharedService.setRemoveSticky(this.showRefDialog);
+    }
+  }
+
+  setPersonReferrals(referrals: Referral[]) {
+    if (referrals?.length) {
+      referrals.forEach((r) => {
+        this.contactReferrals?.forEach((p) => {
+          if (r.referralCompanyId === p.referralCompanyId) {
+            p.referralDate = r.referralDate;
+          }
+        });
+      });
+    }
+  }
+
   private setReferralCompanies() {
     const refs = [];
     this.referralCompanies?.forEach((x) => {
@@ -117,19 +178,7 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
       refs.push(ref);
       this.contactReferrals = refs;
     });
-    // this.setPersonReferrals(this.personDetails?.referrals);
-    // console.log('person refs', this.personReferrals);
   }
-
-  // setPersonReferrals(referrals: Referral[]) {
-  //   if (referrals?.length) {
-  //     referrals.forEach(r => {
-  //       this.personReferrals?.forEach(p => {
-  //         if (r.referralCompanyId === p.referralCompanyId) { p.referralDate = r.referralDate; }
-  //       });
-  //     });
-  //   }
-  // }
 
   startReferral(company: Referral) {
     this.showRefDialog = true;

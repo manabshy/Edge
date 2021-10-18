@@ -582,6 +582,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   ngAfterViewInit(): void {
     this.setScrollInformation();
+    this.sideNavItems.find((x) => x.name == 'valuationTicket').isCurrent = true;
   }
 
   controlStatus(data) {
@@ -2445,10 +2446,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     const valuation = { ...this.valuation, ...this.valuationForm.value };
     valuation.propertyOwner = this.lastKnownOwner;
     valuation.OfficeId = this.property.officeId;
-
-    if (valuation.approxLeaseExpiryDate === 0) {
-      valuation.approxLeaseExpiryDate = null;
-    }
+    valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate;
 
     valuation.isPowerOfAttorney =
       this.adminContact && this.adminContact.contactGroupId > 0 ? this.adminContact?.isPowerOfAttorney : false;
