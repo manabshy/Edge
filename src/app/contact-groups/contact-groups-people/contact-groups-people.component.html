@@ -93,7 +93,7 @@
                   </span>
                 </fieldset>
               </form>
-              <fieldset class="mb-3" *ngIf="!contactGroupDetails?.contactPeople?.length">
+              <!-- <fieldset class="mb-3" *ngIf="!contactGroupDetails?.contactPeople?.length">
                 <p><button (click)="isOffCanvasVisible = true" type="button" class="btn btn--positive"><svg
                       aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
                       <path
@@ -101,7 +101,7 @@
                       <path class="plus-vertical"
                         d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
                     </svg>Person</button></p>
-              </fieldset>
+              </fieldset> -->
 
             </ng-template>
 
@@ -465,6 +465,19 @@
             </form>
           </ng-container>
         </ng-container>
+
+        <div *ngIf="groupType =='company' &&  !contactGroupDetails?.contactPeople?.length">
+          <fieldset class="mb-3">
+            <p><button (click)="isOffCanvasVisible = true" type="button" class="btn btn--positive"><svg
+                  aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                  <path
+                    d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
+                  <path class="plus-vertical"
+                    d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
+                </svg>Person</button></p>
+          </fieldset>
+        </div>
+
         <footer class="footer">
           <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
           <button type="submit" class="btn btn--positive" (click)="saveContactGroup()"

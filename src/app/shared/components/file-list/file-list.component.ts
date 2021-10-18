@@ -63,14 +63,14 @@ export class FileListComponent implements OnInit, OnDestroy {
   setSelectedFile() {
     if (this.tmpFiles && this.tmpFiles.length > 0) {
       if (this.fileType === FileTypeEnum.OnlyImage && this.tmpFiles.some((x) => x.type.indexOf('Image') == -1)) {
-        this.showWarningMessage('This file operation accepts only image files. Please try again!');
+        this.showWarningMessage('This file operation accepts only image files(.png,.jpeg). Please try again!');
         return;
       }
       if (
         this.fileType === FileTypeEnum.OnlyDocument &&
         this.tmpFiles.some((x) => x.type.indexOf('document') == -1 && x.type.indexOf('pdf') == -1)
       ) {
-        this.showWarningMessage('This file operation accepts only document files. Please try again!');
+        this.showWarningMessage('This file operation accepts only document files(.pdf). Please try again!');
         return;
       }
       if (
@@ -79,7 +79,9 @@ export class FileListComponent implements OnInit, OnDestroy {
           (x) => x.type.indexOf('document') == -1 && x.type.indexOf('pdf') == -1 && x.type.indexOf('image') == -1,
         )
       ) {
-        this.showWarningMessage('This file operation accepts only document and image files. Please try again!');
+        this.showWarningMessage(
+          'This file operation accepts only document and image files(.jpeg,.png,.pdf). Please try again!',
+        );
         return;
       }
 

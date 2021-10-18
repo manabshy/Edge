@@ -1807,18 +1807,30 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuationService.getValuersAvailability(request).subscribe((res) => {
         this.availableDates = res.valuationStaffMembersCalanderEvents;
         this.setWeeks();
-        let firstAvailableSlot = this.thisWeek && this.thisWeek.length > 0 ? this.thisWeek[0] : this.nextWeek[0];
-        this.selectedCalendarDate = firstAvailableSlot.date;
-        this.showCalendar = true;
-        this.selectAvailableDate(firstAvailableSlot.hours[0]);
+        this.setFirstFreeSlot();
       });
     } else {
       this.setWeeks();
-      let firstAvailableSlot = this.thisWeek && this.thisWeek.length > 0 ? this.thisWeek[0] : this.nextWeek[0];
-      this.selectedCalendarDate = firstAvailableSlot.date;
-      this.showCalendar = true;
-      this.selectAvailableDate(firstAvailableSlot.hours[0]);
+      this.setFirstFreeSlot();
     }
+  }
+
+  setFirstFreeSlot() {
+    let indexOf = this.thisWeek && this.thisWeek.findIndex((x) => !x.hours.class);
+    let firstAvailableSlot;
+    if (indexOf > -1) {
+      firstAvailableSlot = this.thisWeek[indexOf];
+    } else {
+      indexOf = this.nextWeek && this.nextWeek.findIndex((x) => !x.hours.class);
+      if (indexOf > -1) {
+        firstAvailableSlot = this.nextWeek[indexOf];
+      } else {
+        firstAvailableSlot = this.nextTwoWeek[0];
+      }
+    }
+    this.selectedCalendarDate = firstAvailableSlot.date;
+    this.showCalendar = true;
+    this.selectAvailableDate(firstAvailableSlot.hours[0]);
   }
 
   setWeeks() {
