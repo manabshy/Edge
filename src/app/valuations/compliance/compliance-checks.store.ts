@@ -275,27 +275,14 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     return this.fileService
       .saveFileTemp(formData)
       .pipe(
-        filter((tmpFiles) => !!tmpFiles.files.length),
         mergeMap((tmpFiles) => {
           this.addFilesToUser({ tmpFiles, data })
           return this.peopleArrayShapedForApi$
         }),
-        mergeMap((userDataForApi) => {
-          if (userDataForApi.peopleToSave) {
-            return this.peopleService.setPeopleDocs(userDataForApi.peopleToSave, userDataForApi.contactGroupId)
-          } else {
-            return this.peopleService.setCompanyPeopleDocs(userDataForApi.savePayload, userDataForApi.contactGroupId)
-          }
-        }),
         tap((data) => {
-          if (data.companyDocuments) {
-            let peopleData = data.companyDocuments.concat(data.personDocuments)
-            return this.patchState({ people: setContactsForCompliance(peopleData) })
-          } else {
-            return this.patchState({ people: setContactsForCompliance(data) })
-          }
-        }),
-        take(1),
+          console.log('people: ', data)
+          this.valuationSvc.updatePersonDocuments(data.peopleToSave)
+        })
       )
       .subscribe(
         (res) => {
