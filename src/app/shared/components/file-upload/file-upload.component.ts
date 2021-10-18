@@ -85,6 +85,7 @@ export class FileUploadComponent implements OnInit, OnDestroy, AfterViewInit {
               summary: 'File size cannot be bigger than 100 MB!',
               closable: false,
             });
+            this.fileUploadControl.setValue([]);
             return;
           }
         });

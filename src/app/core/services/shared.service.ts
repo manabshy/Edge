@@ -1,30 +1,26 @@
-import { Injectable, ElementRef } from "@angular/core";
-import { AppUtils, RequestOption } from "../shared/utils";
-import dayjs from "dayjs";
-import { BehaviorSubject, Subject } from "rxjs";
-import { map, fill } from "lodash";
-import { BsModalService } from "ngx-bootstrap/modal/";
-import { ErrorModalComponent } from "../../shared/error-modal/error-modal.component";
-import { NoteModalComponent } from "../../shared/note-modal/note-modal.component";
-import { PhoneNumberUtil } from "google-libphonenumber";
-import { CurrencyPipe, Location } from "@angular/common";
-import { Title } from "@angular/platform-browser";
-import { AbstractControl, FormGroup } from "@angular/forms";
-import { Router } from "@angular/router";
-import { StorageMap } from "@ngx-pwa/local-storage";
-import { ContactGroup } from "src/app/contact-groups/shared/contact-group";
-import { ValidationMessages, FormErrors } from "../shared/app-constants";
-import {
-  Valuation,
-  ValuationStatusEnum,
-  ValuationTypeEnum,
-} from "src/app/valuations/shared/valuation";
-import { DialogService, DynamicDialogRef } from "primeng/dynamicdialog";
-import { InfoDetail } from "./info.service";
-import { eSignTypes } from "../shared/eSignTypes";
+import { Injectable, ElementRef } from '@angular/core';
+import { AppUtils, RequestOption } from '../shared/utils';
+import dayjs from 'dayjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { map, fill } from 'lodash';
+import { BsModalService } from 'ngx-bootstrap/modal/';
+import { ErrorModalComponent } from '../../shared/error-modal/error-modal.component';
+import { NoteModalComponent } from '../../shared/note-modal/note-modal.component';
+import { PhoneNumberUtil } from 'google-libphonenumber';
+import { CurrencyPipe, Location } from '@angular/common';
+import { Title } from '@angular/platform-browser';
+import { AbstractControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { ContactGroup } from 'src/app/contact-groups/shared/contact-group';
+import { ValidationMessages, FormErrors } from '../shared/app-constants';
+import { Valuation, ValuationStatusEnum, ValuationTypeEnum } from 'src/app/valuations/shared/valuation';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { InfoDetail } from './info.service';
+import { eSignTypes } from '../shared/eSignTypes';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class SharedService {
   lastCallNoteToast: any;
@@ -37,12 +33,8 @@ export class SharedService {
   openContactGroupChanged = new BehaviorSubject<boolean | null>(null);
   removeContactGroupChanged = new BehaviorSubject<boolean | null>(null);
   eSignTriggerChanged = new Subject<eSignTypes>();
-  valuationStatusChanged = new BehaviorSubject<ValuationStatusEnum>(
-    ValuationStatusEnum.None
-  );
-  valuationType = new BehaviorSubject<ValuationTypeEnum>(
-    ValuationTypeEnum.None
-  );
+  valuationStatusChanged = new BehaviorSubject<ValuationStatusEnum>(ValuationStatusEnum.None);
+  valuationType = new BehaviorSubject<ValuationTypeEnum>(ValuationTypeEnum.None);
   cancelValuationOperationChanged = new BehaviorSubject<boolean>(false);
 
   constructor(
@@ -52,7 +44,7 @@ export class SharedService {
     private storage: StorageMap,
     private dialogService: DialogService,
     private modalService: BsModalService,
-    private currencyPipe: CurrencyPipe
+    private currencyPipe: CurrencyPipe,
   ) {}
 
   transformCurrency(value: any): any {
@@ -64,27 +56,24 @@ export class SharedService {
     //   return value;
     if (value) {
       let numberValue = this.convertStringToNumber(value.toString());
-      return this.currencyPipe.transform(numberValue, "GBP", "symbol", "1.0-0");
+      return this.currencyPipe.transform(numberValue, 'GBP', 'symbol', '1.0-0');
     }
     return value;
   }
 
   convertStringToNumber(stringValue: string): number {
-    let numberValue = "0";
+    let numberValue = '0';
     if (stringValue) {
-      numberValue = stringValue.replace(/\D/g, "");
-      numberValue = numberValue.replace(/\D/g, "").replace(/^0+/, "");
+      numberValue = stringValue.replace(/\D/g, '');
+      numberValue = numberValue.replace(/\D/g, '').replace(/^0+/, '');
     }
     return +numberValue;
   }
 
   calculateDateToNowInMonths(valuationDate: Date): number {
     let subtractionOfMonths =
-      new Date().getMonth() -
-      valuationDate.getMonth() +
-      12 * (new Date().getFullYear() - valuationDate.getFullYear());
-    if (new Date().getDate() - valuationDate.getDate() < 0)
-      subtractionOfMonths--;
+      new Date().getMonth() - valuationDate.getMonth() + 12 * (new Date().getFullYear() - valuationDate.getFullYear());
+    if (new Date().getDate() - valuationDate.getDate() < 0) subtractionOfMonths--;
     return subtractionOfMonths;
   }
 
@@ -96,7 +85,7 @@ export class SharedService {
     if (!(window.opener && window.opener !== window)) {
       if (AppUtils.deactivateRoute) {
         this._router.navigateByUrl(AppUtils.deactivateRoute);
-        AppUtils.deactivateRoute = "";
+        AppUtils.deactivateRoute = '';
       } else {
         this._location.back();
       }
@@ -111,7 +100,7 @@ export class SharedService {
 
   clearControlValue(control: AbstractControl) {
     if (control.value) {
-      control.setValue("");
+      control.setValue('');
       control.updateValueAndValidity();
       control.parent.markAsDirty();
     }
@@ -122,7 +111,7 @@ export class SharedService {
     const height = Math.floor(Math.random() * 100) + 500;
     const left = window.top.outerWidth / 2 + window.top.screenX - 960 / 2;
     const top = window.top.outerHeight / 2 + window.top.screenY - 600 / 2;
-    const w = window.open(link, "_self");
+    const w = window.open(link, '_self');
     AppUtils.openedWindows.push(w);
     setTimeout(() => {
       AppUtils.openedWindows.forEach((x) => {
@@ -150,8 +139,8 @@ export class SharedService {
     // modal.content.subject = subject;
     this.ref = this.dialogService.open(ErrorModalComponent, {
       data,
-      styleClass: "dialog dialog--hasFooter",
-      header: "Error",
+      styleClass: 'dialog dialog--hasFooter',
+      header: 'Error',
     });
     // this.ref.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); } });
     return subject.asObservable();
@@ -162,7 +151,7 @@ export class SharedService {
     const initialState = {
       data: data,
     };
-    const modalClass = "modal-lg";
+    const modalClass = 'modal-lg';
     const modal = this.modalService.show(NoteModalComponent, {
       class: modalClass,
       initialState,
@@ -181,7 +170,7 @@ export class SharedService {
       if (elementPosition !== offsetPosition) {
         window.scrollTo({
           top: offsetPosition,
-          behavior: "smooth",
+          behavior: 'smooth',
         });
       }
     }
@@ -198,8 +187,8 @@ export class SharedService {
   scrollTodayIntoView() {
     setTimeout(() => {
       if (window.innerWidth < 576) {
-        if (document.getElementById("today")) {
-          document.getElementById("today").scrollIntoView({ block: "center" });
+        if (document.getElementById('today')) {
+          document.getElementById('today').scrollIntoView({ block: 'center' });
         } else {
           window.scrollTo(0, 0);
         }
@@ -210,12 +199,10 @@ export class SharedService {
   scrollCurrentHourIntoView() {
     setTimeout(() => {
       const currentHour = dayjs().hour();
-      const currentHourDivs = document.getElementsByClassName(
-        "hour-" + currentHour
-      );
+      const currentHourDivs = document.getElementsByClassName('hour-' + currentHour);
       if (currentHourDivs) {
         for (let i = 0; i < currentHourDivs.length; i++) {
-          currentHourDivs[i].scrollIntoView({ block: "center" });
+          currentHourDivs[i].scrollIntoView({ block: 'center' });
         }
       }
     });
@@ -241,10 +228,7 @@ export class SharedService {
     return formattedDate;
   }
 
-  checkDuplicateInContactGroup(
-    contactGroupDetails: ContactGroup,
-    personId: number
-  ) {
+  checkDuplicateInContactGroup(contactGroupDetails: ContactGroup, personId: number) {
     let isDuplicate = false;
     if (contactGroupDetails && contactGroupDetails.contactPeople) {
       contactGroupDetails.contactPeople.forEach((x) => {
@@ -260,34 +244,30 @@ export class SharedService {
     let url = this._router.url;
     let id = oldId;
 
-    if (url.indexOf("detail/" + id) === -1) {
+    if (url.indexOf('detail/' + id) === -1) {
       id = 0;
     }
-    if (url.indexOf("?") >= 0 && isNew) {
-      url = url.substring(0, url.indexOf("?"));
-      url = url.replace("detail/" + id, "detail/" + newId);
+    if (url.indexOf('?') >= 0 && isNew) {
+      url = url.substring(0, url.indexOf('?'));
+      url = url.replace('detail/' + id, 'detail/' + newId);
       this._location.replaceState(url);
       oldId = newId;
     }
   }
 
-  logValidationErrors(
-    group: FormGroup,
-    fakeTouched: boolean,
-    scrollToError = false
-  ): boolean {
+  logValidationErrors(group: FormGroup, fakeTouched: boolean, scrollToError = false): boolean {
     let validationControl = true;
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
       if (control.valid) {
-        FormErrors[key] = "";
+        FormErrors[key] = '';
       }
       if (control && !control.valid && (fakeTouched || control.dirty)) {
-        FormErrors[key] = "";
+        FormErrors[key] = '';
         for (const errorKey in control.errors) {
           if (errorKey) {
-            FormErrors[key] += messages ? messages[errorKey] + "\n" : "";
+            FormErrors[key] += messages ? messages[errorKey] + '\n' : '';
             validationControl = false;
           }
         }
@@ -303,17 +283,17 @@ export class SharedService {
   }
 
   resetForm(form: FormGroup) {
-    console.log("reset is called", form);
+    console.log('reset is called', form);
     form.reset();
     Object.keys(form.controls).forEach((key) => {
       form.get(key).setErrors(null);
     });
-    console.log("reset is called after", form);
+    console.log('reset is called after', form);
   }
 
   clearFormValidators(form: FormGroup, formErrors: any) {
     Object.keys(form.controls).forEach((key) => {
-      formErrors[key] = "";
+      formErrors[key] = '';
     });
   }
 
@@ -322,9 +302,7 @@ export class SharedService {
     // Return the end result
     return array.reduce((result, currentValue) => {
       // If an array already present for key, push it to the array. Else create an array and push the object
-      (result[currentValue[key]] = result[currentValue[key]] || []).push(
-        currentValue
-      );
+      (result[currentValue[key]] = result[currentValue[key]] || []).push(currentValue);
       // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
       return result;
     }, []); // empty object is the initial value for result object
@@ -337,8 +315,7 @@ export class SharedService {
       // If an array already present for key, push it to the array. Else create an array and push the object
       // let currentValueArr = currentValue.split("+");
       (result[new Date(new Date(currentValue).toDateString()).getTime()] =
-        result[new Date(new Date(currentValue).toDateString()).getTime()] ||
-        []).push(new Date(currentValue));
+        result[new Date(new Date(currentValue).toDateString()).getTime()] || []).push(new Date(currentValue));
       // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
       return result;
     }, []); // empty object is the initial value for result object
@@ -351,11 +328,7 @@ export class SharedService {
   }
 
   // not working so duplicate in individual components for now. FIX ASAP
-  setBottomReachedFlag(
-    result: any,
-    bottomReached?: boolean,
-    pageSize?: number
-  ) {
+  setBottomReachedFlag(result: any, bottomReached?: boolean, pageSize?: number) {
     if (result && (!result.length || result.length < +pageSize)) {
       bottomReached = true;
     } else {
@@ -365,68 +338,32 @@ export class SharedService {
 
   formatPostCode(postCodeToCheck: string) {
     // Permitted letters depend upon their position in the postcode.
-    const alpha1 = "[abcdefghijklmnoprstuwyz]"; // Character 1
-    const alpha2 = "[abcdefghklmnopqrstuvwxy]"; // Character 2
-    const alpha3 = "[abcdefghjkpmnrstuvwxy]"; // Character 3
-    const alpha4 = "[abehmnprvwxy]"; // Character 4
-    const alpha5 = "[abdefghjlnpqrstuwxyz]"; // Character 5
-    const BFPOa5 = "[abdefghjlnpqrst]"; // BFPO alpha5
-    const BFPOa6 = "[abdefghjlnpqrstuwzyz]"; // BFPO alpha6
+    const alpha1 = '[abcdefghijklmnoprstuwyz]'; // Character 1
+    const alpha2 = '[abcdefghklmnopqrstuvwxy]'; // Character 2
+    const alpha3 = '[abcdefghjkpmnrstuvwxy]'; // Character 3
+    const alpha4 = '[abehmnprvwxy]'; // Character 4
+    const alpha5 = '[abdefghjlnpqrstuwxyz]'; // Character 5
+    const BFPOa5 = '[abdefghjlnpqrst]'; // BFPO alpha5
+    const BFPOa6 = '[abdefghjlnpqrstuwzyz]'; // BFPO alpha6
 
     // Array holds the regular expressions for the valid postcodes
     const pcexp = new Array();
 
     // BFPO postcodes
-    pcexp.push(
-      new RegExp(
-        "^(bf1)(\\s*)([0-6]{1}" + BFPOa5 + "{1}" + BFPOa6 + "{1})$",
-        "i"
-      )
-    );
+    pcexp.push(new RegExp('^(bf1)(\\s*)([0-6]{1}' + BFPOa5 + '{1}' + BFPOa6 + '{1})$', 'i'));
 
     // Expression for postcodes: AN NAA, ANN NAA, AAN NAA, and AANN NAA
-    pcexp.push(
-      new RegExp(
-        "^(" +
-          alpha1 +
-          "{1}" +
-          alpha2 +
-          "?[0-9]{1,2})(\\s*)([0-9]{1}" +
-          alpha5 +
-          "{2})$",
-        "i"
-      )
-    );
+    pcexp.push(new RegExp('^(' + alpha1 + '{1}' + alpha2 + '?[0-9]{1,2})(\\s*)([0-9]{1}' + alpha5 + '{2})$', 'i'));
 
     // Expression for postcodes: ANA NAA
-    pcexp.push(
-      new RegExp(
-        "^(" +
-          alpha1 +
-          "{1}[0-9]{1}" +
-          alpha3 +
-          "{1})(\\s*)([0-9]{1}" +
-          alpha5 +
-          "{2})$",
-        "i"
-      )
-    );
+    pcexp.push(new RegExp('^(' + alpha1 + '{1}[0-9]{1}' + alpha3 + '{1})(\\s*)([0-9]{1}' + alpha5 + '{2})$', 'i'));
 
     // Expression for postcodes: AANA  NAA
     pcexp.push(
       new RegExp(
-        "^(" +
-          alpha1 +
-          "{1}" +
-          alpha2 +
-          "{1}" +
-          "?[0-9]{1}" +
-          alpha4 +
-          "{1})(\\s*)([0-9]{1}" +
-          alpha5 +
-          "{2})$",
-        "i"
-      )
+        '^(' + alpha1 + '{1}' + alpha2 + '{1}' + '?[0-9]{1}' + alpha4 + '{1})(\\s*)([0-9]{1}' + alpha5 + '{2})$',
+        'i',
+      ),
     );
 
     // Exception for the special postcode GIR 0AA
@@ -459,14 +396,14 @@ export class SharedService {
 
         // Copy it back into the original string, converting it to uppercase and inserting a space
         // between the inward and outward codes
-        postCode = RegExp.$1.toUpperCase() + " " + RegExp.$3.toUpperCase();
+        postCode = RegExp.$1.toUpperCase() + ' ' + RegExp.$3.toUpperCase();
 
         // If it is a BFPO c/o type postcode, tidy up the "c/o" part
-        postCode = postCode.replace(/C\/O\s*/, "c/o ");
+        postCode = postCode.replace(/C\/O\s*/, 'c/o ');
 
         // If it is the Anguilla overseas territory postcode, we need to treat it specially
-        if (postCodeToCheck.toUpperCase() === "AI-2640") {
-          postCode = "AI-2640";
+        if (postCodeToCheck.toUpperCase() === 'AI-2640') {
+          postCode = 'AI-2640';
         }
 
         // Load new postcode back into the form element
@@ -489,8 +426,8 @@ export class SharedService {
     let outCode: string;
     let inCode: string;
     if (postcode) {
-      outCode = postcode.split(" ")[0];
-      inCode = postcode.split(" ")[1];
+      outCode = postcode.split(' ')[0];
+      inCode = postcode.split(' ')[1];
       postCodeParts.push(outCode);
       postCodeParts.push(inCode);
     }
@@ -542,13 +479,11 @@ export class SharedService {
 
   isUKMobile(number: string) {
     if (number) {
-      const formattedNumber = number?.replace(" ", "");
+      const formattedNumber = number?.replace(' ', '');
       return (
-        (formattedNumber.startsWith("07") ||
-          formattedNumber.startsWith("00") ||
-          formattedNumber.startsWith("+")) &&
-        !formattedNumber.startsWith("070") &&
-        !formattedNumber.startsWith("076")
+        (formattedNumber.startsWith('07') || formattedNumber.startsWith('00') || formattedNumber.startsWith('+')) &&
+        !formattedNumber.startsWith('070') &&
+        !formattedNumber.startsWith('076')
       );
     } else {
       return false;
@@ -556,24 +491,22 @@ export class SharedService {
   }
 
   isInternationalNumber(number: string) {
-    const formattedNumber = number.replace(" ", "").replace("+44", "");
-    return formattedNumber.startsWith("00") || formattedNumber.startsWith("+");
+    const formattedNumber = number.replace(' ', '').replace('+44', '');
+    return formattedNumber.startsWith('00') || formattedNumber.startsWith('+');
   }
 
   getRegionCode(number: string) {
     const phoneUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance();
-    const rawNumber = phoneUtil.parseAndKeepRawInput(number, "GB");
-    return this.isInternationalNumber(number)
-      ? phoneUtil.getRegionCodeForNumber(rawNumber)
-      : "GB";
+    const rawNumber = phoneUtil.parseAndKeepRawInput(number, 'GB');
+    return this.isInternationalNumber(number) ? phoneUtil.getRegionCodeForNumber(rawNumber) : 'GB';
   }
 
   scrollToFirstInvalidField() {
-    const invalidFields = document.getElementsByClassName("invalid");
+    const invalidFields = document.getElementsByClassName('invalid');
     if (invalidFields.length) {
       setTimeout(() => {
         if (invalidFields[0]) {
-          invalidFields[0].scrollIntoView({ block: "center" });
+          invalidFields[0].scrollIntoView({ block: 'center' });
         }
       });
     }
