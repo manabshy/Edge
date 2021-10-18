@@ -128,7 +128,8 @@
             </ng-template>
           </p-messages>
         </div>
-        <div class="mr-8 md:m-0" [ngClass]="{'opacity-75 pointer-events-none': isCancelled}"
+        <div class="md:m-0"
+          [ngClass]="{'opacity-75 pointer-events-none': isCancelled, 'mr-8': valuation?.valuationStatus > 0 }"
           (click)="controlIsCancelled($event)">
           <app-property-card class="appWrapper" [propertyDetails]="property" [isHorizontalCard]="true"
             [showPropertyDetailActions]="false" [showValuationActions]="true" (showPhotos)="showPhotosModal()"
@@ -139,7 +140,7 @@
         <form [formGroup]="valuationForm" autocompleteOff>
           <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
             <p-accordion [multiple]="true">
-              <div class="mr-8 md:m-0">
+              <div class="md:m-0" [ngClass]="{ 'mr-8': valuation?.valuationStatus > 0 }">
                 <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]"
                   *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">
 

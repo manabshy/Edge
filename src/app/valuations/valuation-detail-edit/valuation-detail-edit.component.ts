@@ -45,7 +45,7 @@ import { CustomEventTitleFormatter } from 'src/app/calendar-shared/custom-event-
 import { CalendarDayViewBeforeRenderEvent, CalendarEvent } from 'angular-calendar';
 import { BasicEventRequest, DiaryProperty } from 'src/app/diary/shared/diary';
 import { DiaryEventService } from 'src/app/diary/shared/diary-event.service';
-import { SidenavService } from 'src/app/core/services/sidenav.service';
+import { SideNavItem, SidenavService } from 'src/app/core/services/sidenav.service';
 import { Person } from 'src/app/shared/models/person';
 import moment from 'moment';
 import { eSignTypes } from 'src/app/core/shared/eSignTypes';
@@ -187,7 +187,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   eSignSubscription = new Subscription();
   moreInfo = (this.sidenavService.selectedItem = 'valuationTicket');
   summaryTotals: PersonSummaryFigures;
-  sideNavItems = this.sidenavService.valuationSideNavItems;
+  sideNavItems: SideNavItem[];
   contactId: number;
   mainPersonId: number;
   showOnlyMyNotes: boolean = false;
@@ -578,11 +578,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
       this.getNextContactNotesPage(this.page);
     });
+
+    let sideNavList = [...this.sidenavService.valuationSideNavItems];
+    sideNavList.find((x) => x.name == 'valuationTicket').isCurrent = true;
+    this.sideNavItems = sideNavList;
   }
 
   ngAfterViewInit(): void {
     this.setScrollInformation();
-    this.sideNavItems.find((x) => x.name == 'valuationTicket').isCurrent = true;
   }
 
   controlStatus(data) {
@@ -643,7 +646,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       else if (this.valuation?.valuationStatus == ValuationStatusEnum.Booked) this.scrollSpecificElement('valuesTab');
       else if (this.valuation?.valuationStatus == ValuationStatusEnum.Valued)
         this.scrollSpecificElement('termsOfBusinessTab');
-    }, 2000);
+    }, 1000);
   }
 
   isThereAPrice(data) {
@@ -663,12 +666,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   scrollSpecificElement(idName: string) {
-    this.scroller.scrollToAnchor(idName);
+    //this.scroller.scrollToAnchor(idName);
 
-    // const scrollElement = document.getElementsByClassName(className);
-    // if (scrollElement) {
-    //   this.sharedService.scrollElIntoView(className);
-    // }
+    const scrollElement = document.getElementById(idName);
+    if (scrollElement) {
+      scrollElement.scrollIntoView();
+    }
   }
 
   removeAdminContact() {
