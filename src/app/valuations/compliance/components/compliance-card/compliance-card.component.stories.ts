@@ -1,6 +1,7 @@
 import { moduleMetadata, componentWrapperDecorator  } from '@storybook/angular';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MessageService } from 'primeng/api';
 // also exported from '@storybook/angular' if you can deal with breaking changes in 6.1
 import { Story, Meta } from '@storybook/angular/types-6-0';
 import { action } from '@storybook/addon-actions';
@@ -34,6 +35,7 @@ export default {
     moduleMetadata({
       declarations: [ComplianceCardComponent, DocumentInfoComponent, FileUploadComponent],
       imports: [CommonModule, VendorsModule, BrowserAnimationsModule],
+      providers: [MessageService]
     }),
     componentWrapperDecorator((story)=> `
         <div class="m-10 w-full md:w-1/2 mx-auto shadow-md">${story}</div>
@@ -150,6 +152,7 @@ LeadContactMixed.args = {
 export const AssociatedContactBlank = ComplianceCardTemplate.bind({});
 AssociatedContactBlank.args = {
   hasMenuBtn: false,
+  isFrozen: false,
   person: {
     id: 121,
     isMain: false,
@@ -168,6 +171,7 @@ AssociatedContactBlank.args = {
 export const AssociatedContactValid = ComplianceCardTemplate.bind({});
 AssociatedContactValid.args = {
   hasMenuBtn: false,
+  isFrozen: false,
   person: {
     id: 131,
     isMain: false,
@@ -186,6 +190,7 @@ AssociatedContactValid.args = {
 export const AssociatedContactInvalid = ComplianceCardTemplate.bind({});
 AssociatedContactInvalid.args = {
   hasMenuBtn: false,
+  isFrozen: false,
   person: {
     id: 415,
     isMain: false,
@@ -204,6 +209,7 @@ AssociatedContactInvalid.args = {
 export const ContactWithMenu = ComplianceCardTemplate.bind({});
 ContactWithMenu.args = {
   hasMenuBtn: true,
+  isFrozen: false,
   person: {
     id: 161,
     isMain: false,

@@ -28,7 +28,7 @@ export class DocumentInfoComponent implements OnInit {
   @Input() fileType: FileTypeEnum;
   @Input() fileLimit = 50;
   @Input() isMultiple: boolean = true;
-  @Input() isFrozen: boolean
+  @Input() isFrozen: boolean = false;
   @Input() label: String;
   @Output() deleteFile: EventEmitter<any> = new EventEmitter();
   @Output() onFileUploaded: EventEmitter<any> = new EventEmitter();

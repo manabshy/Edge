@@ -23,6 +23,7 @@ import {
 import { BigButtonComponent } from '../../../../shared/components/big-button/big-button.component'
 import { FileUploadComponent } from '../../../../shared/components/file-upload/file-upload.component'
 import { PureCompanyFinderShellComponent } from 'src/app/shared/components/company-finder/pure-company-finder-shell.component'
+import { MessageService } from 'primeng/api';
 
 export default {
   title: 'Valuations/Compliance/PureComplianceChecksShellComponent',
@@ -41,6 +42,7 @@ export default {
         PureCompanyFinderShellComponent
       ],
       imports: [CommonModule, VendorsModule, BrowserAnimationsModule],
+      providers: [MessageService]
     }),
     componentWrapperDecorator(
       (story) => `
