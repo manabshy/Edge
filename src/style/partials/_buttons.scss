@@ -59,6 +59,11 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 .btn--info:hover[disabled]                      { background-color:$color--info; }
 .btn--info:hover                                { background-color:$color--info-dark; }
 
+/***** Color - Secondary *****/
+.btn--secondary,
+.btn--secondary:hover[disabled]                      { background-color: #fff; color: $color--midnight; border: 1px solid $color--midnight; }
+.btn--secondary:hover                                { background-color:$color--snow; }
+
 /***** Color - Warning *****/
 .btn--warning,
 .btn--warning:hover[disabled]                   { background-color:#FFC107; }

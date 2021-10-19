@@ -15,6 +15,7 @@ export interface ComplianceChecksState {
     compliancePassedBy: String
     valuationEventId: Number
     companyId: Number
+    isFrozen: Boolean
   }
   
   export interface ComplianceChecksPeople {
@@ -27,7 +28,7 @@ export interface ComplianceChecksState {
     documents: Array<any>
     isMain: Boolean
     isUBO?: Boolean
-    personDateAmlcompleted?: Date
+    personDateAmlCompleted?: Date
     compliancePassedBy?: String
   }
   

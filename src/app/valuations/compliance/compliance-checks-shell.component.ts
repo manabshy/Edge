@@ -15,6 +15,7 @@ import { ComplianceChecksState } from './compliance-checks.interfaces'
         [checkType]="vm.checkType"
         [message]="vm.message"
         [checksAreValid]="vm.checksAreValid"
+        [isFrozen]="vm.isFrozen"
         [companyOrContact]="vm.companyOrContact"
         (fileWasUploaded)="onFileUploaded($event)"
         (fileWasDeleted)="onFileDeleted($event)"
@@ -23,7 +24,8 @@ import { ComplianceChecksState } from './compliance-checks.interfaces'
         (removeContact)="onRemoveContact($event)"
         (saveContact)="onSaveContact($event)"
         (addContact)="onAddContact($event)"
-        (addCompany)="onAddCompany($event)">
+        (addCompany)="onAddCompany($event)"
+        (refreshDocuments)="onRefreshDocuments($event)">
       </app-pure-compliance-checks-shell>
     </div>`,
   providers: [ComplianceChecksStore]
@@ -68,5 +70,9 @@ export class ComplianceChecksShellComponent {
 
   onRemoveContact(ev) :void {
     this._complianceChecksStore.removeContact(ev)
+  }
+
+  onRefreshDocuments(ev) :void {
+    this._complianceChecksStore.onRefreshDocuments(ev)
   }
 }

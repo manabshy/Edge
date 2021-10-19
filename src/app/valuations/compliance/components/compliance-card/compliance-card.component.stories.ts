@@ -63,7 +63,7 @@ LeadContactBlank.args = {
     isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
-    personDateAmlcompleted: null,
+    personDateAmlCompleted: null,
     documents: {
       idDoc: IdBlank.args, 
       proofOfAddressDoc: ProofOfAddressBlank.args, 
@@ -81,7 +81,7 @@ LeadContactValid.args = {
     isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
-    personDateAmlcompleted:new Date('04/01/2020'),
+    personDateAmlCompleted:new Date('04/01/2020'),
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -100,7 +100,7 @@ LeadContactAndUBO.args = {
     isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
-    personDateAmlcompleted: new Date('03/01/2020'),
+    personDateAmlCompleted: new Date('03/01/2020'),
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -118,7 +118,7 @@ LeadContactInvalid.args = {
     isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
-    personDateAmlcompleted: null,
+    personDateAmlCompleted: null,
     documents: {
       idDoc: IdUploadedInvalid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -136,7 +136,7 @@ LeadContactMixed.args = {
     isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
-    personDateAmlcompleted:new Date('04/30/2020'),
+    personDateAmlCompleted:new Date('04/30/2020'),
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -155,7 +155,7 @@ AssociatedContactBlank.args = {
     isMain: false,
     name: 'Eddie Murphy',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
-    personDateAmlcompleted: null,
+    personDateAmlCompleted: null,
     documents: {
       idDoc: IdBlank.args, 
       proofOfAddressDoc: ProofOfAddressBlank.args, 
@@ -173,7 +173,7 @@ AssociatedContactValid.args = {
     isMain: false,
     name: 'Ian Blackford',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
-    personDateAmlcompleted:new Date('02/21/2021'),
+    personDateAmlCompleted:new Date('02/21/2021'),
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -191,7 +191,7 @@ AssociatedContactInvalid.args = {
     isMain: false,
     name: 'Jack Black',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
-    personDateAmlcompleted: null,
+    personDateAmlCompleted: null,
     documents: {
       idDoc: IdUploadedInvalid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -210,7 +210,7 @@ ContactWithMenu.args = {
     name: 'Jack Black',
     position: 'Director',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
-    personDateAmlcompleted:new Date('06/12/2020'),
+    personDateAmlCompleted:new Date('06/12/2020'),
     documents: {
       idDoc: IdUploadedInvalid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 

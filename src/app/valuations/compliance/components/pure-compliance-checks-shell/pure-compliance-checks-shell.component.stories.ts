@@ -54,6 +54,7 @@ export const actionsData = {
   passAML: action('passAML'),
   fileWasUploaded: action('fileWasUploaded'),
   fileWasDeleted: action('fileWasDeleted'),
+  refreshDocuments: action('refreshDocuments'),
 }
 
 const LettingsTemplate: Story<PureComplianceChecksShellComponent> = (args: PureComplianceChecksShellComponent) => ({
@@ -62,6 +63,7 @@ const LettingsTemplate: Story<PureComplianceChecksShellComponent> = (args: PureC
     passAML: actionsData.passAML,
     fileWasUploaded: actionsData.fileWasUploaded,
     fileWasDeleted: actionsData.fileWasDeleted,
+    refreshDocuments: actionsData.refreshDocuments,
   },
 })
 
@@ -80,6 +82,7 @@ ContactAMLCompletedAndValid.args = {
     AssociatedContactValid.args.person,
     { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
   ],
+  isFrozen: true
 }
 
 export const ContactAMLCompleted1YearLater = LettingsTemplate.bind({})
@@ -99,6 +102,7 @@ ContactAMLCompleted1YearLater.args = {
     AssociatedContactValid.args.person,
     { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
   ],
+  isFrozen: true
 }
 
 export const ContactAMLIncompleteAndInvalid = LettingsTemplate.bind({})
@@ -115,6 +119,7 @@ ContactAMLIncompleteAndInvalid.args = {
     AssociatedContactBlank.args.person,
     { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
   ],
+  isFrozen: false
 }
 
 // KYC stories - contact
@@ -132,6 +137,7 @@ ContactKYCCompletedAndValid.args = {
     AssociatedContactValid.args.person,
     { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
   ],
+  isFrozen: true
 }
 
 export const ContactKYCIncompleteAndInvalid = LettingsTemplate.bind({})
@@ -148,6 +154,7 @@ ContactKYCIncompleteAndInvalid.args = {
     { ...AssociatedContactInvalid.args.person, name: 'Ian Blackford' },
     { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
   ],
+  isFrozen: false
 }
 
 // AML stories - company
@@ -160,7 +167,8 @@ CompanyAMLIncomplete.args = {
     type: 'warn',
     text: ['AML incomplete'],
   },
-  people: [{...LeadContactValid.args.person, personDateAmlcompleted: null}, AssociatedContactValid.args.person],
+  people: [{...LeadContactValid.args.person, personDateAmlCompleted: null}, AssociatedContactValid.args.person],
+  isFrozen: true
 }
 
 export const CompanyAMLComplete = LettingsTemplate.bind({})
@@ -173,4 +181,5 @@ CompanyAMLComplete.args = {
     text: ['AML Completed', 'SmartSearch added: 7th Sep 2020 (11:45)'],
   },
   people: [{ ...LeadContactValid.args.person, isUBO: true }, AssociatedContactValid.args.person],
+  isFrozen: true
 }

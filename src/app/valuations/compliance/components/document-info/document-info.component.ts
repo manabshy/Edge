@@ -28,6 +28,7 @@ export class DocumentInfoComponent implements OnInit {
   @Input() fileType: FileTypeEnum;
   @Input() fileLimit = 50;
   @Input() isMultiple: boolean = true;
+  @Input() isFrozen: boolean
   @Input() label: String;
   @Output() deleteFile: EventEmitter<any> = new EventEmitter();
   @Output() onFileUploaded: EventEmitter<any> = new EventEmitter();
@@ -69,7 +70,7 @@ export class DocumentInfoComponent implements OnInit {
       (!this.files.length && this.documentType == DOCUMENT_TYPE.ID) ||
       (!this.files.length && this.documentType == DOCUMENT_TYPE.REPORT) ||
       (!this.files.length && this.documentType == DOCUMENT_TYPE.PROOF_OF_ADDRESS) ||
-      this.documentType == DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS
+      this.documentType == DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS && !this.isFrozen
     );
   }
 

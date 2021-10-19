@@ -13,6 +13,7 @@ import moment from 'moment'
 export class ComplianceCardComponent implements OnInit {
   @Input() person: any
   @Input() hasMenuBtn: boolean
+  @Input() isFrozen: boolean
   @Output() fileUploaded: EventEmitter<any> = new EventEmitter()
   @Output() fileDeleted: EventEmitter<any> = new EventEmitter()
   @Output() toggleIsUBO: EventEmitter<any> = new EventEmitter()
@@ -40,6 +41,7 @@ export class ComplianceCardComponent implements OnInit {
     this.pillClass = this.person.isMain ? 'pill--positive' : 'bg-gray-400'
     this.pillLabel = this.person.isMain ? 'Lead Contact' : 'Associated Contact'
     this.setMenuItems()
+    console.log('person: ', this.person)
   }
 
   private setMenuItems() {
