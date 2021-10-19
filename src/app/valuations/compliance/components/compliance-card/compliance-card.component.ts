@@ -41,7 +41,6 @@ export class ComplianceCardComponent implements OnInit {
     this.pillClass = this.person.isMain ? 'pill--positive' : 'bg-gray-400'
     this.pillLabel = this.person.isMain ? 'Lead Contact' : 'Associated Contact'
     this.setMenuItems()
-    console.log('person: ', this.person)
   }
 
   private setMenuItems() {

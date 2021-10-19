@@ -69,7 +69,7 @@ export class AppInterceptor implements HttpInterceptor {
   }
 
   private addImpersonateHeader(req: HttpRequest<any>) {
-    console.log({ req }, "before", this.impersonatedStaffMemberId);
+    // console.log({ req }, "before", this.impersonatedStaffMemberId);
     return req.clone({
       setHeaders: {
         Impersonate: this.impersonatedStaffMemberId
