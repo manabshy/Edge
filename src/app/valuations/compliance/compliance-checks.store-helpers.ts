@@ -15,6 +15,7 @@ export const buildPartialLoadState = (contactGroupData, valuationData) => {
     compliancePassedDate: valuationData.complianceCheck?.compliancePassedDate,
     valuationEventId: valuationData.valuationEventId,
     companyId: contactGroupData.companyId,
+    isFrozen: valuationData.complianceCheck?.compliancePassedDate ? true : false
   }
 }
 /***
@@ -31,7 +32,7 @@ export const setContactsForCompliance = (people) => {
       name: p.name,
       isMain: p.isMain,
       address: p.address,
-      personDateAmlcompleted: p.personDateAmlcompleted ? p.personDateAmlcompleted : p.amlPassed,
+      personDateAmlCompleted: p.personDateAmlCompleted ? p.personDateAmlCompleted : p.amlPassed,
       amlPassed: p.amlPassed,
       compliancePassedBy: p.compliancePassedByFullName,
       isUBO: discernIsUBO(p),
@@ -333,9 +334,9 @@ export const buildComplianceChecksStatusMessages = (
   // console.log(amlOrKyc)
   people.forEach((person) => {
     const validDocs = amlOrKyc === 'AML' ? personValidForAML(person.documents) : personValidForKYC(person.documents)
-    if (person.personDateAmlcompleted && validDocs) {
+    if (person.personDateAmlCompleted && validDocs) {
       validContacts.push(person)
-    } else if (!person.personDateAmlcompleted && validDocs) {
+    } else if (!person.personDateAmlCompleted && validDocs) {
       contactsReadyForChecks.push(person)
     } else {
       invalidContacts.push(person)
@@ -409,7 +410,7 @@ export const workOutDataShapeForApi = (people, companyOrContact, companyId, cont
         documents: mapDocsForAPI(person.documents),
         isMain: person.isMain,
         position: person.position,
-        personDateAmlcompleted: person.personDateAmlcompleted,
+        personDateAmlCompleted: person.personDateAmlCompleted,
       }
     })
     return {
@@ -428,7 +429,8 @@ export const workOutDataShapeForApi = (people, companyOrContact, companyId, cont
         documents: mapDocsForAPI(person.documents),
         isMain: person.isMain,
         position: person.position,
-        uboAdded: person.uboAdded ? person.uboAdded : null,
+        uboAdded: person.uboAdded,
+        uboRemoved: person.uboRemoved,
       }
       if (person.companyId) {
         ;(updatedPerson.companyId = person.companyId),
@@ -436,7 +438,7 @@ export const workOutDataShapeForApi = (people, companyOrContact, companyId, cont
           companyDocuments.push(updatedPerson)
       } else {
         ;(updatedPerson.personId = person.personId),
-          (updatedPerson.personDateAmlcompleted = person.personDateAmlcompleted),
+          (updatedPerson.personDateAmlCompleted = person.personDateAmlCompleted),
           personDocuments.push(updatedPerson)
       }
     })
