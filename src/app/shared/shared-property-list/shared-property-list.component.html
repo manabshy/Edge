@@ -11,13 +11,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let property of properties; let i = index;" (click)="navigateToDetails(property)" class="cursor-pointer">
+        <tr *ngFor="let property of properties; let i = index;" (click)="navigateToDetails(property)"
+          class="cursor-pointer">
           <td data-title="Address">
             <span class="cell-content">{{property?.address| formatAddress}}</span>
             <span *ngIf="!(property?.address )">No address</span>
           </td>
           <td data-title="Contact Group">
-            <span class="cell-content">{{property?.lastKnownOwner?.contactNames}}</span>
+            <span class="cell-content">{{property?.lastKnownOwner?.companyName ? property?.lastKnownOwner?.companyName +
+              '(' + property?.lastKnownOwner?.contactNames + ')':property?.lastKnownOwner?.contactNames }}</span>
           </td>
           <td data-title="Action">
             <span class="cell-content">

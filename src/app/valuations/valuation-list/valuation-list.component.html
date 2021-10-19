@@ -30,7 +30,9 @@
               formatAddress}}</a></span>
         </td>
         <td data-title="Owner">
-          <span class="cell-content">{{val?.propertyOwner?.contactNames || '-'}}</span>
+          <span class="cell-content">{{val?.propertyOwner?.companyName ? val?.propertyOwner?.companyName +
+            '(' + val?.propertyOwner?.contactNames + ')': val?.propertyOwner?.contactNames || '-'
+            }}</span>
         </td>
         <td data-title="Date">
           <span class="cell-content">{{(val?.valuationDate | date: 'dd/MM/yyyy') || '-'}}</span>

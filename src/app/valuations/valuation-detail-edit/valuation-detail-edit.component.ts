@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { ToastrService } from 'ngx-toastr';
-import { debounceTime, takeUntil, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, takeUntil, distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { ContactGroup, ContactNote, PersonSummaryFigures, Signer } from 'src/app/contact-groups/shared/contact-group';
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
@@ -35,7 +35,7 @@ import { ResultData } from 'src/app/shared/result-data';
 import { StaffMember } from 'src/app/shared/models/staff-member';
 import { TabDirective } from 'ngx-bootstrap/tabs/ngx-bootstrap-tabs';
 import format from 'date-fns/format';
-import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, Subscription, combineLatest } from 'rxjs';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { addYears, differenceInCalendarYears, isThisHour } from 'date-fns';
 import _ from 'lodash';
@@ -45,7 +45,7 @@ import { CustomEventTitleFormatter } from 'src/app/calendar-shared/custom-event-
 import { CalendarDayViewBeforeRenderEvent, CalendarEvent } from 'angular-calendar';
 import { BasicEventRequest, DiaryProperty } from 'src/app/diary/shared/diary';
 import { DiaryEventService } from 'src/app/diary/shared/diary-event.service';
-import { SidenavService } from 'src/app/core/services/sidenav.service';
+import { SideNavItem, SidenavService } from 'src/app/core/services/sidenav.service';
 import { Person } from 'src/app/shared/models/person';
 import moment from 'moment';
 import { eSignTypes } from 'src/app/core/shared/eSignTypes';
@@ -187,7 +187,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   eSignSubscription = new Subscription();
   moreInfo = (this.sidenavService.selectedItem = 'valuationTicket');
   summaryTotals: PersonSummaryFigures;
-  sideNavItems = this.sidenavService.valuationSideNavItems;
+  sideNavItems: SideNavItem[];
   contactId: number;
   mainPersonId: number;
   showOnlyMyNotes: boolean = false;
@@ -529,8 +529,24 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.openContactGroupSubscription = this.sharedService.openContactGroupChanged.subscribe((value) => {
       if (value) {
         this.isAdminContactVisible = value;
+        this.contactGroupService.addAdminContactBs.next(true);
       }
     });
+
+    // this.contactGroupService.addedContactBs.subscribe(() => {
+    //   console.log('ramoooo');
+    // });
+
+    // combineLatest([this.contactGroupService.addedContactBs, this.contactGroupService.addAdminContactBs]).pipe(
+    //   map(([addedContact, addAdminContact]) => {
+    //     if (addAdminContact == true && addedContact?.contactGroupId > 0) {
+    //       //TODO adding the admin contact
+    //       this.contactGroupService.addAdminContactBs.next(false);
+    //       this.contactGroupService.addedContactBs.next(null);
+    //     }
+    //   }),
+    //   tap(() => console.log('come hereeeee')),
+    // );
 
     this.removeContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe((value) => {
       if (value) {
@@ -578,6 +594,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
       this.getNextContactNotesPage(this.page);
     });
+
+    let sideNavList = [...this.sidenavService.valuationSideNavItems];
+    sideNavList.find((x) => x.name == 'valuationTicket').isCurrent = true;
+    this.sideNavItems = sideNavList;
   }
 
   ngAfterViewInit(): void {
@@ -601,8 +621,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           data.receptions &&
           data.propertyTypeId &&
           data.propertyStyleId &&
-          (data.propertyStyleId != 2 || (data.propertyStyleId == 2 && !data.propertyFloorId)) &&
-          (data.propertyFloorId != '10' || (data.propertyFloorId == '10' && data.floorOther)) &&
+          (data.propertyTypeId != 2 || (data.propertyTypeId == 2 && !data.propertyFloorId)) &&
+          (data.propertyTypeId != 2 ||
+            data.propertyFloorId != '10' ||
+            (data.propertyTypeId == 2 && data.propertyFloorId == '10' && data.floorOther)) &&
           (!this.showLeaseExpiryDate || (this.showLeaseExpiryDate == true && data.approxLeaseExpiryDate))
         ) {
           this.statuses.find((x) => x.value == 1).isValid = true;
@@ -640,7 +662,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       else if (this.valuation?.valuationStatus == ValuationStatusEnum.Booked) this.scrollSpecificElement('valuesTab');
       else if (this.valuation?.valuationStatus == ValuationStatusEnum.Valued)
         this.scrollSpecificElement('termsOfBusinessTab');
-    }, 2000);
+    }, 1000);
   }
 
   isThereAPrice(data) {
@@ -660,12 +682,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   scrollSpecificElement(idName: string) {
-    this.scroller.scrollToAnchor(idName);
+    //this.scroller.scrollToAnchor(idName);
 
-    // const scrollElement = document.getElementsByClassName(className);
-    // if (scrollElement) {
-    //   this.sharedService.scrollElIntoView(className);
-    // }
+    const scrollElement = document.getElementById(idName);
+    if (scrollElement) {
+      scrollElement.scrollIntoView();
+    }
   }
 
   removeAdminContact() {
@@ -872,9 +894,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.setOriginTypes(info.originTypes); // TODO: Issue on refresh
     this.interestList = info.section21Statuses;
     this.associateTypes = info.associations;
-    this.propertyTypes = info.propertyTypes;
-    this.allPropertyStyles = info.propertyStyles;
-    this.propertyStyles = info.propertyStyles;
+    this.propertyTypes = [{ id: 0, value: ' ' }, ...info.propertyTypes];
+    this.allPropertyStyles = [info.propertyStyles];
+    this.propertyStyles = [{ id: 0, value: ' ' }, ...info.propertyStyles];
     this.propertyFloors = info.propertyFloors;
   }
 
@@ -1063,8 +1085,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       lettingsOwnerAssociateContactNumber: [''],
       lettingsOwnerAssociateEmail: [''],
       lettingsOwnerAssociateType: ['6'],
-      propertyStyleId: [],
-      propertyTypeId: [],
+      propertyStyleId: [null, Validators.required],
+      propertyTypeId: [null, Validators.required],
       propertyFloorId: [],
       floorOther: [],
       isRetirementHome: [false],
@@ -1807,18 +1829,30 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuationService.getValuersAvailability(request).subscribe((res) => {
         this.availableDates = res.valuationStaffMembersCalanderEvents;
         this.setWeeks();
-        let firstAvailableSlot = this.thisWeek && this.thisWeek.length > 0 ? this.thisWeek[0] : this.nextWeek[0];
-        this.selectedCalendarDate = firstAvailableSlot.date;
-        this.showCalendar = true;
-        this.selectAvailableDate(firstAvailableSlot.hours[0]);
+        this.setFirstFreeSlot();
       });
     } else {
       this.setWeeks();
-      let firstAvailableSlot = this.thisWeek && this.thisWeek.length > 0 ? this.thisWeek[0] : this.nextWeek[0];
-      this.selectedCalendarDate = firstAvailableSlot.date;
-      this.showCalendar = true;
-      this.selectAvailableDate(firstAvailableSlot.hours[0]);
+      this.setFirstFreeSlot();
     }
+  }
+
+  setFirstFreeSlot() {
+    let indexOf = this.thisWeek && this.thisWeek.findIndex((x) => !x.hours.class);
+    let firstAvailableSlot;
+    if (indexOf > -1) {
+      firstAvailableSlot = this.thisWeek[indexOf];
+    } else {
+      indexOf = this.nextWeek && this.nextWeek.findIndex((x) => !x.hours.class);
+      if (indexOf > -1) {
+        firstAvailableSlot = this.nextWeek[indexOf];
+      } else {
+        firstAvailableSlot = this.nextTwoWeek[0];
+      }
+    }
+    this.selectedCalendarDate = firstAvailableSlot.date;
+    this.showCalendar = true;
+    this.selectAvailableDate(firstAvailableSlot.hours[0]);
   }
 
   setWeeks() {
@@ -2373,6 +2407,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuationForm.get('valuationNote').setValidators(null);
     }
 
+    if (this.valuationForm.controls['propertyTypeId'].value === 0)
+      this.valuationForm.controls['propertyTypeId'].setValue(null);
+    if (this.valuationForm.controls['propertyStyleId'].value === 0)
+      this.valuationForm.controls['propertyStyleId'].setValue(null);
+
     this.sharedService.logValidationErrors(this.valuationForm, true);
 
     // validation of land register
@@ -2434,10 +2473,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     const valuation = { ...valuationValue, ...this.valuationForm.value };
     valuation.propertyOwner = this.lastKnownOwner;
     valuation.OfficeId = this.property.officeId;
-
-    if (valuation.approxLeaseExpiryDate === 0) {
-      valuation.approxLeaseExpiryDate = null;
-    }
+    valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate;
 
     valuation.isPowerOfAttorney =
       this.adminContact && this.adminContact.contactGroupId > 0 ? this.adminContact?.isPowerOfAttorney : false;

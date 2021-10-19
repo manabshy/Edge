@@ -197,9 +197,9 @@
 </p-dialog>
 
 <!-- Referral Modal -->
-<!-- <p-dialog header="Referral" [(visible)]="showRefDialog" [modal]="true" [draggable]="false" class="modal--hasFooter">
+<p-dialog header="Referral" [(visible)]="showRefDialog" [modal]="true" [draggable]="false" class="modal--hasFooter">
   <p data-cy="referralMessage">Click OK to refer
-    <strong>{{personDetails?.addressee}}</strong> to
+    <strong>{{firstPerson?.addressee}}</strong> to
     <strong>{{selectedReferralCompany?.referralCompany}}</strong>
   </p>
   <footer class="footer footer--modal">
@@ -208,4 +208,4 @@
       <button type="button" class="btn btn--positive" (click)="sendReferral()">OK</button>
     </div>
   </footer>
-</p-dialog> -->
+</p-dialog>
