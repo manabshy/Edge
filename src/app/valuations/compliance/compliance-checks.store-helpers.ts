@@ -119,11 +119,11 @@ export const mergeFiles = (data, person) => {
 export const findAndRemoveDoc = (documents, ev) => {
   switch (ev.documentType) {
     case DOCUMENT_TYPE.ID:
-      documents.idDoc.files = []
+      documents.idDoc.files = documents.idDoc.files.filter((doc) => doc.fileStoreId !== ev.id)
       break
 
     case DOCUMENT_TYPE.PROOF_OF_ADDRESS:
-      documents.proofOfAddressDoc.files = []
+      documents.proofOfAddressDoc.files = documents.proofOfAddressDoc.files.filter((doc) => doc.fileStoreId !== ev.id)
       break
 
     case DOCUMENT_TYPE.REPORT:

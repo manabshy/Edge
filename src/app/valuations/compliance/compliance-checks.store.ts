@@ -248,7 +248,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           return this.peopleArrayShapedForApi$;
         }),
         mergeMap((userDataForApi) => {
-          console.log('mergeMap((userDataForApi) => { ==========');
           if (userDataForApi.peopleToSave) {
             return this.peopleService.setPeopleDocs(
               userDataForApi.peopleToSave,
@@ -259,7 +258,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
             return this.peopleService.setCompanyPeopleDocs(userDataForApi.savePayload, userDataForApi.contactGroupId);
           }
         }),
-        // mergeMap(() => this.valuationEventId$),
         take(1),
         mergeMap(() => {
           return this.valuationSvc.setComplianceChecksPassedState(valuationEventIdClosure, {
@@ -307,6 +305,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           this.valuationSvc.updatePersonDocuments(data.peopleToSave); // pops personDocuments array into valuation service to get picked up if/when valuation is saved
           return this.validationMessage$
         }),
+        take(1)
       )
       .subscribe(
         () => {
@@ -319,16 +318,26 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   /***
    * @function deleteFileFromPerson
    * @param data:
-   * @description deletes a compliance doc from a person
+   * @description deletes a compliance doc from a person in the store. User will have to save valuation in order for changes to persist to API
    */
   public deleteFileFromPerson = (data: FileDeletionPayload) => {
     this.removeUserDocsFromStore(data);
-
-    return this.patchState({
-      checksAreValid: false,
-      // compliancePassedDate: null,
-      // compliancePassedBy: null,
-    });
+    this.peopleArrayShapedForApi$.pipe(
+      tap((data) => {
+        this.valuationSvc.updatePersonDocuments(data.peopleToSave); // pops personDocuments array into valuation service to get picked up if/when valuation is saved
+        return this.patchState({
+          checksAreValid: false,
+          // compliancePassedDate: null,
+          // compliancePassedBy: null,
+        });
+      }),
+      take(1)
+    )
+    .subscribe((res) => {
+      console.log('res delete file from person: ', res)
+    }, (err) => {
+      console.error('err delete files from person: ', err)
+    })
   };
 
   public addContact = (data: any) => {
@@ -351,9 +360,13 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         }),
         mergeMap((userDataForApi) => {
           if (userDataForApi.peopleToSave) {
+            this.valuationSvc.updatePersonDocuments(data.peopleToSave); // pops personDocuments array into valuation service to get picked up if/when valuation is saved
+
             return this.peopleService.setPeopleDocs(userDataForApi.peopleToSave, userDataForApi.contactGroupId, 22);
           } else {
             // this.addAssociatedCompanyId(userDataForApi.savePayload)
+
+            this.valuationSvc.updatePersonDocuments(data.peopleToSave); // pops personDocuments array into valuation service to get picked up if/when valuation is saved
             return this.peopleService.setCompanyPeopleDocs(userDataForApi.savePayload, userDataForApi.contactGroupId);
           }
         }),
