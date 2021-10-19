@@ -303,8 +303,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           this.addFilesToUser({ tmpFiles, data }); // adds files to store
           return this.peopleArrayShapedForApi$;
         }),
-        tap((data) => {
+        mergeMap((data) => {
           this.valuationSvc.updatePersonDocuments(data.peopleToSave); // pops personDocuments array into valuation service to get picked up if/when valuation is saved
+          return this.validationMessage$
         }),
       )
       .subscribe(
