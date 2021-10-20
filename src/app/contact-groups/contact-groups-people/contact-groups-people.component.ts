@@ -811,7 +811,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
         }
         this.contactGroupService.addContactGroup(contactGroup).subscribe(
           (res) => {
-            this.onSaveComplete(res.result.contactGroupId);
+            this.onSaveComplete(res.result);
           },
           (error: WedgeError) => {
             this.isSubmitting = false;
@@ -826,7 +826,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     } else {
       this.contactGroupService.addContactGroup(contactGroup).subscribe(
         (res) => {
-          this.onSaveComplete(res.result.contactGroupId);
+          this.onSaveComplete(res.result);
         },
         (error: WedgeError) => {
           this.isSubmitting = false;
@@ -845,7 +845,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       (res) => {
         console.log({ res }, 'results from update');
 
-        this.onSaveComplete(res.result.contactGroupId);
+        this.onSaveComplete(res.result);
       },
       (error: WedgeError) => {
         this.isSubmitting = false;
@@ -853,7 +853,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     );
   }
 
-  onSaveComplete(contactGroupId): void {
+  onSaveComplete(contactGroup: ContactGroup): void {
     localStorage.removeItem('contactPeople');
     localStorage.removeItem('newCompany');
     this.pendingChanges = false;
@@ -863,16 +863,23 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       summary: 'Contact Group successfully saved',
       closable: false,
     });
-    if (this.backToOrigin) {
+    if (
+      this.backToOrigin ||
+      this.sharedService.addAdminContactBs.getValue() ||
+      this.sharedService.addLastOwnerBs.getValue()
+    ) {
       if (this.isSigner) {
-        this.getSignerDetails(contactGroupId);
+        this.getSignerDetails(contactGroup.contactGroupId);
       }
+      this.sharedService.addedContactBs.next(contactGroup);
       this.sharedService.back();
     }
-    if (!contactGroupId) {
+    if (!contactGroup.contactGroupId) {
       this.sharedService.back();
     } else {
-      this._router.navigate(['/contact-centre/detail/', 0, 'people', contactGroupId], { replaceUrl: true });
+      this._router.navigate(['/contact-centre/detail/', 0, 'people', contactGroup.contactGroupId], {
+        replaceUrl: true,
+      });
       if (this.isExistingCompany && this.existingCompanyId) {
         this._router.navigate(['/company-centre/detail', this.existingCompanyId]);
       }
