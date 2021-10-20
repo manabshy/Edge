@@ -144,14 +144,14 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     ),
   }));
 
-  readonly removeAmlCheckTimestampFromUser = this.updater((state, personId: string) => ({
+  readonly removeAmlCheckTimestampFromUser = this.updater((state, personId: number) => ({
     ...state,
     people: state.people.map((person) =>
       person.personId === personId ? { ...person, personDateAmlCompleted: null } : person,
     ),
   }));
 
-  readonly toggleUserIsUBO = this.updater((state, companyId: string) => ({
+  readonly toggleUserIsUBO = this.updater((state, companyId: number) => ({
     ...state,
     people: state.people.map((person) =>
       person.companyId === companyId
@@ -175,7 +175,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   readonly addFilesToUser = this.updater((state, params: any) => ({
     ...state,
     people: state.people.map((person) =>
-      person.originalId === params.data.person.originalId
+      person.id === params.data.person.id
         ? addFiles({ ev: params.data.ev, files: params.tmpFiles.files }, person)
         : person,
     ),
@@ -184,6 +184,11 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   readonly addCompanyToValuation = this.updater((state, companyToAdd: any) => ({
     ...state,
     people: [...state.people, { ...companyToAdd, documents: addDocsShell() }],
+  }));
+
+  readonly removeFromValuation = this.updater((state, idToRemove: number) => ({
+    ...state,
+    people: state.people.filter((p) => p.id != idToRemove),
   }));
 
   constructor(
@@ -200,13 +205,13 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     combineLatest([this.valuationSvc.contactGroup$, this.valuationSvc.valuation$])
       .pipe(
         filter(([contactGroupData, valuation]) => !!valuation && !!contactGroupData),
-        take(1),
-        tap(([contactGroupData, valuationData]) =>
-          this.patchState(buildPartialLoadState(contactGroupData, valuationData)),
-        ),
+        tap(([contactGroupData, valuationData]) => {
+          console.log('contactGroupData: ', contactGroupData);
+          this.patchState(buildPartialLoadState(contactGroupData, valuationData));
+        }),
         mergeMap(([contactGroupData, valuation]) => {
           if (contactGroupData.companyId) {
-            return this.peopleService.getCompanyPeopleDocs(contactGroupData.contactGroupId);
+            return this.peopleService.getCompanyPeopleDocs(contactGroupData.contactGroupId, valuation.valuationEventId);
           } else if (valuation && valuation.propertyOwner) {
             return this.peopleService.getPeopleDocs(valuation.propertyOwner.contactGroupId, valuation.valuationEventId);
           }
@@ -221,6 +226,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           }
         }),
         mergeMap(() => this.validationMessage$.pipe(take(1))),
+        take(1),
       )
       .subscribe(
         (res) => {
@@ -255,7 +261,11 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
               valuationEventIdClosure,
             );
           } else {
-            return this.peopleService.setCompanyPeopleDocs(userDataForApi.savePayload, userDataForApi.contactGroupId);
+            return this.peopleService.setCompanyPeopleDocs(
+              userDataForApi.savePayload,
+              userDataForApi.contactGroupId,
+              valuationEventIdClosure,
+            );
           }
         }),
         take(1),
@@ -285,7 +295,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   }
 
   /***
-   * @description saves file(s) to API. Updates local model with new file(s)
+   * @description saves temp file(s) to API. Updates local model with new file(s). User will have to save valuation in order to save files fully
    */
   public addFilesToPerson = (data: FileUpdateEvent) => {
     if (!data.ev.tmpFiles) return;
@@ -303,9 +313,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         }),
         mergeMap((data) => {
           this.valuationSvc.updatePersonDocuments(data.peopleToSave); // pops personDocuments array into valuation service to get picked up if/when valuation is saved
-          return this.validationMessage$
+          return this.validationMessage$;
         }),
-        take(1)
+        take(1),
       )
       .subscribe(
         () => {
@@ -322,22 +332,26 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    */
   public deleteFileFromPerson = (data: FileDeletionPayload) => {
     this.removeUserDocsFromStore(data);
-    this.peopleArrayShapedForApi$.pipe(
-      tap((data) => {
-        this.valuationSvc.updatePersonDocuments(data.peopleToSave); // pops personDocuments array into valuation service to get picked up if/when valuation is saved
-        return this.patchState({
-          checksAreValid: false,
-          // compliancePassedDate: null,
-          // compliancePassedBy: null,
-        });
-      }),
-      take(1)
-    )
-    .subscribe((res) => {
-      console.log('res delete file from person: ', res)
-    }, (err) => {
-      console.error('err delete files from person: ', err)
-    })
+    this.peopleArrayShapedForApi$
+      .pipe(
+        tap((data) => {
+          this.valuationSvc.updatePersonDocuments(data.peopleToSave); // pops personDocuments array into valuation service to get picked up if/when valuation is saved
+          return this.patchState({
+            checksAreValid: false,
+            // compliancePassedDate: null,
+            // compliancePassedBy: null,
+          });
+        }),
+        take(1),
+      )
+      .subscribe(
+        (res) => {
+          console.log('res delete file from person: ', res);
+        },
+        (err) => {
+          console.error('err delete files from person: ', err);
+        },
+      );
   };
 
   public addContact = (data: any) => {
@@ -345,30 +359,21 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   };
 
   public addCompany = (data: any) => {
-    console.log('TODO: addCompany: ', data);
-    of(
-      this.addCompanyToValuation({
-        id: data.companyId,
-        companyId: data.companyId,
-        name: data.companyName,
-        address: data.companyAddress?.addressLines,
-      }),
-    )
+    console.log('addCompany: ', data);
+    this.addCompanyToValuation({
+      id: data.companyId,
+      companyId: data.companyId,
+      associatedCompanyId: data.companyId,
+      name: data.companyName,
+      address: data.companyAddress?.addressLines,
+    });
+
+    this.peopleArrayShapedForApi$
       .pipe(
-        mergeMap(() => {
-          return this.peopleArrayShapedForApi$;
-        }),
-        mergeMap((userDataForApi) => {
-          if (userDataForApi.peopleToSave) {
-            this.valuationSvc.updatePersonDocuments(data.peopleToSave); // pops personDocuments array into valuation service to get picked up if/when valuation is saved
-
-            return this.peopleService.setPeopleDocs(userDataForApi.peopleToSave, userDataForApi.contactGroupId, 22);
-          } else {
-            // this.addAssociatedCompanyId(userDataForApi.savePayload)
-
-            this.valuationSvc.updatePersonDocuments(data.peopleToSave); // pops personDocuments array into valuation service to get picked up if/when valuation is saved
-            return this.peopleService.setCompanyPeopleDocs(userDataForApi.savePayload, userDataForApi.contactGroupId);
-          }
+        tap((companyDataForApi) => {
+          console.log('companyDataForApi: ', companyDataForApi);
+          this.valuationSvc.updateCompanyDocuments(companyDataForApi.savePayload.companyDocuments);
+          // pops companyDocuments array into valuation service to get picked up if/when valuation is saved
         }),
       )
       .subscribe(
@@ -385,7 +390,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     this.peopleArrayShapedForApi$
       .pipe(
         mergeMap((userDataForApi) => {
-          return this.peopleService.setCompanyPeopleDocs(userDataForApi.savePayload, userDataForApi.contactGroupId);
+          return this.peopleService.setCompanyPeopleDocs(userDataForApi.savePayload, userDataForApi.contactGroupId, 33);
         }),
       )
       .subscribe(
@@ -398,6 +403,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
 
   public removeContact = (data: any) => {
     console.log('TODO: removeContact: ', data);
+    this.removeFromValuation(data.id);
   };
 
   public saveContact = (data: any) => {

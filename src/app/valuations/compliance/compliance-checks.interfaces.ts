@@ -19,9 +19,9 @@ export interface ComplianceChecksState {
   }
   
   export interface ComplianceChecksPeople {
-    originalId: String
-    personId: String
-    companyId: String
+    id: Number
+    personId: Number
+    companyId: Number
     name: String
     address?: String
     position?: String

@@ -73,15 +73,15 @@ export class PeopleService {
     return this.http.put<any>(url, person).pipe(map(response => response.result));
   }
 
-  getCompanyPeopleDocs(contactGroupId: number): Observable<any> {
-    const url = `${AppConstants.baseCompanyDocumentUrl}/${contactGroupId}`;
+  getCompanyPeopleDocs(contactGroupId: number, valuationEventId: number): Observable<any> {
+    const url = `${AppConstants.baseCompanyDocumentUrl}/${contactGroupId}/${valuationEventId}`;
     return this.http.get<any>(url).pipe(
       map((response) => response.result),
     );
   }
   
-  setCompanyPeopleDocs(people, contactGroupId: number): Observable<any> {
-    const url = `${AppConstants.baseCompanyDocumentUrl}/${contactGroupId}`;
+  setCompanyPeopleDocs(people, contactGroupId: number, valuationEventId: number): Observable<any> {
+    const url = `${AppConstants.baseCompanyDocumentUrl}/${contactGroupId}/${valuationEventId}`;
     return this.http.post<any>(url, people).pipe(
       map((response) => response.result),
     );
