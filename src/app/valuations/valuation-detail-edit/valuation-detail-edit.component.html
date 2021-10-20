@@ -849,7 +849,7 @@
 <p-dialog header="Admin Contact" [(visible)]="isAdminContactVisible" [modal]="true" [draggable]="false"
   class="modal--medium modal--hasFooter">
   <app-contact-group-finder [showCreateNewCompanyContact]="false" [isSinglePerson]="true"
-    (selectedContactGroup)="getSelectedAdminContact($event)" (isCreatingNewGroup)="createNewLastKnownOwner()">
+    (selectedContactGroup)="getSelectedAdminContact($event)">
   </app-contact-group-finder>
 </p-dialog>
 
@@ -1078,9 +1078,11 @@
               <p class="txt--title" *ngIf="thisWeek">This Week</p>
               <ol class="list list--dates" *ngIf="thisWeek">
                 <li *ngFor="let key of thisWeek">
-                  <app-subnav-item class="underline txt--date" (click)="selectCalendarDate(key['date'])">
-                    {{key['date'] | date:'EEEE,d/M/yy'}}
-                  </app-subnav-item>
+                  <div class="mr-2 min-w-1/4">
+                    <app-subnav-item class="underline txt--date" (click)="selectCalendarDate(key['date'])">
+                      {{key['date'] | date:'EEEE d/M/yy'}}
+                    </app-subnav-item>
+                  </div>
                   <ol class="cards cards--small">
                     <li *ngFor="let hours of key['hours']">
                       <button type="button" class="btn btn--ghost" [ngClass]="hours.class"
@@ -1094,9 +1096,11 @@
               <p class="txt--title" *ngIf="nextWeek">Next Week</p>
               <ol class="list list--dates" *ngIf="nextWeek">
                 <li *ngFor="let key of nextWeek">
-                  <app-subnav-item class="underline txt--date" (click)="selectCalendarDate(key['date'])">
-                    {{key['date'] | date:'EEEE,d/M/yy'}}
-                  </app-subnav-item>
+                  <div class="mr-2 min-w-1/4">
+                    <app-subnav-item class="underline txt--date" (click)="selectCalendarDate(key['date'])">
+                      {{key['date'] | date:'EEEE d/M/yy'}}
+                    </app-subnav-item>
+                  </div>
                   <ol class="cards cards--small">
                     <li *ngFor="let hours of key['hours'] ">
                       <button type="button" class="btn btn--ghost" [ngClass]="hours.class"
@@ -1110,9 +1114,11 @@
               <p class="txt--title" *ngIf="nextWeek">Next Two Week</p>
               <ol class="list list--dates" *ngIf="nextTwoWeek">
                 <li *ngFor="let key of nextTwoWeek">
-                  <app-subnav-item class="underline txt--date" (click)="selectCalendarDate(key['date'])">
-                    {{key['date'] | date:'EEEE,d/M/yy'}}
-                  </app-subnav-item>
+                  <div class="mr-2 min-w-1/4">
+                    <app-subnav-item class="underline txt--date" (click)="selectCalendarDate(key['date'])">
+                      {{key['date'] | date:'EEEE d/M/yy'}}
+                    </app-subnav-item>
+                  </div>
                   <!-- <span class="txt--date">{{key['date'] | date:'fullDate'}}</span> -->
                   <ol class="cards cards--small">
                     <li *ngFor="let hours of key['hours'] ">

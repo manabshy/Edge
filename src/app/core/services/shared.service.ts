@@ -37,6 +37,10 @@ export class SharedService {
   valuationType = new BehaviorSubject<ValuationTypeEnum>(ValuationTypeEnum.None);
   cancelValuationOperationChanged = new BehaviorSubject<boolean>(false);
 
+  addAdminContactBs = new BehaviorSubject<boolean>(false);
+  addLastOwnerBs = new BehaviorSubject<boolean>(false);
+  addedContactBs = new BehaviorSubject<ContactGroup | null>(null);
+
   constructor(
     private _location: Location,
     private _router: Router,
