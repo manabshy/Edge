@@ -9,7 +9,7 @@
       {{moment(file.idValidationDateExpiry).format('DD/MM/YY')}}</span>
     <span class="flex-1 text-right" [pTooltip]="'Upload Date'">{{moment(file.uploadDate).format('DD/MM/YY')}}</span>
     <button (click)="deleteFile.emit({ id:file.fileStoreId, documentType: documentType })"
-      [pTooltip]="'Delete Document'">
+      [pTooltip]="'Delete Document'" *ngIf="!isFrozen">
       <svg aria-hidden="true" width="40" height="40" viewBox="0 0 64 64" class="ml-2 text-gray-400 icon">
         <path
           d="M11.4 56.1c0 3.8 3.1 6.9 6.9 6.9h27.4c3.8 0 6.9-3.1 6.9-6.9V14.8H11.4V56.1zM19.9 31.6l4.9-4.9L32 34l7.3-7.3 4.9 4.9 -7.3 7.3 7.3 7.3 -4.9 4.9L32 43.8l-7.3 7.3 -4.9-4.9 7.3-7.3L19.9 31.6zM44 4.4L40.6 1H23.4L20 4.4H8v6.9h48V4.4H44z">

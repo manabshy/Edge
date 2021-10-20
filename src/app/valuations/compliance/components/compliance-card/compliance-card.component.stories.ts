@@ -1,6 +1,7 @@
 import { moduleMetadata, componentWrapperDecorator  } from '@storybook/angular';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MessageService } from 'primeng/api';
 // also exported from '@storybook/angular' if you can deal with breaking changes in 6.1
 import { Story, Meta } from '@storybook/angular/types-6-0';
 import { action } from '@storybook/addon-actions';
@@ -34,6 +35,7 @@ export default {
     moduleMetadata({
       declarations: [ComplianceCardComponent, DocumentInfoComponent, FileUploadComponent],
       imports: [CommonModule, VendorsModule, BrowserAnimationsModule],
+      providers: [MessageService]
     }),
     componentWrapperDecorator((story)=> `
         <div class="m-10 w-full md:w-1/2 mx-auto shadow-md">${story}</div>
@@ -63,7 +65,7 @@ LeadContactBlank.args = {
     isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
-    personDateAmlcompleted: null,
+    personDateAmlCompleted: null,
     documents: {
       idDoc: IdBlank.args, 
       proofOfAddressDoc: ProofOfAddressBlank.args, 
@@ -81,7 +83,7 @@ LeadContactValid.args = {
     isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
-    personDateAmlcompleted:new Date('04/01/2020'),
+    personDateAmlCompleted:new Date('04/01/2020'),
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -100,7 +102,7 @@ LeadContactAndUBO.args = {
     isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
-    personDateAmlcompleted: new Date('03/01/2020'),
+    personDateAmlCompleted: new Date('03/01/2020'),
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -118,7 +120,7 @@ LeadContactInvalid.args = {
     isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
-    personDateAmlcompleted: null,
+    personDateAmlCompleted: null,
     documents: {
       idDoc: IdUploadedInvalid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -136,7 +138,7 @@ LeadContactMixed.args = {
     isMain: true,
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
-    personDateAmlcompleted:new Date('04/30/2020'),
+    personDateAmlCompleted:new Date('04/30/2020'),
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -150,12 +152,13 @@ LeadContactMixed.args = {
 export const AssociatedContactBlank = ComplianceCardTemplate.bind({});
 AssociatedContactBlank.args = {
   hasMenuBtn: false,
+  isFrozen: false,
   person: {
     id: 121,
     isMain: false,
     name: 'Eddie Murphy',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
-    personDateAmlcompleted: null,
+    personDateAmlCompleted: null,
     documents: {
       idDoc: IdBlank.args, 
       proofOfAddressDoc: ProofOfAddressBlank.args, 
@@ -168,12 +171,13 @@ AssociatedContactBlank.args = {
 export const AssociatedContactValid = ComplianceCardTemplate.bind({});
 AssociatedContactValid.args = {
   hasMenuBtn: false,
+  isFrozen: false,
   person: {
     id: 131,
     isMain: false,
     name: 'Ian Blackford',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
-    personDateAmlcompleted:new Date('02/21/2021'),
+    personDateAmlCompleted:new Date('02/21/2021'),
     documents: {
       idDoc: IdUploadedValid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -186,12 +190,13 @@ AssociatedContactValid.args = {
 export const AssociatedContactInvalid = ComplianceCardTemplate.bind({});
 AssociatedContactInvalid.args = {
   hasMenuBtn: false,
+  isFrozen: false,
   person: {
     id: 415,
     isMain: false,
     name: 'Jack Black',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
-    personDateAmlcompleted: null,
+    personDateAmlCompleted: null,
     documents: {
       idDoc: IdUploadedInvalid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 
@@ -204,13 +209,14 @@ AssociatedContactInvalid.args = {
 export const ContactWithMenu = ComplianceCardTemplate.bind({});
 ContactWithMenu.args = {
   hasMenuBtn: true,
+  isFrozen: false,
   person: {
     id: 161,
     isMain: false,
     name: 'Jack Black',
     position: 'Director',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
-    personDateAmlcompleted:new Date('06/12/2020'),
+    personDateAmlCompleted:new Date('06/12/2020'),
     documents: {
       idDoc: IdUploadedInvalid.args, 
       proofOfAddressDoc: ProofOfAddressUploaded.args, 

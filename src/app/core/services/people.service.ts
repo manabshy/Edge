@@ -87,16 +87,23 @@ export class PeopleService {
     );
   }
 
-  getPeopleDocs(contactGroupId: number): Observable<any> {
-    const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}`;
+  getPeopleDocs(contactGroupId: number, valuationEventId: number): Observable<any> {
+    const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}/${valuationEventId}`;
     return this.http.get<any>(url).pipe(
       map((response) => response.result),
     );
   }
 
-  setPeopleDocs(people, contactGroupId: number): Observable<any> {
-    const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}`
+  setPeopleDocs(people, contactGroupId: number, valuationEventId: number): Observable<any> {
+    const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}/${valuationEventId}`
     return this.http.post<any>(url, people).pipe(
+      map((response) => response.result)
+    )
+  }
+
+  deletePeopleDocs(contactGroupId: number, valuationEventId: number): Observable<any> {
+    const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}/${valuationEventId}`
+    return this.http.delete<any>(url).pipe(
       map((response) => response.result)
     )
   }

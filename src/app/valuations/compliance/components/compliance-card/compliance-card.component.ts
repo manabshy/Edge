@@ -13,6 +13,7 @@ import moment from 'moment'
 export class ComplianceCardComponent implements OnInit {
   @Input() person: any
   @Input() hasMenuBtn: boolean
+  @Input() isFrozen: boolean
   @Output() fileUploaded: EventEmitter<any> = new EventEmitter()
   @Output() fileDeleted: EventEmitter<any> = new EventEmitter()
   @Output() toggleIsUBO: EventEmitter<any> = new EventEmitter()

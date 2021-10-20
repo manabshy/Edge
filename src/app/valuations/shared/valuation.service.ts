@@ -219,4 +219,9 @@ export class ValuationService {
     });
     return options;
   }
+
+  public updatePersonDocuments(personDocuments) {
+    const existingValuation = this._valuation.getValue()
+    this._valuation.next({...existingValuation, personDocuments})
+  }
 }

@@ -8,6 +8,7 @@ import { DocumentInfoComponent } from './document-info.component';
 import { VendorsModule } from '../../../../shared/vendors.module';
 import { FileUploadComponent } from '../../../../shared/components/file-upload/file-upload.component';
 import { MessagesComponent } from '../../../../shared/components/messages/messages.component';
+import { MessageService } from 'primeng/api';
 
 export default {
   title: 'Valuations/Compliance/Components/DocumentInfo',
@@ -16,7 +17,8 @@ export default {
   decorators: [
     moduleMetadata({
       declarations: [DocumentInfoComponent, FileUploadComponent, MessagesComponent ],
-      imports: [CommonModule, VendorsModule, BrowserAnimationsModule]
+      imports: [CommonModule, VendorsModule, BrowserAnimationsModule],
+      providers: [MessageService]
     }),
     componentWrapperDecorator((story)=> `
         <div class="w-full md:w-1/4 mx-auto">${story}</div>
@@ -33,7 +35,8 @@ export const actionsData = {
 const DocumentInfo: Story<DocumentInfoComponent> = (args: DocumentInfoComponent) => ({
   props: {
     ...args,
-    deleteFile: actionsData.deleteFile
+    deleteFile: actionsData.deleteFile,
+    isFrozen: false
   }
 });
 

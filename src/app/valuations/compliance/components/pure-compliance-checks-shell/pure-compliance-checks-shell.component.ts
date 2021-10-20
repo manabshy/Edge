@@ -12,6 +12,7 @@ export class PureComplianceChecksShellComponent {
   @Input() checkType: string // AML || KYC
   @Input() companyOrContact: string // company || contact
   @Input() contactGroupDetails: any
+  @Input() isFrozen: boolean
 
   @Output() passComplianceChecks: EventEmitter<any> = new EventEmitter
   @Output() fileWasUploaded: EventEmitter<any> = new EventEmitter
@@ -20,12 +21,14 @@ export class PureComplianceChecksShellComponent {
   @Output() saveContact: EventEmitter<any> = new EventEmitter
   @Output() removeContact: EventEmitter<any> = new EventEmitter
   @Output() addCompany: EventEmitter<any> = new EventEmitter
+  @Output() refreshDocuments: EventEmitter<any> = new EventEmitter
   
   smartSearchAddedDate = new Date() // TODO
   
   dialogs = {
     showContactDialog: false,
-    showCompanyDialog: false
+    showCompanyDialog: false,
+    showRefreshDocumentstDialog: false
   }
   
   openDialog(dialog){
