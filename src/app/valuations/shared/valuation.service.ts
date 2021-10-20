@@ -224,4 +224,9 @@ export class ValuationService {
     const existingValuation = this._valuation.getValue()
     this._valuation.next({...existingValuation, personDocuments})
   }
+
+  public updateCompanyDocuments(companyDocuments) {
+    const existingValuation = this._valuation.getValue()
+    this._valuation.next({...existingValuation, companyDocuments})
+  }
 }

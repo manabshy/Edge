@@ -1,5 +1,4 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core'
-// import { FormGroup, FormBuilder, Validators, FormControlName, FormControl } from '@angular/forms'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { Company, CompanyAutoCompleteResult } from 'src/app/contact-groups/shared/contact-group'
 import { distinctUntilChanged, switchMap, tap, catchError } from 'rxjs/operators'
@@ -19,6 +18,7 @@ import { Observable, EMPTY } from 'rxjs'
         (companyName)="companyName.emit($event)"
         (searchCompanyEmitter)="findCompany($event)"
         (selectedCompanyDetails)="selectedCompanyDetails.emit($event)"
+        (isManualEntry)="isManualEntry.emit($event)"
       ></app-pure-company-finder-shell>
     </div>
   `,
