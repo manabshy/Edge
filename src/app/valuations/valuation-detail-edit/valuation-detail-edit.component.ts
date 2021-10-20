@@ -529,24 +529,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.openContactGroupSubscription = this.sharedService.openContactGroupChanged.subscribe((value) => {
       if (value) {
         this.isAdminContactVisible = value;
-        this.contactGroupService.addAdminContactBs.next(true);
+        this.sharedService.addAdminContactBs.next(true);
       }
     });
-
-    // this.contactGroupService.addedContactBs.subscribe(() => {
-    //   console.log('ramoooo');
-    // });
-
-    // combineLatest([this.contactGroupService.addedContactBs, this.contactGroupService.addAdminContactBs]).pipe(
-    //   map(([addedContact, addAdminContact]) => {
-    //     if (addAdminContact == true && addedContact?.contactGroupId > 0) {
-    //       //TODO adding the admin contact
-    //       this.contactGroupService.addAdminContactBs.next(false);
-    //       this.contactGroupService.addedContactBs.next(null);
-    //     }
-    //   }),
-    //   tap(() => console.log('come hereeeee')),
-    // );
 
     this.removeContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe((value) => {
       if (value) {
@@ -601,7 +586,22 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   ngAfterViewInit(): void {
+    if (this.sharedService.addAdminContactBs.getValue() === true && this.sharedService.addedContactBs.getValue()) {
+      this.getSignerDetails(this.sharedService.addedContactBs.getValue().contactGroupId)
+        .then((signer: Signer) => {
+          this.getSelectedAdminContact(signer);
+        })
+        .finally(() => {
+          this.sharedService.addAdminContactBs.next(false);
+          this.sharedService.addedContactBs.next(null);
+        });
+    }
+
     this.setScrollInformation();
+  }
+
+  getSignerDetails(id: number) {
+    return this.contactGroupService.getSignerbyId(id).toPromise();
   }
 
   controlStatus(data) {
@@ -617,11 +617,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.statuses.find((x) => x.value == 0).isValid = false;
         }
         if (
-          data.bathrooms &&
-          data.receptions &&
+          data.bathrooms != null &&
+          data.receptions != null &&
           data.propertyTypeId &&
           data.propertyStyleId &&
-          (data.propertyTypeId != 2 || (data.propertyTypeId == 2 && !data.propertyFloorId)) &&
+          (data.propertyTypeId != 2 || (data.propertyTypeId == 2 && data.propertyFloorId > 0)) &&
           (data.propertyTypeId != 2 ||
             data.propertyFloorId != '10' ||
             (data.propertyTypeId == 2 && data.propertyFloorId == '10' && data.floorOther)) &&
@@ -2373,6 +2373,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   checkAvailabilityBooking() {
     if ((this.isNewValuation || this.isEditable) && !this.valuationForm.get('valuationDate').value) {
+      this.isAvailabilityRequired = false;
       if (
         this.isSalesAndLettings &&
         !this.valuation?.lettingsValuationBooking?.startDateTime &&
@@ -2729,20 +2730,20 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
     this.valuationForm.controls['valuationDate'].setValue(this.selectedSalesDate);
     if (this.salesValuer && (this.isSalesOnly || this.isSalesAndLettings)) {
-      this.salesValuerControl.setValue(this.salesValuer);
-      this.salesValuerControl.updateValueAndValidity();
       this.valuation.salesValuationBooking = {
         startDateTime: this.selectedSalesDate,
         totalHours: 1,
       };
+      this.salesValuerControl.setValue(this.salesValuer);
+      this.salesValuerControl.updateValueAndValidity();
     }
     if (this.lettingsValuer && (this.isLettingsOnly || this.isSalesAndLettings)) {
-      this.lettingsValuerControl.setValue(this.lettingsValuer);
-      this.lettingsValuerControl.updateValueAndValidity();
       this.valuation.lettingsValuationBooking = {
         startDateTime: this.selectedLettingsDate,
         totalHours: 1,
       };
+      this.lettingsValuerControl.setValue(this.lettingsValuer);
+      this.lettingsValuerControl.updateValueAndValidity();
     }
 
     if (this.isBothEdit) {
