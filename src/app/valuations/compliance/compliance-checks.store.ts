@@ -225,7 +225,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
             return of(this.patchState({ people: setContactsForCompliance(data) }));
           }
         }),
-        mergeMap(() => this.validationMessage$.pipe(take(1))),
+        mergeMap(() => this.validationMessage$),
         take(1),
       )
       .subscribe(
@@ -312,7 +312,12 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           return this.peopleArrayShapedForApi$;
         }),
         mergeMap((data) => {
-          this.valuationSvc.updatePersonDocuments(data.peopleToSave); // pops personDocuments array into valuation service to get picked up if/when valuation is saved
+          console.log('data: ', data);
+          if (data.savePayload) {
+            this.valuationSvc.updateCompanyDocuments(data.savePayload.companyDocuments);
+          } else {
+            this.valuationSvc.updatePersonDocuments(data.peopleToSave); // pops personDocuments array into valuation service to get picked up if/when valuation is saved
+          }
           return this.validationMessage$;
         }),
         take(1),
@@ -335,7 +340,12 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     this.peopleArrayShapedForApi$
       .pipe(
         tap((data) => {
-          this.valuationSvc.updatePersonDocuments(data.peopleToSave); // pops personDocuments array into valuation service to get picked up if/when valuation is saved
+          console.log('store people data after doc deletion, ready for API: ', data);
+          if (data.savePayload) {
+            this.valuationSvc.updateCompanyDocuments(data.savePayload.companyDocuments);
+          } else {
+            this.valuationSvc.updatePersonDocuments(data.peopleToSave); // pops personDocuments array into valuation service to get picked up if/when valuation is saved
+          }
           return this.patchState({
             checksAreValid: false,
             // compliancePassedDate: null,
@@ -371,7 +381,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     this.peopleArrayShapedForApi$
       .pipe(
         tap((companyDataForApi) => {
-          console.log('companyDataForApi: ', companyDataForApi);
+          console.log('addCompany -> companyDataForApi: ', companyDataForApi);
           this.valuationSvc.updateCompanyDocuments(companyDataForApi.savePayload.companyDocuments);
           // pops companyDocuments array into valuation service to get picked up if/when valuation is saved
         }),
