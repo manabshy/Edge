@@ -841,7 +841,7 @@
 <!-- Contactgroup Finder Modal -->
 <p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false"
   class="modal--medium modal--hasFooter">
-  <app-contact-group-finder (selectedContactGroup)="getSelectedOwner($event)"
+  <app-contact-group-finder (selectedContactGroup)="getSelectedOwner($event)" [showCreateNewCompanyContact]="true"
     (isCreatingNewGroup)="createNewLastKnownOwner()"></app-contact-group-finder>
 </p-dialog>
 
