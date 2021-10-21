@@ -133,7 +133,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   showPhotos = false;
   showMap = false;
   showProperty = false;
-  isLastknownOwnerVisible = false;
+  isLastKnownOwnerVisible = false;
   isAdminContactVisible = false;
   isInstructVisible = false;
   accordionIndex: number;
@@ -204,6 +204,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   cancelString: string = '';
   cancelReasonString: string = '';
   saveValuationSubscription = new Subscription();
+  changedLastOwner: Signer;
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -601,6 +602,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.getSignerDetails(this.sharedService.addedContactBs.getValue().contactGroupId)
           .then((signer: Signer) => {
             this.getSelectedOwner(signer);
+            this.changedLastOwner = signer;
           })
           .finally(() => {
             this.sharedService.addLastOwnerBs.next(false);
@@ -780,7 +782,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (owner) {
       this.lastKnownOwner = owner;
       this.isOwnerChanged = true;
-      this.isLastknownOwnerVisible = false;
+      this.isLastKnownOwnerVisible = false;
       this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
         this.contactGroup = result;
         // console.log(
@@ -932,6 +934,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     else {
       this.lastKnownOwner = this.valuation?.propertyOwner;
     }
+
+    if (this.changedLastOwner && this.changedLastOwner.contactGroupId > 0) {
+      this.lastKnownOwner = { ...this.changedLastOwner };
+      propertyDetails.lastKnownOwner = this.lastKnownOwner;
+      this.changedLastOwner = null;
+    }
+
     this.property = propertyDetails;
     this.valuation.property = { ...this.property };
     this.valuation.officeId = this.property.officeId;
@@ -1659,6 +1668,30 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   getSelectedProperty(property: Property) {
     if (property) {
+      this.propertySubsription = this.propertyService
+        .getValuations(property.propertyId, true)
+        .pipe(
+          map((valuations: Valuation[]) =>
+            valuations.map((valuation: Valuation) => {
+              return {
+                ...valuation,
+                valuationStatusDescription: ValuationStatusEnum[valuation.valuationStatus],
+              };
+            }),
+          ),
+        )
+        .subscribe((valuations: Valuation[]) => {
+          if (valuations && valuations.length > 0) {
+            this.activeValuations = valuations.filter(
+              (x) =>
+                x.valuationStatus == ValuationStatusEnum.Booked ||
+                x.valuationStatus == ValuationStatusEnum.None ||
+                x.valuationStatus == ValuationStatusEnum.Valued,
+            );
+            this.isActiveValuationsVisible = this.activeValuations.length > 0 ? true : false;
+          }
+        });
+
       this.showProperty = false;
 
       this.valuers = [];
@@ -1687,31 +1720,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   onClosePropertyFinder() {
     if (!(this.property && this.property.propertyId > 0)) {
       this.router.navigate(['/valuations-register']);
-    } else {
-      this.propertySubsription = this.propertyService
-        .getValuations(this.property.propertyId, true)
-        .pipe(
-          map((valuations: Valuation[]) =>
-            valuations.map((valuation: Valuation) => {
-              return {
-                ...valuation,
-                valuationStatusDescription: ValuationStatusEnum[valuation.valuationStatus],
-              };
-            }),
-          ),
-        )
-        .subscribe((valuations: Valuation[]) => {
-          if (valuations && valuations.length > 0) {
-            this.activeValuations = valuations.filter(
-              (x) =>
-                x.valuationStatus == ValuationStatusEnum.Booked ||
-                x.valuationStatus == ValuationStatusEnum.None ||
-                x.valuationStatus == ValuationStatusEnum.Valued,
-            );
-            this.isActiveValuationsVisible = this.activeValuations.length > 0 ? true : false;
-          }
-        });
     }
+  }
+
+  createNewValuation() {
+    this.isActiveValuationsVisible = false;
+    this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
+      queryParams: {
+        propertyId: this.propertyId,
+        isNewValuation: true,
+      },
+    });
   }
 
   routeToValuationList() {
@@ -2090,7 +2109,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   createNewLastKnownOwner() {
-    this.isLastknownOwnerVisible = false;
+    this.isLastKnownOwnerVisible = false;
     this.valuationForm.markAsPristine();
   }
 
