@@ -133,7 +133,8 @@
           <app-property-card class="appWrapper" [propertyDetails]="property" [isHorizontalCard]="true"
             [showPropertyDetailActions]="false" [showValuationActions]="true" (showPhotos)="showPhotosModal()"
             (showMap)="showMapModal()" (changeProperty)="changeProperty()"
-            (changeLastknownOwner)="isLastknownOwnerVisible = true"></app-property-card>
+            (changeLastknownOwner)="sharedService.addLastOwnerBs.next(true);isLastKnownOwnerVisible = true">
+          </app-property-card>
         </div>
 
         <form [formGroup]="valuationForm" autocompleteOff>
@@ -839,7 +840,7 @@
 </app-property-detail-map>
 
 <!-- Contactgroup Finder Modal -->
-<p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false"
+<p-dialog header="Last known owner" [(visible)]="isLastKnownOwnerVisible" [modal]="true" [draggable]="false"
   class="modal--medium modal--hasFooter">
   <app-contact-group-finder (selectedContactGroup)="getSelectedOwner($event)" [showCreateNewCompanyContact]="true"
     (isCreatingNewGroup)="createNewLastKnownOwner()"></app-contact-group-finder>
@@ -926,8 +927,7 @@
 
   <footer class="footer--modal">
     <div class="btn--container">
-      <button type="submit" class="btn btn--info" data-cy="createValuation"
-        (click)="isActiveValuationsVisible = false">Create New
+      <button type="submit" class="btn btn--info" data-cy="createValuation" (click)="createNewValuation()">Create New
         Valuation</button>
     </div>
   </footer>

@@ -535,17 +535,13 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       });
   }
 
-  editSelectedCompany(id: number, newCompany?: boolean) {
-    event.preventDefault();
+  editSelectedCompany(event: any) {
     this.isEditingSelectedCompany = true;
     this.contactGroupBackUp();
-    let companyName;
-    if (newCompany) {
-      companyName = this.companyFinderForm.get('companyName').value;
-    }
-    this._router.navigate(['/company-centre/detail', id, 'edit'], {
+    let companyName = event?.companyName;
+    this._router.navigate(['/company-centre/detail', 0, 'edit'], {
       queryParams: {
-        isNewCompany: newCompany,
+        isNewCompany: true,
         isEditingSelectedCompany: true,
         companyName: companyName,
       },
@@ -641,7 +637,9 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     this.foundCompanies = null;
     this.companyDetails = company;
     this.isCompanyAdded = true;
-    this.companyFinderForm.get('selectedCompany').setValue(company.companyName);
+    if (company) {
+      this.companyFinderForm.get('selectedCompany').setValue(company.companyName);
+    }
     this.selectedCompany = this.companyFinderForm.get('selectedCompany').value;
     this.isSearchCompanyVisible = false;
     this.showCompanyFinder = false;
