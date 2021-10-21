@@ -1,44 +1,55 @@
-import { ValuationStatusEnum, ValuationTypeEnum } from './../valuations/shared/valuation'
-import { Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router'
-import { MenuItem, PrimeNGConfig } from 'primeng/api'
-import { DynamicDialogRef } from 'primeng/dynamicdialog'
-import { filter, takeUntil } from 'rxjs/operators'
-import { AuthService } from '../core/services/auth.service'
-import { HeaderService } from '../core/services/header.service'
-import { BaseComponent } from '../shared/models/base-component'
-import { BaseStaffMember } from '../shared/models/base-staff-member'
-import { StaffMember } from '../shared/models/staff-member'
-import { Menu } from 'primeng/menu'
-import { SharedService } from '../core/services/shared.service'
-import { combineLatest, Subscription } from 'rxjs'
-import { eSignTypes } from '../core/shared/eSignTypes'
+import { ValuationStatusEnum, ValuationTypeEnum } from './../valuations/shared/valuation';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  ChangeDetectorRef,
+} from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { MenuItem, PrimeNGConfig } from 'primeng/api';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { filter, takeUntil } from 'rxjs/operators';
+import { AuthService } from '../core/services/auth.service';
+import { HeaderService } from '../core/services/header.service';
+import { BaseComponent } from '../shared/models/base-component';
+import { BaseStaffMember } from '../shared/models/base-staff-member';
+import { StaffMember } from '../shared/models/staff-member';
+import { Menu } from 'primeng/menu';
+import { SharedService } from '../core/services/shared.service';
+import { combineLatest, Subscription } from 'rxjs';
+import { eSignTypes } from '../core/shared/eSignTypes';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy {
-  currentStaffMember: StaffMember
-  navTitle: string
-  headerLabel: string
-  showImpersonation = false
-  impersonatedStaffMember: BaseStaffMember
-  ref: DynamicDialogRef
-  isImpersonating = false
-  showMenuEditItem = false
-  items: MenuItem[]
-  filteredItems: MenuItem[]
-  openContactGroupSubscription = new Subscription()
-  valuationStatusSubscription = new Subscription()
+export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy, AfterViewInit {
+  currentStaffMember: StaffMember;
+  navTitle: string;
+  headerLabel: string;
+  showImpersonation = false;
+  impersonatedStaffMember: BaseStaffMember;
+  ref: DynamicDialogRef;
+  isImpersonating = false;
+  showMenuEditItem = false;
+  items: MenuItem[];
+  filteredItems: MenuItem[];
+  openContactGroupSubscription = new Subscription();
+  valuationStatusSubscription = new Subscription();
+  addRemoveItemSubscription;
 
   @HostListener('document:click', ['$event'])
   clickout(event) {
-    if (this.menu) this.menu.hide()
+    if (this.menu) this.menu.hide();
   }
 
-  @ViewChild('menu', { static: false }) menu: Menu
+  @ViewChild('menu', { static: false }) menu: Menu;
 
   constructor(
     public authService: AuthService,
@@ -48,78 +59,76 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy 
     private sharedService: SharedService,
     private primengConfig: PrimeNGConfig,
   ) {
-    super()
-    this.setRouteTitle()
+    super();
+    this.setRouteTitle();
   }
 
   private setRouteTitle() {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
-      const childRoute = this.getChildRoute(this.route)
+      const childRoute = this.getChildRoute(this.route);
       childRoute.data.subscribe((route) => {
-        console.log('title and route', route)
-        this.navTitle = route?.title
-        this.showMenuEditItem = route?.showMenuEditItem
+        console.log('title and route', route);
+        this.navTitle = route?.title;
+        this.showMenuEditItem = route?.showMenuEditItem;
 
-        this.setItems(this.navTitle)
-      })
-    })
+        this.setItems(this.navTitle);
+      });
+    });
   }
 
   ngOnInit(): void {
-    this.getLabel()
+    this.getLabel();
 
-    this.primengConfig.ripple = true
+    this.primengConfig.ripple = true;
 
     // Sales ToB, Lettings ToB, Sales Property Questionnaire, Lettings Property Questionnaire, Close Valuation
 
-    this.sharedService.removeContactGroupChanged.subscribe((data) => {
-      if (data != null && !data && this.filteredItems) {
-        if (this.filteredItems.some((x) => x.id === 'addAdmin') === false)
-          this.filteredItems.unshift(this.items.find((x) => x.id === 'addAdmin'))
-        this.filteredItems = [...this.filteredItems.filter((x) => x.id !== 'removeAdmin')]
-      }
-    })
-
-    this.sharedService.openContactGroupChanged.subscribe((data) => {
-      if (data != null && !data && this.filteredItems) {
-        if (this.filteredItems.some((x) => x.id === 'removeAdmin') === false)
-          this.filteredItems.push(this.items.find((x) => x.id === 'removeAdmin'))
-        this.filteredItems = [...this.filteredItems.filter((x) => x.id !== 'addAdmin')]
-      }
-    })
-
-    combineLatest([this.sharedService.valuationStatusChanged, this.sharedService.valuationType]).subscribe(
-      ([valuationStatus, valuationType]) => {
-        if (this.items) {
-          if (valuationStatus === ValuationStatusEnum.None) {
-            this.filteredItems = [...this.items.filter((x) => x.id === 'addAdmin')]
-          } else if (valuationStatus === ValuationStatusEnum.Booked)
-            this.filteredItems = [...this.items.filter((x) => x.id === 'cancelValuation' || x.id === 'addAdmin')]
-          else if (valuationStatus === ValuationStatusEnum.Valued) {
-            if (valuationType === ValuationTypeEnum.Lettings) {
-              this.filteredItems = [
-                ...this.items.filter(
-                  (x) => x.id === 'lettingsTermsOfBusiness' || x.id === 'addAdmin' || x.id === 'landLordQuestionnaire',
-                ),
-              ]
-            } else if (valuationType === ValuationTypeEnum.Sales) {
-              this.filteredItems = [
-                ...this.items.filter(
-                  (x) => x.id === 'salesTermsOfBusiness' || x.id === 'addAdmin' || x.id === 'vendorQuestionnaire',
-                ),
-              ]
-            }
-          } else if (valuationStatus === ValuationStatusEnum.Instructed) {
-            if (valuationType === ValuationTypeEnum.Lettings) {
-              this.filteredItems = [...this.items.filter((x) => x.id === 'landLordQuestionnaire')]
-            } else if (valuationType === ValuationTypeEnum.Sales) {
-              this.filteredItems = [...this.items.filter((x) => x.id === 'vendorQuestionnaire')]
-            }
+    combineLatest([
+      this.sharedService.valuationStatusChanged,
+      this.sharedService.valuationType,
+      this.sharedService.removeContactGroupChanged,
+      this.sharedService.openContactGroupChanged,
+    ]).subscribe(([valuationStatus, valuationType, removeContactGroupChanged, openContactGroupChanged]) => {
+      if (this.items) {
+        if (valuationStatus === ValuationStatusEnum.None) {
+          this.filteredItems = [...this.items.filter((x) => x.id === 'addAdmin')];
+        } else if (valuationStatus === ValuationStatusEnum.Booked)
+          this.filteredItems = [...this.items.filter((x) => x.id === 'cancelValuation' || x.id === 'addAdmin')];
+        else if (valuationStatus === ValuationStatusEnum.Valued) {
+          if (valuationType === ValuationTypeEnum.Lettings) {
+            this.filteredItems = [
+              ...this.items.filter(
+                (x) => x.id === 'lettingsTermsOfBusiness' || x.id === 'addAdmin' || x.id === 'landLordQuestionnaire',
+              ),
+            ];
+          } else if (valuationType === ValuationTypeEnum.Sales) {
+            this.filteredItems = [
+              ...this.items.filter(
+                (x) => x.id === 'salesTermsOfBusiness' || x.id === 'addAdmin' || x.id === 'vendorQuestionnaire',
+              ),
+            ];
+          }
+        } else if (valuationStatus === ValuationStatusEnum.Instructed) {
+          if (valuationType === ValuationTypeEnum.Lettings) {
+            this.filteredItems = [...this.items.filter((x) => x.id === 'landLordQuestionnaire')];
+          } else if (valuationType === ValuationTypeEnum.Sales) {
+            this.filteredItems = [...this.items.filter((x) => x.id === 'vendorQuestionnaire')];
           }
         }
-      },
-    )
+        if (removeContactGroupChanged != null && !removeContactGroupChanged) {
+          if (this.filteredItems.some((x) => x.id === 'addAdmin') === false)
+            this.filteredItems.unshift(this.items.find((x) => x.id === 'addAdmin'));
+          this.filteredItems = [...this.filteredItems.filter((x) => x.id !== 'removeAdmin')];
+        } else if (openContactGroupChanged != null && !openContactGroupChanged) {
+          if (this.filteredItems.some((x) => x.id === 'removeAdmin') === false)
+            this.filteredItems.push(this.items.find((x) => x.id === 'removeAdmin'));
+          this.filteredItems = [...this.filteredItems.filter((x) => x.id !== 'addAdmin')];
+        }
+      }
+    });
   }
+
+  ngAfterViewInit(): void {}
 
   setItems(navTitle: string) {
     if (navTitle == 'Valuation') {
@@ -129,7 +138,7 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy 
           label: 'Add Admin Contact',
           icon: 'pi pi-plus',
           command: () => {
-            this.sharedService.openContactGroupChanged.next(true)
+            this.sharedService.openContactGroupChanged.next(true);
           },
         },
         {
@@ -137,7 +146,7 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy 
           label: 'Remove Admin Contact',
           icon: 'pi pi-minus',
           command: () => {
-            this.sharedService.removeContactGroupChanged.next(true)
+            this.sharedService.removeContactGroupChanged.next(true);
           },
         },
         {
@@ -145,7 +154,7 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy 
           label: 'Sales Terms of Business',
           icon: 'pi pi-file-pdf',
           command: () => {
-            this.sharedService.eSignTriggerChanged.next(eSignTypes.Sales_Terms_Of_Business)
+            this.sharedService.eSignTriggerChanged.next(eSignTypes.Sales_Terms_Of_Business);
           },
         },
         {
@@ -153,7 +162,7 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy 
           label: 'Lettings Terms of Business',
           icon: 'pi pi-file-pdf',
           command: () => {
-            this.sharedService.eSignTriggerChanged.next(eSignTypes.Lettings_Terms_Of_Business)
+            this.sharedService.eSignTriggerChanged.next(eSignTypes.Lettings_Terms_Of_Business);
           },
         },
         {
@@ -161,7 +170,7 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy 
           label: 'Land Lord Questionnaire',
           icon: 'pi pi-file-pdf',
           command: () => {
-            this.sharedService.eSignTriggerChanged.next(eSignTypes.Property_Questionnaire)
+            this.sharedService.eSignTriggerChanged.next(eSignTypes.Property_Questionnaire);
           },
         },
         {
@@ -169,7 +178,7 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy 
           label: 'Vendor Questionnaire',
           icon: 'pi pi-file-pdf',
           command: () => {
-            this.sharedService.eSignTriggerChanged.next(eSignTypes.Sales_Property_Questionnaire)
+            this.sharedService.eSignTriggerChanged.next(eSignTypes.Sales_Property_Questionnaire);
           },
         },
         {
@@ -177,27 +186,27 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy 
           label: 'Cancel Valuation',
           icon: 'pi pi-ban',
           command: () => {
-            this.sharedService.cancelValuationOperationChanged.next(true)
+            this.sharedService.cancelValuationOperationChanged.next(true);
           },
         },
-      ]
+      ];
     }
   }
 
   getChildRoute(route: ActivatedRoute): ActivatedRoute {
     if (route.firstChild) {
-      return this.getChildRoute(route.firstChild)
+      return this.getChildRoute(route.firstChild);
     } else {
-      return route
+      return route;
     }
   }
 
   getLabel() {
-    this.headerService.label$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((label) => (this.headerLabel = label))
+    this.headerService.label$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((label) => (this.headerLabel = label));
   }
 
   ngOnDestroy() {
-    this.openContactGroupSubscription.unsubscribe()
-    this.valuationStatusSubscription.unsubscribe()
+    this.openContactGroupSubscription.unsubscribe();
+    this.valuationStatusSubscription.unsubscribe();
   }
 }
