@@ -22,13 +22,14 @@ export const buildPartialLoadState = (contactGroupData, valuationData) => {
  * Builds people array for store mapping from API shape to Store shape. Any API props for people that need changing look here first
  */
 export const setContactsForCompliance = (people) => {
+  console.log('RAW PEOPLE FROM API: ', people)
   return people.map((p) => {
     return {
       id: p.id,
       personId: p.personId,
       companyId: p.companyId,
       // isContactOrCompany: p.personId ? 'contact' : 'company',
-      associatedComnpanyId: p.associatedComnpanyId,
+      associatedCompanyId: p.associatedCompanyId,
       name: p.name,
       isMain: p.isMain,
       address: p.address,
@@ -432,17 +433,11 @@ export const workOutDataShapeForApi = (people, companyOrContact, companyId, cont
         documents: mapDocsForAPI(person.documents),
       };
       if (person.companyId) {
-        // delete updatedPerson.id
-        // if (person.associatedCompanyId) {
-          updatedPerson.associatedCompanyId = person.associatedCompanyId | person.companyId;
-        // } else {
-          // updatedPerson.companyId = person.companyId;
-        // }
+        updatedPerson.associatedCompanyId = person.associatedCompanyId;
+        console.log('updatedPerson: ', updatedPerson)
         companyDocuments.push(updatedPerson);
       } else {
-        (updatedPerson.personId = person.personId),
-          // (updatedPerson.personDateAmlCompleted = person.personDateAmlCompleted),
-          personDocuments.push(updatedPerson);
+        (updatedPerson.personId = person.personId), personDocuments.push(updatedPerson);
       }
     });
     const savePayload = {

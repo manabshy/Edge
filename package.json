@@ -1,9 +1,9 @@
 {
   "name": "wedge",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --hmr",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -93,6 +93,7 @@
     "@angular/compiler-cli": "^11.2.5",
     "@angular/elements": "^12.2.6",
     "@angular/language-service": "^11.2.5",
+    "@angularclass/hmr": "^3.0.0",
     "@babel/core": "^7.15.5",
     "@compodoc/compodoc": "^1.1.14",
     "@fortawesome/fontawesome-free": "^5.15.2",
@@ -106,7 +107,7 @@
     "@types/jasminewd2": "^2.0.8",
     "@types/jest": "^27.0.2",
     "@types/lodash": "^4.14.168",
-    "@types/node": "^12.19.16",
+    "@types/node": "^12.20.33",
     "@webcomponents/custom-elements": "^1.5.0",
     "babel-loader": "^8.2.2",
     "codelyzer": "^5.2.2",
