@@ -945,12 +945,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuation.property = { ...this.property };
     this.valuation.officeId = this.property.officeId;
     // this.valuers = result.valuers;
-    this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
-      this.contactGroup = result;
-      // console.log("----------------------------------- contactGroupBs.next");
-      this.valuationService.contactGroupBs.next(this.contactGroup);
-      this.getSearchedPersonSummaryInfo(this.contactGroup);
-    });
+    if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
+      this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
+        this.contactGroup = result;
+        // console.log("----------------------------------- contactGroupBs.next");
+        this.valuationService.contactGroupBs.next(this.contactGroup);
+        this.getSearchedPersonSummaryInfo(this.contactGroup);
+      });
+    }
 
     const baseProperty = {
       propertyId: this.property.propertyId,
@@ -1245,14 +1247,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.lastKnownOwner = this.valuation.property.lastKnownOwner
             ? this.valuation.property.lastKnownOwner
             : this.valuation.propertyOwner;
-          this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
-            this.contactGroup = result;
-            console.log('----------------------------------- contactGroupBs.next');
-            this.valuationService.contactGroupBs.next(this.contactGroup);
-            this.getSearchedPersonSummaryInfo(this.contactGroup);
 
-            this.setAdminContact();
-          }); // get contact group for last know owner
+          if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
+            this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
+              this.contactGroup = result;
+              console.log('----------------------------------- contactGroupBs.next');
+              this.valuationService.contactGroupBs.next(this.contactGroup);
+              this.getSearchedPersonSummaryInfo(this.contactGroup);
+
+              this.setAdminContact();
+            }); // get contact group for last know owner
+          }
         }
 
         this.setValuationType(this.valuation);
@@ -1700,14 +1705,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuation.property = property;
       this.valuationService._valuation.next(this.valuation);
       this.lastKnownOwner = property.lastKnownOwner;
-      this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then((result) => {
-        this.contactGroup = result;
-        // console.log(
-        //   "----------------------------------- contactGroupBs.next"
-        // );
-        this.valuationService.contactGroupBs.next(this.contactGroup);
-        this.getSearchedPersonSummaryInfo(this.contactGroup);
-      });
+      if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
+        this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then((result) => {
+          this.contactGroup = result;
+          // console.log(
+          //   "----------------------------------- contactGroupBs.next"
+          // );
+          this.valuationService.contactGroupBs.next(this.contactGroup);
+          this.getSearchedPersonSummaryInfo(this.contactGroup);
+        });
+      }
       this.valuationForm.get('property').setValue(property);
       this.valuationForm.get('propertyOwner').setValue(this.lastKnownOwner);
       this.getValuers(property.propertyId);
@@ -2434,6 +2441,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     // return
     this.checkAvailabilityBooking();
     this.setValuersValidators();
+
+    if (!this.lastKnownOwner) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'You must add a last owner to the property!',
+        closable: false,
+      });
+      return;
+    }
 
     if (
       this.areValuesVisible &&

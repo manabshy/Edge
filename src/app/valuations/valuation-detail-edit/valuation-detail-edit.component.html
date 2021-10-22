@@ -138,7 +138,7 @@
         </div>
 
         <form [formGroup]="valuationForm" autocompleteOff>
-          <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
+          <ng-container *ngIf="property">
             <p-accordion [multiple]="true">
               <div class="mr-8 md:m-0">
                 <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]"
@@ -632,7 +632,7 @@
                   data-cy="valuationValues">
                   <div id="valuesTab" [ngClass]="{'opacity-75 pointer-events-none': isCancelled}"
                     (click)="controlIsCancelled($event)">
-                    <ol class="mb-4 cards" [ngStyle]="{'grid-gap': (!isEditable && !isNewValuation)?'20px':''}">
+                    <ol class="mb-4 cards" [ngStyle]="{'grid-gap': (!isEditable && !isNewValuation)?'30px':''}">
                       <li
                         *ngIf="valuation?.salesValuationBooking && isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
                         <h5 class="txt--title">Sales</h5>
@@ -658,8 +658,8 @@
                       <li
                         *ngIf="valuation?.lettingsValuationBooking &&  isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentLongLet').value)">
                         <h5 class="txt--title">Long Let</h5>
-                        <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
-                          <fieldset class="inline-child">
+                        <div class="flex flex-row">
+                          <fieldset>
                             <label style="width:max-content" for="longLetValue">Value (per week)</label>
                             <input class="p-2" autocomplete="off" type="text" name="longLetValue" id="longLetValue"
                               formControlName="suggestedAskingRentLongLet" *ngIf="!(!isEditable && !isNewValuation)"
@@ -669,7 +669,7 @@
                               }}</strong>
                           </fieldset>
 
-                          <fieldset class="ml-14 inline-child"
+                          <fieldset class="ml-14"
                             *ngIf="!isEditable && !isNewValuation && !valuationForm.get('suggestedAskingRentShortLet').value">
                             <label style="width:max-content" for="sellValue">Age of valuation</label>
                             <strong class="text-lg"
@@ -691,8 +691,8 @@
                       <li
                         *ngIf="valuation?.lettingsValuationBooking && isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentShortLet').value)">
                         <h5 class="txt--title">Short Let</h5>
-                        <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
-                          <fieldset class="inline-child">
+                        <div class="flex flex-row">
+                          <fieldset>
                             <label style="width:max-content" for="shortLetValue">Value (per week)</label>
                             <input class="p-2" autocomplete="off" type="text" name="shortLetValue" id="shortLetValue"
                               formControlName="suggestedAskingRentShortLet" *ngIf="!(!isEditable && !isNewValuation)"
@@ -701,7 +701,7 @@
                               *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentShortLet').value
                               }}</strong>
                           </fieldset>
-                          <fieldset class="ml-14 inline-child" *ngIf="!isEditable && !isNewValuation">
+                          <fieldset class="ml-14" *ngIf="!isEditable && !isNewValuation">
                             <label style="width:max-content" for="sellValue">Age of valuation</label>
                             <strong class="text-lg"
                               [ngStyle]="{'color':ageColor(valuationForm.get('ageOfSuggestedAskingPrice').value)}">
@@ -805,7 +805,7 @@
             </div>
           </fieldset>
 
-          <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
+          <ng-container *ngIf="property">
             <footer class="footer">
               <button (click)="cancel()" type="button" class="btn btn--ghost" data-cy="cancelVal">Cancel</button>
               <button *ngIf="canSaveValuation" (click)="saveValuation()" class="btn btn--positive" id="saveVal"
@@ -823,7 +823,7 @@
       </div>
     </div>
     <ng-container [ngSwitch]="moreInfo">
-      <div class="mt-3">
+      <div class="mt-6 mr-10 md:mr-0">
         <app-notes *ngSwitchCase="'notes'" [noteData]="dataNote" [contactGroupNotes]="dataNote?.notes"
           [pageNumber]="page" [bottomReached]="bottomReached" (showMyNotes)="setShowMyNotesFlag($event)"></app-notes>
       </div>
