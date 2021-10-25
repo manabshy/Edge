@@ -21,10 +21,10 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
     if (this._contactGroup != value) {
       this._contactGroup = value;
       if (value && value.contactGroupId > 0) {
-        let adminContactPerson = value.contactPeople.find(
-          (contactPeople) => contactPeople.isMainPerson && contactPeople.isAdminContact,
+        let headerPerson = value.contactPeople.find(
+          (contactPeople) => contactPeople.isMainPerson && !contactPeople.isAdminContact,
         );
-        if (adminContactPerson) this.contactHeader = adminContactPerson?.addressee;
+        if (headerPerson) this.contactHeader = headerPerson?.addressee;
         else this.contactHeader = value.addressee;
       }
     }
