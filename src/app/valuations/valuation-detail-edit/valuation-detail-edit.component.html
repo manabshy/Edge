@@ -1,6 +1,6 @@
 <div class="row">
-  <div class="row__item row__item--aside">
-    <div class="wrapper--sticky">
+  <div class="mb-10 md:mb-0 row__item row__item--aside">
+    <div class="wrapper--sticky ">
 
       <app-contact-group-card class="appWrapper" [(adminContact)]="adminContact"
         [contactGroup]="adminContactGroup? adminContactGroup: contactGroup" *ngIf="contactGroup">
@@ -9,7 +9,7 @@
         <app-sidenav-item class="appWrapper" [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals"
           (selectedItem)="getSelectedSideNavItem($event)">
         </app-sidenav-item>
-        <div class="card" *ngIf="property">
+        <div class=" card" *ngIf="property">
           <div class="card__header">
             Status <span class="pill flexRight"
               [ngClass]="{'pill--negative':valuation.valuationStatus == 5,'pill--positive':valuation.valuationStatus != 5}">
@@ -636,8 +636,8 @@
                       <li
                         *ngIf="valuation?.salesValuationBooking && isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
                         <h5 class="txt--title">Sales</h5>
-                        <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
-                          <fieldset class="inline-child">
+                        <div class="flex flex-row">
+                          <fieldset>
                             <label for="sellValue">Value</label>
                             <input class="p-2" type="text" autocomplete="off" name="sellValue" id="sellValue"
                               formControlName="suggestedAskingPrice" *ngIf="!(!isEditable && !isNewValuation)"
@@ -646,13 +646,13 @@
                               *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingPrice').value
                               }}</strong>
                           </fieldset>
-                          <!-- <fieldset class="ml-14 inline-child" *ngIf="!isEditable && !isNewValuation">
-                          <label style="width:max-content" for="sellValue">Age of valuation</label>
-                          <strong class="text-lg"
-                            [ngStyle]="{'color':ageColor(valuationForm.get('ageOfSuggestedAskingPrice').value)}">
-                            {{valuationForm.get('ageOfSuggestedAskingPrice').value
-                            +" months"}}</strong>
-                        </fieldset> -->
+                          <fieldset class="ml-14" *ngIf="!isEditable && !isNewValuation">
+                            <label style="width:max-content" for="sellValue">Age of valuation</label>
+                            <strong class="text-lg"
+                              [ngStyle]="{'color':ageColor(valuationForm.get('ageOfSuggestedAskingPrice').value)}">
+                              {{valuationForm.get('ageOfSuggestedAskingPrice').value
+                              +" months"}}</strong>
+                          </fieldset>
                         </div>
                       </li>
                       <li
@@ -849,7 +849,7 @@
 <!-- Contactgroup Finder for admin contact Modal -->
 <p-dialog header="Admin Contact" [(visible)]="isAdminContactVisible" [modal]="true" [draggable]="false"
   class="modal--medium modal--hasFooter">
-  <app-contact-group-finder [showCreateNewCompanyContact]="false" [isSinglePerson]="true"
+  <app-contact-group-finder [showCreateNewCompanyContact]="true" [isSinglePerson]="true"
     (selectedContactGroup)="getSelectedAdminContact($event)">
   </app-contact-group-finder>
 </p-dialog>

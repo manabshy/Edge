@@ -389,7 +389,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } else {
       this.valuation = { valuationStatus: ValuationStatusEnum.None, valuationStatusDescription: 'New' };
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0);
-      this.sharedService.removeContactGroupChanged.next(false);
       if (this.propertyId) {
         this.getPropertyInformation(this.propertyId);
       }
@@ -526,14 +525,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     });
 
     this.openContactGroupSubscription = this.sharedService.openContactGroupChanged.subscribe((value) => {
-      if (value) {
+      if (value === true) {
         this.isAdminContactVisible = value;
         this.sharedService.addAdminContactBs.next(true);
       }
     });
 
     this.removeContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe((value) => {
-      if (value) {
+      if (value === true) {
         this.removeAdminContact();
       }
     });
@@ -708,7 +707,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.isAdminContactChanged = true;
     this.valuationForm.get('adminContact').setValue(this.adminContact);
     this.adminContactGroup = null;
-    this.sharedService.removeContactGroupChanged.next(false);
+    this.sharedService.removeContactGroupChanged.next(null);
   }
 
   setShowMyNotesFlag(onlyMyNotes: boolean) {
@@ -775,6 +774,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuationForm.get('adminContact').setValue(this.adminContact);
       this.isAdminContactVisible = false;
       this.sharedService.openContactGroupChanged.next(false);
+      this.sharedService.removeContactGroupChanged.next(false);
     }
   }
 
@@ -1373,7 +1373,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     else if (
       !(this.valuationForm.get('adminContact').value && this.valuationForm.get('adminContact').value.contactGroupId > 0)
     ) {
-      this.sharedService.removeContactGroupChanged.next(false);
+      this.sharedService.removeContactGroupChanged.next(null);
     }
   }
 
