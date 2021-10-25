@@ -1,63 +1,92 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ValuationCancellationReasons, valuationNote } from './../shared/valuation';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { ToastrService } from 'ngx-toastr';
-import { debounceTime, takeUntil, distinctUntilChanged } from 'rxjs/operators';
-import { ContactGroup, Signer } from 'src/app/contactgroups/shared/contact-group';
-import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
+import { debounceTime, takeUntil, distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { ContactGroup, ContactNote, PersonSummaryFigures, Signer } from 'src/app/contact-groups/shared/contact-group';
+import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { FormErrors } from 'src/app/core/shared/app-constants';
-import { MinBedrooms, Property } from 'src/app/property/shared/property';
+import { MinBedrooms, OtherFeatures, Property, PropertyFeatures, PropertyType } from 'src/app/property/shared/property';
 import { PropertyService } from 'src/app/property/shared/property.service';
 import { BaseComponent } from 'src/app/shared/models/base-component';
 import { BaseProperty } from 'src/app/shared/models/base-property';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
-import { Valuation, ValuationStatusEnum, ValuationPropertyInfo, Valuer, OfficeMember, ValuersAvailabilityOption, CalendarAvailibility, ValuationStaffMembersCalanderEvents } from '../shared/valuation';
+import {
+  Valuation,
+  ValuationStatusEnum,
+  ValuationPropertyInfo,
+  Valuer,
+  OfficeMember,
+  ValuersAvailabilityOption,
+  CalendarAvailibility,
+  ValuationStaffMembersCalanderEvents,
+  ValuationBooking,
+  ValuationStatuses,
+  CancelValuation,
+} from '../shared/valuation';
 import { ValuationService } from '../shared/valuation.service';
 import { Instruction } from 'src/app/shared/models/instruction';
 import { ResultData } from 'src/app/shared/result-data';
 import { StaffMember } from 'src/app/shared/models/staff-member';
 import { TabDirective } from 'ngx-bootstrap/tabs/ngx-bootstrap-tabs';
 import format from 'date-fns/format';
-import { Observable } from 'rxjs';
-import { MessageService } from 'primeng/api';
-import { addYears, differenceInCalendarYears } from 'date-fns';
+import { BehaviorSubject, Observable, of, Subject, Subscription, combineLatest } from 'rxjs';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { addYears, differenceInCalendarYears, isThisHour } from 'date-fns';
+import _ from 'lodash';
+import { CurrencyPipe, ViewportScroller } from '@angular/common';
+import { CustomDateFormatter } from 'src/app/calendar-shared/custom-date-formatter.provider';
+import { CustomEventTitleFormatter } from 'src/app/calendar-shared/custom-event-title-formatter.provider';
+import { CalendarDayViewBeforeRenderEvent, CalendarEvent } from 'angular-calendar';
+import { BasicEventRequest, DiaryProperty } from 'src/app/diary/shared/diary';
+import { DiaryEventService } from 'src/app/diary/shared/diary-event.service';
+import { SideNavItem, SidenavService } from 'src/app/core/services/sidenav.service';
+import { Person } from 'src/app/shared/models/person';
+import moment from 'moment';
+import { eSignTypes } from 'src/app/core/shared/eSignTypes';
 
 @Component({
   selector: 'app-valuation-detail-edit',
   templateUrl: './valuation-detail-edit.component.html',
-  styleUrls: ['./valuation-detail-edit.component.scss']
+  styleUrls: ['./valuation-detail-edit.component.scss'],
 })
-export class ValuationDetailEditComponent extends BaseComponent implements OnInit, OnDestroy {
+export class ValuationDetailEditComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
   showCalendar = false;
   valuationId: number;
   valuation: Valuation;
   lastKnownOwner: Signer;
+  adminContact: Signer | null;
   valuationForm: FormGroup;
   tenures: InfoDetail[];
   outsideSpaces: InfoDetail[];
   parkings: InfoDetail[];
   features: InfoDetail[];
   selectedDate: Date;
+  selectedSalesDate: Date;
+  selectedLettingsDate: Date;
   createdSigner: any;
   isCreatingNewSigner: boolean;
   allStaffMembers: BaseStaffMember[] = [];
   mainStaffMember: BaseStaffMember;
   staffMemberId: number;
-  isNewValuation: boolean;
+  isNewValuation: boolean = false;
   showOnlyMainStaffMember: boolean;
   errorMessage: WedgeError;
   isSubmitting: boolean;
   formErrors = FormErrors;
   property: Property;
   isOwnerChanged: boolean;
+  isAdminContactChanged: boolean = false;
   isPropertyChanged: boolean;
-  isEditable: boolean;
+  isEditable: boolean = false;
   showLeaseExpiryDate: boolean;
   canInstruct: boolean;
+  canSaveValuation: boolean = true;
   propertyId: number;
   lastKnownOwnerId: number;
   approxLeaseExpiryDate: Date;
@@ -77,6 +106,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   activeOriginId: InfoDetail;
   showOriginId: boolean;
   allOriginTypes: InfoDetail[] = [];
+  associateTypes: InfoDetail[] = [];
   isSelectingDate = false;
   showInstruct: boolean;
   currentStaffMember: StaffMember;
@@ -96,32 +126,115 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   availableDates: ValuationStaffMembersCalanderEvents;
   canBookAppointment = true;
   isAvailabilityRequired = false;
-  canChangeDate: boolean;
-  canSearchAvailability = false;
-  contactGroup$: Observable<ContactGroup>;
+  oldClass: string = 'null';
+  contactGroup: ContactGroup;
+  adminContactGroup: ContactGroup;
+  contactGroupSubscription = new Subscription();
   showPhotos = false;
   showMap = false;
   showProperty = false;
-  isLastknownOwnerVisible = false;
+  isLastKnownOwnerVisible = false;
+  isAdminContactVisible = false;
   isInstructVisible = false;
-  isAppointmentVisible = false;
-  isFromProperty = false;
+  accordionIndex: number;
+  propertySubsription = new Subscription();
 
+  salesMeetingOwner;
+  lettingsMeetingOwner;
+  salesOwnerAssociateName;
+  salesOwnerAssociateContactNumber;
+  salesOwnerAssociateEmail;
+  salesOwnerAssociateType;
+  lettingsOwnerAssociateName;
+  lettingsOwnerAssociateContactNumber;
+  lettingsOwnerAssociateEmail;
+  lettingsOwnerAssociateType;
+  isAppointmentVisible = false;
+  lettingsValuerOpenSlots: ValuationStaffMembersCalanderEvents;
+  salesValuerOpenSlots: ValuationStaffMembersCalanderEvents;
+  isFromProperty = false;
+  thisWeek: any[] = [];
+  nextWeek: any[] = [];
+  nextTwoWeek: any[] = [];
+  warningForValuer = true;
+  sideBarControlVisible = false;
+  selectedCalendarDate: Date = null;
+  viewingArrangements: InfoDetail[];
+  secondStaffMemberId: number;
+  selectedStaffMemberId: number = 0;
+  isSalesEdit = false;
+  isLettingsEdit = false;
+  isBothEdit = true;
+  isSplitAppointment = false;
+  getTimeSalesValuationDate: number;
+  getTimeLettingsValuationDate: number;
+  todaysDate = new Date();
+  defaultHours = [12, 13, 16, 17, 18, 19];
+  defaultHoursForWeekend = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+  lettingsValuer: BaseStaffMember;
+  salesValuer: BaseStaffMember;
+  bookingButtonLabel = 'Book For Sales and Lettings';
+  propertyTypes: any[];
+  propertyStyles: any[];
+  propertyFloors: any[];
+  allPropertyStyles: any[];
+  activeValuations: Valuation[] = [];
+  isActiveValuationsVisible = false;
+  isCanDeactivate = false;
+  openContactGroupSubscription = new Subscription();
+  cancelValuationSubscription = new Subscription();
+  removeContactGroupSubscription = new Subscription();
+  eSignSubscription = new Subscription();
+  moreInfo = (this.sidenavService.selectedItem = 'valuationTicket');
+  summaryTotals: PersonSummaryFigures;
+  sideNavItems: SideNavItem[];
+  contactId: number;
+  mainPersonId: number;
+  showOnlyMyNotes: boolean = false;
+  contactNotes: ContactNote[] = [];
+  page = 0;
+  pageSize = 20;
+  bottomReached = false;
+  isNoteSelected = false;
+  person: Person;
+  destroy = new Subject();
+  showStudioLabel = false;
+  isCancelValuationVisible = false;
+  isCancelled = false;
+  cancelString: string = '';
+  cancelReasonString: string = '';
+  saveValuationSubscription = new Subscription();
+  changedLastOwner: Signer;
+
+  // previousContactGroupId: number;
+  get dataNote() {
+    if (this.contactGroup?.contactGroupId) {
+      return {
+        contactGroupId: this.contactGroup.contactGroupId,
+        people: this.contactGroup.contactPeople,
+        notes: this.contactNotes,
+      };
+    }
+    if (this.contactGroup) {
+      return { contactGroupId: this.contactGroup, notes: this.contactNotes };
+    }
+    return null;
+  }
 
   get originTypeControl() {
     return this.valuationForm.get('originType') as FormControl;
   }
   get valuationTypeControl() {
-    return this.valuationForm.get('type') as FormControl;
+    return this.availabilityForm.get('type') as FormControl;
   }
   get originIdControl() {
     return this.valuationForm.get('originId') as FormControl;
   }
   get salesValuerIdControl() {
-    return this.valuationForm.get('salesValuerId') as FormControl;
+    return this.availabilityForm.get('salesValuerId') as FormControl;
   }
   get lettingsValuerIdControl() {
-    return this.valuationForm.get('lettingsValuerId') as FormControl;
+    return this.availabilityForm.get('lettingsValuerId') as FormControl;
   }
   get salesValuerControl() {
     return this.valuationForm.get('salesValuer') as FormControl;
@@ -149,6 +262,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   get longLetMonthlyControl() {
     return this.valuationForm.get('suggestedAskingRentLongLetMonthly') as FormControl;
   }
+
+  get suggestedAskingPrice() {
+    return this.valuationForm.get('suggestedAskingPrice') as FormControl;
+  }
+
   get instAskingPriceControl() {
     return this.instructionForm.get('askingPrice') as FormControl;
   }
@@ -181,27 +299,44 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  staffMembers = [
-    { staffMemberId: 2484, fullName: 'Gabor Remenyi', emailAddress: 'gremenyi@dng.co.uk', hasReminder: null },
-    { staffMemberId: 2127, fullName: 'Matt Easley', emailAddress: 'measley@dng.co.uk', hasReminder: null },
-    { staffMemberId: 2606, fullName: 'Elia Fulchignoni', emailAddress: 'efulchignoni@dng.co.uk' },
-    { staffMemberId: 2523, fullName: 'Alexander Agyapong', emailAddress: 'aagyapong@dng.co.uk' },
-    { staffMemberId: 2537, fullName: 'Mansoor Malik', emailAddress: 'mmalik@dng.co.uk', hasReminder: null }
+  get isTermsOfBusinessVisible() {
+    return true;
+    // if (this.valuation) {
+    //   return !(
+    //     this.valuation.valuationStatus === ValuationStatusEnum.None ||
+    //     this.valuation.valuationStatus === ValuationStatusEnum.Booked
+    //   );
+    // }
+  }
+
+  get isLandRegisterVisible() {
+    if (this.valuation) {
+      return !(
+        this.valuation.valuationStatus === ValuationStatusEnum.None ||
+        this.valuation.valuationStatus === ValuationStatusEnum.Booked
+      );
+    }
+  }
+
+  activeState: boolean[] = [true, true, true, true, true, false, false];
+  // activeState: boolean[] = [false, false, false, false, false, false, true];
+  statuses = [
+    { name: 'valuationNotes', value: 0, isValid: false },
+    { name: 'propertyInfo', value: 1, isValid: false },
+    { name: 'appointment', value: 2, isValid: false },
+    { name: 'values', value: 3, isValid: false },
+    { name: 'termsOfBusinesses', value: 4, isValid: false },
+    { name: 'landRegistry', value: 6, isValid: false },
+    { name: 'complianceChecks', value: 9, isValid: false },
+    { name: 'instruct', value: 8, isValid: false },
   ];
 
-  activeState: boolean[] = [true, true, true, false];
-  statuses = [
-    { name: 'valuationNotes', value: 0 },
-    { name: 'propertyInfo', value: 1 },
-    { name: 'appointment', value: 2 },
-    { name: 'values', value: 3 },
-    { name: 'termsOfBusinessues', value: 4 },
-    { name: 'antiMoneyLaundering', value: 5 },
-    { name: 'landRegistery', value: 6 },
-    { name: 'status', value: 7 },
-    { name: 'instruct', value: 8 },
-  ];
-  constructor(private valuationService: ValuationService,
+  setRequirementValuationNoteBs = new BehaviorSubject(false);
+
+  interestList: any[] = [];
+
+  constructor(
+    private valuationService: ValuationService,
     private propertyService: PropertyService,
     private contactGroupService: ContactGroupsService,
     private sharedService: SharedService,
@@ -212,12 +347,23 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     private route: ActivatedRoute,
     private infoService: InfoService,
     private router: Router,
-    private fb: FormBuilder) { super(); }
+    private fb: FormBuilder,
+    private currencyPipe: CurrencyPipe,
+    private primengConfig: PrimeNGConfig,
+    private diaryEventService: DiaryEventService,
+    private sidenavService: SidenavService,
+    private scroller: ViewportScroller,
+  ) {
+    super();
+  }
 
   ngOnInit() {
+    this.valuationService.landRegisterValid.next(false);
+    this.primengConfig.ripple = true;
     this.setupForm();
     this.storage.get('currentUser').subscribe((currentStaffMember: StaffMember) => {
       if (currentStaffMember) {
+        this.currentStaffMember = currentStaffMember;
         // for testing purposes
         if (currentStaffMember.activeDepartments[0].departmentId === 90) {
           this.isClientService = true;
@@ -235,35 +381,37 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuationId = +this.route.snapshot.paramMap.get('id');
     this.propertyId = +this.route.snapshot.queryParamMap.get('propertyId');
     this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get('lastKnownOwnerId');
-    this.isNewValuation = this.route.snapshot.queryParamMap.get('isNewValuation') as unknown as boolean;
-    this.isFromProperty = this.route.snapshot.queryParamMap.get('isFromProperty') as unknown as boolean;
-    this.isNewValuation && !this.isFromProperty ? this.showProperty = true : this.showProperty = false;
+    this.isNewValuation = (this.route.snapshot.queryParamMap.get('isNewValuation') as unknown) as boolean;
+    this.isFromProperty = (this.route.snapshot.queryParamMap.get('isFromProperty') as unknown) as boolean;
+    this.isNewValuation && !this.isFromProperty ? (this.showProperty = true) : (this.showProperty = false);
     if (this.valuationId) {
       this.getValuation(this.valuationId);
-    }
-
-    if (this.propertyId) {
-      this.getPropertyDetails(this.propertyId);
-      this.getValuationPropertyInfo(this.propertyId);
-      this.getValuers(this.propertyId);
+    } else {
+      this.valuation = { valuationStatus: ValuationStatusEnum.None, valuationStatusDescription: 'New' };
+      this.setHeaderDropdownList(ValuationStatusEnum.None, 0);
+      if (this.propertyId) {
+        this.getPropertyInformation(this.propertyId);
+      }
     }
 
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
       if (info) {
         this.setupListInfo(info);
       } else {
-        this.infoService.getDropdownListInfo().pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: ResultData | any) => {
-          if (data) {
-            this.setupListInfo(data.result);
-            console.log(' list info in val edit from db', data.result);
-          }
-        });
+        this.infoService
+          .getDropdownListInfo()
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe((data: ResultData | any) => {
+            if (data) {
+              this.setupListInfo(data.result);
+            }
+          });
       }
     });
 
     this.getAddedProperty();
 
-    this.contactGroupService.signer$.subscribe(data => {
+    this.contactGroupService.signer$.subscribe((data) => {
       if (data) {
         this.lastKnownOwner = data;
         this.createdSigner = data;
@@ -271,42 +419,430 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     });
 
-    this.valuationForm.valueChanges
-      .subscribe((data) => {
-        this.sharedService.logValidationErrors(this.valuationForm, false);
-        this.setRentFigures();
-        this.toggleValuerType();
-        this.checkAvailabilityBooking();
-      });
+    this.valuationForm.valueChanges.subscribe((data) => {
+      this.valuationForm.patchValue(
+        {
+          suggestedAskingRentShortLetMonthly: data.suggestedAskingRentShortLetMonthly
+            ? this.sharedService.transformCurrency(this.shortLetMonthlyControl.value)
+            : '',
+          suggestedAskingRentLongLetMonthly: data.suggestedAskingRentLongLetMonthly
+            ? this.sharedService.transformCurrency(this.longLetMonthlyControl.value)
+            : '',
+          suggestedAskingPrice: data.suggestedAskingPrice
+            ? this.sharedService.transformCurrency(this.suggestedAskingPrice.value)
+            : '',
+          suggestedAskingRentShortLet: data.suggestedAskingRentShortLet
+            ? this.sharedService.transformCurrency(this.shortLetWeeklyControl.value)
+            : '',
+          suggestedAskingRentLongLet: data.suggestedAskingRentLongLet
+            ? this.sharedService.transformCurrency(this.longLetWeeklyControl.value)
+            : '',
+        },
+        { emitEvent: false },
+      );
+      if (this.areValuesVisible && this.isThereAPrice(data) && this.setRequirementValuationNoteBs.getValue() == false) {
+        this.setRequirementValuationNoteBs.next(true);
+        this.valuationForm.controls['valuationNote'].setValidators(Validators.required);
+        this.valuationForm.controls['valuationNote'].updateValueAndValidity();
+      } else {
+        this.formErrors.valuationNote = null;
+      }
+      this.sharedService.logValidationErrors(this.valuationForm, false);
+      this.setRentFigures();
+      this.checkAvailabilityBooking();
+      this.controlStatus(data);
+    });
 
-    this.instructionForm.valueChanges.pipe(debounceTime(100), distinctUntilChanged())
-      .subscribe(() => {
-        this.sharedService.logValidationErrors(this.instructionForm, false);
-        this.setInstructionRentFigures();
-      });
+    this.valuationForm.controls['lettingsMeetingOwner'].valueChanges.subscribe((data) => {
+      if (data == false) {
+        this.setValidationForLettingsMeetingOwner(true);
+      } else {
+        this.setValidationForLettingsMeetingOwner(false);
+      }
+    });
+
+    this.valuationForm.controls['salesMeetingOwner'].valueChanges.subscribe((data) => {
+      if (data == false) {
+        this.setValidationForSalesMeetingOwner(true);
+      } else {
+        this.setValidationForSalesMeetingOwner(false);
+      }
+    });
+
+    this.valuationForm.controls['propertyFloorId'].valueChanges.subscribe((data) => {
+      // console.log("propertyFloorId = ", data);
+      if (+data === 10) {
+        this.setValidationForPropertyFloorOther(true);
+      } else {
+        this.setValidationForPropertyFloorOther(false);
+      }
+    });
+
+    this.instructionForm.valueChanges.pipe(debounceTime(100), distinctUntilChanged()).subscribe((form) => {
+      this.instructionForm.patchValue(
+        {
+          askingPrice: form.askingPrice ? this.sharedService.transformCurrency(this.instAskingPriceControl.value) : '',
+          askingRentLongLet: form.askingRentLongLet
+            ? this.sharedService.transformCurrency(this.instLongLetWeeklyControl.value)
+            : '',
+          askingRentLongLetMonthly: form.askingRentLongLetMonthly
+            ? this.sharedService.transformCurrency(this.instLongLetMonthlyControl.value)
+            : '',
+          askingRentShortLet: form.askingRentShortLet
+            ? this.sharedService.transformCurrency(this.instShortLetWeeklyControl.value)
+            : '',
+          askingRentShortLetMonthly: form.askingRentShortLetMonthly
+            ? this.sharedService.transformCurrency(this.instShortLetMonthlyControl.value)
+            : '',
+        },
+        { emitEvent: false },
+      );
+      this.sharedService.logValidationErrors(this.instructionForm, false);
+      this.setInstructionRentFigures();
+    });
 
     // availability form
     this.availabilityForm = this.fb.group({
-      fromDate: new Date(),
-      staffMemberId1: 0,
-      staffMemberId2: 0,
+      fromDate: [new Date(), Validators.required],
+      salesValuerId: [null, Validators.required],
+      lettingsValuerId: [null, Validators.required],
+      type: 'both',
     });
+
+    this.toggleValuerType();
+    this.availabilityForm.valueChanges.subscribe((data) => {
+      this.sharedService.logValidationErrors(this.availabilityForm, false);
+    });
+
+    this.availabilityForm.controls['type'].valueChanges.subscribe((data) => {
+      this.toggleValuerType();
+    });
+
+    this.storage.get('info').subscribe((data: DropdownListInfo) => {
+      if (data) {
+        this.viewingArrangements = data.viewingArrangements;
+      }
+    });
+
+    this.openContactGroupSubscription = this.sharedService.openContactGroupChanged.subscribe((value) => {
+      if (value === true) {
+        this.isAdminContactVisible = value;
+        this.sharedService.addAdminContactBs.next(true);
+      }
+    });
+
+    this.removeContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe((value) => {
+      if (value === true) {
+        this.removeAdminContact();
+      }
+    });
+
+    this.cancelValuationSubscription = this.sharedService.cancelValuationOperationChanged.subscribe((value) => {
+      this.isCancelValuationVisible = value;
+    });
+
+    this.contactGroupService.noteChanges$.subscribe((data) => {
+      if (data) {
+        this.contactNotes = [];
+        this.page = 1;
+        if (this.contactId) {
+          this.getContactNotes();
+        }
+      }
+    });
+
+    this.eSignSubscription = this.sharedService.eSignTriggerChanged.subscribe((data: eSignTypes) => {
+      if (data) {
+        this.valuationService.createValuationESign(data, this.valuation.valuationEventId).subscribe((result) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: this.removeUnderLine(eSignTypes[data]) + ' send',
+            closable: false,
+          });
+        });
+      }
+    });
+
+    this.contactGroupSubscription = this.valuationService.contactGroupBs.subscribe((result: ContactGroup) => {
+      if (result?.contactGroupId && this.contactId != result?.contactGroupId) {
+        if (!this.contactGroup) this.contactGroup = result;
+        this.contactId = result.contactGroupId;
+        this.getContactNotes();
+      }
+    });
+
+    this.contactGroupService.contactNotePageChanges$.pipe(takeUntil(this.destroy)).subscribe((newPageNumber) => {
+      this.page = newPageNumber;
+      if (this.contactId == null) {
+        this.page = 0;
+      }
+      this.getNextContactNotesPage(this.page);
+    });
+
+    let sideNavList = [...this.sidenavService.valuationSideNavItems];
+    sideNavList.find((x) => x.name == 'valuationTicket').isCurrent = true;
+    this.sideNavItems = sideNavList;
   }
-  setCanBookAppointmentFlag() {
-    switch (true) {
-      case !!(this.isSalesAndLettings && this.salesValuerControl.value && this.lettingsValuerControl.value):
-        this.canBookAppointment = true;
-        break;
 
-      case !!(this.isSalesOnly && this.salesValuerControl.value):
-        this.canBookAppointment = true;
-
-        break;
-      case !!(this.isLettingsOnly && this.lettingsValuerControl.value):
-        this.canBookAppointment = true;
-
-        break;
+  ngAfterViewInit(): void {
+    if (this.sharedService.addedContactBs.getValue()) {
+      if (this.sharedService.addAdminContactBs.getValue() === true) {
+        this.getSignerDetails(this.sharedService.addedContactBs.getValue().contactGroupId)
+          .then((signer: Signer) => {
+            this.getSelectedAdminContact(signer);
+          })
+          .finally(() => {
+            this.sharedService.addAdminContactBs.next(false);
+            this.sharedService.addedContactBs.next(null);
+            this.isAdminContactChanged = true;
+          });
+      }
+      if (this.sharedService.addLastOwnerBs.getValue() === true) {
+        this.getSignerDetails(this.sharedService.addedContactBs.getValue().contactGroupId)
+          .then((signer: Signer) => {
+            this.getSelectedOwner(signer);
+            this.changedLastOwner = signer;
+          })
+          .finally(() => {
+            this.sharedService.addLastOwnerBs.next(false);
+            this.sharedService.addedContactBs.next(null);
+          });
+      }
     }
+    this.setScrollInformation();
+  }
+
+  getSignerDetails(id: number) {
+    return this.contactGroupService.getSignerbyId(id).toPromise();
+  }
+
+  controlStatus(data) {
+    if (data) {
+      if (
+        this.valuation &&
+        (this.valuation.valuationStatus === ValuationStatusEnum.None ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Booked)
+      ) {
+        if (data.timeFrame && data.generalNotes && data.reason) {
+          this.statuses.find((x) => x.value == 0).isValid = true;
+        } else {
+          this.statuses.find((x) => x.value == 0).isValid = false;
+        }
+        if (
+          data.bathrooms != null &&
+          data.receptions != null &&
+          data.propertyTypeId &&
+          data.propertyStyleId &&
+          (data.propertyTypeId != 2 || (data.propertyTypeId == 2 && data.propertyFloorId > 0)) &&
+          (data.propertyTypeId != 2 ||
+            data.propertyFloorId != '10' ||
+            (data.propertyTypeId == 2 && data.propertyFloorId == '10' && data.floorOther)) &&
+          (!this.showLeaseExpiryDate || (this.showLeaseExpiryDate == true && data.approxLeaseExpiryDate))
+        ) {
+          this.statuses.find((x) => x.value == 1).isValid = true;
+        } else {
+          this.statuses.find((x) => x.value == 1).isValid = false;
+        }
+        if (data.salesValuer || data.lettingsValuer) {
+          this.statuses.find((x) => x.value == 2).isValid = true;
+        } else {
+          this.statuses.find((x) => x.value == 2).isValid = false;
+        }
+      } else {
+        // if it is already in valued status that means before status will be done
+        this.statuses.find((x) => x.value == 0).isValid = true;
+        this.statuses.find((x) => x.value == 1).isValid = true;
+        this.statuses.find((x) => x.value == 2).isValid = true;
+      }
+
+      if (this.isThereAPrice(data) && data.valuationNote) {
+        this.statuses.find((x) => x.value == 3).isValid = true;
+      } else {
+        this.statuses.find((x) => x.value == 3).isValid = false;
+      }
+    }
+
+    // termsOfBusinessBs = new BehaviorSubject(false);
+    // antiMoneyLaunderingStatusBs = new BehaviorSubject(false);
+    // landRegistryStatusBs = new BehaviorSubject(false);
+    // complianceCheckStatusBs = new BehaviorSubject(false);
+  }
+
+  setScrollInformation() {
+    const interval = setTimeout(() => {
+      if (this.valuation?.valuationStatus == ValuationStatusEnum.None) this.scrollSpecificElement('appointmentTabs');
+      else if (this.valuation?.valuationStatus == ValuationStatusEnum.Booked) this.scrollSpecificElement('valuesTab');
+      else if (this.valuation?.valuationStatus == ValuationStatusEnum.Valued)
+        this.scrollSpecificElement('termsOfBusinessTab');
+    }, 1000);
+  }
+
+  isThereAPrice(data) {
+    if (
+      data.suggestedAskingPrice ||
+      data.suggestedAskingRentLongLet ||
+      data.suggestedAskingRentShortLet ||
+      data.suggestedAskingRentLongLetMonthly ||
+      data.suggestedAskingRentShortLetMonthly
+    ) {
+      this.valuationForm.controls['valuationNote'].setValidators(Validators.required);
+      return true;
+    }
+    this.valuationForm.controls['valuationNote'].setValidators(null);
+    this.setRequirementValuationNoteBs.next(false);
+    return false;
+  }
+
+  scrollSpecificElement(idName: string) {
+    //this.scroller.scrollToAnchor(idName);
+
+    const scrollElement = document.getElementById(idName);
+    if (scrollElement) {
+      scrollElement.scrollIntoView();
+    }
+  }
+
+  removeAdminContact() {
+    this.adminContact = null;
+    this.isAdminContactChanged = true;
+    this.valuationForm.get('adminContact').setValue(this.adminContact);
+    this.adminContactGroup = null;
+    this.sharedService.removeContactGroupChanged.next(null);
+  }
+
+  setShowMyNotesFlag(onlyMyNotes: boolean) {
+    this.showOnlyMyNotes = onlyMyNotes;
+    this.contactNotes = [];
+    this.page = 0;
+    this.getContactNotes();
+  }
+
+  getContactNotes() {
+    this.contactNotes = [];
+    this.getNextContactNotesPage(this.page);
+  }
+
+  addNote() {
+    // console.log(this.dataNote, "data note...");
+
+    this.sharedService.addNote(this.dataNote);
+  }
+
+  private getNextContactNotesPage(page: number) {
+    if (this.contactId) {
+      this.contactGroupService
+        .getContactGroupNotes(this.contactId, this.pageSize, page, this.showOnlyMyNotes)
+        .subscribe((data) => {
+          if (data) {
+            if (page === 1) {
+              this.contactNotes = data;
+            } else {
+              this.contactNotes = _.concat(this.contactNotes, data);
+            }
+          }
+          this.setBottomReachedFlag(data);
+        });
+    }
+  }
+
+  private setBottomReachedFlag(result: any) {
+    if (result && (!result.length || result.length < +this.pageSize)) {
+      this.bottomReached = true;
+    } else {
+      this.bottomReached = false;
+    }
+  }
+
+  getSelectedSideNavItem(event) {
+    this.moreInfo = this.sidenavService.getSelectedItem(event?.type, event?.index, this.sideNavItems);
+    if (event?.type == 'notes') {
+      this.isNoteSelected = true;
+    } else {
+      this.isNoteSelected = false;
+    }
+  }
+
+  getSelectedAdminContact(owner: Signer) {
+    if (owner) {
+      this.adminContact = {
+        ...owner,
+        ccOwner: this.valuation?.ccOwner,
+        isPowerOfAttorney: this.valuation?.isPowerOfAttorney,
+      };
+      this.isAdminContactChanged = true;
+      this.getAdminContactGroup(this.adminContact?.contactGroupId);
+      this.valuationForm.get('adminContact').setValue(this.adminContact);
+      this.isAdminContactVisible = false;
+      this.sharedService.openContactGroupChanged.next(false);
+      this.sharedService.removeContactGroupChanged.next(false);
+    }
+  }
+
+  getSelectedOwner(owner: Signer) {
+    if (owner) {
+      this.lastKnownOwner = owner;
+      this.isOwnerChanged = true;
+      this.isLastKnownOwnerVisible = false;
+      this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
+        this.contactGroup = result;
+        // console.log(
+        //   "----------------------------------- contactGroupBs.next"
+        // );
+        this.valuationService.contactGroupBs.next(this.contactGroup);
+        this.getSearchedPersonSummaryInfo(this.contactGroup);
+        this.isAdminContactChanged = false;
+      });
+      this.valuationForm.get('propertyOwner').setValue(owner);
+      if (this.property) {
+        this.property.lastKnownOwner = owner;
+      }
+      if (this.isEditable || this.isNewValuation) {
+        this.valuationForm.markAsDirty();
+      }
+    }
+  }
+
+  setValidationForLettingsMeetingOwner(setValidation: boolean) {
+    this.valuationForm.controls['lettingsOwnerAssociateEmail'].setValidators(setValidation ? Validators.required : []);
+    this.valuationForm.controls['lettingsOwnerAssociateEmail'].updateValueAndValidity();
+
+    this.valuationForm.controls['lettingsOwnerAssociateName'].setValidators(setValidation ? Validators.required : []);
+    this.valuationForm.controls['lettingsOwnerAssociateName'].updateValueAndValidity();
+
+    this.valuationForm.controls['lettingsOwnerAssociateContactNumber'].setValidators(
+      setValidation ? Validators.required : [],
+    );
+    this.valuationForm.controls['lettingsOwnerAssociateContactNumber'].updateValueAndValidity();
+  }
+
+  setValidationForSalesMeetingOwner(setValidation: boolean) {
+    this.valuationForm.controls['salesOwnerAssociateEmail'].setValidators(setValidation ? Validators.required : []);
+    this.valuationForm.controls['salesOwnerAssociateEmail'].updateValueAndValidity();
+
+    this.valuationForm.controls['salesOwnerAssociateName'].setValidators(setValidation ? Validators.required : []);
+    this.valuationForm.controls['salesOwnerAssociateName'].updateValueAndValidity();
+
+    this.valuationForm.controls['salesOwnerAssociateContactNumber'].setValidators(
+      setValidation ? Validators.required : [],
+    );
+    this.valuationForm.controls['salesOwnerAssociateContactNumber'].updateValueAndValidity();
+  }
+
+  setValidationForPropertyFloorOther(isRequired: boolean) {
+    // console.log("setValidationForPropertyFloorOther: ", isRequired);
+    this.valuationForm.controls['floorOther'].setValidators(isRequired ? Validators.required : []);
+    if (!isRequired) {
+      this.valuationForm.controls['floorOther'].setValue(null);
+    }
+    this.valuationForm.controls['floorOther'].updateValueAndValidity();
+  }
+
+  selectValuersClick() {
+    this.sideBarControlVisible = true;
+    this.thisWeek = [];
+    this.nextWeek = [];
+    this.nextTwoWeek = [];
+    this.showCalendar = false;
   }
 
   toggleValuerType() {
@@ -315,47 +851,140 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.isSalesOnly = true;
         this.isLettingsOnly = false;
         this.isSalesAndLettings = false;
+        this.availabilityForm.controls['lettingsValuerId'].setValidators(null);
+        this.availabilityForm.controls['salesValuerId'].setValidators(Validators.required);
+        this.bookingButtonLabel = 'Book For Sales';
         break;
       case 'lettings':
         this.isLettingsOnly = true;
         this.isSalesOnly = false;
         this.isSalesAndLettings = false;
+        this.availabilityForm.controls['salesValuerId'].setValidators(null);
+        this.availabilityForm.controls['lettingsValuerId'].setValidators(Validators.required);
+        this.bookingButtonLabel = 'Book For Lettings';
         break;
 
       default:
         this.isSalesAndLettings = true;
         this.isLettingsOnly = false;
         this.isSalesOnly = false;
+        this.availabilityForm.controls['lettingsValuerId'].setValidators(Validators.required);
+        this.availabilityForm.controls['salesValuerId'].setValidators(Validators.required);
+        this.bookingButtonLabel = 'Book For Sales and Lettings';
         break;
     }
+    this.isSplitAppointment = false;
+    this.availabilityForm.controls['salesValuerId'].updateValueAndValidity();
+    this.availabilityForm.controls['lettingsValuerId'].updateValueAndValidity();
+  }
+
+  onSplitAppointmentChange(event) {
+    this.isSplitAppointment = event.checked;
+    this.valuation.salesValuationBooking = null;
+    this.valuation.lettingsValuationBooking = null;
+    this.selectedSalesDate = null;
+    this.selectedLettingsDate = null;
+    this.selectedDate = null;
+    if (this.isSplitAppointment) this.bookingButtonLabel = 'Book For Sales';
+    else this.bookingButtonLabel = 'Book For Sales and Lettings';
+  }
+
+  onSelectActiveValuation(valuation) {
+    this.isCanDeactivate = true;
+
+    this.router
+      .navigateByUrl('/', { skipLocationChange: false })
+      .then(() => this.router.navigate(['valuations-register/detail/', valuation?.data?.valuationEventId, 'edit']));
   }
 
   private setupListInfo(info: DropdownListInfo) {
-    this.tenures = info.tenures;
+    this.tenures = [{ id: 0, value: 'Not Known' }, ...info.tenures];
     this.outsideSpaces = info.outsideSpaces;
     this.parkings = info.parkings;
     this.features = info.propertyFeatures;
     this.allOrigins = info.origins;
     this.allOriginTypes = info.originTypes;
     this.setOriginTypes(info.originTypes); // TODO: Issue on refresh
+    this.interestList = info.section21Statuses;
+    this.associateTypes = info.associations;
+    this.propertyTypes = [{ id: 0, value: ' ' }, ...info.propertyTypes];
+    this.allPropertyStyles = [info.propertyStyles];
+    this.propertyStyles = [{ id: 0, value: ' ' }, ...info.propertyStyles];
+    this.propertyFloors = info.propertyFloors;
   }
 
   getPropertyDetails(propertyId: number) {
-    this.propertyService.getProperty(propertyId, false, true, false, true).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      if (result) {
-        this.lastKnownOwner = result.lastKnownOwner;
-        this.property = result;
-        // this.valuers = result.valuers;
-        this.getContactGroup(result?.lastKnownOwner?.contactGroupId);
-        const baseProperty = { propertyId: this.property.propertyId, address: this.property.address } as BaseProperty;
-        this.valuationForm.get('property').setValue(baseProperty);
-        console.log('base property', this.valuationForm.get('property').value);
-      }
+    return this.propertyService
+      .getProperty(propertyId, true, true, false, true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((result) => {
+        if (result) {
+          this.setPropertyDetail(result);
+          if (!this.valuation.valuationEventId || this.valuation.valuationEventId === 0) {
+            this.valuation.deedLandRegFiles = result.deedLandRegFiles;
+            this.valuation.leaseLandRegFiles = result.leaseLandRegFiles;
+            this.valuation.nameChangeRegFiles = result.nameChangeRegFiles;
+          }
+        }
+      });
+  }
+
+  setPropertyDetail(propertyDetails) {
+    if (propertyDetails.lastKnownOwner) this.lastKnownOwner = propertyDetails.lastKnownOwner;
+    else {
+      this.lastKnownOwner = this.valuation?.propertyOwner;
+    }
+
+    if (this.changedLastOwner && this.changedLastOwner.contactGroupId > 0) {
+      this.lastKnownOwner = { ...this.changedLastOwner };
+      propertyDetails.lastKnownOwner = this.lastKnownOwner;
+      this.changedLastOwner = null;
+    }
+
+    this.property = propertyDetails;
+    this.valuation.property = { ...this.property };
+    this.valuation.officeId = this.property.officeId;
+    // this.valuers = result.valuers;
+    if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
+      this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
+        this.contactGroup = result;
+        // console.log("----------------------------------- contactGroupBs.next");
+        this.valuationService.contactGroupBs.next(this.contactGroup);
+        this.getSearchedPersonSummaryInfo(this.contactGroup);
+      });
+    }
+
+    const baseProperty = {
+      propertyId: this.property.propertyId,
+      address: this.property.address,
+      officeId: this.property.officeId,
+    } as BaseProperty;
+    this.valuationForm.get('property').setValue(baseProperty);
+
+    this.valuationForm.patchValue({
+      propertyStyleId: this.property.propertyStyleId,
+      propertyTypeId: this.property.propertyTypeId,
+      propertyFloorId: this.property['propertyFloorId'],
     });
   }
 
   getContactGroup(contactGroupId: number) {
-    this.contactGroup$ = this.contactGroupService.getContactGroupbyId(contactGroupId, true);
+    return this.contactGroupService.getContactGroupById(contactGroupId, true).toPromise();
+  }
+
+  getAdminContactGroup(contactGroupId: number) {
+    this.contactGroupSubscription = this.contactGroupService
+      .getContactGroupById(contactGroupId, true)
+      .subscribe((result) => {
+        this.adminContactGroup = result;
+        if (this.adminContactGroup.contactPeople && this.adminContactGroup.contactPeople.length > 0) {
+          this.adminContactGroup.contactPeople[0].isAdminContact = true;
+        }
+        this.adminContactGroup.contactPeople = this.adminContactGroup.contactPeople.concat(
+          this.contactGroup?.contactPeople,
+        );
+        // console.log(this.adminContactGroup.contactPeople);
+      });
   }
 
   setInstructionRentFigures() {
@@ -386,7 +1015,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (val.suggestedAskingRentLongLetMonthly && !val.suggestedAskingRentLongLet) {
       this.longLetWeeklyControl.setValue(this.calculateMonthlyRent(+val.suggestedAskingRentLongLetMonthly));
     }
-
   }
 
   setRentFigures() {
@@ -405,18 +1033,27 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private setMonthlyRent(weeklyControl: FormControl, monthlyControl: FormControl) {
-    weeklyControl.valueChanges
-      .subscribe(rent => monthlyControl.setValue(this.calculateMonthlyRent(rent), { emitEvent: false }));
+    weeklyControl.valueChanges.subscribe((rent) => {
+      rent = this.sharedService.convertStringToNumber(rent);
+      monthlyControl.setValue(this.calculateMonthlyRent(rent), {
+        emitEvent: false,
+      });
+    });
   }
+
   private setWeeklyRent(weeklyControl: FormControl, monthlyControl: FormControl) {
-    monthlyControl.valueChanges
-      .subscribe(rent => weeklyControl.setValue(this.calculateWeeklyRent(rent), { emitEvent: false }));
+    monthlyControl.valueChanges.subscribe((rent) => {
+      rent = this.sharedService.convertStringToNumber(rent);
+      weeklyControl.setValue(this.calculateWeeklyRent(rent), {
+        emitEvent: false,
+      });
+    });
   }
 
   calculateMonthlyRent(rent: number): string {
     let monthlyRent: string;
     if (rent > 0) {
-      monthlyRent = (rent * (52 / 12)).toFixed(2);
+      monthlyRent = (rent * (52 / 12)).toFixed(0);
     }
     return monthlyRent;
   }
@@ -424,7 +1061,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   calculateWeeklyRent(rent: number): string {
     let weeklyRent: string;
     if (rent > 0) {
-      weeklyRent = (rent * (12 / 52)).toFixed(2);
+      weeklyRent = (rent * (12 / 52)).toFixed(0);
     }
     return weeklyRent;
   }
@@ -442,13 +1079,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       bathrooms: [0, Validators.max(99)],
       receptions: [0, Validators.max(99)],
       sqFt: [0],
-      tenureId: [0],
-      outsideSpace: [''],
-      parking: [''],
+      tenureId: [],
+      outsideSpace: [],
+      parking: [],
       propertyFeature: [''],
-      approxLeaseExpiryDate: [''],
-      salesValuerId: [null],
-      lettingsValuerId: [null],
+      approxLeaseExpiryDate: [0, [Validators.max(999), Validators.min(0)]],
       salesValuer: [''],
       lettingsValuer: [''],
       isInvitationSent: true,
@@ -459,7 +1094,28 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       suggestedAskingRentShortLet: [],
       suggestedAskingRentLongLetMonthly: [],
       suggestedAskingRentShortLetMonthly: [],
-      type: ['both']
+      declarableInterest: [null, Validators.required],
+      ageOfSuggestedAskingPrice: [],
+      section21StatusId: [],
+      salesMeetingOwner: [true],
+      lettingsMeetingOwner: [true],
+      salesOwnerAssociateName: [''],
+      salesOwnerAssociateContactNumber: [''],
+      salesOwnerAssociateEmail: [''],
+      salesOwnerAssociateType: ['6'],
+      lettingsOwnerAssociateName: [''],
+      lettingsOwnerAssociateContactNumber: [''],
+      lettingsOwnerAssociateEmail: [''],
+      lettingsOwnerAssociateType: ['6'],
+      propertyStyleId: [null, Validators.required],
+      propertyTypeId: [null, Validators.required],
+      propertyFloorId: [],
+      floorOther: [],
+      isRetirementHome: [false],
+      isNewBuild: [false],
+      hasDisabledAccess: [false],
+      adminContact: [],
+      valuationNote: [],
     });
   }
 
@@ -473,12 +1129,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       askingRentLongLet: [],
       askingRentShortLet: [],
       askingRentLongLetMonthly: [],
-      askingRentShortLetMonthly: []
+      askingRentShortLetMonthly: [],
+      isInstructLongLet: [],
+      isInstructShortLet: [],
     });
-  }
-
-  closeCalendar() {
-    this.showCalendar = false;
   }
 
   private setValuersForSalesAndLettings() {
@@ -487,57 +1141,294 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   getValuation(id: number) {
-    this.valuationService.getValuation(id).pipe(takeUntil(this.ngUnsubscribe)).subscribe((data => {
-      if (data) {
-        this.valuation = data;
-        this.valuation.valuationStatus === 3 ? this.canInstruct = true : this.canInstruct = false;
-        this.valuation.approxLeaseExpiryDate ? this.showLeaseExpiryDate = true : this.showLeaseExpiryDate = false;
-        if (this.valuation.valuationStatus === 3 || this.valuation.valuationStatus === 4) {
+    this.valuationService
+      .getValuation(id)
+      .toPromise()
+      .then((data) => {
+        if (data) {
+          this.valuation = data;
+          this.propertyId = this.valuation.property.propertyId;
+          if (this.propertyId) {
+            return this.propertyService.getProperty(this.propertyId, true, true, false, true).toPromise();
+          }
+          return of(this.valuation.property).toPromise();
+        }
+      })
+      .then((result) => {
+        this.setPropertyDetail(result);
+        this.getValuationPropertyInfo(this.propertyId);
+        this.getValuers(this.propertyId);
+      })
+      .then(() => {
+        console.log(this.valuation.property);
+
+        this.setHeaderDropdownList(this.valuation.valuationStatus, this.valuation.valuationType);
+
+        this.valuation.valuationStatus === 3 ? (this.canInstruct = true) : (this.canInstruct = false);
+        this.valuation.approxLeaseExpiryDate ? (this.showLeaseExpiryDate = true) : (this.showLeaseExpiryDate = false);
+
+        if (this.valuation.valuationStatus === ValuationStatusEnum.Cancelled) {
+          if (this.route.snapshot.routeConfig?.path?.indexOf('edit') > -1) {
+            let path = ['valuations-register/detail', this.valuation.valuationEventId, 'cancelled'];
+            this.router.navigate(path);
+            return;
+          }
+          this.isCancelled = true;
+          this.cancelString = `Cancelled ${moment(this.valuation.cancelledDate).format('Do MMM YYYY (HH:mm)')} by ${
+            this.valuation.cancelledBy?.fullName
+          } `;
+          this.cancelReasonString =
+            'Reason for cancellation: ' +
+            (this.valuation.cancellationTypeId == ValuationCancellationReasons.Other
+              ? this.valuation.cancellationReason
+              : this.removeUnderLine(ValuationCancellationReasons[this.valuation.cancellationTypeId]));
+        }
+
+        if (
+          this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Valued ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
+        ) {
           this.isEditable = false;
-        } else { this.isEditable = true; }
+        } else {
+          this.isEditable = true;
+        }
+
+        if (
+          this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
+        ) {
+          this.canSaveValuation = false;
+          this.property = {
+            ...this.property,
+            leaseExpiryDate: this.valuation.leaseExpiryDate,
+            userEnteredOwner: this.valuation.userEnteredOwner,
+          };
+          this.valuation.property = this.property;
+        } else {
+          this.canSaveValuation = true;
+        }
 
         if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
           if (this.isEditable) {
             if (this.valuation.valuationDate) {
               this.showDateAndDuration = true;
-              this.canChangeDate = true;
             } else {
               this.showDateAndDuration = false;
             }
           }
+          this.salesValuerIdControl.setValue(
+            this.valuation.salesValuer ? this.valuation.salesValuer.staffMemberId : null,
+          );
+          this.lettingsValuerIdControl.setValue(
+            this.valuation.salesValuer ? this.valuation.salesValuer.staffMemberId : null,
+          );
+          if (this.valuation.combinedValuationBooking) {
+            this.valuation.salesValuationBooking = {
+              ...this.valuation.combinedValuationBooking,
+            };
+            this.valuation.lettingsValuationBooking = {
+              ...this.valuation.combinedValuationBooking,
+            };
+          }
+
+          this.selectedLettingsDate = this.valuation.lettingsValuationBooking?.startDateTime
+            ? new Date(this.valuation.lettingsValuationBooking?.startDateTime)
+            : null;
+          this.selectedSalesDate = this.valuation.salesValuationBooking?.startDateTime
+            ? new Date(this.valuation.salesValuationBooking?.startDateTime)
+            : null;
+
+          this.getTimeSalesValuationDate = this.selectedSalesDate?.getTime();
+          this.getTimeLettingsValuationDate = this.selectedLettingsDate?.getTime();
         }
 
-        if (this.property) {
-          this.lastKnownOwner = this.property.lastKnownOwner;
-          this.property = this.property;
-        } else {
-          this.lastKnownOwner = this.valuation.propertyOwner;
-          // this.property = this.valuation.property; // Fix this with Gabor on the API
-          this.getPropertyDetails(this.valuation.property.propertyId);
+        if (this.valuation.property) {
+          this.lastKnownOwner = this.valuation.property.lastKnownOwner
+            ? this.valuation.property.lastKnownOwner
+            : this.valuation.propertyOwner;
+
+          if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
+            this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
+              this.contactGroup = result;
+              console.log('----------------------------------- contactGroupBs.next');
+              this.valuationService.contactGroupBs.next(this.contactGroup);
+              this.getSearchedPersonSummaryInfo(this.contactGroup);
+
+              this.setAdminContact();
+            }); // get contact group for last know owner
+          }
         }
-        this.getContactGroup(this.lastKnownOwner?.contactGroupId); // get contact group for last know owner
-        if (this.property?.propertyId) {
-          this.getValuers(this.property.propertyId);
-        }
-        this.setValuationType(data);
-        this.populateForm(data);
-        this.setupInitialRentFigures(data);
+
+        this.setValuationType(this.valuation);
+        this.populateForm(this.valuation);
+        this.setupInitialRentFigures(this.valuation);
+
         if (this.valuation && this.allOrigins) {
-          this.activeOriginId = this.allOrigins.find(x => x.id === +this.valuation.originId);
-          (this.activeOriginId && !this.isEditable) ? this.showOriginId = true : this.showOriginId = false;
+          this.activeOriginId = this.allOrigins.find((x) => x.id === +this.valuation.originId);
+          this.activeOriginId && !this.isEditable ? (this.showOriginId = true) : (this.showOriginId = false);
           this.setOriginIdValue(this.valuation.originId);
         }
+
         if (this.valuation && this.allOrigins && this.originTypes) {
           this.setOriginTypeId(this.valuation.originId);
         }
-      }
-    }));
+      })
+      .then(() => {
+        this.valuationService.getToBLink(id).subscribe((data) => {
+          this.valuation.dateRequestSent = data.dateRequestSent;
+          if (data.toBSales.length > data.toBLetting.length) {
+            this.valuation.valuationFiles = data.toBSales;
+            this.valuation.valuationType = 1;
+          } else {
+            this.valuation.valuationFiles = data.toBLetting;
+            this.valuation.valuationType = 2;
+          }
+        });
+      })
+      .catch((err) => {
+        console.log('err: ', err);
+      });
   }
 
+  setHeaderDropdownList(status, valuationType) {
+    this.sharedService.valuationType.next(valuationType);
+    this.sharedService.valuationStatusChanged.next(status);
+  }
 
+  // setInitialValuesByStatus(valuationStatus) {
+  //   switch (valuationStatus) {
+  //     case ValuationStatusEnum.Instructed: {
+  //       this.isEditable = false;
+  //       this.canSaveValuation = false;
+  //       break;
+  //     }
+  //     case ValuationStatusEnum.Booked: {
+  //       this.isEditable = false;
+  //       let valueIndex = this.statuses.find((x) => x.name == "values").value;
+  //       //this.setTabIndexActive(valueIndex);
+  //       break;
+  //     }
+  //     case ValuationStatusEnum.Valued: {
+  //       this.isEditable = false;
+  //       break;
+  //     }
+  //     case ValuationStatusEnum.Cancelled: {
+  //       this.isEditable = false;
+  //       this.canSaveValuation = false;
+  //       break;
+  //     }
+  //     default: {
+  //       this.isEditable = true;
+  //       this.canSaveValuation = true;
+  //     }
+  //   }
+  // }
+
+  // setTabIndexActive(index: number) {
+  //   let initState : boolean[] = [...this.activeState];
+  //   initState.forEach(x=> x =false);
+  //   initState[index]= true;
+  //   this.activeState[index] = true;
+  // }
+
+  controlIsCancelled($event) {
+    if (this.isCancelled) {
+      $event.preventDefault();
+      return false;
+    }
+  }
+
+  removeUnderLine(str: string): string {
+    return str.replaceAll('_', ' ');
+  }
+
+  getSearchedPersonSummaryInfo(contactGroup: ContactGroup) {
+    this.mainPersonId = this.contactGroup.contactPeople?.find((x) => x.isMainPerson).personId;
+    this.contactId = contactGroup.contactGroupId;
+    // console.log(this.contactId);
+    this.storage.get(this.mainPersonId.toString()).subscribe((data: PersonSummaryFigures) => {
+      if (data) {
+        this.summaryTotals = data;
+      } else {
+        this.contactGroupService.getPersonInfo(this.mainPersonId).subscribe((data) => {
+          this.summaryTotals = data;
+          this.storage.set(this.mainPersonId.toString(), this.summaryTotals).subscribe();
+        });
+      }
+    });
+  }
+
+  // getPersonDetails(personId: number) {
+  //   this.contactGroupService.getPerson(personId, true).subscribe((data) => {
+  //     if (data) {
+  //       this.person = data;
+  //     }
+  //   });
+  // }
+
+  setAdminContact() {
+    if (this.valuation.adminContact && this.valuation.adminContact.contactGroupId > 0)
+      this.getSelectedAdminContact(this.valuation.adminContact);
+    else if (
+      !(this.valuationForm.get('adminContact').value && this.valuationForm.get('adminContact').value.contactGroupId > 0)
+    ) {
+      this.sharedService.removeContactGroupChanged.next(null);
+    }
+  }
+
+  getPropertyInformation(propertyId) {
+    this.propertyId = propertyId;
+    if (this.propertyId) {
+      this.getPropertyDetails(this.propertyId);
+      this.getValuationPropertyInfo(this.propertyId);
+      this.getValuers(this.propertyId);
+    }
+  }
+
+  setValuationInformations(valuationBooking: ValuationBooking, type: string) {
+    if (type == 'both' || type == 'sales') {
+      this.salesMeetingOwner = valuationBooking.meetingOwner;
+      this.salesOwnerAssociateName = valuationBooking.name;
+      this.salesOwnerAssociateContactNumber = valuationBooking.contactNumber;
+      this.salesOwnerAssociateEmail = valuationBooking.emailAddress;
+      this.salesOwnerAssociateType = valuationBooking.associationId;
+    } else if (type == 'lettings') {
+      this.lettingsMeetingOwner = valuationBooking.meetingOwner ? valuationBooking.meetingOwner : true;
+      this.lettingsOwnerAssociateName = valuationBooking.name;
+      this.lettingsOwnerAssociateContactNumber = valuationBooking.contactNumber;
+      this.lettingsOwnerAssociateEmail = valuationBooking.emailAddress;
+      this.lettingsOwnerAssociateType = valuationBooking.associationId;
+    }
+
+    // lettingsOwnerWantsMessage;
+  }
+
+  studioLabelCheck(bedroomCount) {
+    this.showStudioLabel = !bedroomCount || bedroomCount == 0;
+  }
 
   populateForm(valuation: Valuation) {
     if (valuation) {
+      this.studioLabelCheck(valuation.bedrooms);
+      if (valuation.combinedValuationBooking || valuation.salesValuationBooking) {
+        this.setValuationInformations(
+          valuation.combinedValuationBooking ? valuation.combinedValuationBooking : valuation.salesValuationBooking,
+          'both',
+        );
+      } else if (valuation.lettingsValuationBooking) {
+        this.setValuationInformations(valuation.lettingsValuationBooking, 'lettings');
+      }
+
+      this.salesValuer = { ...this.valuation.salesValuer };
+      this.lettingsValuer = { ...this.valuation.lettingsValuer };
+
+      this.adminContact = {
+        ...valuation.adminContact,
+        isPowerOfAttorney: valuation.isPowerOfAttorney,
+        ccOwner: valuation.ccOwner,
+      };
+
       this.valuationForm.patchValue({
         property: valuation.property,
         propertyOwner: valuation.propertyOwner,
@@ -551,22 +1442,95 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         tenureId: valuation.tenureId || 0,
         approxLeaseExpiryDate: this.changeLeaseExpiryDateToYears(valuation.approxLeaseExpiryDate),
         sqFt: this.isEditable ? valuation.sqFt || 0 : valuation.sqFt || 'Not Known',
-        outsideSpace: valuation.outsideSpace,
-        parking: valuation.parking,
+        outsideSpace: this.getInfoDetailValues(valuation.outsideSpace, this.outsideSpaces),
+        parking: this.getInfoDetailValues(valuation.parking, this.parkings),
         propertyFeature: valuation.propertyFeature,
         salesValuer: valuation.salesValuer,
         lettingsValuer: valuation.lettingsValuer,
-        salesValuerId: valuation.salesValuer ? valuation.salesValuer.staffMemberId : 0,
-        lettingsValuerId: valuation.lettingsValuer ? valuation.lettingsValuer.staffMemberId : 0,
         type: this.setInitialType(),
         valuationDate: valuation.valuationDate,
         totalHours: valuation.totalHours || 1,
         suggestedAskingPrice: valuation.suggestedAskingPrice ? valuation.suggestedAskingPrice : '',
         suggestedAskingRentLongLet: valuation.suggestedAskingRentLongLet ? valuation.suggestedAskingRentLongLet : '',
-        suggestedAskingRentLongLetMonthly: valuation.suggestedAskingRentLongLetMonthly ? valuation.suggestedAskingRentLongLetMonthly : '',
+        suggestedAskingRentLongLetMonthly: valuation.suggestedAskingRentLongLetMonthly
+          ? valuation.suggestedAskingRentLongLetMonthly
+          : '',
         suggestedAskingRentShortLet: valuation.suggestedAskingRentShortLet ? valuation.suggestedAskingRentShortLet : '',
-        suggestedAskingRentShortLetMonthly: valuation.suggestedAskingRentShortLetMonthly ? valuation.suggestedAskingRentShortLetMonthly : ''
+        suggestedAskingRentShortLetMonthly: valuation.suggestedAskingRentShortLetMonthly
+          ? valuation.suggestedAskingRentShortLetMonthly
+          : '',
+        instructLet:
+          valuation.suggestedAskingRentLongLetMonthly || valuation.suggestedAskingRentShortLet ? true : false,
+
+        ageOfSuggestedAskingPrice: valuation.valuationDate
+          ? this.sharedService.calculateDateToNowInMonths(new Date(valuation.valuationDate))
+          : 0,
+        declarableInterest: valuation.declarableInterest?.toString(),
+        section21StatusId: valuation.section21StatusId,
+        salesMeetingOwner: this.salesMeetingOwner ? this.salesMeetingOwner : true,
+        lettingsMeetingOwner: this.lettingsMeetingOwner ? this.lettingsMeetingOwner : true,
+        salesOwnerAssociateName: this.salesOwnerAssociateName,
+        salesOwnerAssociateContactNumber: this.salesOwnerAssociateContactNumber,
+        salesOwnerAssociateEmail: this.salesOwnerAssociateEmail,
+        salesOwnerAssociateType: this.salesOwnerAssociateType,
+        lettingsOwnerAssociateName: this.lettingsOwnerAssociateName,
+        lettingsOwnerAssociateContactNumber: this.lettingsOwnerAssociateContactNumber,
+        lettingsOwnerAssociateEmail: this.lettingsOwnerAssociateEmail,
+        lettingsOwnerAssociateType: this.lettingsOwnerAssociateType,
+        propertyStyle: valuation.property?.propertyStyleId,
+        propertyType: valuation.property?.propertyTypeId,
+        propertyFloor: valuation.property?.propertyFloorId,
+        floorOther: valuation.property?.floorOther,
+        isRetirementHome: valuation.otherFeatures
+          ? valuation.otherFeatures.findIndex((x) => x === OtherFeatures.Retirement_Home) > -1
+            ? true
+            : false
+          : false,
+        isNewBuild: valuation.otherFeatures
+          ? valuation.otherFeatures.findIndex((x) => x === OtherFeatures.New_Build) > -1
+            ? true
+            : false
+          : false,
+        hasDisabledAccess: valuation.propertyFeature
+          ? valuation.propertyFeature.findIndex((x) => x === PropertyFeatures.Disabled_Access) > -1
+            ? true
+            : false
+          : false,
+        valuationNote: valuation.valuationContactNote?.text,
       });
+
+      this.onTenureChange(this.valuationForm.get('tenureId').value);
+
+      if (!this.isEditable && !this.isNewValuation) {
+        this.valuationForm.get('generalNotes').disable();
+        this.valuationForm.get('timeFrame').disable();
+        this.valuationForm.get('reason').disable();
+        this.valuationForm.get('propertyTypeId').disable();
+        this.valuationForm.get('propertyFloorId').disable();
+        this.valuationForm.get('floorOther').disable();
+        this.valuationForm.get('propertyStyleId').disable();
+        this.valuationForm.get('isNewBuild').disable();
+        this.valuationForm.get('isRetirementHome').disable();
+        this.valuationForm.get('bedrooms').disable();
+        this.valuationForm.get('bathrooms').disable();
+        this.valuationForm.get('receptions').disable();
+        this.valuationForm.get('sqFt').disable();
+        this.valuationForm.get('tenureId').disable();
+        this.valuationForm.get('approxLeaseExpiryDate').disable();
+        this.valuationForm.get('outsideSpace').disable();
+        this.valuationForm.get('parking').disable();
+        this.valuationForm.get('hasDisabledAccess').disable();
+        this.valuationForm.get('salesMeetingOwner').disable();
+        this.valuationForm.get('salesOwnerAssociateName').disable();
+        this.valuationForm.get('salesOwnerAssociateContactNumber').disable();
+        this.valuationForm.get('salesOwnerAssociateEmail').disable();
+        this.valuationForm.get('salesOwnerAssociateType').disable();
+        this.valuationForm.get('lettingsMeetingOwner').disable();
+        this.valuationForm.get('lettingsOwnerAssociateName').disable();
+        this.valuationForm.get('lettingsOwnerAssociateContactNumber').disable();
+        this.valuationForm.get('lettingsOwnerAssociateEmail').disable();
+        this.valuationForm.get('lettingsOwnerAssociateType').disable();
+      }
     }
   }
 
@@ -587,14 +1551,24 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         bedrooms: info.bedrooms || 0,
         bathrooms: info.bathrooms || 0,
         receptions: info.receptions || 0,
-        tenureId: info.tenureId || 0,
-        approxLeaseExpiryDate: this.changeLeaseExpiryDateToYears(info.approxLeaseExpiryDate),
+        //tenureId: info.tenureId || this.valuationForm.get('tenureId').value,
+        //approxLeaseExpiryDate: this.changeLeaseExpiryDateToYears(info.approxLeaseExpiryDate),
         sqFt: info.sqFt || 0,
-        outsideSpace: info.outsideSpace,
-        parking: info.parking,
+        outsideSpace: this.getInfoDetailValues(info.outsideSpace, this.outsideSpaces),
+        parking: this.getInfoDetailValues(info.parking, this.parkings),
         propertyFeature: info.propertyFeature,
       });
     }
+  }
+
+  getInfoDetailValues(propertyInfo: any[], data: InfoDetail[]): InfoDetail[] {
+    let infoDetail: InfoDetail[] = [];
+    if (propertyInfo && propertyInfo.length > 0 && data) {
+      propertyInfo.forEach((value) => {
+        infoDetail.push(data.find((info) => info.id == value));
+      });
+    }
+    return infoDetail;
   }
 
   populateInstructionForm(instruction: Instruction) {
@@ -606,7 +1580,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         askingRentLongLet: instruction.askingRentLongLet ? instruction.askingRentLongLet : '',
         askingRentLongLetMonthly: instruction.askingRentLongLetMonthly ? instruction.askingRentLongLetMonthly : '',
         askingRentShortLet: instruction.askingRentShortLet ? instruction.askingRentShortLet : '',
-        askingRentShortLetMonthly: instruction.askingRentShortLetMonthly ? instruction.askingRentShortLetMonthly : ''
+        askingRentShortLetMonthly: instruction.askingRentShortLetMonthly ? instruction.askingRentShortLetMonthly : '',
+        instructLet: instruction.askingRentLongLetMonthly || instruction.askingRentShortLetMonthly ? true : false,
+        instructSale: instruction.askingPrice ? true : false,
+        isInstructLongLet: instruction.askingRentLongLetMonthly ? true : false,
+        isInstructShortLet: instruction.askingRentShortLet ? true : false,
       });
     }
   }
@@ -617,27 +1595,33 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.isSalesOnly = true;
         this.isSalesAndLettings = false;
         this.isLettingsOnly = false;
-        console.log('%csales type xxx', 'color:cyan', this.isSalesOnly);
         break;
 
       case val.lettingsValuer && !val.salesValuer:
         this.isLettingsOnly = true;
         this.isSalesOnly = false;
         this.isSalesAndLettings = false;
-        console.log('%c lettings type xxx', 'color:purple', this.isLettingsOnly);
         break;
 
       default:
         this.isSalesAndLettings = true;
         this.isLettingsOnly = false;
         this.isSalesOnly = false;
-        console.log('%csales and lettings type xxx', 'color:magenta', this.isSalesAndLettings);
     }
   }
 
   setOriginTypes(allOriginTypes: InfoDetail[]) {
     this.activeOriginTypes = allOriginTypes.filter((x: InfoDetail) => x.isActive);
     // this.isNewValuation ? this.originTypes = this.activeOriginTypes : this.originTypes = allOriginTypes;
+  }
+
+  ageColor(value: any): string {
+    if (value >= 0) {
+      if (value < 4) return 'green';
+      if (value < 7) return '#CF5E02';
+      return 'red';
+    }
+    return null;
   }
 
   onSelectType(originTypeId: number) {
@@ -651,7 +1635,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   setOriginIdValue(id: number) {
     if (id) {
-      this.allOrigins.forEach(x => {
+      this.allOrigins.forEach((x) => {
         if (+x.id === id && this.isClientService && !this.isEditable) {
           this.origin = x.value;
         }
@@ -660,13 +1644,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   setOriginTypeId(originId: number) {
-    console.log('origin id', originId);
-    console.log('all origin types', this.allOriginTypes);
-    console.log('all origins', this.allOrigins);
     if (originId) {
-      this.allOrigins.forEach(x => {
+      this.allOrigins.forEach((x) => {
         if (+x.id === originId) {
-          if (this.activeOriginTypes.find(t => +t.id === x.parentId)) {
+          if (this.activeOriginTypes.find((t) => +t.id === x.parentId)) {
             this.valuationForm.get('originType').setValue(x.parentId);
             this.onSelectType(x.parentId);
             this.valuationForm.get('originId').setValue(originId);
@@ -679,8 +1660,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private addInactiveOriginType(origin: InfoDetail) {
-    const originType = this.allOriginTypes.find(t => +t.id === origin.parentId);
-    const originId = this.allOrigins.find(o => +o.id === origin.id);
+    const originType = this.allOriginTypes.find((t) => +t.id === origin.parentId);
+    const originId = this.allOrigins.find((o) => +o.id === origin.id);
     if (originType) {
       this.activeOriginTypes.push(originType);
       this.valuationForm.get('originType').setValue(originType.id);
@@ -692,35 +1673,93 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   getSelectedProperty(property: Property) {
     if (property) {
+      this.propertySubsription = this.propertyService
+        .getValuations(property.propertyId, true)
+        .pipe(
+          map((valuations: Valuation[]) =>
+            valuations.map((valuation: Valuation) => {
+              return {
+                ...valuation,
+                valuationStatusDescription: ValuationStatusEnum[valuation.valuationStatus],
+              };
+            }),
+          ),
+        )
+        .subscribe((valuations: Valuation[]) => {
+          if (valuations && valuations.length > 0) {
+            this.activeValuations = valuations.filter(
+              (x) =>
+                x.valuationStatus == ValuationStatusEnum.Booked ||
+                x.valuationStatus == ValuationStatusEnum.None ||
+                x.valuationStatus == ValuationStatusEnum.Valued,
+            );
+            this.isActiveValuationsVisible = this.activeValuations.length > 0 ? true : false;
+          }
+        });
+
       this.showProperty = false;
 
       this.valuers = [];
       this.property = property;
       this.isPropertyChanged = true;
+      this.valuation.property = property;
+      this.valuationService._valuation.next(this.valuation);
       this.lastKnownOwner = property.lastKnownOwner;
-      this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId);
+      if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
+        this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then((result) => {
+          this.contactGroup = result;
+          // console.log(
+          //   "----------------------------------- contactGroupBs.next"
+          // );
+          this.valuationService.contactGroupBs.next(this.contactGroup);
+          this.getSearchedPersonSummaryInfo(this.contactGroup);
+        });
+      }
       this.valuationForm.get('property').setValue(property);
       this.valuationForm.get('propertyOwner').setValue(this.lastKnownOwner);
       this.getValuers(property.propertyId);
       this.getValuationPropertyInfo(property.propertyId);
+      this.getPropertyDetails(property.propertyId);
       this.valuationForm.markAsDirty();
     }
   }
 
+  onClosePropertyFinder() {
+    if (!(this.property && this.property.propertyId > 0)) {
+      this.router.navigate(['/valuations-register']);
+    }
+  }
+
+  createNewValuation() {
+    this.isActiveValuationsVisible = false;
+    this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
+      queryParams: {
+        propertyId: this.propertyId,
+        isNewValuation: true,
+      },
+    });
+  }
+
+  routeToValuationList() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Valuation cancelled',
+      closable: false,
+    });
+    this.valuationService.doValuationSearchBs.next(true);
+    this.router.navigate(['/valuations-register']);
+  }
+
   private getValuationPropertyInfo(propertyId: number) {
-    this.valuationService.getValuationPropertyInfo(propertyId).subscribe(res => {
+    this.valuationService.getValuationPropertyInfo(propertyId).subscribe((res) => {
       if (res) {
-        if (+res.tenureId === 3 || res.approxLeaseExpiryDate) {
-          this.showLeaseExpiryDate = true;
-          this.setApproxLeaseLengthValidator();
-        } else { this.showLeaseExpiryDate = false; }
         this.displayValuationPropInfo(res);
       }
     });
   }
 
   private getAddedProperty() {
-    this.propertyService.newPropertyAdded$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newProperty => {
+    this.propertyService.newPropertyAdded$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((newProperty) => {
       if (newProperty) {
         this.property = newProperty;
         this.showProperty = false;
@@ -732,93 +1771,300 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     });
   }
 
-  getSelectedOwner(owner: Signer) {
-    if (owner) {
-      this.lastKnownOwner = owner;
-      this.isOwnerChanged = true;
-      this.isLastknownOwnerVisible = false;
-      this.getContactGroup(this.lastKnownOwner?.contactGroupId);
-      this.valuationForm.get('propertyOwner').setValue(owner);
-      if (this.property) {
-        this.property.lastKnownOwner = owner;
-      }
-      if (this.isEditable || this.isNewValuation) {
-        this.valuationForm.markAsDirty();
-      }
-    }
-  }
-
   onLettingsValuerChange(valuer: BaseStaffMember) {
-    this.lettingsValuerControl.setValue(valuer);
+    this.lettingsValuer = valuer;
   }
 
   onSalesValuerChange(valuer: BaseStaffMember) {
-    this.salesValuerControl.setValue(valuer);
+    this.salesValuer = valuer;
   }
-
 
   getAvailability() {
     this.availableDates = {} as any;
-    this.canSearchAvailability = false;
-    this.showCalendar = true;
     this.isAppointmentVisible = true;
-    const isSalesOrLettings = (this.isLettingsOnly && this.lettingsValuerControl.value) || (this.isSalesOnly && this.salesValuerControl.value);
-    if (isSalesOrLettings) {
-      this.availabilityForm.patchValue({
-        staffMemberId1: this.salesValuerControl.value.staffMemberId || this.lettingsValuerControl.value.staffMemberId
-      });
-      this.canSearchAvailability = true;
-    } else if (this.isSalesAndLettings && this.salesValuerControl.value && this.lettingsValuerControl.value) {
-      this.availabilityForm.patchValue({
-        staffMemberId1: this.salesValuerControl.value.staffMemberId,
-        staffMemberId2: this.lettingsValuerControl.value.staffMemberId,
-      });
-      this.canSearchAvailability = true;
-    }
+    this.sideBarControlVisible = true;
+    this.isSplitAppointment = false;
+    this.thisWeek = [];
+    this.nextTwoWeek = [];
+    this.nextWeek = [];
+    this.oldClass = 'null';
 
-  }
-
-  searchAvailabilty() {
-    const availability = { ...this.availabilityForm.value };
-    const request = {
-      fromDate: format(availability.fromDate, 'YYYY-MM-DD'),
-      staffMemberId1: availability.staffMemberId1,
-      staffMemberId2: availability.staffMemberId2,
-    } as ValuersAvailabilityOption;
-
-    this.valuationService.getValuersAvailability(request).subscribe(res => {
-      this.availableDates = res.valuationStaffMembersCalanderEvents;
+    this.availabilityForm.patchValue({
+      fromDate: new Date(),
+      lettingsValuerId: this.lettingsValuerControl.value ? this.lettingsValuerControl.value.staffMemberId : '',
+      salesValuerId: this.salesValuerControl.value ? this.salesValuerControl.value.staffMemberId : '',
+      type: this.isLettingsEdit ? 'lettings' : this.isSalesEdit ? 'sales' : 'both',
     });
   }
 
-  selectAvailableDate(date: Date) {
-    if (date) {
-      this.selectedDate = date;
-      this.isAvailabilityRequired = false;
-      // this.canBookAppointment = false;
-      this.canChangeDate = true;
-      if (this.valuation && !this.valuation.valuationDate) {
-        this.valuation.valuationDate = date;
+  searchAvailability() {
+    this.sharedService.logValidationErrors(this.availabilityForm, true);
+
+    if (this.availabilityForm.invalid) {
+      return;
+    }
+
+    this.isSplitAppointment = false;
+    const availability = { ...this.availabilityForm.value };
+
+    const request = {
+      fromDate: format(availability.fromDate, 'yyyy-MM-dd'),
+      salesValuerId:
+        (this.isBothEdit || this.isSalesEdit == true) && !this.isLettingsOnly ? availability.salesValuerId : null,
+      lettingsValuerId:
+        (this.isBothEdit || this.isLettingsEdit == true) && !this.isSalesOnly ? availability.lettingsValuerId : null,
+    } as ValuersAvailabilityOption;
+
+    if (this.isSalesAndLettings && availability.salesValuerId != availability.lettingsValuerId) {
+      this.selectedStaffMemberId = availability.salesValuerId;
+      this.secondStaffMemberId = availability.lettingsValuerId;
+    } else {
+      this.selectedStaffMemberId = this.isSalesOnly ? availability.salesValuerId : availability.lettingsValuerId;
+      this.secondStaffMemberId = null;
+    }
+
+    this.salesValuerOpenSlots = { thisWeek: [], nextWeek: [], next2Weeks: [] };
+    this.lettingsValuerOpenSlots = {
+      thisWeek: [],
+      nextWeek: [],
+      next2Weeks: [],
+    };
+
+    this.getAvailableSlots(request);
+    this.sideBarControlVisible = false;
+  }
+
+  async getAvailableSlots(request) {
+    // user chooses both sales and lettings
+    let lettingsValuerId;
+    let salesValuerId;
+    lettingsValuerId = request.lettingsValuerId;
+    if (request.salesValuerId) {
+      request.lettingsValuerId = null;
+      await this.valuationService
+        .getValuersAvailability(request)
+        .toPromise()
+        .then((res) => {
+          this.salesValuerOpenSlots = res.valuationStaffMembersCalanderEvents;
+          this.availableDates = { ...this.salesValuerOpenSlots };
+        });
+    }
+
+    request.lettingsValuerId = lettingsValuerId;
+
+    if (request.lettingsValuerId) {
+      salesValuerId = request.salesValuerId;
+      request.lettingsValuerId = lettingsValuerId;
+      request.salesValuerId = null;
+      await this.valuationService
+        .getValuersAvailability(request)
+        .toPromise()
+        .then((res) => {
+          this.lettingsValuerOpenSlots = res.valuationStaffMembersCalanderEvents;
+          this.availableDates = { ...this.lettingsValuerOpenSlots };
+        });
+    }
+
+    request.salesValuerId = salesValuerId;
+
+    if (request.salesValuerId && request.lettingsValuerId && request.salesValuerId != request.lettingsValuerId) {
+      this.valuationService.getValuersAvailability(request).subscribe((res) => {
+        this.availableDates = res.valuationStaffMembersCalanderEvents;
+        this.setWeeks();
+        this.setFirstFreeSlot();
+      });
+    } else {
+      this.setWeeks();
+      this.setFirstFreeSlot();
+    }
+  }
+
+  setFirstFreeSlot() {
+    let indexOf = this.thisWeek && this.thisWeek.findIndex((x) => !x.hours.class);
+    let firstAvailableSlot;
+    if (indexOf > -1) {
+      firstAvailableSlot = this.thisWeek[indexOf];
+    } else {
+      indexOf = this.nextWeek && this.nextWeek.findIndex((x) => !x.hours.class);
+      if (indexOf > -1) {
+        firstAvailableSlot = this.nextWeek[indexOf];
+      } else {
+        firstAvailableSlot = this.nextTwoWeek[0];
       }
-      this.valuationForm.get('valuationDate').setValue(date);
-      this.showCalendar = false;
-      this.isAppointmentVisible = false;
+    }
+    this.selectedCalendarDate = firstAvailableSlot.date;
+    this.showCalendar = true;
+    this.selectAvailableDate(firstAvailableSlot.hours[0]);
+  }
+
+  setWeeks() {
+    this.thisWeek = [];
+    this.nextWeek = [];
+    this.nextTwoWeek = [];
+
+    if (this.availableDates) {
+      this.thisWeek = this.setWeekData(this.availableDates.thisWeek);
+      this.nextWeek = this.setWeekData(this.availableDates.nextWeek);
+      this.nextTwoWeek = this.setWeekData(this.availableDates.next2Weeks);
     }
   }
 
-
-  showValuersList() {
-    this.showOnlyMainStaffMember = !this.showOnlyMainStaffMember;
-    if (this.property) {
-      const propId = this.property.propertyId;
-      this.getValuers(propId);
+  removeSelectedClass(data: any[], oldClass: string) {
+    let hourIndex = -1;
+    if (data && data.length > 0) {
+      for (let i in data) {
+        if (data[i].hours.findIndex((y) => y.class == 'hourColorsForSelected') > -1) {
+          hourIndex = data[i].hours.findIndex((y) => y.class == 'hourColorsForSelected');
+          data[i].hours[hourIndex].class = oldClass;
+        }
+      }
     }
   }
+
+  setWeekData(allData: Date[]): any[] {
+    let weekData;
+    let hours: any[] = [];
+    let newData = [];
+    if (allData && allData.length > 0) {
+      weekData = this.sharedService.groupByDate(allData);
+      // console.log(weekData);
+      for (let key in weekData) {
+        hours = [];
+        let defaultHours = [...this.defaultHours];
+        let date: Date = new Date(weekData[key][0]);
+        if (date.getDay() == 6 || date.getDay() == 0) {
+          defaultHours = [...this.defaultHoursForWeekend];
+        }
+        for (let d in defaultHours) {
+          let slotDate = new Date(date.setHours(defaultHours[d]));
+          if (date > new Date()) {
+            hours.push({
+              value: slotDate,
+              class:
+                this.isLettingsEdit || this.isLettingsOnly
+                  ? 'hourColorsForLettings'
+                  : this.isSalesEdit || this.isSalesOnly
+                  ? 'hourColorsForSales'
+                  : 'hourColorsForBoth',
+            });
+          }
+        }
+
+        for (let i = 0; i < hours.length; i++) {
+          let index = weekData[key].findIndex((x) => x.getHours() == hours[i].value.getHours());
+
+          if (index > -1) {
+            hours[i] = {
+              value: hours[i].value,
+              class: '',
+            };
+          } else {
+            let lettingIndex = this.findIndexSlot(hours[i].value, this.lettingsValuerOpenSlots);
+            let salesIndex = this.findIndexSlot(hours[i].value, this.salesValuerOpenSlots);
+            if (lettingIndex == -1 && salesIndex > -1) {
+              hours[i] = {
+                value: hours[i].value,
+                class: 'hourColorsForLettings',
+              };
+            } else if (lettingIndex > -1 && salesIndex == -1) {
+              hours[i] = {
+                value: hours[i].value,
+                class: 'hourColorsForSales',
+              };
+            }
+          }
+        }
+
+        if (key)
+          newData.push({
+            date: weekData[key][0],
+            hours: [...hours],
+          });
+      }
+    }
+    return newData;
+  }
+
+  findIndexSlot(date: Date, slots: ValuationStaffMembersCalanderEvents): number {
+    let index = -1;
+    if (slots.thisWeek && slots.thisWeek.findIndex((x) => new Date(x).getTime() === date.getTime()) > -1) {
+      index = slots.thisWeek.findIndex((x) => new Date(x).getTime() === date.getTime());
+      return index;
+    }
+    if (slots.nextWeek && slots.nextWeek.findIndex((x) => new Date(x).getTime() === date.getTime()) > -1) {
+      index = slots.nextWeek.findIndex((x) => new Date(x).getTime() === date.getTime());
+      return index;
+    }
+    if (slots.next2Weeks && slots.next2Weeks.findIndex((x) => new Date(x).getTime() === date.getTime()) > -1) {
+      index = slots.next2Weeks.findIndex((x) => new Date(x).getTime() === date.getTime());
+      return index;
+    }
+    return index;
+  }
+
+  selectAvailableDate(hours) {
+    if (hours) {
+      this.selectedDate = hours.value;
+      this.selectCalendarDate(this.selectedDate);
+      this.isAvailabilityRequired = false;
+
+      this.removeSelectedClass(this.thisWeek, this.oldClass);
+      this.removeSelectedClass(this.nextWeek, this.oldClass);
+      this.removeSelectedClass(this.nextTwoWeek, this.oldClass);
+      this.oldClass = hours.class;
+      hours.class = 'hourColorsForSelected';
+    }
+  }
+
+  onPropertyType(value) {
+    this.propertyStyles = this.allPropertyStyles?.filter((x: InfoDetail) => +x.parentId === +value);
+
+    if (value == PropertyType.House) {
+      this.valuationForm.controls['propertyFloorId'].setValue(null);
+    }
+  }
+
+  setCloseState() {
+    this.showCalendar = false;
+    this.isAppointmentVisible = false;
+    this.sideBarControlVisible = false;
+    this.canBookAppointment = false;
+    this.isSalesEdit = false;
+    this.isLettingsEdit = false;
+    this.isBothEdit = false;
+    this.oldClass = 'null';
+  }
+
+  hideAppointmentDialog() {
+    this.scrollSpecificElement('appointmentTab');
+  }
+
+  selectCalendarDate(date: Date) {
+    this.selectedCalendarDate = date;
+    this.showCalendar = true;
+  }
+
+  getStaff(members: BaseStaffMember[]) {
+    if (members && members.length > 5) {
+      return _.take(members, 5);
+    }
+    return members;
+  }
+
+  // showValuersList() {
+  //   this.showOnlyMainStaffMember = !this.showOnlyMainStaffMember;
+  //   if (this.property) {
+  //     const propId = this.property.propertyId;
+  //     this.getValuers(propId);
+  //   }
+  // }
 
   private getValuers(propId: number) {
     if (this.valuers && !this.valuers.length) {
-      this.valuationService.getValuers(propId).pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(data => {
+      this.valuationService
+        .getValuers(propId)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe((data) => {
           this.allValuers = data;
           this.setValuersForSalesAndLettings();
           this.addInactiveValuers();
@@ -832,73 +2078,45 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.allValuers && val) {
       if (val.salesValuer && this.allValuers.sales && this.allValuers.sales.length) {
         const index = this.allValuers.sales
-          .flatMap(x => x.staffMembers).findIndex(s => s.staffMemberId === val.salesValuer?.staffMemberId);
+          .flatMap((x) => x.staffMembers)
+          .findIndex((s) => s.staffMemberId === val.salesValuer?.staffMemberId);
         if (index < 0) {
           this.allValuers.sales[0].staffMembers.push(val.salesValuer);
-          this.valuationForm.get('salesValuerId').setValue(val.salesValuer.staffMemberId);
+          this.availabilityForm.get('salesValuerId').setValue(val.salesValuer.staffMemberId);
           this.canBookAppointment = false;
-          this.canChangeDate = false;
         }
       }
 
       if (val.lettingsValuer && this.allValuers.lettings && this.allValuers.lettings.length) {
-        const allLettingsValuers = this.allValuers.lettings
-          .flatMap(x => x.staffMembers);
-        const index = allLettingsValuers
-          .findIndex(s => s.staffMemberId === val.lettingsValuer?.staffMemberId);
+        const allLettingsValuers = this.allValuers.lettings.flatMap((x) => x.staffMembers);
+        const index = allLettingsValuers.findIndex((s) => s.staffMemberId === val.lettingsValuer?.staffMemberId);
         if (index < 0) {
           this.allValuers.lettings[0].staffMembers.push(val.lettingsValuer);
-          this.valuationForm.get('lettingsValuerId').setValue(val.lettingsValuer.staffMemberId);
+          this.availabilityForm.get('lettingsValuerId').setValue(val.lettingsValuer.staffMemberId);
           this.canBookAppointment = false;
-          this.canChangeDate = false;
         }
-
       }
     }
   }
-
 
   onTenureChange(tenureId: number) {
-    if (+tenureId === 3) {
+    if (+tenureId === 3 || +tenureId === 2) {
       this.showLeaseExpiryDate = true;
-      this.setApproxLeaseLengthValidator();
     } else {
       this.showLeaseExpiryDate = false;
-      if (this.approxLeaseExpiryDateControl.errors) {
-        this.approxLeaseExpiryDateControl.clearValidators();
-        this.approxLeaseExpiryDateControl.updateValueAndValidity();
-      }
+      // if (this.approxLeaseExpiryDateControl.errors) {
+      //   this.approxLeaseExpiryDateControl.clearValidators();
+      //   this.approxLeaseExpiryDateControl.updateValueAndValidity();
+      // }
     }
-  }
-
-  setApproxLeaseLengthValidator() {
-    if (!this.approxLeaseExpiryDateControl.value) {
-      this.approxLeaseExpiryDateControl.setValidators(Validators.required);
-      this.approxLeaseExpiryDateControl.updateValueAndValidity();
-    } else {
-      this.approxLeaseExpiryDateControl.clearValidators();
-      this.approxLeaseExpiryDateControl.updateValueAndValidity();
-    }
-  }
-
-  changeDate() {
-    if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
-      this.availabilityForm.patchValue({
-        staffMemberId1: this.valuationForm.get('salesValuerId').value,
-        staffMemberId2: this.valuationForm.get('lettingsValuerId').value,
-      });
-    }
-    this.showCalendar = true;
-
   }
 
   createNewSigner() {
     this.valuationForm.markAsPristine();
   }
 
-
   createNewLastKnownOwner() {
-    this.isLastknownOwnerVisible = false;
+    this.isLastKnownOwnerVisible = false;
     this.valuationForm.markAsPristine();
   }
 
@@ -917,6 +2135,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   hidePhotosModal() {
     this.showPhotos = false;
   }
+
   changeProperty() {
     this.showProperty = true;
   }
@@ -925,14 +2144,45 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.showProperty = true;
   }
 
-
-  toggleAccordion(index: number) {
-    this.activeState[index] = !this.activeState[index];
+  toggleAccordion(value: number) {
+    let status = this.statuses.find((x) => x.value == value);
+    if (status) {
+      if (status.value == 0) this.scrollSpecificElement('valuationNotesTab');
+      else if (status.value == 1) this.scrollSpecificElement('propertyInfoTab');
+      else if (status.value == 2) this.scrollSpecificElement('appointmentTab');
+      else if (status.value == 3) this.scrollSpecificElement('valuesTab');
+      else if (status.value == 4) this.scrollSpecificElement('termsOfBusinessTab');
+      else if (status.value == 6) this.scrollSpecificElement('landRegisterTab');
+      else if (status.value == 9) this.scrollSpecificElement('complianceChecksTab');
+    }
   }
 
   startInstruction() {
+    if (this.valuationForm.controls['declarableInterest'].invalid) {
+      this.accordionIndex = 4;
+      this.activeState[4] = true;
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Please complete terms of business!',
+        closable: false,
+      });
+      return;
+    }
+
+    if (!this.valuationService.landRegisterValid.getValue()) {
+      this.accordionIndex = 5;
+      this.activeState[5] = true;
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Please complete land registration!',
+        closable: false,
+      });
+      return;
+    }
+
     let val: Valuation;
     val = { ...this.valuation, ...this.valuationForm.value };
+
     const instruction = {
       valuationEventId: val.valuationEventId,
       salesAgencyType: '',
@@ -941,9 +2191,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       askingRentShortLet: val.suggestedAskingRentShortLet,
       askingRentLongLet: val.suggestedAskingRentLongLet,
       askingRentShortLetMonthly: val.suggestedAskingRentShortLetMonthly,
-      askingRentLongLetMonthly: val.suggestedAskingRentLongLetMonthly
+      askingRentLongLetMonthly: val.suggestedAskingRentLongLetMonthly,
     } as Instruction;
     this.instruction = instruction;
+    this.isInstructVisible = true;
     this.populateInstructionForm(instruction);
     this.setInstructionFlags(instruction);
   }
@@ -955,36 +2206,35 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } else if (!instruction.askingPrice && instruction.askingRentLongLet) {
       this.instructionForm.get('instructLet').setValue(true);
       this.showInstruct = false;
-    } else { this.showInstruct = true; }
+    } else {
+      this.showInstruct = true;
+    }
   }
 
-  onInstructSalesChange(event) {
-    console.log('sales change', event);
-  }
   onInstructLettingsChange(event) {
-    console.log('lettins change', event);
+    if (this.instructionForm.get('instructLet').value == false) {
+      this.formErrors.lettingsAgencyType = null;
+      this.instructionForm.patchValue(
+        {
+          isInstructLongLet: false,
+          isInstructShortLet: false,
+        },
+        { emitEvent: false },
+      );
+    }
   }
-
 
   setInstructionFormValidators() {
     this.setAskingPriceValidator();
     this.setRentValidators();
   }
 
-
   setAgencyTypeValidator() {
-    switch (true) {
-      case this.instructSaleControl.value:
-        this.setSalesAgencyTypeValidator();
-        break;
-      case this.instructLetControl.value:
-        this.setLettingsAgencyTypeValidator();
-        break;
-
-      default:
-        this.setSalesAgencyTypeValidator();
-        this.setLettingsAgencyTypeValidator();
-        break;
+    if (this.instructSaleControl.value) {
+      this.setSalesAgencyTypeValidator();
+    }
+    if (this.instructLetControl.value) {
+      this.setLettingsAgencyTypeValidator();
     }
   }
 
@@ -1103,29 +2353,42 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   saveInstruction() {
     this.setAgencyTypeValidator();
     this.setInstructionFormValidators();
+
     this.sharedService.logValidationErrors(this.instructionForm, true);
-    const instructionSelected = this.instructionForm.get('instructSale').value || this.instructionForm.get('instructLet').value;
+    const instructionSelected =
+      this.instructionForm.get('instructSale').value || this.instructionForm.get('instructLet').value;
     if (this.instructionForm.valid) {
       if (this.instructionForm.dirty && instructionSelected) {
         this.isSubmitting = true;
-        const instruction = { ...this.instruction, ...this.instructionForm.value } as Instruction;
+        const instruction = {
+          ...this.instruction,
+          ...this.instructionForm.value,
+        } as Instruction;
         this.setInstructionValue(instruction);
-        this.valuationService.addInstruction(instruction).subscribe((result: ResultData) => {
-          this.onInstructionSaveComplete(result.status);
-        },
+        this.valuationService.addInstruction(instruction).subscribe(
+          (result: ResultData) => {
+            this.onInstructionSaveComplete(result.status);
+          },
           (error: WedgeError) => {
             this.isSubmitting = false;
-          });
-        console.log('instruction form to save', this.instructionForm.value);
+          },
+        );
       } else {
         this.onInstructionSaveComplete();
       }
     } else {
-      this.errorMessage = {} as WedgeError;
-      this.errorMessage.displayMessage = 'Please correct validation errors';
-
+      Object.keys(this.instructionForm.controls).forEach((key: string) => {
+        const control = this.instructionForm.get(key);
+        if (control.invalid)
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'You must enter ' + key + ' value',
+            closable: false,
+          });
+      });
     }
   }
+
   setInstructionValue(instruction: Instruction) {
     const isSale = this.instructionForm.get('instructSale').value;
     const isLet = this.instructionForm.get('instructLet').value;
@@ -1136,59 +2399,178 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     instruction.askingRentLongLetMonthly = 0;
 
     if (isSale) {
-      instruction.askingPrice = +this.instAskingPriceControl.value;
+      instruction.askingPrice = this.sharedService.convertStringToNumber(this.instAskingPriceControl.value);
     }
     if (isLet) {
-      instruction.askingRentLongLet = +this.instLongLetWeeklyControl.value;
-      instruction.askingRentLongLetMonthly = +this.instLongLetMonthlyControl.value;
-      instruction.askingRentShortLet = +this.instShortLetWeeklyControl.value;
-      instruction.askingRentShortLetMonthly = +this.instShortLetMonthlyControl.value;
+      instruction.askingRentLongLet = this.sharedService.convertStringToNumber(this.instLongLetWeeklyControl.value);
+      instruction.askingRentLongLetMonthly = this.sharedService.convertStringToNumber(
+        this.instLongLetMonthlyControl.value,
+      );
+      instruction.askingRentShortLet = this.sharedService.convertStringToNumber(this.instShortLetWeeklyControl.value);
+      instruction.askingRentShortLetMonthly = this.sharedService.convertStringToNumber(
+        this.instShortLetMonthlyControl.value,
+      );
     }
   }
 
   checkAvailabilityBooking() {
     if ((this.isNewValuation || this.isEditable) && !this.valuationForm.get('valuationDate').value) {
-      if (this.isSalesAndLettings && (this.salesValuerIdControl.valid && this.lettingsValuerIdControl.value)) {
+      this.isAvailabilityRequired = false;
+      if (
+        this.isSalesAndLettings &&
+        !this.valuation?.lettingsValuationBooking?.startDateTime &&
+        !this.valuation?.salesValuationBooking?.startDateTime
+      ) {
         this.isAvailabilityRequired = true;
-        this.isSalesOnly = false;
+      }
+      if (this.isSalesOnly && !this.valuation?.salesValuationBooking?.startDateTime) {
+        this.isAvailabilityRequired = true;
+        this.isSalesAndLettings = false;
         this.isLettingsOnly = false;
-        console.log('for both', this.isAvailabilityRequired);
       }
-      if (this.isSalesOnly && this.salesValuerIdControl.value) {
-        this.isAvailabilityRequired = true;
-        this.isSalesAndLettings = false;
-        console.log('for lettings only', this.isAvailabilityRequired);
-      }
-      if (this.isLettingsOnly && this.lettingsValuerIdControl.value) {
+      if (this.isLettingsOnly && !this.valuation?.lettingsValuationBooking?.startDateTime) {
         this.isAvailabilityRequired = true;
         this.isSalesOnly = false;
         this.isSalesAndLettings = false;
-        console.log('for sales only', this.isAvailabilityRequired);
-
       }
     }
   }
 
   saveValuation() {
+    // console.log("saveValuation");
+    // return
     this.checkAvailabilityBooking();
     this.setValuersValidators();
+
+    if (!this.lastKnownOwner) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'You must add a last owner to the property!',
+        closable: false,
+      });
+      return;
+    }
+
+    if (
+      this.areValuesVisible &&
+      this.isThereAPrice(this.valuationForm.value) &&
+      this.valuationForm.get('valuationNote').value
+    ) {
+      this.valuationForm.get('valuationNote').setValidators(null);
+    }
+
+    if (this.valuationForm.controls['propertyTypeId'].value === 0)
+      this.valuationForm.controls['propertyTypeId'].setValue(null);
+    if (this.valuationForm.controls['propertyStyleId'].value === 0)
+      this.valuationForm.controls['propertyStyleId'].setValue(null);
+
     this.sharedService.logValidationErrors(this.valuationForm, true);
-    if (this.valuationForm.valid && !this.isAvailabilityRequired) {
-      if (this.valuationForm.dirty || this.isOwnerChanged || this.isPropertyChanged) {
-        this.addOrUpdateValuation();
-      } else {
-        this.onSaveComplete();
-      }
+
+    // validation of land register
+    //this.valuationService.valuationValidationSubject.next(true);
+
+    if (this.formErrors['declarableInterest']) {
+      this.accordionIndex = 4;
+      this.activeState[4] = true;
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'You must complete terms of business',
+        closable: false,
+      });
+      return;
+    }
+
+    if (this.isAvailabilityRequired) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'You must make valuation appointments',
+        closable: false,
+      });
+      return;
+    }
+    //this.valuationService.validationControlBs.getValue()
+    if (this.valuationForm.valid) {
+      this.addOrUpdateValuation();
+      // if (
+      //   this.valuationForm.dirty ||
+      //   this.isOwnerChanged ||
+      //   this.isPropertyChanged ||
+      //   this.isAdminContactChanged
+      // ) {
+      //   this.addOrUpdateValuation();
+      // } else {
+      //   this.onSaveComplete();
+      // }
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
     }
   }
 
+  getInfoIdArray(infoArray: InfoDetail[]): number[] {
+    let idArray: number[] = [];
+    if (infoArray && infoArray.length > 0) {
+      infoArray.map((element) => {
+        idArray.push(element.id);
+        return idArray;
+      });
+    }
+    return idArray;
+  }
+
   addOrUpdateValuation() {
     this.setLeaseExpiryDate();
     this.isSubmitting = true;
-    const valuation = { ...this.valuation, ...this.valuationForm.value };
+    const valuationValue = this.valuationService._valuation.getValue(); // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
+    const valuation = { ...valuationValue, ...this.valuationForm.value };
+    valuation.propertyOwner = this.lastKnownOwner;
+    valuation.OfficeId = this.property.officeId;
+    valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate;
+
+    valuation.isPowerOfAttorney =
+      this.adminContact && this.adminContact.contactGroupId > 0 ? this.adminContact?.isPowerOfAttorney : false;
+    valuation.ccOwner = this.adminContact && this.adminContact.contactGroupId > 0 ? this.adminContact?.ccOwner : false;
+
+    valuation.valuationContactNote = {
+      ...this.valuation.valuationContactNote,
+      text: this.valuationForm.controls['valuationNote'].value,
+    };
+
+    valuation.suggestedAskingRentShortLetMonthly = this.sharedService.convertStringToNumber(
+      valuation.suggestedAskingRentShortLetMonthly,
+    );
+
+    valuation.property = this.valuation.property;
+
+    if (!this.valuationForm.get('propertyTypeId').value) return;
+
+    valuation.property.propertyTypeId = +this.valuationForm.get('propertyTypeId').value;
+    valuation.property.propertyStyleId = +this.valuationForm.get('propertyStyleId').value;
+    valuation.property.propertyFloorId = this.valuationForm.get('propertyFloorId').value;
+    valuation.property.floorOther = this.valuationForm.get('floorOther').value;
+    valuation.otherFeatures = [];
+    valuation.propertyFeature = [];
+
+    if (this.showLeaseExpiryDate == false) {
+      valuation.leaseLandReg = {};
+    }
+
+    if (this.valuationForm.get('isNewBuild').value) valuation.otherFeatures.push(OtherFeatures.New_Build);
+    if (this.valuationForm.get('isRetirementHome').value) valuation.otherFeatures.push(OtherFeatures.Retirement_Home);
+    if (this.valuationForm.get('hasDisabledAccess').value)
+      valuation.propertyFeature.push(PropertyFeatures.Disabled_Access);
+
+    valuation.suggestedAskingRentLongLetMonthly = this.sharedService.convertStringToNumber(
+      valuation.suggestedAskingRentLongLetMonthly,
+    );
+    valuation.suggestedAskingPrice = this.sharedService.convertStringToNumber(valuation.suggestedAskingPrice);
+    valuation.suggestedAskingRentShortLet = this.sharedService.convertStringToNumber(
+      valuation.suggestedAskingRentShortLet,
+    );
+    valuation.suggestedAskingRentLongLet = this.sharedService.convertStringToNumber(
+      valuation.suggestedAskingRentLongLet,
+    );
+
     this.checkValuers(valuation);
     if (this.approxLeaseExpiryDate) {
       valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate;
@@ -1197,25 +2579,83 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       valuation.sqFt = 0;
     }
 
+    valuation.parking = this.getInfoIdArray(this.valuationForm.get('parking').value);
+    valuation.outsideSpace = this.getInfoIdArray(this.valuationForm.get('outsideSpace').value);
+
+    this.setValuers(valuation);
+
     if (this.isNewValuation) {
-      console.log('%c val', 'color:green', valuation);
-      this.valuationService.addValuation(valuation).subscribe(data => {
-        if (data) { this.onSaveComplete(data); }
-      },
+      this.saveValuationSubscription = this.valuationService.addValuation(valuation).subscribe(
+        (data) => {
+          if (data) {
+            this.onSaveComplete(data);
+          }
+        },
         (error: WedgeError) => {
-          this.errorMessage = error;
+          this.messageService.add({
+            severity: 'error',
+            summary: error.displayMessage,
+            closable: false,
+          });
           this.isSubmitting = false;
-        });
+        },
+      );
     } else {
-      this.valuationService.updateValuation(valuation).subscribe(data => {
-        if (data) { this.onSaveComplete(data); }
-      },
+      this.saveValuationSubscription = this.valuationService.updateValuation(valuation).subscribe(
+        (data) => {
+          if (data) {
+            this.onSaveComplete(data);
+          }
+        },
         (error: WedgeError) => {
           this.errorMessage = error;
           this.isSubmitting = false;
-        });
+        },
+      );
     }
   }
+
+  setValuers(valuation) {
+    if (valuation.salesValuationBooking?.startDateTime == valuation.lettingsValuationBooking?.startDateTime) {
+      valuation.combinedValuationBooking = {
+        name: valuation.salesMeetingOwner == false ? valuation.salesOwnerAssociateName : '',
+        emailAddress: valuation.salesMeetingOwner == false ? valuation.salesOwnerAssociateEmail : '',
+        contactNumber: valuation.salesMeetingOwner == false ? valuation.salesOwnerAssociateContactNumber : '',
+        associationId: valuation.salesMeetingOwner == false ? valuation.salesOwnerAssociateType : '',
+        meetingOwner: valuation.salesMeetingOwner,
+        startDateTime: valuation.salesValuationBooking?.startDateTime,
+        totalHours: 1,
+      };
+      valuation.combinedValuationBooking.meetingOwner = valuation.salesMeetingOwner == false ? false : true;
+    } else {
+      valuation.combinedValuationBooking = null;
+      if (valuation.salesValuationBooking) {
+        valuation.salesValuationBooking = {
+          name: valuation.salesMeetingOwner == false ? valuation.salesOwnerAssociateName : '',
+          emailAddress: valuation.salesMeetingOwner == false ? valuation.salesOwnerAssociateEmail : '',
+          contactNumber: valuation.salesMeetingOwner == false ? valuation.salesOwnerAssociateContactNumber : '',
+          associationId: valuation.salesMeetingOwner == false ? valuation.salesOwnerAssociateType : '',
+          meetingOwner: valuation.salesMeetingOwner,
+          startDateTime: valuation.salesValuationBooking?.startDateTime,
+          totalHours: 1,
+        };
+        valuation.salesValuationBooking.meetingOwner = valuation.salesMeetingOwner == false ? false : true;
+      }
+      if (valuation.lettingsValuationBooking) {
+        valuation.lettingsValuationBooking = {
+          name: valuation.lettingMeetingOwner == false ? valuation.lettingsOwnerAssociateName : '',
+          emailAddress: valuation.lettingMeetingOwner == false ? valuation.lettingsOwnerAssociateEmail : '',
+          contactNumber: valuation.lettingMeetingOwner == false ? valuation.lettingsOwnerAssociateContactNumber : '',
+          associationId: valuation.lettingMeetingOwner == false ? valuation.lettingsOwnerAssociateType : '',
+          meetingOwner: valuation.lettingMeetingOwner,
+          startDateTime: valuation.lettingsValuationBooking?.startDateTime,
+          totalHours: 1,
+        };
+        valuation.lettingsValuationBooking.meetingOwner = valuation.lettingMeetingOwner == false ? false : true;
+      }
+    }
+  }
+
   checkValuers(valuation: any) {
     switch (valuation.type) {
       case 'lettings':
@@ -1228,30 +2668,35 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private setLeaseExpiryDate() {
-    if (this.valuationForm.get('approxLeaseExpiryDate').value) {
+    if (
+      this.valuationForm.get('approxLeaseExpiryDate').value &&
+      this.valuationForm.get('approxLeaseExpiryDate').value > 0
+    ) {
       const leaseExpiryDateInYears = +this.valuationForm.get('approxLeaseExpiryDate').value;
       this.approxLeaseExpiryDate = addYears(new Date(), leaseExpiryDateInYears);
+    } else {
+      this.approxLeaseExpiryDate = null;
     }
-
   }
+
   private changeLeaseExpiryDateToYears(approxLeaseExpiryDate: any) {
     if (approxLeaseExpiryDate) {
-      return differenceInCalendarYears(approxLeaseExpiryDate, new Date());
+      return differenceInCalendarYears(new Date(approxLeaseExpiryDate), new Date());
     }
   }
 
   duplicateValuation() {
     const propertyId = this.property.propertyId;
     const lastKnownOwnerId = this.lastKnownOwner.contactGroupId;
-    this.router.navigateByUrl('/', { skipLocationChange: true })
-      .then(() => this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+      this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
         queryParams: {
           propertyId: propertyId,
           lastKnownOwnerId: lastKnownOwnerId,
-          isNewValuation: true
-        }
-      })
-      );
+          isNewValuation: true,
+        },
+      }),
+    );
   }
 
   onSaveComplete(valuation?: Valuation) {
@@ -1260,15 +2705,25 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.errorMessage = null;
     if (this.isNewValuation) {
       // this.toastr.success('Valuation successfully saved');
-      this.messageService.add({ severity: 'success', summary: 'Valuation successfully saved', closable: false });
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Valuation successfully saved',
+        closable: false,
+      });
       this.sharedService.resetUrl(this.valuationId, valuation.valuationEventId);
     } else {
       // this.toastr.success('Valuation successfully updated');
-      this.messageService.add({ severity: 'success', summary: 'Valuation successfully updated', closable: false });
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Valuation successfully updated',
+        closable: false,
+      });
     }
 
-    this.router.navigateByUrl('/', { skipLocationChange: true })
-      .then(() => this.router.navigate(['/valuations-register/detail', valuation.valuationEventId, 'edit']));
+    if (valuation && valuation.valuationEventId > 0)
+      this.router
+        .navigateByUrl('/', { skipLocationChange: true })
+        .then(() => this.router.navigate(['/valuations-register/detail', valuation.valuationEventId, 'edit']));
   }
 
   onInstructionSaveComplete(status?: boolean) {
@@ -1277,7 +2732,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.isSubmitting = false;
     this.errorMessage = null;
     if (status) {
-      this.messageService.add({ severity: 'success', summary: 'Instruction successfully saved', closable: false });
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Instruction successfully saved',
+        closable: false,
+      });
       this.router.navigate(['/property-centre/detail', this.property.propertyId]);
     }
   }
@@ -1287,13 +2746,87 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   cancelInstruction() {
-    console.log('cancel inst', this.instructionForm.value);
     this.sharedService.resetForm(this.instructionForm);
   }
 
-  canDeactivate(): boolean {
-    if (this.valuationForm.dirty && !this.isSubmitting) {
+  cancelBooking() {
+    this.sharedService.resetForm(this.availabilityForm);
+    this.isAppointmentVisible = false;
+  }
 
+  makeBooking() {
+    if (this.isSplitAppointment == true) {
+      if (!this.selectedSalesDate) {
+        this.bookingButtonLabel = 'Book For Lettings';
+        this.selectedSalesDate = this.selectedDate;
+        return;
+      } else {
+        this.selectedLettingsDate = this.selectedDate;
+      }
+    } else {
+      if (this.isSalesAndLettings) {
+        this.selectedLettingsDate = this.selectedDate;
+        this.selectedSalesDate = this.selectedDate;
+      } else if (this.isSalesOnly) {
+        this.selectedSalesDate = this.selectedDate;
+      } else if (this.isLettingsOnly) {
+        this.selectedLettingsDate = this.selectedDate;
+      }
+    }
+
+    this.oldClass = 'null';
+
+    if (this.valuation && !this.valuation.valuationDate) {
+      this.valuation.valuationDate = this.selectedSalesDate;
+    }
+    this.valuationForm.controls['valuationDate'].setValue(this.selectedSalesDate);
+    if (this.salesValuer && (this.isSalesOnly || this.isSalesAndLettings)) {
+      this.valuation.salesValuationBooking = {
+        startDateTime: this.selectedSalesDate,
+        totalHours: 1,
+      };
+      this.salesValuerControl.setValue(this.salesValuer);
+      this.salesValuerControl.updateValueAndValidity();
+    }
+    if (this.lettingsValuer && (this.isLettingsOnly || this.isSalesAndLettings)) {
+      this.valuation.lettingsValuationBooking = {
+        startDateTime: this.selectedLettingsDate,
+        totalHours: 1,
+      };
+      this.lettingsValuerControl.setValue(this.lettingsValuer);
+      this.lettingsValuerControl.updateValueAndValidity();
+    }
+
+    if (this.isBothEdit) {
+      if (this.isSalesOnly) {
+        {
+          this.lettingsValuerControl.setValue(null);
+          this.valuation.lettingsValuationBooking = null;
+          this.getTimeLettingsValuationDate = null;
+        }
+      } else if (this.isLettingsOnly) {
+        this.salesValuerControl.setValue(null);
+        this.valuation.salesValuationBooking = null;
+        this.getTimeSalesValuationDate = null;
+      }
+    }
+    this.selectedLettingsDate = this.valuation.lettingsValuationBooking?.startDateTime
+      ? new Date(this.valuation.lettingsValuationBooking?.startDateTime)
+      : null;
+    this.selectedSalesDate = this.valuation.salesValuationBooking?.startDateTime
+      ? new Date(this.valuation.salesValuationBooking?.startDateTime)
+      : null;
+
+    this.getTimeSalesValuationDate = this.selectedSalesDate?.getTime();
+    this.getTimeLettingsValuationDate = this.selectedLettingsDate?.getTime();
+
+    this.setCloseState();
+
+    this.valuationForm.markAsDirty();
+  }
+
+  canDeactivate(): boolean {
+    if (!this.isCanDeactivate && this.valuationForm.dirty && !this.isSubmitting) {
       return false;
     }
     return true;
@@ -1301,8 +2834,19 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   ngOnDestroy() {
     this.property = {} as Property;
+    this.sharedService.removeContactGroupChanged.next(null);
+    this.sharedService.openContactGroupChanged.next(null);
     this.propertyService.setAddedProperty(null);
     this.sharedService.clearFormValidators(this.valuationForm, this.formErrors);
     this.storage.delete('valuationFormData').subscribe();
+    this.openContactGroupSubscription.unsubscribe();
+    this.removeContactGroupSubscription.unsubscribe();
+    this.eSignSubscription.unsubscribe();
+    this.cancelValuationSubscription.unsubscribe();
+    this.propertySubsription.unsubscribe();
+    this.contactGroupSubscription.unsubscribe();
+    this.saveValuationSubscription.unsubscribe();
+    this.storage.delete(this.mainPersonId?.toString()).subscribe();
+    this.destroy.unsubscribe();
   }
 }

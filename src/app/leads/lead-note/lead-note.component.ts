@@ -17,7 +17,7 @@ import {
   filter,
   takeUntil,
 } from "rxjs/operators";
-import { ContactNote } from "src/app/contactgroups/shared/contact-group";
+import { ContactNote } from "src/app/contact-groups/shared/contact-group";
 import { ValidationService } from "src/app/core/services/validation.service";
 import { BaseComponent } from "src/app/shared/models/base-component";
 import { Person } from "src/app/shared/models/person";

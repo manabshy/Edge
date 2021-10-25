@@ -3,6 +3,7 @@
 // @import "../../../../node_modules/bootstrap/scss/functions";
 // @import "../../../../node_modules/bootstrap/scss/variables";
 // @import "../../../../node_modules/bootstrap/scss/mixins";
+@import "../../../style/partials/colors";
 
 // form {
 //     padding-bottom: spacer(5);
@@ -41,3 +42,70 @@
 //         min-height: 14rem;
 //     }
 // }
+
+
+// i {
+//   margin-left: 10px;
+//   vertical-align: super;
+// }
+
+::ng-deep {
+  .p-badge-info{
+    margin-left: 4px;
+    background-color: $color--midnight-20 !important;
+  }
+  .p-badge-success{
+    margin-left: 4px;
+    background-color: $color--red !important;
+  }
+  .p-dialog-title{
+    width: -webkit-fill-available;
+  }
+
+  .p-messages{ margin-top: -10px !important;}
+
+  .p-overflow-hidden{ overflow: hidden !important;position: fixed !important}
+
+  //.p-tooltip-text		{ background-color:lightblue !important; color:black !important }
+}
+
+.formValuation {
+  overflow-y: hidden;
+}
+
+.instructClass {
+  margin-left: 4px;
+  background-color:#AFB8CF !important
+}
+
+.dot {
+  height: 25px;
+  width: 25px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.hourColorsForBoth{
+  background: linear-gradient(to right, $color--midnight-20 50%, $color--red 50%,);
+}
+
+.hourColorsForSales{
+  background: $color--red;
+}
+
+.hourColorsForSelected{
+  // background: darkseagreen;
+  background-color: $color--midnight-70; color:#FFFFFF; fill:#FFFFFF; box-shadow:inset 0px 0px 0px 1px  #CED1DB;
+ // background-color:transparent; color:#535E80; box-shadow:inset 0px 0px 0px 1px #CED1DB;
+}
+
+.hourColorsForLettings{
+  background: $color--midnight-20;
+}
+
+// .info-tooltip{
+//   background-color:#F1AFA8
+// }
+
+

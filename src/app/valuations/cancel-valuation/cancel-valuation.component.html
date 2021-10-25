@@ -1,0 +1,31 @@
+<form [formGroup]="cancelValuationForm" (ngSubmit)="cancelValuation()">
+  <div>
+    <fieldset [ngClass]="{'invalid': formErrors?.cancelTypeId}">
+      <label for="cancelTypeId">What is the reason for cancelling</label>
+      <span class="select">
+        <select name="cancelTypeId" id="cancelTypeId" formControlName="cancelTypeId"
+          (change)="onReasonTypeChanged($event.target.value)">
+          <option *ngFor="let reason of reasons" [value]='reason.id'>
+            {{reason.value}}
+          </option>
+        </select>
+      </span>
+      <p class="message message--negative"> {{formErrors?.cancelTypeId}} </p>
+    </fieldset>
+
+    <fieldset class="mt-3 inline-child" *ngIf="isDescriptionVisible" [ngClass]="{'invalid': formErrors?.cancelReason}">
+      <label for="cancelReason">Description</label>
+      <textarea class="p-2" name="cancelReason" id="cancelReason" cols="30" rows="3" formControlName="cancelReason"
+        data-cy="reasonDescription" [ngClass]="{'is-invalid': formErrors?.cancelReason}"></textarea>
+      <p class="message message--negative"> {{formErrors?.cancelReason}} </p>
+    </fieldset>
+
+  </div>
+  <footer class="footer--modal">
+    <div class="btn--container">
+      <button type="button" class="btn btn--ghost" (click)="cancelOperation()">Back</button>
+      <button type="submit" class="btn btn--positive" data-cy="cancelValuation">Cancel
+        Valuation</button>
+    </div>
+  </footer>
+</form>

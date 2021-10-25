@@ -1,5 +1,5 @@
-import { ResultData } from 'src/app/shared/result-data';
-import { Address } from 'src/app/shared/models/address';
+import { ResultData } from "src/app/shared/result-data";
+import { Address } from "src/app/shared/models/address";
 
 export interface Dashboard {
   period: string;
@@ -90,7 +90,7 @@ export interface BusinessDevelopment {
   propertyLettingId: number;
   propertySaleId: number;
   reason: string;
-  status: 'Let';
+  status: "Let";
 }
 
 export interface BusinessDevelopmentCallbackReminder {
@@ -222,52 +222,42 @@ export interface BDTicketHistory {
   propertySaleStatus: string;
 }
 
-
 export enum Tiles {
-  AllInstructions = 'All Instructions',
-  Applicants = 'All applicants',
-  BusinessDevelopment = 'Business Development',
-  Exchanges = 'Exchanges',
-  Instructions = 'Instructions',
-  LiveTenancies = 'Live Tenancies',
-  Managed = 'Managed',
-  NewInstructions = 'New Instructions',
-  OffersAgreed = 'Offers Agreed',
-  OffersReceived = 'Offers Received',
-  Pipeline = 'Pipeline',
-  ReletInstructions = 'Relet Instructions',
-  Valuations = 'Valuations',
-  Viewings = 'Viewings',
+  AllInstructions = "All Instructions",
+  Applicants = "All applicants",
+  BusinessDevelopment = "Business Development",
+  Exchanges = "Exchanges",
+  Instructions = "Instructions",
+  LiveTenancies = "Live Tenancies",
+  Managed = "Managed",
+  NewInstructions = "New Instructions",
+  OffersAgreed = "Offers Agreed",
+  OffersReceived = "Offers Received",
+  Pipeline = "Pipeline",
+  ReletInstructions = "Relet Instructions",
+  Valuations = "Valuations",
+  Viewings = "Viewings",
 }
 
 export enum InstructionStatus {
-  All = 'All',
-  Relet = 'ReLet',
-  New = 'New'
+  All = "All",
+  Relet = "ReLet",
+  New = "New",
 }
 
 export enum OfferStatus {
-  All = 'All',
-  OffersAgreed = 'OffersAgreed',
-  OffersReceived = 'OffersReceived'
+  All = "All",
+  OffersAgreed = "OffersAgreed",
+  OffersReceived = "OffersReceived",
 }
 
 /**
  * Tiles available to the sales manager
  */
 export const SalesManagerTiles = [
-  [
-    Tiles.Valuations,
-    Tiles.Instructions,
-  ],
-  [
-    Tiles.BusinessDevelopment,
-    Tiles.AllInstructions
-  ],
-  [
-    Tiles.Exchanges,
-    Tiles.Pipeline
-  ]
+  [Tiles.Valuations, Tiles.Instructions],
+  [Tiles.BusinessDevelopment, Tiles.AllInstructions],
+  [Tiles.Exchanges, Tiles.Pipeline],
 ];
 
 /**
@@ -280,29 +270,16 @@ export const SalesManagerTeamTiles = [
   Tiles.AllInstructions,
   Tiles.Exchanges,
   Tiles.Pipeline,
-
 ];
 
 /**
  * Tiles available to the lettings manager
  */
 export const LettingsManagerTiles = [
-  [
-    Tiles.Valuations,
-    Tiles.NewInstructions,
-    Tiles.ReletInstructions
-  ],
-  [
-    Tiles.BusinessDevelopment,
-    Tiles.AllInstructions
-  ],
-  [
-    Tiles.Exchanges,
-    Tiles.Pipeline
-  ],
-  [
-    Tiles.LiveTenancies
-  ]
+  [Tiles.Valuations, Tiles.NewInstructions, Tiles.ReletInstructions],
+  [Tiles.BusinessDevelopment, Tiles.AllInstructions],
+  [Tiles.Exchanges, Tiles.Pipeline],
+  [Tiles.LiveTenancies],
 ];
 
 /**
@@ -323,18 +300,9 @@ export const LettingsManagerTeamTiles = [
  * Tiles available to the negotiator
  */
 export const NegotiatorTiles = [
-  [
-    Tiles.Applicants,
-    Tiles.Viewings
-  ],
-  [
-    Tiles.OffersReceived,
-    Tiles.OffersAgreed
-  ],
-  [
-    Tiles.Exchanges,
-    Tiles.Pipeline
-  ]
+  [Tiles.Applicants, Tiles.Viewings],
+  [Tiles.OffersReceived, Tiles.OffersAgreed],
+  [Tiles.Exchanges, Tiles.Pipeline],
 ];
 
 /**
@@ -357,26 +325,43 @@ export interface ReportingMonth {
 }
 
 export enum PeriodsEnum {
-  Today = 'Today',
-  ThisWeek = 'ThisWeek',
-  ThisMonth = 'ThisMonth',
-  ThisQuarter = 'ThisQuarter',
-  ThisYear = 'ThisYear',
-  Custom = 'Custom'
+  Today = "Today",
+  ThisWeek = "ThisWeek",
+  ThisMonth = "ThisMonth",
+  ThisQuarter = "ThisQuarter",
+  ThisYear = "ThisYear",
+  Custom = "Custom",
 }
 
-export const Periods = new Map([
-  [PeriodsEnum.ThisWeek, 'This Week']
-]);
+export const Periods = new Map([[PeriodsEnum.ThisWeek, "This Week"]]);
 
 export const PeriodList = [
-  { value: 'Today', name: 'Today' },
-  { value: 'ThisWeek', name: 'This Week' },
-  { value: 'ThisMonth', name: 'This Month' },
-  { value: 'ThisQuarter', name: 'This Quarter' },
-  { value: 'ThisYear', name: 'This Year' },
-  { value: 'Custom', name: 'Custom' }
+  { value: "Today", name: "Today" },
+  { value: "ThisWeek", name: "This Week" },
+  { value: "ThisMonth", name: "This Month" },
+  { value: "ThisQuarter", name: "This Quarter" },
+  { value: "ThisYear", name: "This Year" },
+  { value: "Custom", name: "Custom" },
 ];
+
+export const roleOptions = [
+  { value: "10", name: "Sales" },
+  { value: "11", name: "Lettings" },
+  { value: "60", name: "CS" },
+];
+
+export const Roles = [
+  { value: 1, name: "Manager" },
+  { value: 2, name: "Broker" },
+  { value: 3, name: "Negotiator" },
+];
+
+export enum LeaderboardRankingViewEnum {
+  DefaultView = 0,
+  ManagerView = 1,
+  BrokerView = 2,
+  NegView = 3,
+}
 
 export enum OfferLettingStatus {
   OfferReceived = 1,
@@ -385,7 +370,7 @@ export enum OfferLettingStatus {
   FallenThrough = 8,
   Exchanged = 12,
   Let = 16,
-  LetEnded = 32
+  LetEnded = 32,
 }
 export enum OfferSaleStatus {
   OfferReceived = 1,
@@ -395,5 +380,5 @@ export enum OfferSaleStatus {
   SaleFallenThrough = 16,
   Exchanged = 32,
   Completed = 64,
-  FailedToComplete = 128
+  FailedToComplete = 128,
 }

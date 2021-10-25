@@ -40,7 +40,7 @@
         </fieldset>
       </div>
 
-      <fieldset>
+      <fieldset class="mb-3">
         <label for="region" class="small">Region</label>
         <span class="select">
           <select class="custom-select custom-select-sm" id="region" name="region" formControlName="regionId"
@@ -79,16 +79,16 @@
       </div>
 
       <legend class="legend">Owner</legend>
-      <fieldset>
+      <fieldset class="mb-3">
         <label for="area" class="small">Last known owner</label>
         <ng-container *ngIf="propertyDetails?.lastKnownOwner?.contactNames; else newOwner">
           <p><a
               [routerLink]="['/contact-centre/detail/0/people/', propertyDetails?.lastKnownOwner?.contactGroupId]">{{propertyDetails?.lastKnownOwner?.contactNames}}</a>
             <a *ngIf="  this.propertyDetails?.lastKnownOwner" role="button" (click)="removeLastKnownOwner()"><svg
-                aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onRight-center  icon--fill-negative">
+                aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                class="icon icon--s icon--onRight-center  icon--fill-negative">
                 <path transform="translate(-1 -1)"
-                  d="M32,63A31,31,0,1,1,63,32,31,31,0,0,1,32,63ZM18.7,15.5a2.73,2.73,0,0,0-1.9.8l-.6.6a2.58,2.58,0,0,0-.3,3.3L28.4,32.6,16,44.9a1.55,1.55,0,0,0-.5,1.4,2.5,2.5,0,0,0,.8,1.8l.5.6a2.73,2.73,0,0,0,1.9.8A1.9,1.9,0,0,0,20,49L32.5,36.6,44.9,49a2.39,2.39,0,0,0,1.4.5,2.73,2.73,0,0,0,1.9-.8l.5-.5a2.5,2.5,0,0,0,.8-1.8,1.54,1.54,0,0,0-.5-1.3L36.5,32.5,48.9,20.1a1.55,1.55,0,0,0,.5-1.4,2.5,2.5,0,0,0-.8-1.8l-.5-.6a2.73,2.73,0,0,0-1.9-.8,1.9,1.9,0,0,0-1.3.5L32.5,28.5,20.1,16A2.39,2.39,0,0,0,18.7,15.5Z"
-                 />
+                  d="M32,63A31,31,0,1,1,63,32,31,31,0,0,1,32,63ZM18.7,15.5a2.73,2.73,0,0,0-1.9.8l-.6.6a2.58,2.58,0,0,0-.3,3.3L28.4,32.6,16,44.9a1.55,1.55,0,0,0-.5,1.4,2.5,2.5,0,0,0,.8,1.8l.5.6a2.73,2.73,0,0,0,1.9.8A1.9,1.9,0,0,0,20,49L32.5,36.6,44.9,49a2.39,2.39,0,0,0,1.4.5,2.73,2.73,0,0,0,1.9-.8l.5-.5a2.5,2.5,0,0,0,.8-1.8,1.54,1.54,0,0,0-.5-1.3L36.5,32.5,48.9,20.1a1.55,1.55,0,0,0,.5-1.4,2.5,2.5,0,0,0-.8-1.8l-.5-.6a2.73,2.73,0,0,0-1.9-.8,1.9,1.9,0,0,0-1.3.5L32.5,28.5,20.1,16A2.39,2.39,0,0,0,18.7,15.5Z" />
               </svg></a>
           </p>
           <p><button (click)="showLastKnowOwnerModal()" type="button" class="btn btn--info"><svg aria-hidden="true"
@@ -140,6 +140,6 @@
 <!-- Contactgroup Finder Modal -->
 <p-dialog [header]="lastKnownOwnerModalHeader" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false"
   class="modal--medium modal--hasFooter">
-  <app-contactgroup-finder [fullName]="lastKnownPerson" (selectedContactGroup)="getSelectedOwner($event)"
-    (isCreatingNewGroup)="createNewLastKnownOwner()"></app-contactgroup-finder>
+  <app-contact-group-finder [fullName]="lastKnownPerson" (selectedContactGroup)="getSelectedOwner($event)"
+    (isCreatingNewGroup)="createNewLastKnownOwner()"></app-contact-group-finder>
 </p-dialog>

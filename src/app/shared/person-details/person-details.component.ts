@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { MarketingPreferences, Person, Referral } from '../models/person';
 import { Router } from '@angular/router';
-import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
+import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { ResultData } from '../result-data';
@@ -18,7 +18,7 @@ import { SharedService } from 'src/app/core/services/shared.service';
 @Component({
   selector: 'app-person-details',
   templateUrl: './person-details.component.html',
-  styleUrls: ['./person-details.component.scss']
+  styleUrls: ['./person-details.component.scss'],
 })
 export class PersonDetailsComponent implements OnInit, OnChanges {
   @Input() personDetails: Person;
@@ -49,24 +49,30 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   warningStatus: string;
   preferredNumberComment: string;
 
-  constructor(private router: Router, private contactGroupService: ContactGroupsService,
+  constructor(
+    private router: Router,
+    private contactGroupService: ContactGroupsService,
     private peopleService: PeopleService,
-    public staffMemberService: StaffMemberService, private storage: StorageMap, private sharedService: SharedService,
-    private infoService: InfoService, private messageService: MessageService, private dialogService: DialogService) { }
+    public staffMemberService: StaffMemberService,
+    private storage: StorageMap,
+    private sharedService: SharedService,
+    private infoService: InfoService,
+    private messageService: MessageService,
+    private dialogService: DialogService,
+  ) {}
 
   ngOnInit() {
-    this.contactGroupService.noteChanges$.subscribe(note => {
+    this.contactGroupService.noteChanges$.subscribe((note) => {
       const notes = this.personDetails.personNotes;
-      const existingNote = notes.find(x => x.id === note.id);
+      const existingNote = notes.find((x) => x.id === note.id);
       if (note && note.isImportant && !existingNote) {
         notes.push(note);
       }
       if (note && !note.isImportant) {
-        const index = notes.findIndex(x => +x.id === +note.id);
+        const index = notes.findIndex((x) => +x.id === +note.id);
         notes.splice(index, 1);
       }
     });
-    
   }
 
   ngOnChanges() {
@@ -75,35 +81,45 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
     this.getCurrentUser();
 
     if (this.personDetails?.phoneNumbers?.length) {
-      const preferredNumberItem = this.personDetails.phoneNumbers.find(x => x.isPreferred);
+      const preferredNumberItem = this.personDetails.phoneNumbers.find((x) => x.isPreferred);
       this.preferredNumber = preferredNumberItem.number;
       this.preferredNumberComment = preferredNumberItem.comments;
     }
 
     if (this.personDetails?.emailAddresses?.length) {
-      this.preferredEmail = this.personDetails.emailAddresses.find(x => x.isPreferred).email;
+      this.preferredEmail = this.personDetails.emailAddresses.find((x) => x.isPreferred).email;
     }
-    if (this.warnings) { console.log('warnings here as input', this.warnings) }
+    if (this.warnings) {
+      console.log('warnings here as input', this.warnings);
+    }
   }
 
   getCurrentUser() {
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
-      } else { this.staffMemberService.getCurrentStaffMember().subscribe(res => this.currentStaffMember = res); }
+      } else {
+        this.staffMemberService.getCurrentStaffMember().subscribe((res) => (this.currentStaffMember = res));
+      }
       this.setCanRemoveFlag(this.currentStaffMember?.permissions);
     });
   }
 
   setCanRemoveFlag(permissions: Permission[]) {
-    this.canRemove = permissions?.find(x => x.permissionId === PermissionEnum.GdprRemoval) ? true : false;
+    this.canRemove = permissions?.find((x) => x.permissionId === PermissionEnum.GdprRemoval) ? true : false;
   }
 
   getInfo() {
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
-      if (data) { this.referralCompanies = data.referralCompanies; this.warnings = data.personWarningStatuses; } else {
+      if (data) {
+        this.referralCompanies = data.referralCompanies;
+        this.warnings = data.personWarningStatuses;
+      } else {
         this.infoService.getDropdownListInfo().subscribe((info: DropdownListInfo) => {
-          if (info) { this.referralCompanies = info.referralCompanies; this.warnings = info.personWarningStatuses; }
+          if (info) {
+            this.referralCompanies = info.referralCompanies;
+            this.warnings = info.personWarningStatuses;
+          }
         });
       }
       this.setPersonWarning(this.personDetails, this.warnings);
@@ -116,7 +132,8 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
     if (person) {
       if (person.warningStatusId !== 1) {
         console.log('status here.....');
-        this.warningStatus = warnings?.find(x => x.id === person.warningStatusId)?.value || person.warningStatusComment;
+        this.warningStatus =
+          warnings?.find((x) => x.id === person.warningStatusId)?.value || person.warningStatusComment;
       }
     }
     console.log('status here 2.....', person);
@@ -124,7 +141,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
 
   private setReferralCompanies() {
     const refs = [];
-    this.referralCompanies?.forEach(x => {
+    this.referralCompanies?.forEach((x) => {
       const ref: Referral = { referralCompanyId: x.id, referralCompany: x.value, referralDate: null };
       refs.push(ref);
       this.personReferrals = refs;
@@ -135,9 +152,11 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
 
   setPersonReferrals(referrals: Referral[]) {
     if (referrals?.length) {
-      referrals.forEach(r => {
-        this.personReferrals?.forEach(p => {
-          if (r.referralCompanyId === p.referralCompanyId) { p.referralDate = r.referralDate; }
+      referrals.forEach((r) => {
+        this.personReferrals?.forEach((p) => {
+          if (r.referralCompanyId === p.referralCompanyId) {
+            p.referralDate = r.referralDate;
+          }
         });
       });
     }
@@ -151,7 +170,8 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
 
   sendReferral() {
     if (this.personDetails?.personId && this.selectedCompany?.referralCompanyId) {
-      this.contactGroupService.createPersonReferral(this.personDetails, this.selectedCompany.referralCompanyId)
+      this.contactGroupService
+        .createPersonReferral(this.personDetails, this.selectedCompany.referralCompanyId)
         .subscribe((res: ResultData) => this.onSaveComplete(res.result));
     }
   }
@@ -159,7 +179,12 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   onSaveComplete(res: Referral[]): void {
     if (res) {
       this.setPersonReferrals(res);
-      this.messageService.add({ severity: 'success', summary: 'Referral successfully sent', closable: false, key: 'referralMessage' });
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Referral successfully sent',
+        closable: false,
+        key: 'referralMessage',
+      });
       this.showRefDialog = false;
       this.sharedService.setRemoveSticky(this.showRefDialog);
     }
@@ -171,7 +196,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   }
 
   toggleShowEmailModal(shouldSet: boolean) {
-    shouldSet ? this.showEmailModal = true : this.showEmailModal = false;
+    shouldSet ? (this.showEmailModal = true) : (this.showEmailModal = false);
     console.log({ shouldSet });
 
     this.sharedService.setRemoveSticky(this.showEmailModal);
@@ -193,25 +218,31 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
     const data = {
       isSingleAction: true,
       title: `<p>${this.personDetails?.addressee} is involved in a live transaction.</p> <p><strong>Please rectify before completing this action.</strong></p>`,
-      actions: ['OK']
+      actions: ['OK'],
     };
 
-    this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', header: 'GDPR Removal Warning' });
+    this.dialogRef = this.dialogService.open(ConfirmModalComponent, {
+      data,
+      styleClass: 'dialog dialog--hasFooter',
+      header: 'GDPR Removal Warning',
+    });
     this.dialogRef.onClose.subscribe();
-
   }
 
   performRemoval() {
     if (this.referenceCount) {
       this.showTransactionMessage();
     } else {
-
       const data = {
         title: `<p>Are you sure you want to permanently remove ${this.personDetails?.addressee} from the EDGE database?</p> <p><strong>This is an irreversible action!</strong></p>`,
-        actions: ['Cancel', 'OK']
+        actions: ['Cancel', 'OK'],
       };
 
-      this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', header: 'GDPR Removal Warning' });
+      this.dialogRef = this.dialogService.open(ConfirmModalComponent, {
+        data,
+        styleClass: 'dialog dialog--hasFooter',
+        header: 'GDPR Removal Warning',
+      });
       this.dialogRef.onClose.subscribe((res) => {
         if (res) {
           this.peopleService.performGdprRemoval(this.personDetails).subscribe((result) => {
@@ -219,7 +250,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
               this.messageService.add({
                 severity: 'success',
                 summary: `GDPR Removal Completed`,
-                closable: false
+                closable: false,
               });
               setTimeout(() => {
                 this.router.navigate(['/contact-centre']);
@@ -231,4 +262,3 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
     }
   }
 }
-

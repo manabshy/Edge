@@ -1,8 +1,8 @@
 import { Component, OnInit, ɵConsole } from '@angular/core';
 import { FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
-import { ContactGroupsService } from '../contactgroups/shared/contact-groups.service';
+import { ContactGroupsService } from '../contact-groups/shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
-import { CompanyAutoCompleteResult } from '../contactgroups/shared/contact-group';
+import { CompanyAutoCompleteResult } from '../contact-groups/shared/contact-group';
 import { AppUtils } from '../core/shared/utils';
 import { debounceTime, distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
 import { SharedService } from '../core/services/shared.service';

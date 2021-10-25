@@ -1,9 +1,10 @@
 <form [formGroup]="officeFinderForm">
-  <fieldset [ngClass]="{'invalid': isRequired}">
+  <fieldset class="mb-3" [ngClass]="{'invalid': isRequired}">
     <label for="office">Office</label>
     <ng-container *ngIf="isMultiSelect;else dropDown">
-      <p-multiSelect #multiSelect [options]="offices"  [maxSelectedLabels]="1" formControlName="officeIds" optionLabel="name" optionValue="officeId"
-        placeholder="Select Office(s)" (onChange)="onOfficeIdsSelected($event)"></p-multiSelect>
+      <p-multiSelect #multiSelect [options]="offices" [maxSelectedLabels]="1" formControlName="officeIds"
+        optionLabel="name" optionValue="officeId" placeholder="Select Office(s)"
+        (onChange)="onOfficeIdsSelected($event)"></p-multiSelect>
     </ng-container>
 
     <ng-template #dropDown>

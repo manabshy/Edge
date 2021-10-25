@@ -1,14 +1,17 @@
-<fieldset class="overflow">
+<fieldset class="overflow mb-3">
   <p *ngIf="data?.error?.displayMessage" [innerText]="data?.error?.displayMessage"></p>
   <pre *ngIf="data?.error?.technicalDetails" [innerText]="data?.error?.technicalDetails"></pre>
 </fieldset>
-<fieldset>
-  <a [href]="'mailto:helpdesk@dng.co.uk?subject=Error '+title+'&body='+desc+'%0D%0D'+(techDet||'')+'%0D%0D'+url">Contact Helpdesk</a>
+<fieldset class="mb-3">
+  <a [href]="'mailto:helpdesk@dng.co.uk?subject=Error '+title+'&body='+desc+'%0D%0D'+(techDet||'')+'%0D%0D'+url">Contact
+    Helpdesk</a>
 </fieldset>
-<fieldset *ngIf="data?.error?.requestId" class="text-left text-muted">
+<fieldset *ngIf="data?.error?.requestId" class="text-left text-muted mb-3">
   <small>IT REF: {{data?.error?.requestId}}</small>
 </fieldset>
-<fieldset><p *ngIf="data?.triggeredBy">triggeredby:{{data?.triggeredBy | json}} </p></fieldset>
+<fieldset class="mb-3">
+  <p *ngIf="data?.triggeredBy">triggeredby:{{data?.triggeredBy | json}} </p>
+</fieldset>
 
 <footer class="footer footer--modal">
   <div class="btn--container">

@@ -18,21 +18,21 @@
         [isLeadClosed]="isLeadClosed" [isLead]="true" [personId]="person?.personId"
         (associatedProperty)="getAssociatedProperty($event)">
       </app-shared-property-list>
-      <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
+      <app-contact-groups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
         [personId]="person?.personId" [closedCounter]="summaryTotals?.instructions?.inactive">
-      </app-contactgroups-detail-instructions>
-      <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo" [personId]="person?.personId"
-        [closedCounter]="summaryTotals?.offers?.inactive"></app-contactgroups-detail-offers>
-      <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [moreInfo]="moreInfo" [personId]="person?.personId"
-        [closedCounter]="summaryTotals?.searches?.inactive"></app-contactgroups-detail-searches>
+      </app-contact-groups-detail-instructions>
+      <app-contact-groups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo" [personId]="person?.personId"
+        [closedCounter]="summaryTotals?.offers?.inactive"></app-contact-groups-detail-offers>
+      <app-contact-groups-detail-searches *ngSwitchCase="'searches'" [moreInfo]="moreInfo" [personId]="person?.personId"
+        [closedCounter]="summaryTotals?.searches?.inactive"></app-contact-groups-detail-searches>
       <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo" [personId]="person?.personId"
         [closedCounter]="summaryTotals?.valuations?.inactive"></app-shared-valuation-list>
-      <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'" [moreInfo]="moreInfo"
+      <app-contact-groups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'" [moreInfo]="moreInfo"
         [personId]="person?.personId" [closedCounter]="summaryTotals?.lettingsManagements?.inactive">
-      </app-contactgroups-detail-lettings-managements>
-      <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'" [moreInfo]="moreInfo"
+      </app-contact-groups-detail-lettings-managements>
+      <app-contact-groups-detail-home-helper *ngSwitchCase="'homeHelpers'" [moreInfo]="moreInfo"
         [personId]="person?.personId" [closedCounter]="summaryTotals?.homeHelpers?.inactive">
-      </app-contactgroups-detail-home-helper>
+      </app-contact-groups-detail-home-helper>
       <app-shared-lead-register *ngSwitchCase="'leads'" [moreInfo]="moreInfo" [personId]="person?.personId"
         [closedCounter]="summaryTotals?.leads?.inactive"></app-shared-lead-register>
       <app-notes *ngSwitchCase="'notes'" [personNotes]="personNotes" [person]="person" [pageNumber]="page"
@@ -66,7 +66,7 @@
 
               <fieldset class="inline-child" [ngClass]="{'invalid': (formErrors?.nextChaseDate)}">
                 <label for="chaseDate">Chase date</label>
-                <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" formControlName="nextChaseDate"
+                <input class="p-2" type="text" id="chaseDate" placeholder="dd/mm/yyyy" formControlName="nextChaseDate"
                   [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:tomorrowsDate, customTodayClass: 'font-weight-bold'}"
                   bsDatepicker [attr.disabled]="!canEditLead ? true : null" #datepicker="bsDatepicker"
                   [appNoDoubleTap]='datepicker' (bsValueChange)="onChaseDateChange($event)">
@@ -75,16 +75,15 @@
 
               <fieldset class="inline-child">
                 <label for="chaser">Chaser</label>
-                <app-staff-member-finder class="appWrapper"
-                  [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value" [listType]="'activeStaffMembers'"
-                  (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
+                <app-staff-member-finder class="appWrapper" [staffMemberId]="leadEditForm.get('ownerId').value"
+                  [listType]="'activeStaffMembers'" (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
                   [isRequired]="!leadEditForm.get('ownerId').value && !isUnassignedLead"
                   [isDisabled]="!canEditLead ? true : false">
                 </app-staff-member-finder>
               </fieldset>
             </div>
 
-            <fieldset *ngIf="canEditLead" class="close-lead">
+            <fieldset class="mb-3" *ngIf="canEditLead" class="close-lead">
               <span class="checkbox">
                 <span *ngIf="canClose">
                   <input type="checkbox" id="closeLead" formControlName="closeLead" (change)="closeLeadChanged(lead)"
@@ -99,8 +98,14 @@
               <ol class="list">
                 <li [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
                   {{lead?.relatedProperty?.address | formatAddress}}
-                  <span class="pill pill--negative pill--onRight" *ngIf="!lead?.isPropertyOwner">Not the Owner</span>
+                  <span class="pill pill--negative pill--onRight mr-2" *ngIf="!lead?.isPropertyOwner">Not the Owner</span>
                   <div class="btn--container flexRight">
+
+                    <button class="btn btn--positive" type="button" data-cy="createVal"
+                      (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)" *ngIf="!isMessageVisible">
+                      Create Val.
+                    </button>
+
                     <button class="btn btn--ghost btn--hoverNegative" type="button" aria-label="remove"
                       (click)="removeProperty()" *ngIf="!isMessageVisible && !isLeadClosed"
                       [attr.disabled]="!canEditLead ? true : null"><svg aria-hidden="true" width="64" height="64"
@@ -108,20 +113,8 @@
                         <path
                           d="M11.4 56.1c0 3.8 3.1 6.9 6.9 6.9h27.4c3.8 0 6.9-3.1 6.9-6.9V14.8H11.4V56.1zM19.9 31.6l4.9-4.9L32 34l7.3-7.3 4.9 4.9 -7.3 7.3 7.3 7.3 -4.9 4.9L32 43.8l-7.3 7.3 -4.9-4.9 7.3-7.3L19.9 31.6zM44 4.4L40.6 1H23.4L20 4.4H8v6.9h48V4.4H44z">
                         </path>
-                      </svg>Remove</button>
-                    <ng-component *ngIf="false">
-                      <button class="btn btn--positive" type="button" data-cy="createVal"
-                        (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)"
-                        *ngIf="!isMessageVisible"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                          class="icon icon--s icon--onLeft">
-                          <path class="horizontal"
-                            d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z">
-                          </path>
-                          <path class="vertical"
-                            d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z">
-                          </path>
-                        </svg>Valuation</button>
-                    </ng-component>
+                      </svg>Remove
+                    </button>
                   </div>
                 </li>
               </ol>

@@ -1,30 +1,28 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { AppUtils, RequestOption } from '../shared/utils';
 import dayjs from 'dayjs';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { map, fill } from 'lodash';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ErrorModalComponent } from '../../shared/error-modal/error-modal.component';
 import { NoteModalComponent } from '../../shared/note-modal/note-modal.component';
 import { PhoneNumberUtil } from 'google-libphonenumber';
-import { Location } from '@angular/common';
+import { CurrencyPipe, Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpParams } from '@angular/common/http';
-import { CustomQueryEncoderHelper } from '../shared/custom-query-encoder-helper';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { ContactGroup } from 'src/app/contact-groups/shared/contact-group';
 import { ValidationMessages, FormErrors } from '../shared/app-constants';
-import { Valuation, ValuationStatusEnum } from 'src/app/valuations/shared/valuation';
+import { Valuation, ValuationStatusEnum, ValuationTypeEnum } from 'src/app/valuations/shared/valuation';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InfoDetail } from './info.service';
+import { eSignTypes } from '../shared/eSignTypes';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SharedService {
-
   lastCallNoteToast: any;
   lastCallEndCallToast: any;
   formErrors: any;
@@ -32,12 +30,55 @@ export class SharedService {
   private removeStickySubject = new Subject<boolean>();
   removeSticky$ = this.removeStickySubject.asObservable();
 
-  constructor(private _location: Location,
+  openContactGroupChanged = new BehaviorSubject<boolean | null>(null);
+  removeContactGroupChanged = new BehaviorSubject<boolean | null>(null);
+  eSignTriggerChanged = new Subject<eSignTypes>();
+  valuationStatusChanged = new BehaviorSubject<ValuationStatusEnum>(ValuationStatusEnum.None);
+  valuationType = new BehaviorSubject<ValuationTypeEnum>(ValuationTypeEnum.None);
+  cancelValuationOperationChanged = new BehaviorSubject<boolean>(false);
+
+  addAdminContactBs = new BehaviorSubject<boolean>(false);
+  addLastOwnerBs = new BehaviorSubject<boolean>(false);
+  addedContactBs = new BehaviorSubject<ContactGroup | null>(null);
+
+  constructor(
+    private _location: Location,
     private _router: Router,
     private titleService: Title,
     private storage: StorageMap,
     private dialogService: DialogService,
-    private modalService: BsModalService) {
+    private modalService: BsModalService,
+    private currencyPipe: CurrencyPipe,
+  ) {}
+
+  transformCurrency(value: any): any {
+    // if (
+    //   value &&
+    //   value.toString().length > 0 &&
+    //   value.toString().indexOf("£") > -1
+    // )
+    //   return value;
+    if (value) {
+      let numberValue = this.convertStringToNumber(value.toString());
+      return this.currencyPipe.transform(numberValue, 'GBP', 'symbol', '1.0-0');
+    }
+    return value;
+  }
+
+  convertStringToNumber(stringValue: string): number {
+    let numberValue = '0';
+    if (stringValue) {
+      numberValue = stringValue.replace(/\D/g, '');
+      numberValue = numberValue.replace(/\D/g, '').replace(/^0+/, '');
+    }
+    return +numberValue;
+  }
+
+  calculateDateToNowInMonths(valuationDate: Date): number {
+    let subtractionOfMonths =
+      new Date().getMonth() - valuationDate.getMonth() + 12 * (new Date().getFullYear() - valuationDate.getFullYear());
+    if (new Date().getDate() - valuationDate.getDate() < 0) subtractionOfMonths--;
+    return subtractionOfMonths;
   }
 
   setRemoveSticky(removed: boolean) {
@@ -72,19 +113,19 @@ export class SharedService {
   openLinkWindow(link: string) {
     const width = Math.floor(Math.random() * 100) + 860;
     const height = Math.floor(Math.random() * 100) + 500;
-    const left = window.top.outerWidth / 2 + window.top.screenX - (960 / 2);
-    const top = window.top.outerHeight / 2 + window.top.screenY - (600 / 2);
+    const left = window.top.outerWidth / 2 + window.top.screenX - 960 / 2;
+    const top = window.top.outerHeight / 2 + window.top.screenY - 600 / 2;
     const w = window.open(link, '_self');
     AppUtils.openedWindows.push(w);
     setTimeout(() => {
-      AppUtils.openedWindows.forEach(x => {
+      AppUtils.openedWindows.forEach((x) => {
         x.focus();
       });
     });
   }
 
   showWarning(id: number, warnings: InfoDetail[], comment?: string): string {
-    return warnings?.find(x => x.id === id).value || comment;
+    return warnings?.find((x) => x.id === id).value || comment;
   }
 
   showError(error: WedgeError, triggeredBy) {
@@ -94,13 +135,17 @@ export class SharedService {
       // desc: error.displayMessage,
       // techDet: error.technicalDetails,
       triggeredBy,
-      error
+      error,
     };
     console.log({ data });
 
     // const modal = this.modalService.show(ErrorModalComponent, { ignoreBackdropClick: true, initialState });
     // modal.content.subject = subject;
-    this.ref = this.dialogService.open(ErrorModalComponent, { data, styleClass: 'dialog dialog--hasFooter', header: 'Error' });
+    this.ref = this.dialogService.open(ErrorModalComponent, {
+      data,
+      styleClass: 'dialog dialog--hasFooter',
+      header: 'Error',
+    });
     // this.ref.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); } });
     return subject.asObservable();
   }
@@ -108,10 +153,13 @@ export class SharedService {
   addNote(data: any) {
     const subject = new Subject<boolean>();
     const initialState = {
-      data: data
+      data: data,
     };
     const modalClass = 'modal-lg';
-    const modal = this.modalService.show(NoteModalComponent, { class: modalClass, initialState });
+    const modal = this.modalService.show(NoteModalComponent, {
+      class: modalClass,
+      initialState,
+    });
     modal.content.subject = subject;
     return subject.asObservable();
   }
@@ -126,7 +174,7 @@ export class SharedService {
       if (elementPosition !== offsetPosition) {
         window.scrollTo({
           top: offsetPosition,
-          behavior: "smooth"
+          behavior: 'smooth',
         });
       }
     }
@@ -137,7 +185,7 @@ export class SharedService {
       if (element) {
         element.nativeElement.scrollIntoView();
       }
-    })
+    });
   }
 
   scrollTodayIntoView() {
@@ -187,7 +235,7 @@ export class SharedService {
   checkDuplicateInContactGroup(contactGroupDetails: ContactGroup, personId: number) {
     let isDuplicate = false;
     if (contactGroupDetails && contactGroupDetails.contactPeople) {
-      contactGroupDetails.contactPeople.forEach(x => {
+      contactGroupDetails.contactPeople.forEach((x) => {
         if (x && x.personId === personId) {
           isDuplicate = true;
         }
@@ -211,7 +259,8 @@ export class SharedService {
     }
   }
 
-  logValidationErrors(group: FormGroup, fakeTouched: boolean, scrollToError = false) {
+  logValidationErrors(group: FormGroup, fakeTouched: boolean, scrollToError = false): boolean {
+    let validationControl = true;
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
@@ -219,11 +268,11 @@ export class SharedService {
         FormErrors[key] = '';
       }
       if (control && !control.valid && (fakeTouched || control.dirty)) {
-        console.log('control', key, 'errors ', control.errors);
         FormErrors[key] = '';
         for (const errorKey in control.errors) {
           if (errorKey) {
-            FormErrors[key] += messages[errorKey] + '\n';
+            FormErrors[key] += messages ? messages[errorKey] + '\n' : '';
+            validationControl = false;
           }
         }
       }
@@ -234,25 +283,50 @@ export class SharedService {
     if (scrollToError) {
       this.scrollToFirstInvalidField();
     }
+    return validationControl;
   }
 
   resetForm(form: FormGroup) {
-    console.log('reset is called', form)
+    console.log('reset is called', form);
     form.reset();
-    Object.keys(form.controls).forEach(key => {
+    Object.keys(form.controls).forEach((key) => {
       form.get(key).setErrors(null);
     });
-    console.log('reset is called after', form)
+    console.log('reset is called after', form);
   }
 
   clearFormValidators(form: FormGroup, formErrors: any) {
-    Object.keys(form.controls).forEach(key => {
+    Object.keys(form.controls).forEach((key) => {
       formErrors[key] = '';
     });
   }
 
+  // Accepts the array and key
+  groupBy(array, key): [] {
+    // Return the end result
+    return array.reduce((result, currentValue) => {
+      // If an array already present for key, push it to the array. Else create an array and push the object
+      (result[currentValue[key]] = result[currentValue[key]] || []).push(currentValue);
+      // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
+      return result;
+    }, []); // empty object is the initial value for result object
+  }
+
+  // Accepts the array and key
+  groupByDate(array): [] {
+    // Return the end result
+    return array.reduce((result, currentValue) => {
+      // If an array already present for key, push it to the array. Else create an array and push the object
+      // let currentValueArr = currentValue.split("+");
+      (result[new Date(new Date(currentValue).toDateString()).getTime()] =
+        result[new Date(new Date(currentValue).toDateString()).getTime()] || []).push(new Date(currentValue));
+      // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
+      return result;
+    }, []); // empty object is the initial value for result object
+  }
+
   setValuationStatusLabel(vals: Valuation[]) {
-    vals.forEach(x => {
+    vals.forEach((x) => {
       x.valuationStatusLabel = ValuationStatusEnum[x.valuationStatus];
     });
   }
@@ -268,13 +342,13 @@ export class SharedService {
 
   formatPostCode(postCodeToCheck: string) {
     // Permitted letters depend upon their position in the postcode.
-    const alpha1 = '[abcdefghijklmnoprstuwyz]';                       // Character 1
-    const alpha2 = '[abcdefghklmnopqrstuvwxy]';                       // Character 2
-    const alpha3 = '[abcdefghjkpmnrstuvwxy]';                         // Character 3
-    const alpha4 = '[abehmnprvwxy]';                                  // Character 4
-    const alpha5 = '[abdefghjlnpqrstuwxyz]';                          // Character 5
-    const BFPOa5 = '[abdefghjlnpqrst]';                               // BFPO alpha5
-    const BFPOa6 = '[abdefghjlnpqrstuwzyz]';                          // BFPO alpha6
+    const alpha1 = '[abcdefghijklmnoprstuwyz]'; // Character 1
+    const alpha2 = '[abcdefghklmnopqrstuvwxy]'; // Character 2
+    const alpha3 = '[abcdefghjkpmnrstuvwxy]'; // Character 3
+    const alpha4 = '[abehmnprvwxy]'; // Character 4
+    const alpha5 = '[abdefghjlnpqrstuwxyz]'; // Character 5
+    const BFPOa5 = '[abdefghjlnpqrst]'; // BFPO alpha5
+    const BFPOa6 = '[abdefghjlnpqrstuwzyz]'; // BFPO alpha6
 
     // Array holds the regular expressions for the valid postcodes
     const pcexp = new Array();
@@ -289,7 +363,12 @@ export class SharedService {
     pcexp.push(new RegExp('^(' + alpha1 + '{1}[0-9]{1}' + alpha3 + '{1})(\\s*)([0-9]{1}' + alpha5 + '{2})$', 'i'));
 
     // Expression for postcodes: AANA  NAA
-    pcexp.push(new RegExp('^(' + alpha1 + '{1}' + alpha2 + '{1}' + '?[0-9]{1}' + alpha4 + '{1})(\\s*)([0-9]{1}' + alpha5 + '{2})$', 'i'));
+    pcexp.push(
+      new RegExp(
+        '^(' + alpha1 + '{1}' + alpha2 + '{1}' + '?[0-9]{1}' + alpha4 + '{1})(\\s*)([0-9]{1}' + alpha5 + '{2})$',
+        'i',
+      ),
+    );
 
     // Exception for the special postcode GIR 0AA
     pcexp.push(/^(GIR)(\s*)(0AA)$/i);
@@ -314,7 +393,6 @@ export class SharedService {
 
     // Check the string against the types of post codes
     for (let i = 0; i < pcexp.length; i++) {
-
       if (pcexp[i].test(postCode) && postCode) {
         postCode.trim();
         // The post code is valid - split the post code into component parts
@@ -328,7 +406,9 @@ export class SharedService {
         postCode = postCode.replace(/C\/O\s*/, 'c/o ');
 
         // If it is the Anguilla overseas territory postcode, we need to treat it specially
-        if (postCodeToCheck.toUpperCase() === 'AI-2640') { postCode = 'AI-2640'; }
+        if (postCodeToCheck.toUpperCase() === 'AI-2640') {
+          postCode = 'AI-2640';
+        }
 
         // Load new postcode back into the form element
         valid = true;
@@ -338,7 +418,11 @@ export class SharedService {
       }
     }
     // Return with either the reformatted valid postcode or the original invalid postcode
-    if (valid) { return postCode; } else { return postCodeToCheck; }
+    if (valid) {
+      return postCode;
+    } else {
+      return postCodeToCheck;
+    }
   }
 
   splitPostCode(postcode: string) {
@@ -360,9 +444,15 @@ export class SharedService {
    */
   public priceRangeLet(): number[] {
     let pv = 0;
-    return map(fill((new Array(30)), 0), (v, i) => {
+    return map(fill(new Array(30), 0), (v, i) => {
       v = pv;
-      if (v < 1000) { v += 50; } else if (v >= 1000 && v < 2000) { v += 250; } else if (v >= 2000 && v < 5000) { v += 500; }
+      if (v < 1000) {
+        v += 50;
+      } else if (v >= 1000 && v < 2000) {
+        v += 250;
+      } else if (v >= 2000 && v < 5000) {
+        v += 500;
+      }
       pv = v;
       return pv;
     });
@@ -375,11 +465,17 @@ export class SharedService {
    */
   public priceRangeSale(): number[] {
     let pv = 0;
-    return map(fill((new Array(30)), 0), (vv, i) => {
+    return map(fill(new Array(30), 0), (vv, i) => {
       vv = pv;
-      if (vv < 1000000) { vv += 50000; }
-      if (vv >= 1000000 && vv < 2000000) { vv += 250000; }
-      if (vv >= 2000000 && vv < 5000000) { vv += 500000; }
+      if (vv < 1000000) {
+        vv += 50000;
+      }
+      if (vv >= 1000000 && vv < 2000000) {
+        vv += 250000;
+      }
+      if (vv >= 2000000 && vv < 5000000) {
+        vv += 500000;
+      }
       pv = vv;
       return pv;
     });
@@ -388,8 +484,11 @@ export class SharedService {
   isUKMobile(number: string) {
     if (number) {
       const formattedNumber = number?.replace(' ', '');
-      return (formattedNumber.startsWith('07') || formattedNumber.startsWith('00') || formattedNumber.startsWith('+')) &&
-        !formattedNumber.startsWith('070') && !formattedNumber.startsWith('076');
+      return (
+        (formattedNumber.startsWith('07') || formattedNumber.startsWith('00') || formattedNumber.startsWith('+')) &&
+        !formattedNumber.startsWith('070') &&
+        !formattedNumber.startsWith('076')
+      );
     } else {
       return false;
     }
@@ -416,7 +515,6 @@ export class SharedService {
       });
     }
   }
-
 }
 
 export class WedgeError {
@@ -427,4 +525,3 @@ export class WedgeError {
   displayMessage: string;
   requestUrl?: string;
 }
-

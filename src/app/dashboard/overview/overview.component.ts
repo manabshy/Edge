@@ -1,4 +1,6 @@
+import { enumDepartments } from "./../../core/shared/departments";
 import {
+  AfterViewChecked,
   AfterViewInit,
   Component,
   EventEmitter,
@@ -9,25 +11,36 @@ import {
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { BsLocaleService } from "ngx-bootstrap/datepicker";
 import { PeriodService } from "src/app/core/services/period.service";
-import { PeriodList, Periods, PeriodsEnum } from "../shared/dashboard";
+import {
+  LeaderboardRankingViewEnum,
+  PeriodList,
+  Periods,
+  PeriodsEnum,
+  roleOptions,
+  Roles,
+} from "../shared/dashboard";
 import moment from "moment";
 import { DaterangepickerConfig } from "ng2-daterangepicker";
 import { DaterangepickerComponent } from "ng2-daterangepicker";
 import { TeamMember } from "src/app/client-services/shared/models/team-member";
 import { CsBoardService } from "src/app/client-services/shared/services/cs-board.service";
-import { tap } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { StorageMap } from "@ngx-pwa/local-storage";
 import { Observable } from "rxjs";
 import { StaffMember } from "src/app/shared/models/staff-member";
 import { StaffMemberService } from "src/app/core/services/staff-member.service";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Constants } from "src/app/shared/period-list";
+import { LeaderBoardRanking } from "src/app/shared/models/leader-board-ranking";
 
 @Component({
   selector: "app-overview",
   templateUrl: "./overview.component.html",
   styleUrls: ["./overview.component.scss"],
 })
-export class OverviewComponent implements OnInit, AfterViewInit {
+export class OverviewComponent
+  implements OnInit, AfterViewInit, AfterViewChecked
+{
   bsRangeValue: any;
   filtersForm: FormGroup;
   periods = PeriodList;
@@ -40,8 +53,16 @@ export class OverviewComponent implements OnInit, AfterViewInit {
   // @Output() showRules = new EventEmitter<boolean>();
   @Output() selectedMember = new EventEmitter<TeamMember>();
   members$ = new Observable<TeamMember[]>();
-  searchPlaceHolder = "Navigator";
+  searchPlaceHolder = "Select User";
   currentStaffMember: StaffMember;
+
+  roleOptions = roleOptions;
+  rankings: LeaderBoardRanking[] = [];
+  selectedRole = Roles[0];
+  roles = Roles;
+  todayRange: any;
+  loadControl = false;
+  pieChartData: any;
 
   // see original project for full list of options
   // can also be setup using the config service to apply to multiple pickers
@@ -62,7 +83,7 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     this.periodService.onReportingMonthsOnSelected.subscribe((data) => {
       console.log(data);
       if (data && data.length > 0) {
-        let todayRange = this.periodService.getInterval(PeriodsEnum.Today);
+        this.todayRange = this.periodService.getInterval(PeriodsEnum.Today);
         let weekRange = this.periodService.getInterval(PeriodsEnum.ThisWeek);
         let monthRange = this.periodService.getInterval(PeriodsEnum.ThisMonth);
         let yearRange = this.periodService.getInterval(PeriodsEnum.ThisYear);
@@ -76,9 +97,9 @@ export class OverviewComponent implements OnInit, AfterViewInit {
               hour: 0,
               minute: 0,
             }),
-            moment(todayRange.periodEndDate).set({
-              hour: todayRange.periodEndDate.getHours(),
-              minute: todayRange.periodEndDate.getMinutes(),
+            moment(this.todayRange.periodEndDate).set({
+              hour: this.todayRange.periodEndDate.getHours(),
+              minute: this.todayRange.periodEndDate.getMinutes(),
             }),
           ],
           ThisWeek: [
@@ -129,9 +150,9 @@ export class OverviewComponent implements OnInit, AfterViewInit {
             hour: 0,
             minute: 0,
           }),
-          enddate: moment(todayRange.periodEndDate).set({
-            hour: todayRange.periodEndDate.getHours(),
-            minute: todayRange.periodEndDate.getMinutes(),
+          enddate: moment(this.todayRange.periodEndDate).set({
+            hour: this.todayRange.periodEndDate.getHours(),
+            minute: this.todayRange.periodEndDate.getMinutes(),
           }),
           timePickerSeconds: "false",
           opens: "center",
@@ -154,36 +175,67 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     this.storage.get("currentUser").subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
+        console.log(this.currentStaffMember);
       } else {
         this.staffMemberService
           .getCurrentStaffMember()
           .subscribe((res) => (this.currentStaffMember = res));
       }
     });
-    this.statsUpdatedString = moment(this.statsUpdated).format(
-      "MMMM DD YYYY HH:mm A"
-    );
+    this.filtersForm = this.fb.group({
+      selectedRoleOption: [roleOptions[0]],
+    });
+
+    this.pieChartData = {
+      labels: ["bisi", "bisi2"],
+      datasets: [{ data: [8, 10] }],
+    };
   }
   ngAfterViewInit(): void {}
 
-  ngOnInit(): void {
-    this.filtersForm = this.fb.group({
-      period: [],
-    });
+  ngAfterViewChecked(): void {
+    if (this.loadControl === false && this.todayRange)
+      this.getDashboardInformation(null);
+  }
 
-    this.filtersForm.valueChanges.subscribe((data) => {
-      if (data?.period === "Custom") {
-        console.log("custom...");
-        this.showCustomDates = true;
-      } else {
-        let test = this.periodService.getInterval(data.period);
-        console.log({ test });
-      }
-    });
+  ngOnInit(): void {
+    this.filtersForm.valueChanges.subscribe((data) => {});
+  }
+
+  getDashboardInformation(event: any) {
+    console.log(event);
+    this.loadControl = true;
+    this.staffMemberService
+      .getDashboardData(
+        this.filtersForm.get("selectedRoleOption").value?.value,
+        this.selectedRole?.value,
+        moment(
+          this.daterange.start
+            ? this.daterange.start
+            : this.todayRange.periodStartDate
+        ).format("YYYY-MM-DD HH:mm"),
+        moment(
+          this.daterange.end
+            ? this.daterange.end
+            : this.todayRange.periodEndDate
+        ).format("YYYY-MM-DD HH:mm"),
+        this.currentStaffMember?.staffMemberId
+      )
+      .toPromise()
+      .then((res) => {
+        console.log(res);
+        if (res) {
+          this.statsUpdated = new Date(res.result.statusDate);
+          this.statsUpdatedString = moment(res.result.statusDate).format(
+            "MMMM DD YYYY HH:mm A"
+          );
+        }
+      });
   }
 
   getSelectedOwner(event: any) {
-    // this.currentStaffMember = event;
+    this.currentStaffMember = event;
+    this.getDashboardInformation(null);
     console.log(event);
   }
 
@@ -199,6 +251,7 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     this.daterange.start = moment().subtract(5, "minutes");
     this.daterange.end = moment();
     this.daterange.label = value.label;
+    this.getDashboardInformation(null);
   }
 
   cancel() {
@@ -207,6 +260,36 @@ export class OverviewComponent implements OnInit, AfterViewInit {
 
   setTargets() {
     this.router.navigate(["targets"], { relativeTo: this.route });
+  }
+
+  selectOptionClass(option: any): string {
+    if (option) {
+      switch (+option.value) {
+        case enumDepartments.lettings:
+          return "fas fa-shipping-fast";
+        case enumDepartments.sales:
+          return "fas fa-store-alt";
+        case enumDepartments.corporate_services:
+          return "fas fa-briefcase";
+        default:
+          break;
+      }
+    }
+  }
+
+  selectRoleClass(option: any): string {
+    if (option) {
+      switch (+option.value) {
+        case LeaderboardRankingViewEnum.ManagerView:
+          return "fas fa-user-tie";
+        case LeaderboardRankingViewEnum.BrokerView:
+          return "fas fa-hand-holding-usd";
+        case LeaderboardRankingViewEnum.NegView:
+          return "fas fa-people-arrows";
+        default:
+          break;
+      }
+    }
   }
 
   onDateChange(value: Date): void {

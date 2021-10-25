@@ -9,20 +9,20 @@
   <div class="card__body">
     <form [formGroup]="noteForm">
       <fieldset [ngClass]="{'invalid': showErrorMessage}">
-        <textarea #note class="form-control" name="note" id="note" cols="30" rows="5"
-          placeholder="Please give as much detail as possible."
-          formControlName="text" [attr.disabled]="isDisabled ? true : null"></textarea>
+        <textarea #note class="form-control p-2" name="note" id="note" cols="30" rows="5"
+          placeholder="Please give as much detail as possible." formControlName="text"
+          [attr.disabled]="isDisabled ? true : null"></textarea>
         <p class="message message--negative">Note is required</p>
       </fieldset>
 
       <fieldset>
         <span class="checkbox checkbox--inline">
           <span>
-            <input type="checkbox" id="important" formControlName="isImportant">
+            <input class="p-2" type="checkbox" id="important" formControlName="isImportant">
             <label for="important">Set as important</label>
           </span>
           <span>
-            <input type="checkbox" id="topPinned" formControlName="isPinned">
+            <input class="p-2" type="checkbox" id="topPinned" formControlName="isPinned">
             <label for="topPinned">Pin to top</label>
           </span>
         </span>

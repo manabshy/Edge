@@ -35,8 +35,8 @@ import {
   ContactNote,
   PersonSummaryFigures,
   BasicContactGroup,
-} from "src/app/contactgroups/shared/contact-group";
-import { ContactGroupsService } from "src/app/contactgroups/shared/contact-groups.service";
+} from "src/app/contact-groups/shared/contact-group";
+import { ContactGroupsService } from "src/app/contact-groups/shared/contact-groups.service";
 import { Person, PersonProperty } from "src/app/shared/models/person";
 import { ToastrService } from "ngx-toastr";
 import { takeUntil, debounceTime, map } from "rxjs/operators";
@@ -474,7 +474,15 @@ export class LeadEditComponent
           this.lead?.closedById
             ? (this.isLeadClosed = true)
             : (this.isLeadClosed = false);
-          this.setCanEditFlag();
+
+          let changedListingType = null;
+          if (
+            this.leadSearchInfo?.listingType == ListingType.MyLeads &&
+            this.lead.ownerId != this.currentStaffMember?.staffMemberId
+          ) {
+            changedListingType = ListingType.OtherUserLeads;
+          }
+          this.setCanEditFlag(changedListingType);
 
           this.setLeadTypes(this.lead);
           this.setIsOwnerFlag();
@@ -495,6 +503,7 @@ export class LeadEditComponent
     if (this.isOwnerChanged) {
       if (this.lead?.ownerId === this.currentStaffMember?.staffMemberId) {
         this.isOwner = true;
+        this.isMyLead = true;
       } else {
         this.isOwner = false;
         this.canEditLead = false;
@@ -504,8 +513,13 @@ export class LeadEditComponent
     }
   }
 
-  private setCanEditFlag() {
-    const listingType = this.leadSearchInfo?.listingType ?? 1;
+  private setCanEditFlag(changedListingType?: ListingType) {
+    const listingType = changedListingType
+      ? changedListingType
+      : this.leadSearchInfo?.listingType ?? 1;
+    if (this.lead?.ownerId === this.currentStaffMember?.staffMemberId) {
+      this.isMyLead = true;
+    }
     console.log(this.leadSearchInfo, "info", listingType, "listing type");
     switch (true) {
       case this.isMyLead && !this.isLeadClosed:
@@ -893,12 +907,29 @@ export class LeadEditComponent
   }
 
   viewRegister() {
-    this.isSubmitting = true;
-    this.validationService.clearFormValidators(
-      this.leadEditForm,
-      this.formErrors
-    );
-    this.router.navigateByUrl("leads-register");
+    if (
+      this.isNewLead &&
+      this.leadsService.previousLeadQueryParam &&
+      this.leadsService.previousLeadQueryParam.value
+    ) {
+      const leadSearchInfo =
+        this.leadsService.previousLeadQueryParam.value["leadSearchInfo"];
+      const leadId = JSON.parse(leadSearchInfo)["startLeadId"];
+
+      localStorage.setItem("currentUrl", this.router.url);
+      this.router.navigateByUrl("/", { skipLocationChange: true }).then(() =>
+        this.router.navigate(["leads-register/edit", leadId], {
+          queryParams: this.leadsService.previousLeadQueryParam.value,
+        })
+      );
+    } else {
+      this.isSubmitting = true;
+      this.validationService.clearFormValidators(
+        this.leadEditForm,
+        this.formErrors
+      );
+      this.router.navigateByUrl("leads-register");
+    }
   }
 
   getPersonNotes() {
@@ -1013,17 +1044,16 @@ export class LeadEditComponent
     }
   }
 
-  navigateToNewValuation(propertyId: number, lastKnownOwnerId?: number) {
+  navigateToNewValuation(propertyId: number) {
+    event.stopPropagation();
     this.router.navigate(["valuations-register/detail/", 0, "edit"], {
       queryParams: {
         propertyId: propertyId,
-        lastKnownOwnerId: lastKnownOwnerId,
         isNewValuation: true,
         isFromProperty: true,
+        lastKnownOwnerId: this.personId,
       },
     });
-
-    console.log("related prop", propertyId);
   }
 
   getSelectedItem(item: any) {

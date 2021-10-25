@@ -12,7 +12,6 @@
 
             </ng-template>
           </ng-select> -->
-
           <fieldset class="inline-child">
             <app-staff-member-finder class="appWrapper"
               [staffMemberId]="staffMemberId?staffMemberId:currentStaffMember?.staffMemberId"
@@ -52,7 +51,7 @@
               </li>
               <li (click)="$event.stopPropagation()">
                 <label class="small" for="dateFrom">Go to Date</label>
-                <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+                <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm p-2"
                   [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
                   bsDatepicker #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker'
                   (bsValueChange)="onDateChange($event)" formControlName="dateFilter">
@@ -92,8 +91,7 @@
             </svg>
           </button>
         </li>
-        <!-- Hide create event for release 22/04/21 -->
-        <li class="calNav__add" *ngIf="false">
+        <li class="calNav__add">
           <a class="btn btn--positive" [routerLink]="['/diary/edit', 0]" [queryParams]="{isNewEvent: true}"
             *ngIf="!myCalendarOnly" aria-label="Add event"><svg aria-hidden="true" width="64" height="64"
               viewBox="0 0 64 64" class="icon icon--s icon--onLeft">

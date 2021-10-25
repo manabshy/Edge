@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
+import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Company, BasicContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { Company, BasicContactGroup } from 'src/app/contact-groups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
 
 @Component({
   selector: 'app-company-detail',
-  templateUrl: './company-detail.component.html',
-  styleUrls: ['./company-detail.component.scss']
+  templateUrl: './company-detail.component.html'
 })
 export class CompanyDetailComponent implements OnInit {
   companyDetails: Company;

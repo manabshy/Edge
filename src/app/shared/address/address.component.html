@@ -1,5 +1,5 @@
 <form [formGroup]="addressForm" (keydown.enter)="$event.preventDefault()" autocompleteOff>
-  <fieldset *ngIf="!(propertyDetails || isNewProperty)">
+  <fieldset class="mb-3" *ngIf="!(propertyDetails || isNewProperty)">
     <label for="country">Country</label>
     <span class="select">
       <select id="country" formControlName="countryId">
@@ -8,10 +8,10 @@
     </span>
   </fieldset>
 
-  <fieldset [ngClass]="{'invalid':isRequired}">
+  <fieldset class="mb-3" [ngClass]="{'invalid':isRequired}">
     <label for="property">Find Address (Postcode)</label>
     <span class="joined">
-      <input type="search" id="fullAddress" class="form-control" placeholder=""
+      <input type="search" id="fullAddress" class="form-control p-2" placeholder=""
         [ngClass]="{'border border-warning': personDetails && !addressLines.value && !enterAddressManually, 'is-invalid':addressError}"
         formControlName="fullAddress" (keyup.enter)="$event.stopPropagation(); searchAddress()">
       <div class="btn--container">
@@ -31,10 +31,10 @@
   </fieldset>
 
   <ng-container *ngIf="propertyDetails || addressLines.value || enterAddressManually">
-    <fieldset *ngIf="!(propertyDetails || isNewProperty)"
+    <fieldset class="mb-3" *ngIf="!(propertyDetails || isNewProperty)"
       [ngClass]="{'invalid': personDetails && !addressLines.value && enterAddressManually}">
       <label for="postcode">Address Lines</label>
-      <textarea type="textarea" formControlName="addressLines" id="addressLines"
+      <textarea class="p-2" type="textarea" formControlName="addressLines" id="addressLines"
         (keydown.enter)="$event.stopPropagation()" rows="5" cols="10" maxlength="500"
         [ngClass]="{'border border-warning': personDetails && !addressLines.value && enterAddressManually}"></textarea>
       <p class="message message--info" *ngIf="personDetails && !addressLines.value && enterAddressManually"><svg
@@ -52,35 +52,36 @@
       <div class="inline-parent">
         <fieldset class="inline-child">
           <label for="postcode">Flat Number</label>
-          <input type="text" formControlName="flatNumber" id="flatNumber" />
+          <input class="p-2" type="text" formControlName="flatNumber" id="flatNumber" />
         </fieldset>
         <fieldset class="inline-child">
           <label for="postcode">House Number</label>
-          <input type="text" formControlName="houseNumber" id="houseNumber" />
+          <input class="p-2" type="text" formControlName="houseNumber" id="houseNumber" />
         </fieldset>
         <fieldset class="inline-child inline-child--grid-5">
           <label for="postcode">Building Name</label>
-          <input type="text" formControlName="houseBuildingName" id="houseBuildingName" />
+          <input class="p-2" type="text" formControlName="houseBuildingName" id="houseBuildingName" />
         </fieldset>
       </div>
-      
-      <fieldset>
+
+      <fieldset class="mb-3">
         <label for="postcode">Street</label>
-        <input type="text" formControlName="streetName" id="streetName" />
+        <input class="p-2" type="text" formControlName="streetName" id="streetName" />
       </fieldset>
-      <fieldset>
+      <fieldset class="mb-3">
         <label for="postcode">Address Line 2</label>
-        <input type="text" formControlName="addressLine2" id="addressLine2" />
+        <input class="p-2" type="text" formControlName="addressLine2" id="addressLine2" />
       </fieldset>
-      <fieldset>
+      <fieldset class="mb-3">
         <label for="postcode">Town</label>
-        <input type="text" formControlName="town" id="town" />
+        <input class="p-2" type="text" formControlName="town" id="town" />
       </fieldset>
     </ng-container>
 
-    <fieldset *ngIf="showPostCode || propertyDetails" [ngClass]="{'invalid': personDetails && !postCode.value}">
+    <fieldset class="mb-3" *ngIf="showPostCode || propertyDetails"
+      [ngClass]="{'invalid': personDetails && !postCode.value}">
       <label for="postcode">Postcode</label>
-      <input type="text" id="postcode" formControlName="postCode">
+      <input class="p-2" type="text" id="postcode" formControlName="postCode">
       <!-- <span class="invalid-feedback">{{formErrors.postCode}}</span> -->
       <p class="message message--info" *ngIf="personDetails && !postCode.value"><svg aria-hidden="true" width="64"
           height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
@@ -96,7 +97,8 @@
 </form>
 
 <!-- Address Lookup Modal -->
-<p-dialog header="Address Lookup" [(visible)]="foundAddress" [modal]="true" [draggable]="false" class="modal--small modal--hasFooter">
+<p-dialog header="Address Lookup" [(visible)]="foundAddress" [modal]="true" [draggable]="false"
+  class="modal--small modal--hasFooter">
   <fieldset>
     <div class="table">
       <table class="table--mobile table--rowHover">
@@ -110,7 +112,8 @@
             </td>
           </tr>
           <tr *ngFor="let address of foundAddress?.Items"
-            (click)="address?.Action ? findAddress(searchTermBK, address?.Id) :  retrieveAddress(address?.Id)">
+            (click)="address?.Action ? findAddress(searchTermBK, address?.Id) :  retrieveAddress(address?.Id)"
+            class="cursor-pointer">
             <td>
               <span class="cell-content" *ngIf="!address?.Error">
                 {{address?.Text}}, {{address?.Description}}
@@ -123,14 +126,23 @@
             </td>
           </tr>
         </tbody>
-      </table>    
+      </table>
     </div>
   </fieldset>
-  
+
   <footer class="footer footer--modal">
     <span class="btn--container">
-      <a href (click)="$event.preventDefault()" class="btn btn--alignRight btn--ghost" *ngIf="backToAddressesList" (click)="findAddress(searchTermBK, '')"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M63 28.6H14.2l12.3-12.3 -4.9-4.9L1 32l20.7 20.7 4.9-4.9L14.2 35.4H63V28.6z"></path></svg>Back</a>
-      <span (click)="enterAddress($event)"><a href (click)="$event.preventDefault()" class="btn btn--ghost"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" /><path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" /></svg> Enter Manually</a></span>
+      <a href (click)="$event.preventDefault()" class="btn btn--alignRight btn--ghost" *ngIf="backToAddressesList"
+        (click)="findAddress(searchTermBK, '')"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+          class="icon icon--s icon--onLeft">
+          <path d="M63 28.6H14.2l12.3-12.3 -4.9-4.9L1 32l20.7 20.7 4.9-4.9L14.2 35.4H63V28.6z"></path>
+        </svg>Back</a>
+      <span (click)="enterAddress($event)"><a href (click)="$event.preventDefault()" class="btn btn--ghost"><svg
+            aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+            <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
+            <path class="plus-vertical"
+              d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
+          </svg> Enter Manually</a></span>
     </span>
   </footer>
 </p-dialog>

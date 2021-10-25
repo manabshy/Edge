@@ -4,13 +4,12 @@
       <div [ngClass]="{'col-sm-8 col-xl-6 offset-sm-2': !fullWidth}">
         <ng-container *ngIf="!isLabelHidden">
           <ng-container *ngIf="!label; else givenLabel "><label class="small">Signers</label>
-        </ng-container>
-        <ng-template #givenLabel><label *ngIf="!hideLabel"
-            class="small">{{label}}</label>
-        </ng-template>
+          </ng-container>
+          <ng-template #givenLabel><label *ngIf="!hideLabel" class="small">{{label}}</label>
+          </ng-template>
         </ng-container>
         <div class="form-group d-flex d-sm-block" *ngIf="selectedSignerDetails && !isMultiple">
-          <input type="hidden" #selectedSignerInput id="selectedSigner" formControlName="selectedSigner">
+          <input class="p-2" type="hidden" #selectedSignerInput id="selectedSigner" formControlName="selectedSigner">
           <a class="small mobile-btn" *ngIf="selectedSignerDetails"
             [routerLink]="['/contact-centre/detail/0/people/', selectedSignerDetails?.contactGroupId]">
             {{selectedSignerDetails?.contactNames}}
@@ -19,7 +18,7 @@
               <span class="badge badge-pill badge-primary">{{selectedSignerDetails?.companyName}}</span>
             </ng-container>
           </a>
-          <a class="small mobile-btn" *ngIf="!selectedSignerDetails" >
+          <a class="small mobile-btn" *ngIf="!selectedSignerDetails">
             {{selectedSignerDetails?.contactNames}}
             <ng-container *ngIf="selectedSignerDetails?.companyName">
               <br>
@@ -36,17 +35,16 @@
         </div>
         <ng-container *ngIf="isMultiple && selectedSigners">
           <div class="form-group d-flex d-sm-block" *ngFor="let signer of selectedSigners">
-            <input type="hidden" #selectedSignerInput
-            id="selectedSigner" formControlName="selectedSigner">
-            <a class="small mobile-btn"
-              [routerLink]="['/contact-centre/detail/0/people/', signer?.contactGroupId]">
+            <input type="hidden" #selectedSignerInput id="selectedSigner" formControlName="selectedSigner">
+            <a class="small mobile-btn" [routerLink]="['/contact-centre/detail/0/people/', signer?.contactGroupId]">
               {{signer?.contactNames}}
             </a>
             <button class="btn btn-light btn-sm ml-2" *ngIf="isMultiple" type="button" aria-label="remove"
               (click)="remove(signer?.contactGroupId,true)">
               Remove
             </button>
-            <small *ngIf="!signer.phoneNumber && isTelRequired" class="text-danger ml-2">Telephone number for contact is required</small>
+            <small *ngIf="!signer.phoneNumber && isTelRequired" class="text-danger ml-2">Telephone number for contact is
+              required</small>
           </div>
         </ng-container>
       </div>
@@ -54,17 +52,25 @@
     <div class="row">
       <div class="col-sm-3 offset-sm-2" [hidden]="!isSearchVisible">
         <div class="form-group">
-          <button type="button" class="btn btn--info" [ngClass]="{'is-invalid': contactRequiredWarning}" (click)="setSigners()">
-            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft icon--s"><path class="horizontal" d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"></path><path class="vertical" d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"></path></svg>
+          <button type="button" class="btn btn--info" [ngClass]="{'is-invalid': contactRequiredWarning}"
+            (click)="setSigners()">
+            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft icon--s">
+              <path class="horizontal"
+                d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z">
+              </path>
+              <path class="vertical"
+                d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z">
+              </path>
+            </svg>
             <ng-container *ngIf="!label; else givenLabel3">Signer</ng-container>
-              <ng-template #givenLabel3>{{label}}</ng-template>
+            <ng-template #givenLabel3>{{label}}</ng-template>
           </button>
           <div class="invalid-feedback w-100">{{contactRequiredWarning}}</div>
         </div>
       </div>
       <div class="col-12"></div>
       <div class="col-sm-8 col-xl-6 offset-sm-2">
-        <div class="off-canvas" [hidden]="!signers" (click)="signers = null">
+        <div class="off-canvas" style="padding-left: 16px;" [hidden]="!signers" (click)="signers = null">
           <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
             <h4 class="page-title text-left pt-3">
               <ng-container *ngIf="!label; else givenLabel4 ">Signer</ng-container>
@@ -74,12 +80,11 @@
               </button>
             </h4>
             <div class="form-group">
-              <label for="searchTerm"
-                  class="small">Find</label>
+              <label for="searchTerm" class="small">Find</label>
               <div class="input-group input-group-sm">
-                <input #searchSignerInput type="search" id="searchTerm" class="form-control" formControlName="searchTerm"
-                  (keydown.enter)="searchSigner()" [ngbTypeahead]="suggestions" [focusFirst]="false"
-                  (selectItem)="selectedSuggestion($event)">
+                <input #searchSignerInput type="search" id="searchTerm" class="form-control p-2"
+                  formControlName="searchTerm" (keydown.enter)="searchSigner()" [ngbTypeahead]="suggestions"
+                  [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
                 <div class="input-group-append">
                   <button type="button" class="btn btn-secondary" (click)="searchSigner()">Search</button>
                 </div>
@@ -91,16 +96,17 @@
               <i class="fas fa-plus mr-2"></i> New Contact Group
             </a>
             <app-subnav *ngIf='hasBeenSearched'>
-              <app-subnav-item *ngFor="let signer of signers" (click)="selectSigner(signer.contactGroupId); signers=null">
+              <app-subnav-item *ngFor="let signer of signers"
+                (click)="selectSigner(signer.contactGroupId); signers=null">
                 <div class="row">
-                  <div class="col-sm-4">
+                  <div class="col-sm-4" style="margin-right: 4px;">
                     <b [innerHTML]="signer.contactNames | highlight : signerFinderForm.value.searchTerm"
                       [ngClass]="{'mr-2': signer?.companyName}"></b>
                     <ng-container *ngIf="signer?.companyName">
                       <span class="badge badge-pill badge-primary">{{signer?.companyName}}</span>
                     </ng-container>
                   </div>
-                  <div class="col-sm-4">
+                  <div class="col-sm-4" style="margin-right: 8px;">
                     {{signer?.phoneNumber}}
                   </div>
                   <div class="col-sm-4">
@@ -113,7 +119,7 @@
                 <ng-template #givenLabel2>{{label}}</ng-template>
                 found
               </div>
-              <a [routerLink]="['/contact-centre/detail/0/people', 0]"  *ngIf="!isMultiple"
+              <a [routerLink]="['/contact-centre/detail/0/people', 0]" *ngIf="!isMultiple"
                 [queryParams]="{isNewContactGroup: true, isSigner: true, signer: signerFinderForm.get('searchTerm').value}"
                 (click)="createNewSigner()" class="list-group-item list-group-item-action text-center py-4">
                 <span class="btn-link">

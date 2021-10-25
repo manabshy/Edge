@@ -1,6 +1,6 @@
 import { Address } from 'src/app/shared/models/address';
 import { Property, PropertyType, PropertyStyle, MapCentre, Photo, PropertySummaryFigures } from './property';
-import { Signer } from 'src/app/contactgroups/shared/contact-group';
+import { Signer } from 'src/app/contact-groups/shared/contact-group';
 
 export const MockProperty = {
   propertyId: 40171,

@@ -1,9 +1,35 @@
 <form [formGroup]="filtersForm">
   <div class="grid row">
-    <div class="grid grid--24 row">
-      <input type="text" name="daterangeInput" daterangepicker (selected)="selectedDate($event, daterange)" />
+    <div class="grid grid--1" style="margin-top:4px">
+      <fieldset>
+        <p-dropdown [options]="roleOptions" formControlName="selectedRoleOption"
+          (ngModelChange)="getDashboardInformation($event)" optionLabel="name">
+          <ng-template pTemplate="selectedItem">
+            <div *ngIf="filtersForm.get('selectedRoleOption').value">
+              <div class="row">
+                <i [class]="selectOptionClass(filtersForm.get('selectedRoleOption').value)"
+                  style="padding-right: 8px;font-size: large;color:#4DA685;"></i>
+                <p>{{filtersForm.get('selectedRoleOption').value.name}}</p>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template let-option pTemplate="item">
+            <div>
+              <div class="row">
+                <i [class]="selectOptionClass(option)" style="padding-right: 8px;font-size: initial;"></i>
+                <p>{{option?.name}}</p>
+              </div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </fieldset>
     </div>
-    <div class="grid grid--25 grid--dividerLeft">
+
+    <div class="grid grid--3 row  grid--dividerLeft">
+      <input class="p-2" type="text" name="daterangeInput" daterangepicker (selected)="selectedDate($event, daterange)"
+        (ngModelChange)="getDashboardInformation($event)" />
+    </div>
+    <div class="grid grid--24 grid--dividerLeft">
       <ol class="header-navigation">
         <li class="profile">
           <span class="circle">
@@ -19,8 +45,10 @@
           </span>
         </li>
         <fieldset class="inline-child">
-          <app-staff-member-finder class="appWrapper" [placeholder]="searchPlaceHolder" [isFullStaffMember]="true"
-            (selectedStaffMember)="getSelectedOwner($event)"></app-staff-member-finder>
+          <app-staff-member-finder class="appWrapper" [deparmentId]="filtersForm.get('selectedRoleOption').value?.value"
+            [placeholder]="searchPlaceHolder" [isFullStaffMember]="true"
+            (selectedStaffMember)="getSelectedOwner($event)" [listType]="'dashboardMembers'" [isDashboardMember]="true">
+          </app-staff-member-finder>
         </fieldset>
       </ol>
     </div>
@@ -45,9 +73,27 @@
     </div>
     <div class="unit__body">
       <div class="grid grid--10">
-        <fieldset class="inline-child">
-          <app-staff-member-finder class="appWrapper" [placeholder]="searchPlaceHolder"
-            (selectedStaffMemberId)="getSelectedOwner($event)"></app-staff-member-finder>
+        <fieldset>
+          <p-dropdown [options]="roles" [(ngModel)]="selectedRole" (ngModelChange)="getDashboardInformation($event)"
+            optionLabel="name">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedRole">
+                <div class="row">
+                  <i [class]="selectRoleClass(selectedRole)"
+                    style="padding-right: 8px;font-size: large;color:#4DA685;"></i>
+                  <p>{{selectedRole.name}}</p>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template let-option pTemplate="item">
+              <div>
+                <div class="row">
+                  <i [class]="selectRoleClass(option)" style="padding-right: 8px;font-size: initial;"></i>
+                  <p>{{option?.name}}</p>
+                </div>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </fieldset>
         <ol class="list list--rankings">
           <li class="hoverPointer" *ngFor="let member of members$|async; let position=index"
@@ -211,7 +257,7 @@
       Header
     </div>
     <div class="unit__body">
-      Body
+
     </div>
     <div class="unit__footer">
       Footer
@@ -219,35 +265,19 @@
   </div>
 
   <div class="unit unit--height2 unit--width3">
-    <div class="unit__header">
-      Header
-    </div>
     <div class="unit__body">
-      Body
+      <p-panel header="Deneme">
+        <p-chart type="pie" [data]="pieChartData"></p-chart>
+      </p-panel>
     </div>
     <div class="footer footer--modal">
       <div class="btn--container">
         <label for="statsUpdated">Stats Updated</label>
-        <input type="text" id="statsUpdated" placeholder="dd/mm/yyyy" name="statsUpdated" [(ngModel)]="statsUpdated"
+        <input class="p-2" type="text" id="statsUpdated" placeholder="dd/mm/yyyy" name="statsUpdated"
+          [(ngModel)]="statsUpdated"
           [bsConfig]="{ useUtc: false, dateInputFormat: 'MMMM DD YYYY HH:mm A', customTodayClass: 'font-weight-bold'}"
           bsDatepicker [attr.disabled]="false" #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker'>
       </div>
     </div>
   </div>
 </div>
-
-
-
-<!-- Custom Date Picker Modal -->
-<p-dialog header="Select date range" [(visible)]="showCustomDates" [modal]="true" [draggable]="false"
-  class="modal--medium modal--hasFooter">
-  <div> <input type="text" placeholder="Custom date"
-      [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold',isAnimated: true}"
-      bsDaterangepicker (bsValueChange)="onDateChange($event)"></div>
-  <footer class="footer footer--modal">
-    <div class="btn--container">
-      <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
-      <button class="btn btn--positive" type="submit" (click)="getCustomDate()">Apply date range</button>
-    </div>
-  </footer>
-</p-dialog>

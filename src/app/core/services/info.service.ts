@@ -1,44 +1,43 @@
-import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { shareReplay, tap, map } from 'rxjs/operators';
-import { AppConstants } from '../shared/app-constants';
-import { HttpClient } from '@angular/common/http';
-import { StorageMap } from '@ngx-pwa/local-storage';
-import { ReportingMonth } from 'src/app/dashboard/shared/dashboard';
+import { Injectable } from "@angular/core";
+import { Observable, BehaviorSubject } from "rxjs";
+import { shareReplay, tap, map } from "rxjs/operators";
+import { AppConstants } from "../shared/app-constants";
+import { HttpClient } from "@angular/common/http";
+import { StorageMap } from "@ngx-pwa/local-storage";
+import { ReportingMonth } from "src/app/dashboard/shared/dashboard";
 
 const CACHE_SIZE = 1;
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class InfoService {
   private infoDetail$: Observable<DropdownListInfo>;
   infoData: any;
   info: DropdownListInfo;
-  constructor(private http: HttpClient, private storage: StorageMap) { }
+  constructor(private http: HttpClient, private storage: StorageMap) {}
 
   getDropdownListInfo(): Observable<DropdownListInfo> {
     if (!this.infoDetail$) {
-      this.infoDetail$ = this.requestDropdownListInfo().pipe(shareReplay(CACHE_SIZE));
+      this.infoDetail$ = this.requestDropdownListInfo().pipe(
+        shareReplay(CACHE_SIZE)
+      );
     }
 
     return this.infoDetail$;
   }
 
-
   private requestDropdownListInfo(): Observable<DropdownListInfo> {
-    return this.http.get<any>(AppConstants.baseInfoUrl)
-      .pipe(
-        map(response => response),
-        tap(data => {
-          if (data) {
-            this.infoData = data.result;
-            this.storage.set('info', this.infoData).subscribe();
-            this.storage.set('cacheStatus', data.cacheStatus).subscribe();
-          }
-        })
-      );
+    return this.http.get<any>(AppConstants.baseInfoUrl).pipe(
+      map((response) => response),
+      tap((data) => {
+        if (data) {
+          this.infoData = data.result;
+          this.storage.set("info", this.infoData).subscribe();
+          this.storage.set("cacheStatus", data.cacheStatus).subscribe();
+        }
+      })
+    );
   }
-
 }
 
 export interface DropdownListInfo {
@@ -69,6 +68,10 @@ export interface DropdownListInfo {
   diaryEventTypes: InfoDetail[];
   referralCompanies: InfoDetail[];
   reportingMonths: ReportingMonth[];
+  section21Statuses: InfoDetail[];
+  associations: InfoDetail[];
+  propertyFloors: InfoDetail[];
+  valuationCancellationReasons: InfoDetail[];
 }
 
 export interface InfoDetail extends LeadTypeInfo {

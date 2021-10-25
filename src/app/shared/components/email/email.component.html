@@ -1,149 +1,158 @@
-<form [formGroup]="emailForm" (ngSubmit)="send()" autocomplete="off">
-  <div class="row">
-    <div class="grid grid--25">
-      <fieldset>
-        <label for="senderEmail">From</label>
-        <span class="radio">
-          <span>
-            <input type="radio" id="individualEmail" [value]="currentStaffMember?.email" name="senderEmail"
-              formControlName="senderEmail" data-cy="individualEmail"
-              [checked]="currentStaffMember?.email ? 'checked' : null">
-            <label for="individualEmail">{{currentStaffMember?.email}}</label>
-          </span>
-          <span>
-            <input type="radio" id="departmentEmail" [value]="currentStaffMember?.activeDepartments[0]?.emailAddress"
-              name="senderEmail" formControlName="senderEmail">
-            <label for="departmentEmail">{{currentStaffMember?.activeDepartments[0]?.emailAddress}}</label>
-          </span>
-        </span>
-      </fieldset>
-      <div class="inline-parent">
-        <fieldset class="inline-child" [ngClass]="{invalid: formErrors?.recipientEmail}">
-          <label for="recipientEmail">To (External)</label>
-          <ng-container *ngIf="personOnly; else group">
-            <p-multiSelect [options]="person?.emailAddresses" [filter]="false" [showHeader]="false" [ngClass]="{'txt--negative': noEmailContact}"
-              formControlName="recipientEmail" optionLabel="email" optionValue="email"
-              defaultLabel="Select recipient email" crollHeight="250px" display="chip" (onClick)="showButton=true">
-              <ng-template let-emailAddress pTemplate="item">
-                <span [ngClass]="{'txt--negative': noEmailContact}">
-                  <ng-container *ngIf="emailAddress?.isPreferred"> <svg aria-hidden="true" width="64" height="64"
-                      viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
-                      <polygon
-                        points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 ">
-                      </polygon>
-                    </svg>
-                  </ng-container>{{emailAddress?.email}}
-                </span>
-              </ng-template>
-            </p-multiSelect>
-          </ng-container>
-          <ng-template #group>
-            <p-multiSelect [options]="groupedPeople" [group]="true" [filter]="false" [showHeader]="false"
-              formControlName="recipientEmail" optionLabel="name" optionValue="value"
-              defaultLabel="Select recipient email" crollHeight="250px" display="chip" (onClick)="showButton=true">
+<div class="w-auto md:w-180">
+
+  <form [formGroup]="emailForm" (ngSubmit)="send()" autocomplete="off">
+    <div class="row">
+      <div class="grid grid--25">
+        <div>
+          <fieldset class="mb-3">
+            <label for="senderEmail">From</label>
+            <span class="radio">
+              <span>
+                <input type="radio" id="individualEmail" [value]="currentStaffMember?.email" name="senderEmail"
+                  formControlName="senderEmail" data-cy="individualEmail"
+                  [checked]="currentStaffMember?.email ? 'checked' : null">
+                <label for="individualEmail">{{currentStaffMember?.email}}</label>
+              </span>
+              <span>
+                <input type="radio" id="departmentEmail"
+                  [value]="currentStaffMember?.activeDepartments[0]?.emailAddress" name="senderEmail"
+                  formControlName="senderEmail">
+                <label for="departmentEmail">{{currentStaffMember?.activeDepartments[0]?.emailAddress}}</label>
+              </span>
+            </span>
+          </fieldset>
+
+          <fieldset class="mb-3" [ngClass]="{invalid: formErrors?.recipientEmail}">
+            <label for="recipientEmail">To (External)</label>
+            <ng-container *ngIf="personOnly; else group">
+              <p-multiSelect [options]="person?.emailAddresses" [filter]="false" [showHeader]="false"
+                [ngClass]="{'txt--negative': noEmailContact}" formControlName="recipientEmail" optionLabel="email"
+                optionValue="email" defaultLabel="Select recipient email" crollHeight="250px" display="chip"
+                (onClick)="showButton=true">
+                <ng-template let-emailAddress pTemplate="item">
+                  <span [ngClass]="{'txt--negative': noEmailContact}">
+                    <ng-container *ngIf="emailAddress?.isPreferred"> <svg aria-hidden="true" width="64" height="64"
+                        viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                        <polygon
+                          points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 ">
+                        </polygon>
+                      </svg>
+                    </ng-container>{{emailAddress?.email}}
+                  </span>
+                </ng-template>
+              </p-multiSelect>
+            </ng-container>
+            <ng-template #group>
+              <p-multiSelect [options]="groupedPeople" [group]="true" [filter]="false" [showHeader]="false"
+                formControlName="recipientEmail" optionLabel="name" optionValue="value"
+                defaultLabel="Select recipient email" crollHeight="250px" display="chip" (onClick)="showButton=true">
+                <ng-template let-group pTemplate="group">
+                  <div class="p-d-flex p-ai-center">
+                    <span>{{group.label}}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </ng-template>
+            <p class="message message--negative">{{formErrors?.recipientEmail}}</p>
+          </fieldset>
+          <!-- <div class="inline-parent">
+
+          <fieldset *ngIf="showButton" class="inline-child"> <button type="button" class="btn btn--info"
+            (click)="isContactGroupFinderVisible=true">Add Contact Group</button></fieldset>
+        </div> -->
+          <fieldset class="mb-3">
+            <label for="ccInternalEmail">Cc (Internal)</label>
+            <p-multiSelect [options]="groupedStaffMembers" [group]="true" [maxSelectedLabels]="1"
+              formControlName="ccInternalEmail" optionLabel="name" optionValue="value" defaultLabel="Select email"
+              crollHeight="250px" display="chip">
               <ng-template let-group pTemplate="group">
                 <div class="p-d-flex p-ai-center">
                   <span>{{group.label}}</span>
                 </div>
               </ng-template>
             </p-multiSelect>
-          </ng-template>
-          <p class="message message--negative">{{formErrors?.recipientEmail}}</p>
-        </fieldset>
-        <!-- <fieldset *ngIf="showButton" class="inline-child"> <button type="button" class="btn btn--info"
-            (click)="isContactGroupFinderVisible=true">Add Contact Group</button></fieldset> -->
+          </fieldset>
+          <fieldset class="mb-3" [ngClass]="{invalid: isInvalidEmail}">
+            <label for="ccExternalEmail">Cc (External)</label>
+            <p-chips inputId="ccExternalEmail" formControlName="ccExternalEmail" separator="," [allowDuplicate]="false"
+              [style]="{'width':'100%'}" (onAdd)="onEmailAdded($event)" (onRemove)="onEmailRemoved($event)"></p-chips>
+            <p class="message message--negative">Email is not valid</p>
+          </fieldset>
+          <fieldset *ngIf="false">
+            <button class="btn btn--info" data-cy="searchProperty" (click)="index=1"><svg aria-hidden="true" width="64"
+                height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+                <path
+                  d="M38.7 23v24c0 6-4.9 10.9-10.9 10.9S16.9 53 16.9 47V12.9c0-3.8 3.1-6.8 6.8-6.8s6.8 3.1 6.8 6.8v28.6c0 1.5-1.2 2.7-2.7 2.7s-2.7-1.2-2.7-2.7V15.7H21v25.9c0 3.8 3.1 6.8 6.8 6.8s6.8-3.1 6.8-6.8V12.9c0-6-4.9-10.9-10.9-10.9S12.8 6.9 12.8 12.9V47c0 8.3 6.7 15 15 15s15-6.7 15-15V23H38.7z" />
+                <path
+                  d="M62 12.7H39.8c-0.7 0-1.2 0.7-1.2 1.3v0.4c0 0.6 0.5 1.3 1.2 1.3H62c0.7 0 1.2-0.7 1.2-1.3v-0.4C63.2 13.4 62.7 12.7 62 12.7z" />
+                <path
+                  d="M52.4 25.4V3.2c0-0.7-0.7-1.2-1.3-1.2h-0.4c-0.6 0-1.3 0.5-1.3 1.2v22.2c0 0.7 0.7 1.2 1.3 1.2h0.4C51.7 26.5 52.4 26 52.4 25.4z" />
+              </svg>Add Attachments</button>
+          </fieldset>
+        </div>
       </div>
-      <fieldset>
-        <label for="ccInternalEmail">Cc (Internal)</label>
-        <p-multiSelect [options]="groupedStaffMembers" [group]="true" [maxSelectedLabels]="1"
-          formControlName="ccInternalEmail" optionLabel="name" optionValue="value" defaultLabel="Select email"
-          crollHeight="250px" display="chip">
-          <ng-template let-group pTemplate="group">
-            <div class="p-d-flex p-ai-center">
-              <span>{{group.label}}</span>
-            </div>
-          </ng-template>
-        </p-multiSelect>
-      </fieldset>
-      <fieldset [ngClass]="{invalid: isInvalidEmail}">
-        <label for="ccExternalEmail">Cc (External)</label>
-        <p-chips inputId="ccExternalEmail" formControlName="ccExternalEmail" separator="," [allowDuplicate]="false"
-          [style]="{'width':'100%'}" (onAdd)="onEmailAdded($event)" (onRemove)="onEmailRemoved($event)"></p-chips>
-        <p class="message message--negative">Email is not valid</p>
-      </fieldset>
-      <fieldset *ngIf="false">
-        <button class="btn btn--info" data-cy="searchProperty" (click)="index=1"><svg aria-hidden="true" width="64"
-            height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
-            <path
-              d="M38.7 23v24c0 6-4.9 10.9-10.9 10.9S16.9 53 16.9 47V12.9c0-3.8 3.1-6.8 6.8-6.8s6.8 3.1 6.8 6.8v28.6c0 1.5-1.2 2.7-2.7 2.7s-2.7-1.2-2.7-2.7V15.7H21v25.9c0 3.8 3.1 6.8 6.8 6.8s6.8-3.1 6.8-6.8V12.9c0-6-4.9-10.9-10.9-10.9S12.8 6.9 12.8 12.9V47c0 8.3 6.7 15 15 15s15-6.7 15-15V23H38.7z" />
-            <path
-              d="M62 12.7H39.8c-0.7 0-1.2 0.7-1.2 1.3v0.4c0 0.6 0.5 1.3 1.2 1.3H62c0.7 0 1.2-0.7 1.2-1.3v-0.4C63.2 13.4 62.7 12.7 62 12.7z" />
-            <path
-              d="M52.4 25.4V3.2c0-0.7-0.7-1.2-1.3-1.2h-0.4c-0.6 0-1.3 0.5-1.3 1.2v22.2c0 0.7 0.7 1.2 1.3 1.2h0.4C51.7 26.5 52.4 26 52.4 25.4z" />
-          </svg>Add Attachments</button>
-      </fieldset>
+      <div class="grid grid--75 grid--dividerLeft">
+        <fieldset class="mb-3 fieldset--width-max" [ngClass]="{invalid: formErrors?.subject}">
+          <label for="subject">Subject</label>
+          <input class="p-2" type="text" id="subject" formControlName="subject">
+          <p class="message message--negative">{{formErrors?.subject}}</p>
+        </fieldset>
+        <fieldset class="mb-3 fieldset--width-max" [ngClass]="{invalid: formErrors?.body}">
+          <p-editor #pEditor formControlName="body"
+            [style]="{'height':'320px', 'font-size':'12px', 'font-family':'poppins'}">
+            <p-header>
+              <span class="ql-formats">
+                <button class="ql-bold" aria-label="Bold"></button>
+                <button class="ql-italic" aria-label="Italic"></button>
+                <button class="ql-underline" aria-label="Underline"></button>
+              </span>
+              <span class="ql-formats">
+                <select class="ql-align">
+                  <option selected></option>
+                  <option value="center"></option>
+                  <option value="right"></option>
+                  <option value="justify"></option>
+                </select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-link" aria-label="Hypertext"></button>
+              </span>
+            </p-header>
+          </p-editor>
+          <p class="message message--negative">{{formErrors?.body}}</p>
+        </fieldset>
+        <fieldset class="mb-3 fieldset--signature">
+          <app-email-signature [signature]="currentStaffMemberSignature"></app-email-signature>
+        </fieldset>
+      </div>
     </div>
-    <div class="grid grid--75 grid--dividerLeft">
-      <fieldset class="fieldset--width-max" [ngClass]="{invalid: formErrors?.subject}">
-        <label for="subject">Subject</label>
-        <input type="text" id="subject" formControlName="subject">
-        <p class="message message--negative">{{formErrors?.subject}}</p>
-      </fieldset>
-      <fieldset class="fieldset--width-max" [ngClass]="{invalid: formErrors?.body}">
-        <p-editor #pEditor formControlName="body" [style]="{'height':'320px', 'font-size':'12px', 'font-family':'poppins'}">
-          <p-header>
-            <span class="ql-formats">
-              <button class="ql-bold" aria-label="Bold"></button>
-              <button class="ql-italic" aria-label="Italic"></button>
-              <button class="ql-underline" aria-label="Underline"></button>
-            </span>
-            <span class="ql-formats">
-              <select class="ql-align">
-                <option selected></option>
-                <option value="center"></option>
-                <option value="right"></option>
-                <option value="justify"></option>
-              </select>
-            </span>
-            <span class="ql-formats">
-              <button class="ql-list" value="ordered"></button>
-              <button class="ql-list" value="bullet"></button>
-            </span>
-            <span class="ql-formats">
-              <button class="ql-link" aria-label="Hypertext"></button>
-            </span>
-          </p-header>
-        </p-editor>
-        <p class="message message--negative">{{formErrors?.body}}</p>
-      </fieldset>
-      <fieldset class="fieldset--signature">
-        <app-email-signature [signature]="currentStaffMemberSignature"></app-email-signature>
-      </fieldset>
-    </div>
-  </div>
 
-  <footer class="footer footer--modal">
-    <div class="btn--container">
-      <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
-      <button type="submit" class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-          class="icon icon--onLeft">
-          <path d="M2.2 57.8l60-25.7L2.2 6.4l0 20L45 32.1 2.1 37.8 2.2 57.8z" />
-        </svg>Send</button>
-    </div>
-  </footer>
-</form>
+    <footer class="footer footer--modal">
+      <div class="btn--container">
+        <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
+        <button type="submit" class="btn btn--positive"><svg aria-hidden="true" width="64" height="64"
+            viewBox="0 0 64 64" class="icon icon--onLeft">
+            <path d="M2.2 57.8l60-25.7L2.2 6.4l0 20L45 32.1 2.1 37.8 2.2 57.8z" />
+          </svg>Send</button>
+      </div>
+    </footer>
+  </form>
 
-
+</div>
 <!-- Contactgroup Finder Modal -->
 <p-dialog header="Find contact group" [(visible)]="isContactGroupFinderVisible" [modal]="true" [draggable]="false"
   class="modal--medium modal--hasFooter">
-  <app-contactgroup-finder class="appWrapper" [isFull]="true"
+  <app-contact-group-finder class="appWrapper" [isFull]="true"
     (fullSelectedContactGroup)="getSelectedContactGroup($event)"
-    (isCreatingNewGroup)="isContactGroupFinderVisible=false"></app-contactgroup-finder>
+    (isCreatingNewGroup)="isContactGroupFinderVisible=false"></app-contact-group-finder>
 </p-dialog>
 
 <!-- Contactgroup Finder Modal -->
-<p-dialog header="Add files" [(visible)]="showFileUploader" [modal]="true" [draggable]="false">
+<!-- <p-dialog header="Add files" [(visible)]="showFileUploader" [modal]="true" [draggable]="false">
   <p-fileUpload name="demo[]" [showCancelButton]="false" [showUploadButton]="false" url="./upload.php"
     (onUpload)="onUpload($event)" multiple="multiple" maxFileSize="1000000">
     <ng-template pTemplate="content">
@@ -152,7 +161,7 @@
       </ul>
     </ng-template>
   </p-fileUpload>
-</p-dialog>
+</p-dialog> -->
 
 <!--Success Messages -->
 <p-toast></p-toast>

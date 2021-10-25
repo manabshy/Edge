@@ -1,8 +1,27 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnChanges, ChangeDetectorRef, ViewChild, ElementRef, Renderer2, AfterViewChecked, OnDestroy } from '@angular/core';
 import {
-  CalendarEvent, CalendarDateFormatter, CalendarWeekViewBeforeRenderEvent,
-  CalendarDayViewBeforeRenderEvent, DAYS_OF_WEEK, CalendarEventTitleFormatter, CalendarMonthViewBeforeRenderEvent
-} from 'angular-calendar';
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  Input,
+  OnChanges,
+  ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
+  Renderer2,
+  AfterViewChecked,
+  OnDestroy,
+  ViewEncapsulation,
+} from "@angular/core";
+import {
+  CalendarEvent,
+  CalendarDateFormatter,
+  CalendarWeekViewBeforeRenderEvent,
+  CalendarDayViewBeforeRenderEvent,
+  DAYS_OF_WEEK,
+  CalendarEventTitleFormatter,
+  CalendarMonthViewBeforeRenderEvent,
+} from "angular-calendar";
 import {
   isSameMonth,
   isSameDay,
@@ -20,24 +39,38 @@ import {
   getDaysInMonth,
   subDays,
   differenceInDays,
-  eachDayOfInterval
-} from 'date-fns';
-import { CustomDateFormatter } from '../custom-date-formatter.provider';
-import { Observable, fromEvent, of, combineLatest, merge, Subscription } from 'rxjs';
-import { DiaryEvent, BasicEventRequest, Staff, DiaryProperty } from '../../diary/shared/diary';
-import { DiaryEventService } from '../../diary/shared/diary-event.service';
-import { tap, map, takeUntil, finalize } from 'rxjs/operators';
-import { CustomEventTitleFormatter } from '../custom-event-title-formatter.provider';
-import { WeekViewHourSegment } from 'calendar-utils';
-import * as _ from 'lodash';
-import { StorageMap } from '@ngx-pwa/local-storage';
-import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
-import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
-import { Router, ActivatedRoute } from '@angular/router';
-import { CalendarView } from '../shared/calendar-shared';
-import { isSame } from 'ngx-bootstrap/chronos/public_api';
-import { SharedService } from 'src/app/core/services/shared.service';
-
+  eachDayOfInterval,
+} from "date-fns";
+import { CustomDateFormatter } from "../custom-date-formatter.provider";
+import {
+  Observable,
+  fromEvent,
+  of,
+  combineLatest,
+  merge,
+  Subscription,
+} from "rxjs";
+import {
+  DiaryEvent,
+  BasicEventRequest,
+  Staff,
+  DiaryProperty,
+} from "../../diary/shared/diary";
+import { DiaryEventService } from "../../diary/shared/diary-event.service";
+import { tap, map, takeUntil, finalize } from "rxjs/operators";
+import { CustomEventTitleFormatter } from "../custom-event-title-formatter.provider";
+import { WeekViewHourSegment } from "calendar-utils";
+import * as _ from "lodash";
+import { StorageMap } from "@ngx-pwa/local-storage";
+import {
+  InfoDetail,
+  DropdownListInfo,
+} from "src/app/core/services/info.service";
+import { BaseStaffMember } from "src/app/shared/models/base-staff-member";
+import { Router, ActivatedRoute } from "@angular/router";
+import { CalendarView } from "../shared/calendar-shared";
+import { isSame } from "ngx-bootstrap/chronos/public_api";
+import { SharedService } from "src/app/core/services/shared.service";
 
 function floorToNearest(amount: number, precision: number) {
   return Math.floor(amount / precision) * precision;
@@ -47,29 +80,67 @@ function ceilToNearest(amount: number, precision: number) {
   return Math.ceil(amount / precision) * precision;
 }
 @Component({
-  selector: 'app-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss'],
+  selector: "app-calendar",
+  templateUrl: "./calendar.component.html",
+  styleUrls: ["./calendar.component.scss"],
   providers: [
     {
       provide: CalendarDateFormatter,
-      useClass: CustomDateFormatter
+      useClass: CustomDateFormatter,
     },
     {
       provide: CalendarEventTitleFormatter,
-      useClass: CustomEventTitleFormatter
-    }
-  ]
+      useClass: CustomEventTitleFormatter,
+    },
+  ],
 })
-export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, OnDestroy {
+export class CalendarComponent
+  implements OnInit, OnChanges, AfterViewChecked, OnDestroy
+{
   @Input() staffMemberId: number;
   @Input() myCalendarOnly: boolean;
   @Input() isSelectingDate: boolean;
+  @Input() isOnlyShowPurposes: boolean;
   @Output() selectedDate = new EventEmitter<any>();
-  @ViewChild('calendarContainer', { static: true }) calendarContainer: ElementRef;
-  view: CalendarView | 'month' | 'week' | 'threeDays' | 'day' = CalendarView.Week;
+  @ViewChild("calendarContainer", { static: true })
+  calendarContainer: ElementRef;
+  @Input() view: CalendarView | "month" | "week" | "threeDays" | "day";
   daysInWeek;
-  viewDate: Date = new Date();
+  @Input() selectedStaffMemberId: number;
+  @Input() tooltipPlacement: string = 'auto';
+
+  private _viewDate: Date = new Date();
+  @Input()
+  get viewDate(): Date {
+    return this._viewDate;
+  }
+  set viewDate(value: Date) {
+    if (value != this._viewDate) {
+      this._viewDate = value;
+      if (this.selectedStaffMemberId > 0) {
+        this.diaryEvents = [];
+        this.staffEvents = [];
+        if (this.secondStaffMemberId && this.secondStaffMemberId > 0)
+          this.getCurrentDiaryEvents(null, true);
+        this.getCurrentDiaryEvents();
+      }
+    }
+  }
+
+  private _secondStaffMemberId: number;
+  @Input()
+  get secondStaffMemberId(): number {
+    return this._secondStaffMemberId;
+  }
+  set secondStaffMemberId(value: number) {
+    if (value != this._secondStaffMemberId) {
+      this._secondStaffMemberId = value;
+      if (this._secondStaffMemberId && this._secondStaffMemberId > 0) {
+        this.getCurrentDiaryEvents(false, true);
+      }
+    }
+  }
+
   weekStartsOn = DAYS_OF_WEEK.MONDAY;
   clickedDate: Date;
   clickedColumn: number;
@@ -80,7 +151,6 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   activeDayIsOpen: boolean;
   viewingArrangements: InfoDetail[];
   id: number;
-  selectedStaffMemberId: number;
 
   // draggable
   newEvents: CalendarEvent[] = [];
@@ -89,49 +159,61 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
 
   dairyEventSubscription: Subscription;
   movedToView = false;
-  requestedTimeframe: { start: number, end: number };
+  requestedTimeframe: { start: number; end: number };
   scrollPosition = 0;
+  staffEvents: CalendarEvent[] = [];
 
-  constructor(private diaryEventService: DiaryEventService,
+  constructor(
+    private diaryEventService: DiaryEventService,
     private renderer: Renderer2,
     private storage: StorageMap,
     private router: Router,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private sharedService: SharedService) { }
+    private sharedService: SharedService
+  ) {
+    if (!this.view) {
+      this.view = CalendarView.Week;
+    }
+  }
 
   ngOnInit() {
-
-    this.route.queryParams.subscribe(params => {
-      this.selectedStaffMemberId = +params['staffMemberId'] || 0;
-      console.log('id in calendar', this.selectedStaffMemberId);
-      if (params['selectedDate']) {
-        this.viewDate = new Date(+params['selectedDate']);
-        this.view = params['calendarView'];
-        this.scrollPosition = params['scrollPos'];
+    this.route.queryParams.subscribe((params) => {
+      this.selectedStaffMemberId = this.isOnlyShowPurposes
+        ? this.selectedStaffMemberId
+        : +params["staffMemberId"] || 0;
+      console.log("id in calendar", this.selectedStaffMemberId);
+      if (params["selectedDate"]) {
+        this.viewDate = new Date(+params["selectedDate"]);
+        this.view = params["calendarView"];
+        this.scrollPosition = params["scrollPos"];
       }
       this.getCurrentDiaryEvents();
     });
 
-    this.storage.get('info').subscribe((data: DropdownListInfo) => {
-      if (data) { this.viewingArrangements = data.viewingArrangements; }
+    this.storage.get("info").subscribe((data: DropdownListInfo) => {
+      if (data) {
+        this.viewingArrangements = data.viewingArrangements;
+      }
     });
 
     if (window.innerWidth < 1024) {
       this.view = CalendarView.ThreeDays;
     }
     this.diaryEvents = [];
+    console.log(this.viewDate);
   }
 
   ngAfterViewChecked() {
-
     const calContainer = this.calendarContainer.nativeElement;
     let gap = 20;
     if (window.innerWidth < 576) {
       gap += 50;
     }
-    const maxHeight = `${window.innerHeight - calContainer.getBoundingClientRect().top - gap}px`;
-    this.renderer.setStyle(calContainer, 'max-height', maxHeight);
+    const maxHeight = `${
+      window.innerHeight - calContainer.getBoundingClientRect().top - gap
+    }px`;
+    this.renderer.setStyle(calContainer, "max-height", maxHeight);
 
     this.cdr.detectChanges();
   }
@@ -145,9 +227,13 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
 
   passDateToRouter() {
     this.scrollPosition = this.calendarContainer.nativeElement.scrollTop;
-    this.router.navigate(['/'], {
-      queryParams: { selectedDate: this.viewDate.getTime(), calendarView: this.view, scrollPos: this.scrollPosition },
-      queryParamsHandling: 'merge'
+    this.router.navigate(["/"], {
+      queryParams: {
+        selectedDate: this.viewDate.getTime(),
+        calendarView: this.view,
+        scrollPos: this.scrollPosition,
+      },
+      queryParamsHandling: "merge",
     });
   }
 
@@ -172,14 +258,18 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   currentTimeIntoView() {
-    const calHourSegments = document.getElementsByClassName('cal-hour-segment');
+    const calHourSegments = document.getElementsByClassName("cal-hour-segment");
     setTimeout(() => {
       if (!this.scrollPosition) {
-        if (calHourSegments && calHourSegments.length) {
+        if (
+          calHourSegments &&
+          calHourSegments.length &&
+          calHourSegments.length > 22
+        ) {
           if (window.innerWidth >= 1024) {
-            calHourSegments[23].scrollIntoView({ block: 'center' });
+            calHourSegments[23].scrollIntoView({ block: "center" });
           } else {
-            calHourSegments[22].scrollIntoView({ block: 'center' });
+            calHourSegments[22].scrollIntoView({ block: "center" });
           }
         }
       } else {
@@ -192,12 +282,13 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     // this.id = staffMemberId;
     this.selectedStaffMemberId = staffMemberId;
     this.getCurrentDiaryEvents(true);
-    console.log('get selected id from output event', staffMemberId);
+    console.log("get selected id from output event", staffMemberId);
   }
 
-
-  getCurrentDiaryEvents(isLoaderVisible?: boolean) {
-
+  getCurrentDiaryEvents(
+    isLoaderVisible?: boolean,
+    isSecondStaffMember?: boolean
+  ) {
     function startOfThreeDays(date: Date) {
       return new Date(date);
     }
@@ -205,27 +296,32 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       month: startOfMonth,
       week: startOfWeek,
       threeDays: startOfThreeDays,
-      day: startOfDay
+      day: startOfDay,
     }[this.view];
     const getEnd: any = {
       month: endOfMonth,
       week: endOfWeek,
       threeDays: endOfWeek,
-      day: endOfDay
+      day: endOfDay,
     }[this.view];
 
     const request = {
-      staffMemberId: this.selectedStaffMemberId || this.id || 0,
-      startDate: format(getStart(this.viewDate), 'yyyy-MM-dd'),
-      endDate: format(getEnd(this.viewDate), 'yyyy-MM-dd'),
+      staffMemberId: isSecondStaffMember
+        ? this.secondStaffMemberId
+        : this.selectedStaffMemberId || this.id || 0,
+      startDate: format(getStart(this.viewDate), "yyyy-MM-dd"),
+      endDate: format(getEnd(this.viewDate), "yyyy-MM-dd"),
     } as BasicEventRequest;
 
     if (this.view === CalendarView.ThreeDays) {
-      request.startDate = format((this.viewDate), 'yyyy-MM-dd');
-      request.endDate = format((addDays(this.viewDate, 3)), 'yyyy-MM-dd');
+      request.startDate = format(this.viewDate, "yyyy-MM-dd");
+      request.endDate = format(addDays(this.viewDate, 3), "yyyy-MM-dd");
     } else if (this.view === CalendarView.Week) {
-      request.startDate = format(addDays(getStart(this.viewDate), 1), 'yyyy-MM-dd');
-      request.endDate = format(addDays(getEnd(this.viewDate), 1), 'yyyy-MM-dd');
+      request.startDate = format(
+        addDays(getStart(this.viewDate), 1),
+        "yyyy-MM-dd"
+      );
+      request.endDate = format(addDays(getEnd(this.viewDate), 1), "yyyy-MM-dd");
     }
     this.getDiaryEvents(request, isLoaderVisible);
 
@@ -257,25 +353,35 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   getDiaryEvents(request, isLoaderVisible?: boolean) {
-    this.dairyEventSubscription = this.diaryEventService.getDiaryEvents(request, isLoaderVisible).subscribe(result => {
-      this.diaryEvents = [];
-      // when the events arrive the view needs to scroll to 8AM
-      this.currentTimeIntoView();
-      return result.map(diary => {
-        if (!diary.isCancelled) {
-          this.diaryEvents.push(this.setCalendarEvent(diary));
-          if (diary.allDay) {
-            const allEvents = this.getMultiAlldayEvents(diary);
-            allEvents?.forEach(event => {
-              if (event) { this.diaryEvents.push(this.setCalendarEvent(event)); }
-            });
+    this.dairyEventSubscription = this.diaryEventService
+      .getDiaryEvents(request, isLoaderVisible)
+      .subscribe((result) => {
+        this.diaryEvents = [];
+        if (!(this.secondStaffMemberId && this.secondStaffMemberId > 0))
+          this.staffEvents = [];
+        // when the events arrive the view needs to scroll to 8AM
+        this.currentTimeIntoView();
+        result.map((diary) => {
+          if (!diary.isCancelled) {
+            this.staffEvents.push(this.setCalendarEvent(diary, request));
+            if (diary.allDay) {
+              const allEvents = this.getMultiAlldayEvents(diary);
+              allEvents?.forEach((event) => {
+                if (event) {
+                  this.staffEvents.push(this.setCalendarEvent(event, request));
+                }
+              });
+            }
           }
-        }
+        });
+        this.diaryEvents = [...this.staffEvents];
+        console.log(request.staffMemberId);
+        console.log("deneme");
+        console.log(this.diaryEvents);
       });
-    });
   }
 
-  setCalendarEvent(diary: DiaryEvent) {
+  setCalendarEvent(diary: DiaryEvent, request) {
     const title = diary.subject || diary.eventType;
     const start = new Date(diary.startDateTime);
     const end = diary.allDay ? null : new Date(diary.endDateTime);
@@ -283,51 +389,87 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     const meta = diary;
     this.setViewingArrangement(diary.properties);
     const members = this.getStaff(meta.staffMembers);
-    let cssClass = '';
-    cssClass += meta.isCancelled ? 'is-cancelled' : '';
-    cssClass += meta.isHighImportance ? ' is-important' : '';
-    cssClass += meta.isConfirmed ? ' is-confirmed' : '';
+    let cssClass = "";
+    cssClass += meta.isCancelled ? "is-cancelled" : "";
+    cssClass += meta.isHighImportance ? " is-important" : "";
+    cssClass += meta.isConfirmed ? " is-confirmed" : "";
 
-    return { title, start, end, allDay, meta, members, cssClass } as CalendarEvent;
+    if (this.isOnlyShowPurposes) {
+      if (request && request.staffMemberId == this.secondStaffMemberId)
+        cssClass += " lettingsEvent";
+      else cssClass += " salesEvent";
+    }
+    return {
+      title,
+      start,
+      end,
+      allDay,
+      meta,
+      members,
+      cssClass,
+    } as CalendarEvent;
   }
 
   getMultiAlldayEvents(event: DiaryEvent): DiaryEvent[] {
     let allDays = [];
     const allEvents: DiaryEvent[] = [];
     if (differenceInDays(event.endDateTime, event.startDateTime) > 0) {
-      allDays = eachDayOfInterval({ start: new Date(event.startDateTime), end: new Date(event.endDateTime) });
+      allDays = eachDayOfInterval({
+        start: new Date(event.startDateTime),
+        end: new Date(event.endDateTime),
+      });
       const starts = allDays.splice(1);
 
-      starts.forEach(start => {
+      starts.forEach((start) => {
         const newEvent = { ...event, startDateTime: start };
-        if (newEvent) { allEvents.push(newEvent); }
+        if (newEvent) {
+          allEvents.push(newEvent);
+        }
       });
-      console.log(differenceInDays(event.endDateTime, event.startDateTime), { starts });
+      console.log(differenceInDays(event.endDateTime, event.startDateTime), {
+        starts,
+      });
       return allEvents;
     }
-
   }
 
   eventClicked({ event }: { event: CalendarEvent }) {
     const clickedEvent = { ...event.meta } as DiaryEvent;
     this.scrollPosition = this.calendarContainer.nativeElement.scrollTop;
+    this.diaryEventService.newEventDates({
+      startDate: new Date(clickedEvent.startDateTime),
+      endDate: new Date(clickedEvent.endDateTime),
+    });
+    if (this.isOnlyShowPurposes) return;
     if (!clickedEvent.isBusy) {
-      if (+clickedEvent.eventTypeId === 8 || +clickedEvent.eventTypeId === 2048) {
-        this.router.navigate(['/valuations-register/detail', clickedEvent.properties[0].propertyEventId, 'edit'],
-          {
-            queryParams: { scrollPos: this.scrollPosition, selectedDate: this.viewDate.getTime(), calendarView: this.view, }
-          });
-      } else {
-        this.router.navigate(['/diary/edit', clickedEvent.diaryEventId],
+      if (
+        +clickedEvent.eventTypeId === 8 ||
+        +clickedEvent.eventTypeId === 2048
+      ) {
+        this.router.navigate(
+          [
+            "/valuations-register/detail",
+            clickedEvent.properties[0].propertyEventId,
+            "edit",
+          ],
           {
             queryParams: {
-              staffMemberId: this.id || this.selectedStaffMemberId,
-              graphEventId: clickedEvent.exchangeGUID,
               scrollPos: this.scrollPosition,
               selectedDate: this.viewDate.getTime(),
               calendarView: this.view,
-            }
-          });
+            },
+          }
+        );
+      } else {
+        this.router.navigate(["/diary/edit", clickedEvent.diaryEventId], {
+          queryParams: {
+            staffMemberId: this.id || this.selectedStaffMemberId,
+            graphEventId: clickedEvent.exchangeGUID,
+            scrollPos: this.scrollPosition,
+            selectedDate: this.viewDate.getTime(),
+            calendarView: this.view,
+          },
+        });
       }
     }
   }
@@ -335,7 +477,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   getClickedDate(date: Date) {
     if (date) {
       this.selectedDate.emit(date);
-      console.log('clicked date', date);
+      console.log("clicked date", date);
     }
   }
 
@@ -360,7 +502,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     if (this.viewingArrangements && properties && properties.length) {
       const values = Object.values(this.viewingArrangements);
       for (const property of properties) {
-        values.forEach(x => {
+        values.forEach((x) => {
           if (x.id === property.viewingArragementId) {
             property.viewingArragement = x.value;
           }
@@ -370,29 +512,36 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   trackByFn(index, item: DiaryEvent) {
-    if (!item) { return null; }
+    if (!item) {
+      return null;
+    }
     return item.diaryEventId;
   }
 
   // New draggable here....
-  startDragToCreate(segment: WeekViewHourSegment, mouseDownEvent: MouseEvent, segmentElement: HTMLElement) {
+  startDragToCreate(
+    segment: WeekViewHourSegment,
+    mouseDownEvent: MouseEvent,
+    segmentElement: HTMLElement
+  ) {
+    if (this.isOnlyShowPurposes) return;
     if (!this.isSelectingDate) {
       const dragToSelectEvent: CalendarEvent = {
         id: this.diaryEvents.length,
-        title: 'New event',
+        title: "New event",
         start: segment.date,
         meta: {
-          tmpEvent: true
-        }
+          tmpEvent: true,
+        },
       };
       this.diaryEvents = [...this.diaryEvents, dragToSelectEvent];
       const segmentPosition = segmentElement.getBoundingClientRect();
       this.dragToCreateActive = true;
       const endOfView = endOfWeek(this.viewDate, {
-        weekStartsOn: this.weekStartsOn
+        weekStartsOn: this.weekStartsOn,
       });
 
-      fromEvent(document, 'mousemove')
+      fromEvent(document, "mousemove")
         .pipe(
           finalize(() => {
             delete dragToSelectEvent.meta.tmpEvent;
@@ -400,7 +549,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
             this.createNewEvent();
             this.refresh();
           }),
-          takeUntil(fromEvent(document, 'mouseup'))
+          takeUntil(fromEvent(document, "mouseup"))
         )
         .subscribe((mouseMoveEvent: MouseEvent) => {
           const minutesDiff = ceilToNearest(
@@ -414,7 +563,10 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
               segmentPosition.width
             ) / segmentPosition.width;
 
-          const newEnd = addDays(addMinutes(segment.date, minutesDiff), daysDiff);
+          const newEnd = addDays(
+            addMinutes(segment.date, minutesDiff),
+            daysDiff
+          );
           if (newEnd > segment.date && newEnd < endOfView) {
             dragToSelectEvent.end = newEnd;
           }
@@ -423,22 +575,24 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     }
   }
 
-
   private refresh() {
     this.diaryEvents = [...this.diaryEvents];
     this.cdr.detectChanges();
   }
 
   createNewEvent() {
-    this.scrollPosition = this.calendarContainer.nativeElement.scrollTop;
-    const newEvent = this.diaryEvents[this.diaryEvents.length - 1];
-    if (newEvent.id >= 0) {
-      if (newEvent.end === undefined) {
-        newEvent.end = addHours(newEvent.start, 1);
-      }
-      this.diaryEventService.newEventDates({ startDate: newEvent.start, endDate: newEvent.end });
-      this.router.navigate(['/diary/edit', 0],
-        {
+    if (!this.isOnlyShowPurposes) {
+      this.scrollPosition = this.calendarContainer.nativeElement.scrollTop;
+      const newEvent = this.diaryEvents[this.diaryEvents.length - 1];
+      if (newEvent.id >= 0) {
+        if (newEvent.end === undefined) {
+          newEvent.end = addHours(newEvent.start, 1);
+        }
+        this.diaryEventService.newEventDates({
+          startDate: newEvent.start,
+          endDate: newEvent.end,
+        });
+        this.router.navigate(["/diary/edit", 0], {
           queryParams: {
             staffMemberId: this.id || this.selectedStaffMemberId,
             isNewEvent: true,
@@ -446,8 +600,9 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
             scrollPos: this.scrollPosition,
             selectedDate: this.viewDate.getTime(),
             calendarView: this.view,
-          }
+          },
         });
+      }
     }
   }
 
@@ -457,6 +612,3 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     }
   }
 }
-
-
-

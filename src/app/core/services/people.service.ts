@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppConstants } from '../shared/app-constants';
-import { map, tap } from 'rxjs/operators';
+import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { PersonInstruction, PersonSearch, PersonOffer, PersonLettingsManagement, PersonHomeHelper, PersonProperty, Person } from '../../shared/models/person';
 import { Valuation } from 'src/app/valuations/shared/valuation';
 
@@ -71,5 +71,61 @@ export class PeopleService {
   performGdprRemoval(person: Person): Observable<Person | any> {
     const url = `${AppConstants.basePersonUrl}/${person.personId}/gdpr`;
     return this.http.put<any>(url, person).pipe(map(response => response.result));
+  }
+
+  getCompanyPeopleDocs(contactGroupId: number, valuationEventId: number): Observable<any> {
+    const url = `${AppConstants.baseCompanyDocumentUrl}/${contactGroupId}/${valuationEventId}`;
+    return this.http.get<any>(url).pipe(
+      map((response) => response.result),
+    );
+  }
+  
+  setCompanyPeopleDocs(people, contactGroupId: number, valuationEventId: number): Observable<any> {
+    const url = `${AppConstants.baseCompanyDocumentUrl}/${contactGroupId}/${valuationEventId}`;
+    return this.http.post<any>(url, people).pipe(
+      map((response) => response.result),
+    );
+  }
+
+  getPersonDocs(personId: number){
+    const url = `${AppConstants.basePersonDocumentUrl}/${personId}`;
+    return this.http.get<any>(url).pipe(
+      map((response) => response.result),
+    );
+  }
+
+  getCompanyDocs(companyId: number){
+    const url = `${AppConstants.baseCompanyDocumentUrl}/${companyId}`;
+    return this.http.get<any>(url).pipe(
+      map((response) => response.result),
+    );
+  }
+
+  getPeopleDocs(contactGroupId: number, valuationEventId: number): Observable<any> {
+    const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}/${valuationEventId}`;
+    return this.http.get<any>(url).pipe(
+      map((response) => response.result),
+    );
+  }
+
+  setPeopleDocs(people, contactGroupId: number, valuationEventId: number): Observable<any> {
+    const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}/${valuationEventId}`
+    return this.http.post<any>(url, people).pipe(
+      map((response) => response.result)
+    )
+  }
+
+  deletePeopleDocs(contactGroupId: number, valuationEventId: number): Observable<any> {
+    const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}/${valuationEventId}`
+    return this.http.delete<any>(url).pipe(
+      map((response) => response.result)
+    )
+  }
+  
+  deleteCompanyDocs(contactGroupId: number, valuationEventId: number): Observable<any> {
+    const url = `${AppConstants.baseCompanyDocumentUrl}/${contactGroupId}/${valuationEventId}`
+    return this.http.delete<any>(url).pipe(
+      map((response) => response.result)
+    )
   }
 }

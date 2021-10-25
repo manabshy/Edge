@@ -19,7 +19,6 @@ import { PropertyHistoryComponent } from "./property-history/property-history.co
 import { PropertyMediaComponent } from "./property-media/property-media.component";
 import { PropertyNotesComponent } from "./property-notes/property-notes.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
-import { DiaryComponent } from "./diary/diary.component";
 import { LeaderboardComponent } from "./leaderboard/leaderboard.component";
 import { ApplicantRegisterComponent } from "./applicant-register/applicant-register.component";
 import { ApplicantViewLettingComponent } from "./applicant-view-letting/applicant-view-letting.component";
@@ -36,7 +35,6 @@ import { CoreModule } from "./core/core.module";
 import { AccountModule } from "./account/account.module";
 import { LeaderboardModule } from "./leaderboard/leaderboard.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { DiaryModule } from "./diary/diary.module";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
@@ -46,7 +44,6 @@ import { ImpersonateMemberComponent } from "./impersonate-member/impersonate-mem
 import { ConfigsLoaderService } from "./configs-loader.service";
 import { GlobalErrorHandlerService } from "./core/services/global-error-handler.service";
 
-// ADDED SHARED MODULE ON 19/03 BUT REMOVE ASAP
 import { SharedModule } from "./shared/shared.module";
 
 // ngx bootstrap imports
@@ -61,7 +58,7 @@ import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown/";
 import { CollapseModule } from "ngx-bootstrap/collapse/";
 import { TabsModule } from "ngx-bootstrap/tabs/";
-import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
+// import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
 import { ModalModule } from "ngx-bootstrap/modal/";
 import { PopoverModule } from "ngx-bootstrap/popover";
 import { TooltipModule } from "ngx-bootstrap/tooltip";
@@ -79,8 +76,7 @@ import { LoadingBarHttpClientModule } from "@ngx-loading-bar/http-client";
 import { AngularStickyThingsModule } from "@w11k/angular-sticky-things";
 import { CalendarSharedModule } from "./calendar-shared/calendar-shared.module";
 
-import { MsalModule, MsalInterceptor } from "@azure/msal-angular";
-import { Logger, LogLevel } from "msal";
+import { MsalModule } from "@azure/msal-angular";
 import { HeaderComponent } from "./header/header.component";
 
 // SVG ICONS
@@ -127,7 +123,6 @@ const redirectUri = environment.baseRedirectUri
 import { defineLocale } from "ngx-bootstrap/chronos";
 import { deLocale, frLocale, plLocale, enGbLocale } from "ngx-bootstrap/locale";
 import { ProfileComponent } from "./profile/profile.component";
-import { Daterangepicker } from "ng2-daterangepicker";
 
 defineLocale("de", deLocale);
 defineLocale("fr", frLocale);
@@ -142,7 +137,7 @@ const externalModulesImports = [
   BsDropdownModule.forRoot(),
   CollapseModule.forRoot(),
   TabsModule.forRoot(),
-  BsDatepickerModule.forRoot(),
+  // BsDatepickerModule.forRoot(),
   TypeaheadModule.forRoot(),
   ModalModule.forRoot(),
   PopoverModule.forRoot(),
@@ -166,7 +161,7 @@ const externalModulesExports = [
   TabsModule,
   TypeaheadModule,
   BsDropdownModule,
-  BsDatepickerModule,
+  // BsDatepickerModule,
   ModalModule,
   PopoverModule,
   NgPipesModule,
@@ -213,7 +208,7 @@ const externalModulesExports = [
     NotFoundComponent,
     ImpersonateMemberComponent,
     HeaderComponent,
-    ProfileComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -227,7 +222,7 @@ const externalModulesExports = [
     DashboardModule,
     LeaderboardModule,
     CalendarSharedModule,
-    SharedModule, // ADD forRoot Investigate 24/03/2021
+    SharedModule,
     AppRoutingModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production,

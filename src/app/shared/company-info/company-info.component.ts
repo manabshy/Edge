@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Company } from 'src/app/contactgroups/shared/contact-group';
+import { Company } from 'src/app/contact-groups/shared/contact-group';
 
 @Component({
   selector: 'app-company-info',

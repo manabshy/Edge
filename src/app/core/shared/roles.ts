@@ -1,0 +1,31 @@
+export enum enumRoles {    
+  Director = 1,
+  HeadOffice = 2,
+  LettingsManager = 3,
+  LettingsNegotiator = 4,
+  LettingsTeamAssistant = 5,
+  PAToLettingsDirector = 6,
+  PAToSalesDirector = 7,
+  PropertyManager = 8,
+  PropertyTeamAssistant = 9,
+  SalesManager = 10,
+  SalesNegotiator = 11,
+  SalesTeamAssistant = 12,
+  IT = 34,
+  Compliance = 35,
+  BrokerFull = 36,
+  BrokerSales = 38,
+  BrokerLets = 39,
+  SeniorNegotiator = 40,
+  CSManager = 41,
+  NewHomesBroker = 42,
+  CSConsultant = 43,
+  LettingsAccounts = 44,
+  DivisionalOM = 45,
+  HeadOfLettingsAccounts = 46,
+  Valuer = 47,
+  CEO = 48,
+  AreaDirector = 49
+}
+
+

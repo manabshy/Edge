@@ -86,9 +86,9 @@ export class AppComponent extends BaseComponent implements OnInit {
       filter(e => e instanceof NavigationEnd)
     ).subscribe((event: any | NavigationEnd) => {
       const current = event.urlAfterRedirects;
-      console.log('isupdateAvailable: ', this.serviceWorker.isUpdateAvailable);
-      console.log('current Patch: ', current);
-      console.log('condition:', current === '/' && this.serviceWorker.isUpdateAvailable);
+      // console.log('isupdateAvailable: ', this.serviceWorker.isUpdateAvailable);
+      // console.log('current Patch: ', current);
+      // console.log('condition:', current === '/' && this.serviceWorker.isUpdateAvailable);
 
       const homes = [
         '/',
@@ -129,7 +129,7 @@ export class AppComponent extends BaseComponent implements OnInit {
   private setImpersonatedAsCurrentUser() {
     this.staffMemberService.impersonatedStaffMember$.subscribe((person: BaseStaffMember) => {
       if (person) {
-        console.log({ person }, 'for new impersonated person');
+        // console.log({ person }, 'for new impersonated person');
         this.storage.delete('currentUser').subscribe(() => {
           this.getCurrentStaffMember();
           window.location.reload();
@@ -142,14 +142,14 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.storage.get('currentUser').subscribe((staffMember: StaffMember) => {
       if (staffMember) {
         this.currentStaffMember = staffMember;
-        console.log('current user from storage here....', staffMember);
+        // console.log('current user from storage here....', staffMember);
       } else {
         this.staffMemberService.getCurrentStaffMember().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
           if (data) {
             this.currentStaffMember = data;
             this.isCurrentUserAvailable = true;
             AppUtils.currentStaffMemberGlobal = data;
-            console.log('app component current user from db', data);
+            // console.log('app component current user from db', data);
           }
         }, (error: WedgeError) => {
         });
@@ -161,12 +161,12 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
       if (info) {
         this.listInfo = info;
-        console.log('app info in from storage....', info);
+        // console.log('app info in from storage....', info);
       } else {
         this.infoService.getDropdownListInfo().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
           if (data) {
             this.listInfo = data;
-            console.log('app info from db', data);
+            // console.log('app info from db', data);
           }
         });
       }

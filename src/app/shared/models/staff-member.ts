@@ -10,6 +10,7 @@ export interface StaffMember {
   phone: string;
   mobile: string;
   roles: Role[];
+  securityRoles: any;
   permissions: Permission[];
   dashboardMode: string;
   impersonations: Impersonation[];
@@ -20,6 +21,7 @@ export interface StaffMember {
   thumbnailUrl: string;
   photoUrl: string;
   canImpersonate: boolean;
+  dashboardDepartments: string;
 }
 
 export interface Impersonation {
@@ -32,9 +34,9 @@ export interface Permission {
 }
 
 export enum PermissionDescription {
-  CreateFeedback = 'Create Feedback',
-  CreateInspection = 'Create Inspection Report',
-  CreateValuation = 'Create Valuation'
+  CreateFeedback = "Create Feedback",
+  CreateInspection = "Create Inspection Report",
+  CreateValuation = "Create Valuation",
 }
 
 export interface Office {
@@ -75,36 +77,38 @@ export enum PermissionEnum {
 }
 
 export enum DefaultViews {
-  CreateAppointment = 'appointment',
-  CreateCallback = 'callback',
-  PropertySearch = 'propertySearch',
-  Portfolio = 'portfolio'
+  CreateAppointment = "appointment",
+  CreateCallback = "callback",
+  PropertySearch = "propertySearch",
+  Portfolio = "portfolio",
 }
 
 export enum RoleName {
-  Negotiator = 'Negotiator',
-  Manager = 'Manager',
-  Broker = 'Broker'
+  Negotiator = "Negotiator",
+  Manager = "Manager",
+  Broker = "Broker",
+  Consultant ="Constultant",
+  OfficeManager ="OfficeManager"
 }
 
 export enum RoleDepartment {
-  Sales = 'Sales',
-  Lettings = 'Lettings'
+  Sales = "Sales",
+  Lettings = "Lettings",
 }
 
 export enum OrderRole {
   SalesManager,
   LettingsManager,
   SalesNegotiator,
-  LettingsNegotiator
+  LettingsNegotiator,
 }
 
 export enum ApiRole {
-  NotApplicable = 'NotApplicable',
-  SalesManager = 'SalesManager',
-  LettingsManager = 'LettingsManager',
-  SalesNegotiator = 'SalesNegotiator',
-  LettingsNegotiator = 'LettingsNegotiator'
+  NotApplicable = "NotApplicable",
+  SalesManager = "SalesManager",
+  LettingsManager = "LettingsManager",
+  SalesNegotiator = "SalesNegotiator",
+  LettingsNegotiator = "LettingsNegotiator",
 }
 
 export interface StaffMemberResult {

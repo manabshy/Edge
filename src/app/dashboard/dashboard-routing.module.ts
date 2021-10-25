@@ -25,9 +25,6 @@ const routes: Routes = [
     canActivate: [MsalGuard],
     data: { title: "Targets" },
   },
-  // { path: 'list/:id', component: DashboardListComponent, canActivate: [MsalGuard] },
-  // { path: 'instructionsAndBdd/:id', component: InstructionsAndBusinessDevelopmentComponent, canActivate: [MsalGuard] },
-  // { path: 'exchangesAndPipeline/:id', component: ExchangesAndPipelineComponent, canActivate: [MsalGuard] },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
