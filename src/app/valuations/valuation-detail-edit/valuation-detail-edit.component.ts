@@ -526,6 +526,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     this.openContactGroupSubscription = this.sharedService.openContactGroupChanged.subscribe((value) => {
       if (value === true) {
+        if (this.lastKnownOwner && this.lastKnownOwner.companyName && this.lastKnownOwner.companyName.length > 0) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'You can not add admin contact to a company contact group!',
+            closable: false,
+          });
+          return;
+        }
         this.isAdminContactVisible = value;
         this.sharedService.addAdminContactBs.next(true);
       }
