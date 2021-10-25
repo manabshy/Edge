@@ -115,14 +115,19 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy,
             this.filteredItems = [...this.items.filter((x) => x.id === 'vendorQuestionnaire')];
           }
         }
-        if (removeContactGroupChanged != null && !removeContactGroupChanged) {
-          if (this.filteredItems.some((x) => x.id === 'addAdmin') === false)
-            this.filteredItems.unshift(this.items.find((x) => x.id === 'addAdmin'));
-          this.filteredItems = [...this.filteredItems.filter((x) => x.id !== 'removeAdmin')];
-        } else if (openContactGroupChanged != null && !openContactGroupChanged) {
-          if (this.filteredItems.some((x) => x.id === 'removeAdmin') === false)
+
+        if (openContactGroupChanged === false) {
+          if (this.filteredItems.some((x) => x.id === 'removeAdmin') === false) {
             this.filteredItems.push(this.items.find((x) => x.id === 'removeAdmin'));
-          this.filteredItems = [...this.filteredItems.filter((x) => x.id !== 'addAdmin')];
+            this.filteredItems = [...this.filteredItems.filter((x) => x.id !== 'addAdmin')];
+          }
+        }
+
+        if (removeContactGroupChanged === null) {
+          if (this.filteredItems.some((x) => x.id === 'addAdmin') === false) {
+            this.filteredItems.unshift(this.items.find((x) => x.id === 'addAdmin'));
+            this.filteredItems = [...this.filteredItems.filter((x) => x.id !== 'removeAdmin')];
+          }
         }
       }
     });
