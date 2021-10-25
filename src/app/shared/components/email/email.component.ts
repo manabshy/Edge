@@ -286,8 +286,14 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
 
     if (people)
       people.forEach((x) => {
-        const item = { label: x.addressee, value: x.addressee, items: this.getEmails(x.emailAddresses, x.personId) };
-        this.groupedPeople.push(item);
+        if (x) {
+          const item = {
+            label: x.addressee,
+            value: x.addressee,
+            items: this.getEmails(x.emailAddresses, x.personId),
+          };
+          this.groupedPeople.push(item);
+        }
       });
   }
 
@@ -305,13 +311,14 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
 
   getEmails(emailAddresses: Email[], personId: number) {
     const emails = [];
-    emailAddresses.forEach((x) =>
-      emails.push({
-        name: x.email,
-        value: { personId, contactId: this.contactGroup.contactGroupId, emailAddress: x.email } as EmailInfo,
-        isPreferred: x.isPreferred,
-      }),
-    );
+    if (emailAddresses)
+      emailAddresses.forEach((x) =>
+        emails.push({
+          name: x.email,
+          value: { personId, contactId: this.contactGroup.contactGroupId, emailAddress: x.email } as EmailInfo,
+          isPreferred: x.isPreferred,
+        }),
+      );
     // console.log({ emails });
 
     return emails;

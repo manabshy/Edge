@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core'
-import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
-import { Company, CompanyAutoCompleteResult } from 'src/app/contact-groups/shared/contact-group'
-import { distinctUntilChanged, switchMap, tap, catchError } from 'rxjs/operators'
-import { Observable, EMPTY } from 'rxjs'
+import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
+import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
+import { Company, CompanyAutoCompleteResult } from 'src/app/contact-groups/shared/contact-group';
+import { distinctUntilChanged, switchMap, tap, catchError } from 'rxjs/operators';
+import { Observable, EMPTY } from 'rxjs';
 
 @Component({
   selector: 'app-company-finder',
@@ -16,6 +16,7 @@ import { Observable, EMPTY } from 'rxjs'
         [suggestions]="suggestions"
         [companyNameError]="companyNameError"
         (companyName)="companyName.emit($event)"
+        [canCreateNewCompany]="canCreateNewCompany"
         (searchCompanyEmitter)="findCompany($event)"
         (selectedCompanyDetails)="selectedCompanyDetails.emit($event)"
         (isManualEntry)="isManualEntry.emit($event)"
@@ -24,18 +25,18 @@ import { Observable, EMPTY } from 'rxjs'
   `,
 })
 export class CompanyFinderComponent implements OnInit, OnDestroy {
-  @Input() companyNameError: any
-  @Input() existingCompany?: Company
-  @Input() canCreateNewCompany = false
+  @Input() companyNameError: any;
+  @Input() existingCompany?: Company;
+  @Input() canCreateNewCompany = false;
 
-  @Output() companyName = new EventEmitter<any>()
-  @Output() selectedCompanyDetails = new EventEmitter<Company>()
-  @Output() isManualEntry = new EventEmitter<boolean>()
+  @Output() companyName = new EventEmitter<any>();
+  @Output() selectedCompanyDetails = new EventEmitter<Company>();
+  @Output() isManualEntry = new EventEmitter<boolean>();
 
-  foundCompanies: CompanyAutoCompleteResult[]
-  suggestions: (text$: Observable<string>) => Observable<any[]>
-  noSuggestions = false
-  hasBeenSearched = false
+  foundCompanies: CompanyAutoCompleteResult[];
+  suggestions: (text$: Observable<string>) => Observable<any[]>;
+  noSuggestions = false;
+  hasBeenSearched = false;
 
   constructor(private contactGroupService: ContactGroupsService) {}
 
@@ -47,42 +48,42 @@ export class CompanyFinderComponent implements OnInit, OnDestroy {
           this.contactGroupService.getCompanySuggestions(term).pipe(
             tap((data) => {
               if (data && !data.length) {
-                this.noSuggestions = true
+                this.noSuggestions = true;
               } else {
-                this.noSuggestions = false
+                this.noSuggestions = false;
               }
             }),
             catchError(() => {
-              return EMPTY
+              return EMPTY;
             }),
           ),
         ),
-      )
+      );
   }
 
   findCompany(searchTerm: any) {
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe((data) => {
-      this.hasBeenSearched = true
-      this.foundCompanies = data
-      this.checkDuplicateCompanies(searchTerm)
-    })
+      this.hasBeenSearched = true;
+      this.foundCompanies = data;
+      this.checkDuplicateCompanies(searchTerm);
+    });
   }
 
   private checkDuplicateCompanies(companyName: string) {
-    const matchedCompanies = []
+    const matchedCompanies = [];
     if (this.foundCompanies && companyName.length) {
       this.foundCompanies.forEach((x) => {
-        const sameCompanyName = x.companyName.toLowerCase() === companyName.toLowerCase()
+        const sameCompanyName = x.companyName.toLowerCase() === companyName.toLowerCase();
         if (sameCompanyName) {
-          x.matchScore = 10
+          x.matchScore = 10;
         }
-        matchedCompanies.push(x)
-      })
-      this.foundCompanies = matchedCompanies
+        matchedCompanies.push(x);
+      });
+      this.foundCompanies = matchedCompanies;
     }
   }
 
   ngOnDestroy() {
-    console.log('destroyed')
+    console.log('destroyed');
   }
 }

@@ -81,7 +81,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   formErrors = FormErrors;
   property: Property;
   isOwnerChanged: boolean;
-  isAdminContactChanged: boolean;
+  isAdminContactChanged: boolean = false;
   isPropertyChanged: boolean;
   isEditable: boolean = false;
   showLeaseExpiryDate: boolean;
@@ -133,7 +133,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   showPhotos = false;
   showMap = false;
   showProperty = false;
-  isLastknownOwnerVisible = false;
+  isLastKnownOwnerVisible = false;
   isAdminContactVisible = false;
   isInstructVisible = false;
   accordionIndex: number;
@@ -204,6 +204,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   cancelString: string = '';
   cancelReasonString: string = '';
   saveValuationSubscription = new Subscription();
+  changedLastOwner: Signer;
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -358,8 +359,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   ngOnInit() {
     this.valuationService.landRegisterValid.next(false);
-    this.sharedService.openContactGroupChanged.next(false);
-    this.sharedService.removeContactGroupChanged.next(false);
     this.primengConfig.ripple = true;
     this.setupForm();
     this.storage.get('currentUser').subscribe((currentStaffMember: StaffMember) => {
@@ -389,8 +388,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.getValuation(this.valuationId);
     } else {
       this.valuation = { valuationStatus: ValuationStatusEnum.None, valuationStatusDescription: 'New' };
-      this.sharedService.removeContactGroupChanged.next(false);
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0);
+      this.sharedService.removeContactGroupChanged.next(false);
       if (this.propertyId) {
         this.getPropertyInformation(this.propertyId);
       }
@@ -565,8 +564,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     });
 
-    this.valuationService.contactGroupBs.subscribe((result: ContactGroup) => {
+    this.contactGroupSubscription = this.valuationService.contactGroupBs.subscribe((result: ContactGroup) => {
       if (result?.contactGroupId && this.contactId != result?.contactGroupId) {
+        if (!this.contactGroup) this.contactGroup = result;
         this.contactId = result.contactGroupId;
         this.getContactNotes();
       }
@@ -586,17 +586,30 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   ngAfterViewInit(): void {
-    if (this.sharedService.addAdminContactBs.getValue() === true && this.sharedService.addedContactBs.getValue()) {
-      this.getSignerDetails(this.sharedService.addedContactBs.getValue().contactGroupId)
-        .then((signer: Signer) => {
-          this.getSelectedAdminContact(signer);
-        })
-        .finally(() => {
-          this.sharedService.addAdminContactBs.next(false);
-          this.sharedService.addedContactBs.next(null);
-        });
+    if (this.sharedService.addedContactBs.getValue()) {
+      if (this.sharedService.addAdminContactBs.getValue() === true) {
+        this.getSignerDetails(this.sharedService.addedContactBs.getValue().contactGroupId)
+          .then((signer: Signer) => {
+            this.getSelectedAdminContact(signer);
+          })
+          .finally(() => {
+            this.sharedService.addAdminContactBs.next(false);
+            this.sharedService.addedContactBs.next(null);
+            this.isAdminContactChanged = true;
+          });
+      }
+      if (this.sharedService.addLastOwnerBs.getValue() === true) {
+        this.getSignerDetails(this.sharedService.addedContactBs.getValue().contactGroupId)
+          .then((signer: Signer) => {
+            this.getSelectedOwner(signer);
+            this.changedLastOwner = signer;
+          })
+          .finally(() => {
+            this.sharedService.addLastOwnerBs.next(false);
+            this.sharedService.addedContactBs.next(null);
+          });
+      }
     }
-
     this.setScrollInformation();
   }
 
@@ -769,7 +782,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (owner) {
       this.lastKnownOwner = owner;
       this.isOwnerChanged = true;
-      this.isLastknownOwnerVisible = false;
+      this.isLastKnownOwnerVisible = false;
       this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
         this.contactGroup = result;
         // console.log(
@@ -777,6 +790,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         // );
         this.valuationService.contactGroupBs.next(this.contactGroup);
         this.getSearchedPersonSummaryInfo(this.contactGroup);
+        this.isAdminContactChanged = false;
       });
       this.valuationForm.get('propertyOwner').setValue(owner);
       if (this.property) {
@@ -785,7 +799,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       if (this.isEditable || this.isNewValuation) {
         this.valuationForm.markAsDirty();
       }
-      this.isAdminContactChanged = false;
     }
   }
 
@@ -921,16 +934,25 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     else {
       this.lastKnownOwner = this.valuation?.propertyOwner;
     }
+
+    if (this.changedLastOwner && this.changedLastOwner.contactGroupId > 0) {
+      this.lastKnownOwner = { ...this.changedLastOwner };
+      propertyDetails.lastKnownOwner = this.lastKnownOwner;
+      this.changedLastOwner = null;
+    }
+
     this.property = propertyDetails;
     this.valuation.property = { ...this.property };
     this.valuation.officeId = this.property.officeId;
     // this.valuers = result.valuers;
-    this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
-      this.contactGroup = result;
-      // console.log("----------------------------------- contactGroupBs.next");
-      this.valuationService.contactGroupBs.next(this.contactGroup);
-      this.getSearchedPersonSummaryInfo(this.contactGroup);
-    });
+    if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
+      this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
+        this.contactGroup = result;
+        // console.log("----------------------------------- contactGroupBs.next");
+        this.valuationService.contactGroupBs.next(this.contactGroup);
+        this.getSearchedPersonSummaryInfo(this.contactGroup);
+      });
+    }
 
     const baseProperty = {
       propertyId: this.property.propertyId,
@@ -1225,13 +1247,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.lastKnownOwner = this.valuation.property.lastKnownOwner
             ? this.valuation.property.lastKnownOwner
             : this.valuation.propertyOwner;
-          this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
-            this.contactGroup = result;
-            console.log('----------------------------------- contactGroupBs.next');
-            this.valuationService.contactGroupBs.next(this.contactGroup);
-            this.getSearchedPersonSummaryInfo(this.contactGroup);
-            this.setAdminContact();
-          }); // get contact group for last know owner
+
+          if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
+            this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
+              this.contactGroup = result;
+              console.log('----------------------------------- contactGroupBs.next');
+              this.valuationService.contactGroupBs.next(this.contactGroup);
+              this.getSearchedPersonSummaryInfo(this.contactGroup);
+
+              this.setAdminContact();
+            }); // get contact group for last know owner
+          }
         }
 
         this.setValuationType(this.valuation);
@@ -1344,7 +1370,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   setAdminContact() {
     if (this.valuation.adminContact && this.valuation.adminContact.contactGroupId > 0)
       this.getSelectedAdminContact(this.valuation.adminContact);
-    else this.sharedService.removeContactGroupChanged.next(false);
+    else if (
+      !(this.valuationForm.get('adminContact').value && this.valuationForm.get('adminContact').value.contactGroupId > 0)
+    ) {
+      this.sharedService.removeContactGroupChanged.next(false);
+    }
   }
 
   getPropertyInformation(propertyId) {
@@ -1643,37 +1673,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   getSelectedProperty(property: Property) {
     if (property) {
-      this.showProperty = false;
-
-      this.valuers = [];
-      this.property = property;
-      this.isPropertyChanged = true;
-      this.valuation.property = property;
-      this.valuationService._valuation.next(this.valuation);
-      this.lastKnownOwner = property.lastKnownOwner;
-      this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then((result) => {
-        this.contactGroup = result;
-        // console.log(
-        //   "----------------------------------- contactGroupBs.next"
-        // );
-        this.valuationService.contactGroupBs.next(this.contactGroup);
-        this.getSearchedPersonSummaryInfo(this.contactGroup);
-      });
-      this.valuationForm.get('property').setValue(property);
-      this.valuationForm.get('propertyOwner').setValue(this.lastKnownOwner);
-      this.getValuers(property.propertyId);
-      this.getValuationPropertyInfo(property.propertyId);
-      this.getPropertyDetails(property.propertyId);
-      this.valuationForm.markAsDirty();
-    }
-  }
-
-  onClosePropertyFinder() {
-    if (!(this.property && this.property.propertyId > 0)) {
-      this.router.navigate(['/valuations-register']);
-    } else {
       this.propertySubsription = this.propertyService
-        .getValuations(this.property.propertyId, true)
+        .getValuations(property.propertyId, true)
         .pipe(
           map((valuations: Valuation[]) =>
             valuations.map((valuation: Valuation) => {
@@ -1695,7 +1696,48 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
             this.isActiveValuationsVisible = this.activeValuations.length > 0 ? true : false;
           }
         });
+
+      this.showProperty = false;
+
+      this.valuers = [];
+      this.property = property;
+      this.isPropertyChanged = true;
+      this.valuation.property = property;
+      this.valuationService._valuation.next(this.valuation);
+      this.lastKnownOwner = property.lastKnownOwner;
+      if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
+        this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then((result) => {
+          this.contactGroup = result;
+          // console.log(
+          //   "----------------------------------- contactGroupBs.next"
+          // );
+          this.valuationService.contactGroupBs.next(this.contactGroup);
+          this.getSearchedPersonSummaryInfo(this.contactGroup);
+        });
+      }
+      this.valuationForm.get('property').setValue(property);
+      this.valuationForm.get('propertyOwner').setValue(this.lastKnownOwner);
+      this.getValuers(property.propertyId);
+      this.getValuationPropertyInfo(property.propertyId);
+      this.getPropertyDetails(property.propertyId);
+      this.valuationForm.markAsDirty();
     }
+  }
+
+  onClosePropertyFinder() {
+    if (!(this.property && this.property.propertyId > 0)) {
+      this.router.navigate(['/valuations-register']);
+    }
+  }
+
+  createNewValuation() {
+    this.isActiveValuationsVisible = false;
+    this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
+      queryParams: {
+        propertyId: this.propertyId,
+        isNewValuation: true,
+      },
+    });
   }
 
   routeToValuationList() {
@@ -2074,7 +2116,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   createNewLastKnownOwner() {
-    this.isLastknownOwnerVisible = false;
+    this.isLastKnownOwnerVisible = false;
     this.valuationForm.markAsPristine();
   }
 
@@ -2400,6 +2442,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.checkAvailabilityBooking();
     this.setValuersValidators();
 
+    if (!this.lastKnownOwner) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'You must add a last owner to the property!',
+        closable: false,
+      });
+      return;
+    }
+
     if (
       this.areValuesVisible &&
       this.isThereAPrice(this.valuationForm.value) &&
@@ -2470,7 +2521,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   addOrUpdateValuation() {
     this.setLeaseExpiryDate();
     this.isSubmitting = true;
-    const valuationValue = this.valuationService._valuation.getValue() // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
+    const valuationValue = this.valuationService._valuation.getValue(); // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
     const valuation = { ...valuationValue, ...this.valuationForm.value };
     valuation.propertyOwner = this.lastKnownOwner;
     valuation.OfficeId = this.property.officeId;
@@ -2783,6 +2834,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   ngOnDestroy() {
     this.property = {} as Property;
+    this.sharedService.removeContactGroupChanged.next(null);
+    this.sharedService.openContactGroupChanged.next(null);
     this.propertyService.setAddedProperty(null);
     this.sharedService.clearFormValidators(this.valuationForm, this.formErrors);
     this.storage.delete('valuationFormData').subscribe();
