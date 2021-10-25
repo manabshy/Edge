@@ -9,6 +9,7 @@ import { VendorsModule } from '../../../../shared/vendors.module';
 import { FileUploadComponent } from '../../../../shared/components/file-upload/file-upload.component';
 import { MessagesComponent } from '../../../../shared/components/messages/messages.component';
 import { MessageService } from 'primeng/api';
+import { DOCUMENT_TYPE } from '../../compliance-checks.interfaces'
 
 export default {
   title: 'Valuations/Compliance/Components/DocumentInfo',
@@ -42,7 +43,7 @@ const DocumentInfo: Story<DocumentInfoComponent> = (args: DocumentInfoComponent)
 
 export const IdBlank = DocumentInfo.bind({});
 IdBlank.args = {
-  documentType: 49,
+  documentType: DOCUMENT_TYPE.ID,
   label: 'ID',
   files: [],
   fileLimit: 1,
@@ -52,7 +53,7 @@ IdBlank.args = {
 
 export const IdUploadedValid = DocumentInfo.bind({});
 IdUploadedValid.args = {
-  documentType: 49,
+  documentType: DOCUMENT_TYPE.ID,
   files: [{
     id: 0,
     label: 'ID',
@@ -64,7 +65,7 @@ IdUploadedValid.args = {
 
 export const IdUploadedInvalid = DocumentInfo.bind({});
 IdUploadedInvalid.args = {
-  documentType: 49,
+  documentType: DOCUMENT_TYPE.ID,
   files: [{
     id: 0,
     label: 'ID',
@@ -76,14 +77,14 @@ IdUploadedInvalid.args = {
 
 export const ProofOfAddressBlank = DocumentInfo.bind({});
 ProofOfAddressBlank.args = {
- documentType: 48,
+ documentType: DOCUMENT_TYPE.PROOF_OF_ADDRESS,
  label: 'Proof Of Address',
  files: []
 };
 
 export const ProofOfAddressUploaded = DocumentInfo.bind({});
 ProofOfAddressUploaded.args = {
-  documentType: 48,
+  documentType: DOCUMENT_TYPE.PROOF_OF_ADDRESS,
   label: 'Proof Of Address',
   files: [{
     id: 0,
@@ -94,14 +95,14 @@ ProofOfAddressUploaded.args = {
 
 export const ReportBlank = DocumentInfo.bind({});
 ReportBlank.args = {
-  documentType: 51,
+  documentType: DOCUMENT_TYPE.REPORT,
   label: 'Report',
   files: []
 };
 
 export const ReportUploaded = DocumentInfo.bind({});
 ReportUploaded.args = {
-  documentType: 51,
+  documentType: DOCUMENT_TYPE.REPORT,
   label: 'Report',
   files: [{
     id: 0,
@@ -112,7 +113,7 @@ ReportUploaded.args = {
 
 export const MultipleReportsUploaded = DocumentInfo.bind({});
 MultipleReportsUploaded.args = {
-  documentType: 51,
+  documentType: DOCUMENT_TYPE.REPORT,
   label: 'Report',
   files: [{
     id: 0,
@@ -127,14 +128,14 @@ MultipleReportsUploaded.args = {
 
 export const AdditionalDocumentsBlank = DocumentInfo.bind({});
 AdditionalDocumentsBlank.args = {
-  documentType: 50,
+  documentType: DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS,
   label: 'Additional Documents',
   files: []
 };
 
 export const AdditionalDocumentUploaded = DocumentInfo.bind({});
 AdditionalDocumentUploaded.args = {
-  documentType: 50,
+  documentType: DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS,
   label: 'Additional Documents',
   files: [{
     id: 0,
@@ -145,7 +146,7 @@ AdditionalDocumentUploaded.args = {
 
 export const MultipleAdditionalDocumentsUploaded = DocumentInfo.bind({});
 MultipleAdditionalDocumentsUploaded.args = {
-  documentType: 50,
+  documentType: DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS,
   label: 'Additional Documents',
   files: [{
     id: 0,
@@ -160,7 +161,7 @@ MultipleAdditionalDocumentsUploaded.args = {
 
 export const LongNameDocumentsUploaded = DocumentInfo.bind({});
 LongNameDocumentsUploaded.args = {
-  documentType: 50,
+  documentType: DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS,
   label: 'Additional Documents',
   files: [{
     id: 0,

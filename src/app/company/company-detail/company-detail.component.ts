@@ -7,8 +7,7 @@ import { CompanyService } from '../shared/company.service';
 
 @Component({
   selector: 'app-company-detail',
-  templateUrl: './company-detail.component.html',
-  styleUrls: ['./company-detail.component.scss']
+  templateUrl: './company-detail.component.html'
 })
 export class CompanyDetailComponent implements OnInit {
   companyDetails: Company;

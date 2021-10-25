@@ -1,5 +1,11 @@
-import { DOCUMENT_TYPE } from './components/document-info/document-info.component'
 import { Person } from '../../shared/models/person'
+
+export enum DOCUMENT_TYPE {
+  PROOF_OF_ADDRESS = 54,
+  ID = 49,
+  ADDITIONAL_DOCUMENTS = 50,
+  REPORT = 51,
+}
 
 export interface ComplianceChecksState {
     checksAreValid: Boolean

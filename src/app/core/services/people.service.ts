@@ -87,6 +87,20 @@ export class PeopleService {
     );
   }
 
+  getPersonDocs(personId: number){
+    const url = `${AppConstants.basePersonDocumentUrl}/${personId}`;
+    return this.http.get<any>(url).pipe(
+      map((response) => response.result),
+    );
+  }
+
+  getCompanyDocs(companyId: number){
+    const url = `${AppConstants.baseCompanyDocumentUrl}/${companyId}`;
+    return this.http.get<any>(url).pipe(
+      map((response) => response.result),
+    );
+  }
+
   getPeopleDocs(contactGroupId: number, valuationEventId: number): Observable<any> {
     const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}/${valuationEventId}`;
     return this.http.get<any>(url).pipe(
@@ -103,6 +117,13 @@ export class PeopleService {
 
   deletePeopleDocs(contactGroupId: number, valuationEventId: number): Observable<any> {
     const url = `${AppConstants.basePersonDocumentUrl}/${contactGroupId}/${valuationEventId}`
+    return this.http.delete<any>(url).pipe(
+      map((response) => response.result)
+    )
+  }
+  
+  deleteCompanyDocs(contactGroupId: number, valuationEventId: number): Observable<any> {
+    const url = `${AppConstants.baseCompanyDocumentUrl}/${contactGroupId}/${valuationEventId}`
     return this.http.delete<any>(url).pipe(
       map((response) => response.result)
     )

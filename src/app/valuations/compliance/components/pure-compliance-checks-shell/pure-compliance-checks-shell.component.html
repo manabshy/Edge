@@ -11,8 +11,8 @@
     >
       <app-compliance-card
         [person]="person"
-        [hasMenuBtn]="companyOrContact == 'company'"
         [isFrozen]="isFrozen"
+        [hasMenuBtn]="companyOrContact === 'company'"
         (fileUploaded)="fileWasUploaded.emit($event)"
         (fileDeleted)="fileWasDeleted.emit($event)"
         (toggleIsUBO)="toggleIsUBO.emit($event)"
@@ -24,10 +24,10 @@
 
   <div
     class="px-2 md:px-4 w-full flex flex-col md:flex-row gap-x-4 justify-center my-10"
-    *ngIf="companyOrContact == 'company'"
+    *ngIf="companyOrContact === 'company'"
   >
-    <app-big-button [label]="'Add Associated Company'" (onClick)="openDialog('showCompanyDialog')"></app-big-button>
-    <app-big-button [label]="'Add Contact'" (onClick)="openDialog('showContactDialog')"></app-big-button>
+    <app-big-button [label]="'Add Associated Company'" [disabled]="isFrozen" (onClick)="openDialog('showCompanyDialog')"></app-big-button>
+    <app-big-button [label]="'Add Contact'"  [disabled]="isFrozen" (onClick)="openDialog('showContactDialog')"></app-big-button>
   </div>
 
   <div class="border-t border-gray-300 flex flex-row pt-4 items-center mt-8">
@@ -55,15 +55,13 @@
   [(visible)]="dialogs.showContactDialog"
   [modal]="true"
   [draggable]="false"
+  [appendTo]="'body'"
   class="modal--medium modal--hasFooter"
 >
-  <!-- <app-person-duplicate-checker 
-    [contactGroupDetails]="contactGroupDetails" 
-    [searchTerm]="searchTerm"
-    (addedPersonDetails)="getAddedPersonDetails($event)" 
-    (selectedPerson)="getSelectedPerson($event)"
-    (creatingNewPerson)="createNewPerson()">
-  </app-person-duplicate-checker> -->
+  <app-contact-group-finder 
+  (selectedContactGroup)="getSelectedContactGroup($event)"
+  >
+</app-contact-group-finder>
 </p-dialog>
 
 <!-- Company Finder Modal -->

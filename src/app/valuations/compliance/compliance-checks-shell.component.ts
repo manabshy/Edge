@@ -17,6 +17,7 @@ import { ComplianceChecksState } from './compliance-checks.interfaces'
         [checksAreValid]="vm.checksAreValid"
         [isFrozen]="vm.isFrozen"
         [companyOrContact]="vm.companyOrContact"
+        [contactGroupDetails]="vm.contactGroupDetails"
         (fileWasUploaded)="onFileUploaded($event)"
         (fileWasDeleted)="onFileDeleted($event)"
         (passComplianceChecks)="onPassComplianceChecks()"

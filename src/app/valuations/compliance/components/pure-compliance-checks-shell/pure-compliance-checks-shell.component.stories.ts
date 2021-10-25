@@ -1,28 +1,29 @@
-import { moduleMetadata, componentWrapperDecorator } from '@storybook/angular'
-import { CommonModule } from '@angular/common'
-import { action } from '@storybook/addon-actions'
-import { Story, Meta } from '@storybook/angular/types-6-0'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { VendorsModule } from '../../../../shared/vendors.module'
+import { moduleMetadata, componentWrapperDecorator } from '@storybook/angular';
+import { CommonModule } from '@angular/common';
+import { action } from '@storybook/addon-actions';
+import { Story, Meta } from '@storybook/angular/types-6-0';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { VendorsModule } from '../../../../shared/vendors.module';
 
 // component under test
-import { PureComplianceChecksShellComponent } from './pure-compliance-checks-shell.component'
+import { PureComplianceChecksShellComponent } from './pure-compliance-checks-shell.component';
 
 // child components
-import { ComplianceCardComponent } from '../compliance-card/compliance-card.component'
-import { DocumentInfoComponent } from '../../components/document-info/document-info.component'
-import { MessagesComponent } from '../../../../shared/components/messages/messages.component'
-import { CompanyFinderComponent } from '../../../../shared/components/company-finder/company-finder.component'
+import { ComplianceCardComponent } from '../compliance-card/compliance-card.component';
+import { DocumentInfoComponent } from '../../components/document-info/document-info.component';
+import { MessagesComponent } from '../../../../shared/components/messages/messages.component';
+import { CompanyFinderComponent } from '../../../../shared/components/company-finder/company-finder.component';
 import {
   LeadContactBlank,
   LeadContactValid,
   AssociatedContactBlank,
   AssociatedContactValid,
   AssociatedContactInvalid,
-} from '../compliance-card/compliance-card.component.stories'
-import { BigButtonComponent } from '../../../../shared/components/big-button/big-button.component'
-import { FileUploadComponent } from '../../../../shared/components/file-upload/file-upload.component'
-import { PureCompanyFinderShellComponent } from 'src/app/shared/components/company-finder/pure-company-finder-shell.component'
+  AssociatedCompanyContact,
+} from '../compliance-card/compliance-card.component.stories';
+import { BigButtonComponent } from '../../../../shared/components/big-button/big-button.component';
+import { FileUploadComponent } from '../../../../shared/components/file-upload/file-upload.component';
+import { PureCompanyFinderShellComponent } from 'src/app/shared/components/company-finder/pure-company-finder-shell.component';
 import { MessageService } from 'primeng/api';
 
 export default {
@@ -39,10 +40,10 @@ export default {
         CompanyFinderComponent,
         BigButtonComponent,
         FileUploadComponent,
-        PureCompanyFinderShellComponent
+        PureCompanyFinderShellComponent,
       ],
       imports: [CommonModule, VendorsModule, BrowserAnimationsModule],
-      providers: [MessageService]
+      providers: [MessageService],
     }),
     componentWrapperDecorator(
       (story) => `
@@ -50,14 +51,14 @@ export default {
       `,
     ),
   ],
-} as Meta
+} as Meta;
 
 export const actionsData = {
   passAML: action('passAML'),
   fileWasUploaded: action('fileWasUploaded'),
   fileWasDeleted: action('fileWasDeleted'),
   refreshDocuments: action('refreshDocuments'),
-}
+};
 
 const LettingsTemplate: Story<PureComplianceChecksShellComponent> = (args: PureComplianceChecksShellComponent) => ({
   props: {
@@ -67,10 +68,10 @@ const LettingsTemplate: Story<PureComplianceChecksShellComponent> = (args: PureC
     fileWasDeleted: actionsData.fileWasDeleted,
     refreshDocuments: actionsData.refreshDocuments,
   },
-})
+});
 
 // AML stories - contact
-export const ContactAMLCompletedAndValid = LettingsTemplate.bind({})
+export const ContactAMLCompletedAndValid = LettingsTemplate.bind({});
 ContactAMLCompletedAndValid.args = {
   checksAreValid: true,
   checkType: 'AML',
@@ -84,19 +85,16 @@ ContactAMLCompletedAndValid.args = {
     AssociatedContactValid.args.person,
     { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
   ],
-  isFrozen: true
-}
+  isFrozen: true,
+};
 
-export const ContactAMLCompleted1YearLater = LettingsTemplate.bind({})
+export const ContactAMLCompleted1YearLater = LettingsTemplate.bind({});
 ContactAMLCompleted1YearLater.args = {
   checksAreValid: true,
   checkType: 'AML',
   message: {
     type: 'info',
-    text: [
-      'AML checks are more than a year old',
-      'Consider running updated checks'
-    ],
+    text: ['AML checks are more than a year old', 'Consider running updated checks'],
   },
   people: [
     LeadContactValid.args.person,
@@ -104,10 +102,10 @@ ContactAMLCompleted1YearLater.args = {
     AssociatedContactValid.args.person,
     { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
   ],
-  isFrozen: true
-}
+  isFrozen: true,
+};
 
-export const ContactAMLIncompleteAndInvalid = LettingsTemplate.bind({})
+export const ContactAMLIncompleteAndInvalid = LettingsTemplate.bind({});
 ContactAMLIncompleteAndInvalid.args = {
   checksAreValid: false,
   checkType: 'AML',
@@ -121,11 +119,11 @@ ContactAMLIncompleteAndInvalid.args = {
     AssociatedContactBlank.args.person,
     { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
   ],
-  isFrozen: false
-}
+  isFrozen: false,
+};
 
 // KYC stories - contact
-export const ContactKYCCompletedAndValid = LettingsTemplate.bind({})
+export const ContactKYCCompletedAndValid = LettingsTemplate.bind({});
 ContactKYCCompletedAndValid.args = {
   checksAreValid: true,
   checkType: 'KYC',
@@ -139,10 +137,10 @@ ContactKYCCompletedAndValid.args = {
     AssociatedContactValid.args.person,
     { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
   ],
-  isFrozen: true
-}
+  isFrozen: true,
+};
 
-export const ContactKYCIncompleteAndInvalid = LettingsTemplate.bind({})
+export const ContactKYCIncompleteAndInvalid = LettingsTemplate.bind({});
 ContactKYCIncompleteAndInvalid.args = {
   checksAreValid: false,
   checkType: 'KYC',
@@ -156,11 +154,11 @@ ContactKYCIncompleteAndInvalid.args = {
     { ...AssociatedContactInvalid.args.person, name: 'Ian Blackford' },
     { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
   ],
-  isFrozen: false
-}
+  isFrozen: false,
+};
 
 // AML stories - company
-export const CompanyAMLIncomplete = LettingsTemplate.bind({})
+export const CompanyAMLIncomplete = LettingsTemplate.bind({});
 CompanyAMLIncomplete.args = {
   checksAreValid: false,
   checkType: 'AML',
@@ -169,19 +167,42 @@ CompanyAMLIncomplete.args = {
     type: 'warn',
     text: ['AML incomplete'],
   },
-  people: [{...LeadContactValid.args.person, personDateAmlCompleted: null}, AssociatedContactValid.args.person],
-  isFrozen: true
-}
+  people: [
+    { ...LeadContactValid.args.person, personDateAmlCompleted: null, companyId: LeadContactValid.args.person.id },
+    AssociatedContactValid.args.person,
+  ],
+  isFrozen: false,
+};
 
-export const CompanyAMLComplete = LettingsTemplate.bind({})
+export const CompanyAMLComplete = LettingsTemplate.bind({});
 CompanyAMLComplete.args = {
-  checksAreValid: false,
+  checksAreValid: true,
   checkType: 'AML',
   companyOrContact: 'company',
   message: {
     type: 'success',
     text: ['AML Completed', 'SmartSearch added: 7th Sep 2020 (11:45)'],
   },
-  people: [{ ...LeadContactValid.args.person, isUBO: true }, AssociatedContactValid.args.person],
-  isFrozen: true
-}
+  people: [
+    { ...LeadContactValid.args.person, isUBO: true, companyId: LeadContactValid.args.person.id },
+    AssociatedContactValid.args.person,
+  ],
+  isFrozen: true,
+};
+
+export const MultipleCompanyAMLComplete = LettingsTemplate.bind({});
+MultipleCompanyAMLComplete.args = {
+  checksAreValid: true,
+  checkType: 'AML',
+  companyOrContact: 'company',
+  message: {
+    type: 'success',
+    text: ['AML Completed', 'SmartSearch added: 7th Sep 2020 (11:45)'],
+  },
+  people: [
+    { ...LeadContactValid.args.person, isUBO: true, companyId: LeadContactValid.args.person.id },
+    AssociatedContactValid.args.person,
+    AssociatedCompanyContact.args.person,
+  ],
+  isFrozen: true,
+};
