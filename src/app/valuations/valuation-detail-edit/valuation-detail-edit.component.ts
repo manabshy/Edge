@@ -668,6 +668,22 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       } else {
         this.statuses.find((x) => x.value == 3).isValid = false;
       }
+
+      if (this.valuationService.landRegisterValid.getValue()) {
+        this.statuses.find((x) => x.value == 6).isValid = true;
+      } else {
+        this.statuses.find((x) => x.value == 6).isValid = false;
+      }
+
+      if (
+        this.valuation.complianceCheck &&
+        this.valuation.complianceCheck.compliancePassedByFullName &&
+        this.valuation.complianceCheck.compliancePassedByFullName.length > 0
+      ) {
+        this.statuses.find((x) => x.value == 9).isValid = true;
+      } else {
+        this.statuses.find((x) => x.value == 9).isValid = false;
+      }
     }
 
     // termsOfBusinessBs = new BehaviorSubject(false);
@@ -942,6 +958,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     else {
       this.lastKnownOwner = this.valuation?.propertyOwner;
     }
+
+    this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner);
 
     if (this.changedLastOwner && this.changedLastOwner.contactGroupId > 0) {
       this.lastKnownOwner = { ...this.changedLastOwner };
@@ -1255,6 +1273,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.lastKnownOwner = this.valuation.property.lastKnownOwner
             ? this.valuation.property.lastKnownOwner
             : this.valuation.propertyOwner;
+
+          this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner);
 
           if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
