@@ -75,6 +75,12 @@ export interface Valuation extends ValuationInfo {
   nameChangeRegFiles?: EdgeFile[];
   userEnteredOwner?: string;
   leaseExpiryDate?: Date;
+  complianceCheck?: ComplianceChecksStatus
+}
+
+export interface ComplianceChecksStatus {
+  compliancePassedByFullName: string
+  compliancePassedDate: string
 }
 
 export interface ValuationPricingInfo {
