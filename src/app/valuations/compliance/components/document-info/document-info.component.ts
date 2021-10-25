@@ -1,15 +1,9 @@
-import { Component, Input, OnInit, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FileTypeEnum } from '../../../../core/services/file.service';
 import moment from 'moment';
 import { FormControl, FormGroup } from '@angular/forms';
+import { DOCUMENT_TYPE } from '../../compliance-checks.interfaces';
 // import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-export enum DOCUMENT_TYPE {
-  PROOF_OF_ADDRESS = 48,
-  ID = 49,
-  ADDITIONAL_DOCUMENTS = 50,
-  REPORT = 51,
-}
 
 export interface EmitDocument {
   tmpFiles: Array<any>;
@@ -70,7 +64,7 @@ export class DocumentInfoComponent implements OnInit {
       (!this.files.length && this.documentType == DOCUMENT_TYPE.ID) ||
       (!this.files.length && this.documentType == DOCUMENT_TYPE.REPORT) ||
       (!this.files.length && this.documentType == DOCUMENT_TYPE.PROOF_OF_ADDRESS) ||
-      this.documentType == DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS && !this.isFrozen
+      this.documentType == DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS
     );
   }
 
