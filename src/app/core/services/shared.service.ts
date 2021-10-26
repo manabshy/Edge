@@ -1,3 +1,4 @@
+import { Signer } from './../../contact-groups/shared/contact-group';
 import { Injectable, ElementRef } from '@angular/core';
 import { AppUtils, RequestOption } from '../shared/utils';
 import dayjs from 'dayjs';
@@ -36,6 +37,7 @@ export class SharedService {
   valuationStatusChanged = new BehaviorSubject<ValuationStatusEnum>(ValuationStatusEnum.None);
   valuationType = new BehaviorSubject<ValuationTypeEnum>(ValuationTypeEnum.None);
   cancelValuationOperationChanged = new BehaviorSubject<boolean>(false);
+  valuationLastOwnerChanged = new BehaviorSubject<Signer | null>(null);
 
   addAdminContactBs = new BehaviorSubject<boolean>(false);
   addLastOwnerBs = new BehaviorSubject<boolean>(false);
@@ -68,6 +70,7 @@ export class SharedService {
   convertStringToNumber(stringValue: string): number {
     let numberValue = '0';
     if (stringValue) {
+      stringValue = stringValue.toString();
       numberValue = stringValue.replace(/\D/g, '');
       numberValue = numberValue.replace(/\D/g, '').replace(/^0+/, '');
     }

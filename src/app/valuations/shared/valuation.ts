@@ -75,6 +75,12 @@ export interface Valuation extends ValuationInfo {
   nameChangeRegFiles?: EdgeFile[];
   userEnteredOwner?: string;
   leaseExpiryDate?: Date;
+  complianceCheck?: ComplianceChecksStatus;
+}
+
+export interface ComplianceChecksStatus {
+  compliancePassedByFullName: string;
+  compliancePassedDate: string;
 }
 
 export interface ValuationPricingInfo {
@@ -166,6 +172,7 @@ export const ValuationStatuses = <ValuationStatus[]>[
   { id: 3, value: 'Valued' },
   { id: 4, value: 'Instructed' },
   { id: 5, value: 'Cancelled' },
+  { id: 6, value: 'Closed' },
 ];
 
 export enum ValuationStatusEnum {
@@ -174,6 +181,7 @@ export enum ValuationStatusEnum {
   Valued = 3,
   Instructed = 4,
   Cancelled = 5,
+  Closed = 6,
 }
 
 export enum ValuationCancellationReasons {

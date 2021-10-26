@@ -526,6 +526,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     this.openContactGroupSubscription = this.sharedService.openContactGroupChanged.subscribe((value) => {
       if (value === true) {
+        if (this.lastKnownOwner && this.lastKnownOwner.companyName && this.lastKnownOwner.companyName.length > 0) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'You can not add admin contact to a company contact group!',
+            closable: false,
+          });
+          return;
+        }
         this.isAdminContactVisible = value;
         this.sharedService.addAdminContactBs.next(true);
       }
@@ -659,6 +667,23 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.statuses.find((x) => x.value == 3).isValid = true;
       } else {
         this.statuses.find((x) => x.value == 3).isValid = false;
+      }
+
+      if (this.valuationService.landRegisterValid.getValue()) {
+        this.statuses.find((x) => x.value == 6).isValid = true;
+      } else {
+        this.statuses.find((x) => x.value == 6).isValid = false;
+      }
+
+      if (
+        this.valuation &&
+        this.valuation.complianceCheck &&
+        this.valuation.complianceCheck.compliancePassedByFullName &&
+        this.valuation.complianceCheck.compliancePassedByFullName.length > 0
+      ) {
+        this.statuses.find((x) => x.value == 9).isValid = true;
+      } else {
+        this.statuses.find((x) => x.value == 9).isValid = false;
       }
     }
 
@@ -935,6 +960,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.lastKnownOwner = this.valuation?.propertyOwner;
     }
 
+    this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner);
+
     if (this.changedLastOwner && this.changedLastOwner.contactGroupId > 0) {
       this.lastKnownOwner = { ...this.changedLastOwner };
       propertyDetails.lastKnownOwner = this.lastKnownOwner;
@@ -1167,21 +1194,28 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.valuationStatus === 3 ? (this.canInstruct = true) : (this.canInstruct = false);
         this.valuation.approxLeaseExpiryDate ? (this.showLeaseExpiryDate = true) : (this.showLeaseExpiryDate = false);
 
-        if (this.valuation.valuationStatus === ValuationStatusEnum.Cancelled) {
+        if (
+          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Closed
+        ) {
           if (this.route.snapshot.routeConfig?.path?.indexOf('edit') > -1) {
             let path = ['valuations-register/detail', this.valuation.valuationEventId, 'cancelled'];
             this.router.navigate(path);
             return;
           }
           this.isCancelled = true;
-          this.cancelString = `Cancelled ${moment(this.valuation.cancelledDate).format('Do MMM YYYY (HH:mm)')} by ${
-            this.valuation.cancelledBy?.fullName
-          } `;
-          this.cancelReasonString =
-            'Reason for cancellation: ' +
-            (this.valuation.cancellationTypeId == ValuationCancellationReasons.Other
-              ? this.valuation.cancellationReason
-              : this.removeUnderLine(ValuationCancellationReasons[this.valuation.cancellationTypeId]));
+          if (this.valuation.valuationStatus === ValuationStatusEnum.Cancelled) {
+            this.cancelString = `Cancelled ${moment(this.valuation.cancelledDate).format('Do MMM YYYY (HH:mm)')} by ${
+              this.valuation.cancelledBy?.fullName
+            } `;
+            this.cancelReasonString =
+              'Reason for cancellation: ' +
+              (this.valuation.cancellationTypeId == ValuationCancellationReasons.Other
+                ? this.valuation.cancellationReason
+                : this.removeUnderLine(ValuationCancellationReasons[this.valuation.cancellationTypeId]));
+          } else {
+            this.cancelString = 'Closed';
+          }
         }
 
         if (
@@ -1247,6 +1281,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.lastKnownOwner = this.valuation.property.lastKnownOwner
             ? this.valuation.property.lastKnownOwner
             : this.valuation.propertyOwner;
+
+          this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner);
 
           if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
