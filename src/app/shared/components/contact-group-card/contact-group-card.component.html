@@ -5,7 +5,7 @@
         <span>
           <p class="txt--title">
             <a [routerLink]="['/contact-centre/detail/0/people/', contactGroup?.contactGroupId]">
-              {{contactGroup?.addressee}}
+              {{contactHeader}}
             </a>
           </p>
         </span>
@@ -69,7 +69,7 @@
               *ngIf="!contactGroup?.contactPeople[0]?.isAdminContact && contactGroup?.contactPeople[0]?.isMainPerson"
               class="pill pill--positive pill--onRight flexRight">Main</span>
             <span *ngIf="contactGroup?.contactPeople[0]?.isAdminContact"
-              class="pill pill--positive pill--onRight flexRight">Admin</span>
+              class="pill pill--info pill--onRight flexRight">Admin</span>
           </li>
           <li>
             <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
@@ -181,7 +181,7 @@
               </svg>{{person?.addressee}}
               <span *ngIf="!person?.isAdminContact && person?.isMainPerson"
                 class="pill pill--positive pill--onRight flexRight">Main</span>
-              <span *ngIf="person?.isAdminContact" class="pill pill--positive pill--onRight flexRight">Admin</span>
+              <span *ngIf="person?.isAdminContact" class="pill pill--info pill--onRight flexRight">Admin</span>
             </li>
           </ol>
         </details>

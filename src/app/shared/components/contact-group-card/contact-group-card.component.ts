@@ -16,7 +16,23 @@ import { ResultData } from '../../result-data';
   templateUrl: './contact-group-card.component.html',
 })
 export class ContactGroupCardComponent implements OnInit, OnChanges {
-  @Input() contactGroup: ContactGroup;
+  private _contactGroup: ContactGroup;
+  set contactGroup(value) {
+    if (this._contactGroup != value) {
+      this._contactGroup = value;
+      if (value && value.contactGroupId > 0) {
+        let headerPerson = value.contactPeople.find(
+          (contactPeople) => contactPeople.isMainPerson && !contactPeople.isAdminContact,
+        );
+        if (headerPerson) this.contactHeader = headerPerson?.addressee;
+        else this.contactHeader = value.addressee;
+      }
+    }
+  }
+  @Input() get contactGroup() {
+    return this._contactGroup;
+  }
+
   @Input() showEmailModal = false;
   @Input() showValuationActions = true;
   @Input() adminContact: Signer;
@@ -31,6 +47,7 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
   importantNotes$: Observable<ContactNote[]>;
   filteredItems: MenuItem[];
   items: MenuItem[];
+  contactHeader: string;
 
   constructor(
     private contactGroupService: ContactGroupsService,

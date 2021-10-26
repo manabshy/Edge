@@ -389,7 +389,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } else {
       this.valuation = { valuationStatus: ValuationStatusEnum.None, valuationStatusDescription: 'New' };
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0);
-      this.sharedService.removeContactGroupChanged.next(false);
       if (this.propertyId) {
         this.getPropertyInformation(this.propertyId);
       }
@@ -526,14 +525,22 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     });
 
     this.openContactGroupSubscription = this.sharedService.openContactGroupChanged.subscribe((value) => {
-      if (value) {
+      if (value === true) {
+        if (this.lastKnownOwner && this.lastKnownOwner.companyName && this.lastKnownOwner.companyName.length > 0) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'You can not add admin contact to a company contact group!',
+            closable: false,
+          });
+          return;
+        }
         this.isAdminContactVisible = value;
         this.sharedService.addAdminContactBs.next(true);
       }
     });
 
     this.removeContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe((value) => {
-      if (value) {
+      if (value === true) {
         this.removeAdminContact();
       }
     });
@@ -661,6 +668,22 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       } else {
         this.statuses.find((x) => x.value == 3).isValid = false;
       }
+
+      if (this.valuationService.landRegisterValid.getValue()) {
+        this.statuses.find((x) => x.value == 6).isValid = true;
+      } else {
+        this.statuses.find((x) => x.value == 6).isValid = false;
+      }
+
+      if (
+        this.valuation.complianceCheck &&
+        this.valuation.complianceCheck.compliancePassedByFullName &&
+        this.valuation.complianceCheck.compliancePassedByFullName.length > 0
+      ) {
+        this.statuses.find((x) => x.value == 9).isValid = true;
+      } else {
+        this.statuses.find((x) => x.value == 9).isValid = false;
+      }
     }
 
     // termsOfBusinessBs = new BehaviorSubject(false);
@@ -708,7 +731,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.isAdminContactChanged = true;
     this.valuationForm.get('adminContact').setValue(this.adminContact);
     this.adminContactGroup = null;
-    this.sharedService.removeContactGroupChanged.next(false);
+    this.sharedService.removeContactGroupChanged.next(null);
   }
 
   setShowMyNotesFlag(onlyMyNotes: boolean) {
@@ -775,6 +798,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuationForm.get('adminContact').setValue(this.adminContact);
       this.isAdminContactVisible = false;
       this.sharedService.openContactGroupChanged.next(false);
+      this.sharedService.removeContactGroupChanged.next(false);
     }
   }
 
@@ -934,6 +958,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     else {
       this.lastKnownOwner = this.valuation?.propertyOwner;
     }
+
+    this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner);
 
     if (this.changedLastOwner && this.changedLastOwner.contactGroupId > 0) {
       this.lastKnownOwner = { ...this.changedLastOwner };
@@ -1248,6 +1274,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
             ? this.valuation.property.lastKnownOwner
             : this.valuation.propertyOwner;
 
+          this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner);
+
           if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
               this.contactGroup = result;
@@ -1373,7 +1401,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     else if (
       !(this.valuationForm.get('adminContact').value && this.valuationForm.get('adminContact').value.contactGroupId > 0)
     ) {
-      this.sharedService.removeContactGroupChanged.next(false);
+      this.sharedService.removeContactGroupChanged.next(null);
     }
   }
 

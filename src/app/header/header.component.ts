@@ -88,44 +88,66 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy,
       this.sharedService.valuationType,
       this.sharedService.removeContactGroupChanged,
       this.sharedService.openContactGroupChanged,
-    ]).subscribe(([valuationStatus, valuationType, removeContactGroupChanged, openContactGroupChanged]) => {
-      if (this.items) {
-        if (valuationStatus === ValuationStatusEnum.None) {
-          this.filteredItems = [...this.items.filter((x) => x.id === 'addAdmin')];
-        } else if (valuationStatus === ValuationStatusEnum.Booked)
-          this.filteredItems = [...this.items.filter((x) => x.id === 'cancelValuation' || x.id === 'addAdmin')];
-        else if (valuationStatus === ValuationStatusEnum.Valued) {
-          if (valuationType === ValuationTypeEnum.Lettings) {
-            this.filteredItems = [
-              ...this.items.filter(
-                (x) => x.id === 'lettingsTermsOfBusiness' || x.id === 'addAdmin' || x.id === 'landLordQuestionnaire',
-              ),
-            ];
-          } else if (valuationType === ValuationTypeEnum.Sales) {
-            this.filteredItems = [
-              ...this.items.filter(
-                (x) => x.id === 'salesTermsOfBusiness' || x.id === 'addAdmin' || x.id === 'vendorQuestionnaire',
-              ),
-            ];
+      this.sharedService.valuationLastOwnerChanged,
+    ]).subscribe(
+      ([
+        valuationStatus,
+        valuationType,
+        removeContactGroupChanged,
+        openContactGroupChanged,
+        valuationLastOwnerChanged,
+      ]) => {
+        if (this.items) {
+          if (valuationStatus === ValuationStatusEnum.None) {
+            this.filteredItems = [...this.items.filter((x) => x.id === 'addAdmin')];
+          } else if (valuationStatus === ValuationStatusEnum.Booked)
+            this.filteredItems = [...this.items.filter((x) => x.id === 'cancelValuation' || x.id === 'addAdmin')];
+          else if (valuationStatus === ValuationStatusEnum.Valued) {
+            if (valuationType === ValuationTypeEnum.Lettings) {
+              this.filteredItems = [
+                ...this.items.filter(
+                  (x) => x.id === 'lettingsTermsOfBusiness' || x.id === 'addAdmin' || x.id === 'landLordQuestionnaire',
+                ),
+              ];
+            } else if (valuationType === ValuationTypeEnum.Sales) {
+              this.filteredItems = [
+                ...this.items.filter(
+                  (x) => x.id === 'salesTermsOfBusiness' || x.id === 'addAdmin' || x.id === 'vendorQuestionnaire',
+                ),
+              ];
+            }
+          } else if (valuationStatus === ValuationStatusEnum.Instructed) {
+            if (valuationType === ValuationTypeEnum.Lettings) {
+              this.filteredItems = [...this.items.filter((x) => x.id === 'landLordQuestionnaire')];
+            } else if (valuationType === ValuationTypeEnum.Sales) {
+              this.filteredItems = [...this.items.filter((x) => x.id === 'vendorQuestionnaire')];
+            }
           }
-        } else if (valuationStatus === ValuationStatusEnum.Instructed) {
-          if (valuationType === ValuationTypeEnum.Lettings) {
-            this.filteredItems = [...this.items.filter((x) => x.id === 'landLordQuestionnaire')];
-          } else if (valuationType === ValuationTypeEnum.Sales) {
-            this.filteredItems = [...this.items.filter((x) => x.id === 'vendorQuestionnaire')];
+
+          if (openContactGroupChanged === false) {
+            if (this.filteredItems.some((x) => x.id === 'removeAdmin') === false) {
+              this.filteredItems.push(this.items.find((x) => x.id === 'removeAdmin'));
+              this.filteredItems = [...this.filteredItems.filter((x) => x.id !== 'addAdmin')];
+            }
+          }
+
+          if (removeContactGroupChanged === null) {
+            if (this.filteredItems.some((x) => x.id === 'addAdmin') === false) {
+              this.filteredItems.unshift(this.items.find((x) => x.id === 'addAdmin'));
+              this.filteredItems = [...this.filteredItems.filter((x) => x.id !== 'removeAdmin')];
+            }
+          }
+
+          if (
+            valuationLastOwnerChanged != null &&
+            valuationLastOwnerChanged.companyName &&
+            valuationLastOwnerChanged.companyName.length > 0
+          ) {
+            this.filteredItems = [...this.filteredItems.filter((x) => x.id !== 'addAdmin')];
           }
         }
-        if (removeContactGroupChanged != null && !removeContactGroupChanged) {
-          if (this.filteredItems.some((x) => x.id === 'addAdmin') === false)
-            this.filteredItems.unshift(this.items.find((x) => x.id === 'addAdmin'));
-          this.filteredItems = [...this.filteredItems.filter((x) => x.id !== 'removeAdmin')];
-        } else if (openContactGroupChanged != null && !openContactGroupChanged) {
-          if (this.filteredItems.some((x) => x.id === 'removeAdmin') === false)
-            this.filteredItems.push(this.items.find((x) => x.id === 'removeAdmin'));
-          this.filteredItems = [...this.filteredItems.filter((x) => x.id !== 'addAdmin')];
-        }
-      }
-    });
+      },
+    );
   }
 
   ngAfterViewInit(): void {}
