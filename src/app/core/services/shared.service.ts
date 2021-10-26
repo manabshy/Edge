@@ -70,6 +70,7 @@ export class SharedService {
   convertStringToNumber(stringValue: string): number {
     let numberValue = '0';
     if (stringValue) {
+      stringValue = stringValue.toString();
       numberValue = stringValue.replace(/\D/g, '');
       numberValue = numberValue.replace(/\D/g, '').replace(/^0+/, '');
     }

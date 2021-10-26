@@ -181,6 +181,7 @@ export enum ValuationStatusEnum {
   Valued = 3,
   Instructed = 4,
   Cancelled = 5,
+  Closed = 6,
 }
 
 export enum ValuationCancellationReasons {

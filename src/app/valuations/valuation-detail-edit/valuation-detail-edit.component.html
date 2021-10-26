@@ -144,7 +144,8 @@
                 <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]"
                   *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">
 
-                  <div id="valuationNotesTab" class="grid grid--9">
+                  <div id="valuationNotesTab" class="grid grid--9"
+                    [ngClass]="{'opacity-75 pointer-events-none': isCancelled}" (click)="controlIsCancelled($event)">
                     <div>
                       <fieldset class="mb-3 inline-child" [ngClass]="{'invalid': formErrors?.reason}"
                         *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
@@ -182,7 +183,8 @@
 
                 <p-accordionTab header="Property Info" [(selected)]="activeState[1]">
 
-                  <div id="propertyInfoTab">
+                  <div id="propertyInfoTab" [ngClass]="{'opacity-75 pointer-events-none': isCancelled}"
+                    (click)="controlIsCancelled($event)">
                     <div class="inline-parent inline-parent__hasLabels">
                       <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.propertyTypeId}">
                         <label for="propertyTypeId">Property Type</label>
@@ -333,7 +335,8 @@
 
                 <p-accordionTab header="Appointment" [(selected)]="activeState[2]">
 
-                  <div id="appointmentTab">
+                  <div id="appointmentTab" [ngClass]="{'opacity-75 pointer-events-none': isCancelled}"
+                    (click)="controlIsCancelled($event)">
                     <fieldset *ngIf="isNewValuation && canBookAppointment">
                       <button class="btn btn--positive" type="button" (click)="isBothEdit = true;getAvailability()"
                         data-cy="getvailability">Book Availability</button>
@@ -757,7 +760,8 @@
                 </p-accordionTab>
 
                 <p-accordionTab header="Compliance Checks" *ngIf="isLandRegisterVisible" [(selected)]="activeState[9]">
-                  <div id="complianceChecksTab">
+                  <div id="complianceChecksTab" [ngClass]="{'opacity-75 pointer-events-none': isCancelled}"
+                    (click)="controlIsCancelled($event)">
                     <app-compliance-checks-shell>
                     </app-compliance-checks-shell>
                   </div>

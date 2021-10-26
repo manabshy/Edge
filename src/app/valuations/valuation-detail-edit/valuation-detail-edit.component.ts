@@ -676,6 +676,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
 
       if (
+        this.valuation &&
         this.valuation.complianceCheck &&
         this.valuation.complianceCheck.compliancePassedByFullName &&
         this.valuation.complianceCheck.compliancePassedByFullName.length > 0
@@ -1193,21 +1194,28 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.valuationStatus === 3 ? (this.canInstruct = true) : (this.canInstruct = false);
         this.valuation.approxLeaseExpiryDate ? (this.showLeaseExpiryDate = true) : (this.showLeaseExpiryDate = false);
 
-        if (this.valuation.valuationStatus === ValuationStatusEnum.Cancelled) {
+        if (
+          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Closed
+        ) {
           if (this.route.snapshot.routeConfig?.path?.indexOf('edit') > -1) {
             let path = ['valuations-register/detail', this.valuation.valuationEventId, 'cancelled'];
             this.router.navigate(path);
             return;
           }
           this.isCancelled = true;
-          this.cancelString = `Cancelled ${moment(this.valuation.cancelledDate).format('Do MMM YYYY (HH:mm)')} by ${
-            this.valuation.cancelledBy?.fullName
-          } `;
-          this.cancelReasonString =
-            'Reason for cancellation: ' +
-            (this.valuation.cancellationTypeId == ValuationCancellationReasons.Other
-              ? this.valuation.cancellationReason
-              : this.removeUnderLine(ValuationCancellationReasons[this.valuation.cancellationTypeId]));
+          if (this.valuation.valuationStatus === ValuationStatusEnum.Cancelled) {
+            this.cancelString = `Cancelled ${moment(this.valuation.cancelledDate).format('Do MMM YYYY (HH:mm)')} by ${
+              this.valuation.cancelledBy?.fullName
+            } `;
+            this.cancelReasonString =
+              'Reason for cancellation: ' +
+              (this.valuation.cancellationTypeId == ValuationCancellationReasons.Other
+                ? this.valuation.cancellationReason
+                : this.removeUnderLine(ValuationCancellationReasons[this.valuation.cancellationTypeId]));
+          } else {
+            this.cancelString = 'Closed';
+          }
         }
 
         if (
