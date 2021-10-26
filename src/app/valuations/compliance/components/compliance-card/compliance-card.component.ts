@@ -11,7 +11,7 @@ import moment from 'moment'
   templateUrl: './compliance-card.component.html'
 })
 export class ComplianceCardComponent implements OnInit {
-  @Input() person: any // TODO add type!
+  @Input() entity: any // TODO add type!
   @Input() isFrozen: boolean
   @Input() hasMenuBtn: boolean
 
@@ -44,37 +44,37 @@ export class ComplianceCardComponent implements OnInit {
   }
 
   private buildPills() {
-    if (this.person.companyId) {
-      this.pillClass = this.person.id === this.person.companyId ? 'pill--positive' : 'bg-gray-400'
-      this.pillLabel = this.person.id === this.person.companyId ? 'Company' : 'Associated Company'
+    if (this.entity.companyId) {
+      this.pillClass = this.entity.isMain ? 'pill--positive' : 'bg-gray-400'
+      this.pillLabel = this.entity.isMain ? 'Company' : 'Associated Company'
     } else {
-      this.pillClass = this.person.isMain ? 'pill--positive' : 'bg-gray-400'
-      this.pillLabel = this.person.isMain ? 'Lead Contact' : 'Associated Contact'
+      this.pillClass = this.entity.isMain ? 'pill--positive' : 'bg-gray-400'
+      this.pillLabel = this.entity.isMain ? 'Lead Contact' : 'Associated Contact'
     }
   }
 
   private setMenuItems() {
     this.items = [
       {
-        label: `Edit ${this.person.companyId ? 'company' : 'contact'}`,
+        label: `Edit ${this.entity.companyId ? 'company' : 'contact'}`,
         icon: 'fa fa-edit',
         command: (ev) => {
           this.dialogs.showEditDialog = !this.dialogs.showEditDialog
         }
       },
       {
-        label: `Remove ${this.person.companyId ? 'company' : 'contact'}`,
+        label: `Remove ${this.entity.companyId ? 'company' : 'contact'}`,
         icon: 'fa fa-times',
         command: (ev) => {
           this.dialogs.showRemoveDialog = !this.dialogs.showRemoveDialog
         }
       },
       {
-        label: this.person.isUBO ? 'Remove as UBO' : 'Make UBO',
-        icon: this.person.isUBO ? 'fa fa-toggle-off' : 'fa fa-toggle-on',
+        label: this.entity.isUBO ? 'Remove as UBO' : 'Make UBO',
+        icon: this.entity.isUBO ? 'fa fa-toggle-off' : 'fa fa-toggle-on',
         command: (ev) => {
           this.setMenuItems() // refreshes options again
-          this.onToggleIsUBO.emit(this.person)
+          this.onToggleIsUBO.emit(this.entity)
         }
       }
     ]
@@ -82,11 +82,11 @@ export class ComplianceCardComponent implements OnInit {
 
   public confirmDelete(): void {
     this.dialogs.showRemoveDialog = false
-    this.onRemoveEntity.emit(this.person)
+    this.onRemoveEntity.emit(this.entity)
   }
 
   public updateEntity(): void {
     this.dialogs.showEditDialog = false
-    this.onUpdateEntity.emit({ id: this.person.id, ...this.contactForm.value })
+    this.onUpdateEntity.emit({ id: this.entity.id, ...this.contactForm.value })
   }
 }

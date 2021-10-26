@@ -5,12 +5,12 @@
 
   <div class="w-full flex flex-col lg:flex-row lg:flex-wrap px-0">
     <div
-      *ngFor="let person of people; let i = index; let even = even"
+      *ngFor="let entity of entities; let i = index; let even = even"
       class="w-full lg:w-1/2"
-      [ngClass]="[even ? 'lg:border-r' : '', (i == 0 || i == 1) && people.length > 2 ? 'lg:border-b' : '']"
+      [ngClass]="[even ? 'lg:border-r' : '', (i == 0 || i == 1) && entities.length > 2 ? 'lg:border-b' : '']"
     >
       <app-compliance-card
-        [person]="person"
+        [entity]="entity"
         [isFrozen]="isFrozen"
         [hasMenuBtn]="companyOrContact === 'company'"
         (onFileUploaded)="onFileWasUploaded.emit($event)"
@@ -63,13 +63,14 @@
   [(visible)]="dialogs.showContactDialog"
   [modal]="true"
   [draggable]="false"
-  [appendTo]="'body'"
   class="modal--medium modal--hasFooter"
 >
   <app-contact-search
     [contactGroupDetails]="contactGroupDetails"
     [searchTerm]="searchTerm"
     [potentialDuplicatePeople]="potentialDuplicatePeople"
+    [isCreateNewPersonVisible]="true"
+    [existingIds]="existingContactIds$ | async"
     (addedPersonDetails)="getAddedPersonDetails($event)"
     (selectedPerson)="addSelectedContact($event)"
     (findPotentialDuplicatePerson)="onQueryDuplicates.emit($event)"
@@ -87,9 +88,9 @@
 >
   <app-company-finder
     [canCreateNewCompany]="true"
+    [existingIds]="existingCompanyIds$ | async"
     (companyName)="getCompanyName($event)"
     (selectedCompanyDetails)="onAddCompany.emit($event)"
-    (isManualEntry)="setManualEntryFlag()"
   ></app-company-finder>
 </p-dialog>
 

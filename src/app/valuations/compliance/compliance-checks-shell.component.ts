@@ -4,6 +4,7 @@ import { ComplianceChecksStore } from './compliance-checks.store'
 import { ComplianceChecksState } from './compliance-checks.interfaces'
 import { ComplianceChecksFacadeService } from './compliance-checks.facade.service'
 import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-group'
+import { map } from 'rxjs/operators'
 
 /***
  * @description The outermost component for Company & Contact compliance checks. Uses compliance checks store for all server/service/biz logic interactions
@@ -13,7 +14,7 @@ import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-
   template: `
     <div *ngIf="vm$ | async as vm">
       <app-pure-compliance-checks-shell
-        [people]="vm.people"
+        [entities]="vm.entities"
         [checkType]="vm.checkType"
         [message]="vm.message"
         [checksAreValid]="vm.checksAreValid"
@@ -40,9 +41,18 @@ import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-
 export class ComplianceChecksShellComponent {
   vm$: Observable<ComplianceChecksState>
   contactSearchResults$: Observable<PotentialDuplicateResult>
+  newCompanyAdded$: Observable<any>
 
   constructor(public readonly store: ComplianceChecksStore, public readonly facadeSvc: ComplianceChecksFacadeService) {
     this.vm$ = this.store.complianceChecksVm$
     this.contactSearchResults$ = this.facadeSvc.contactSearchResults$
+    this.facadeSvc.newCompanyAdded$
+      .pipe(
+        map((company) => {
+          console.log('adding company via newCompanyChange observable')
+          this.store.onAddNewCompany(company)
+        })
+      )
+      .subscribe()
   }
 }

@@ -57,10 +57,10 @@ const ComplianceCardTemplate: Story<ComplianceCardComponent> = (args: Compliance
   },
 });
 
-// Lead person stories
+// Lead entity stories
 export const LeadContactBlank = ComplianceCardTemplate.bind({});
 LeadContactBlank.args = {
-  person: {
+  entity: {
     id: 123,
     personId: 123,
     isMain: true,
@@ -78,7 +78,7 @@ LeadContactBlank.args = {
 
 export const LeadContactValid = ComplianceCardTemplate.bind({});
 LeadContactValid.args = {
-  person: {
+  entity: {
     id: 456,
     personId: 456,
     isMain: true,
@@ -96,7 +96,7 @@ LeadContactValid.args = {
 
 export const LeadContactAndUBO = ComplianceCardTemplate.bind({});
 LeadContactAndUBO.args = {
-  person: {
+  entity: {
     id: 456,
     personId: 456,
     isUBO: true,
@@ -115,7 +115,7 @@ LeadContactAndUBO.args = {
 
 export const LeadContactInvalid = ComplianceCardTemplate.bind({});
 LeadContactInvalid.args = {
-  person: {
+  entity: {
     id: 789,
     personId: 789,
     isMain: true,
@@ -133,7 +133,7 @@ LeadContactInvalid.args = {
 
 export const LeadContactMixed = ComplianceCardTemplate.bind({});
 LeadContactMixed.args = {
-  person: {
+  entity: {
     id: 101,
     personId: 101,
     isMain: true,
@@ -149,11 +149,11 @@ LeadContactMixed.args = {
   },
 };
 
-// Associated person stories
+// Associated entity stories
 export const AssociatedContactBlank = ComplianceCardTemplate.bind({});
 AssociatedContactBlank.args = {
   isFrozen: false,
-  person: {
+  entity: {
     id: 121,
     personId: 121,
     isMain: false,
@@ -172,7 +172,7 @@ AssociatedContactBlank.args = {
 export const AssociatedContactValid = ComplianceCardTemplate.bind({});
 AssociatedContactValid.args = {
   isFrozen: false,
-  person: {
+  entity: {
     id: 131,
     personId: 131,
     isMain: false,
@@ -191,7 +191,7 @@ AssociatedContactValid.args = {
 export const AssociatedContactInvalid = ComplianceCardTemplate.bind({});
 AssociatedContactInvalid.args = {
   isFrozen: false,
-  person: {
+  entity: {
     id: 415,
     personId: 415,
     isMain: false,
@@ -210,7 +210,7 @@ AssociatedContactInvalid.args = {
 export const CompanyContact = ComplianceCardTemplate.bind({});
 CompanyContact.args = {
   isFrozen: false,
-  person: {
+  entity: {
     id: 161,
     companyId: 161,
     name: 'Beazer Bungalows',
@@ -229,7 +229,7 @@ CompanyContact.args = {
 export const AssociatedCompanyContact = ComplianceCardTemplate.bind({});
 AssociatedCompanyContact.args = {
   isFrozen: false,
-  person: {
+  entity: {
     id: 191,
     companyId: 161,
     name: 'Abacus Solicitors',

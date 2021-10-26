@@ -16,7 +16,7 @@ export interface ComplianceChecksState {
       type: string // 'warn' || 'info' || 'error'
       text: Array<string>
     }
-    people: Array<ComplianceChecksPeople>
+    entities: Array<ComplianceChecksPeople>
     compliancePassedDate: Date
     compliancePassedBy: string
     valuationEventId: number
@@ -57,7 +57,7 @@ export interface ComplianceChecksState {
       documentType?: DOCUMENT_TYPE
       idValidationDateExpiry?: Date
     }
-    person?: Person
+    entity?: Person
   }
   
   export interface FileUpdate {
@@ -69,5 +69,5 @@ export interface ComplianceChecksState {
       id: number
       documentType: DOCUMENT_TYPE
     }
-    person: Person
+    entity: Person
   }
