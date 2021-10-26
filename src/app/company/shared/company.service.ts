@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Company } from 'src/app/contact-groups/shared/contact-group';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { map, tap, catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CompanyService {
   private companyPageChangeSubject = new Subject<number | null>();
-  private newCompanySubject = new Subject<Company | null>();
+  private newCompanySubject = new BehaviorSubject<Company | null>(null);
   companyPageChanges$ = this.companyPageChangeSubject.asObservable();
   newCompanyChanges$ = this.newCompanySubject.asObservable();
 
