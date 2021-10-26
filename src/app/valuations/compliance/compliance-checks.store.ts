@@ -93,7 +93,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    * @function peopleArrayShapedForApi$
    * @description takes people out of store data shape and preps them for saving to the API
    */
-  public peopleArrayShapedForApi$: Observable<any> = combineLatest([
+  private peopleArrayShapedForApi$: Observable<any> = combineLatest([
     this.people$,
     this.companyOrContact$,
     this.companyId$,
@@ -108,7 +108,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    * @function pushContactsToValuationServiceForSave$
    * @description takes documents out of the store, shapes them for the API and puts them in the valuation service ready for picking up when user saves valuation
    */
-  public pushContactsToValuationServiceForSave$: Observable<any> = this.peopleArrayShapedForApi$.pipe(
+  private pushContactsToValuationServiceForSave$: Observable<any> = this.peopleArrayShapedForApi$.pipe(
     tap((data) => {
       console.log('pushContactsToValuationServiceForSave RUNNING 🏃🏃🏃🏃')
       if (data.savePayload) {
@@ -158,7 +158,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     people: state.people.map((person) => (person.id === data.person.id ? mergeFiles(data, person) : person))
   }))
 
-  readonly removeUserDocsFromStore = this.updater((state, data: any) => ({
+  readonly removeDocFromStore = this.updater((state, data: any) => ({
     ...state,
     people: state.people.map((person) => (person.id === data.person.id ? removeDocFromDocumentsObject(data) : person))
   }))
@@ -176,6 +176,20 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
             ...person,
             isUBO: !person.isUBO,
             uboAdded: person.isUBO ? null : new Date()
+          }
+        : person
+    )
+  }))
+
+  readonly updateEntity = this.updater((state, entity: any) => ({
+    ...state,
+    people: state.people.map((person) =>
+      person.id === entity.id
+        ? {
+            ...person,
+            name: entity.name,
+            address: entity.address,
+            position: entity.position
           }
         : person
     )
@@ -231,22 +245,28 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       .pipe(
         filter(([contactGroupData, valuation]) => !!valuation && !!contactGroupData),
         tap(([contactGroupData, valuationData]) => {
-          this.patchState(buildPartialLoadState(contactGroupData, valuationData))
+          this.patchState(buildPartialLoadState(contactGroupData.companyId, valuationData))
         }),
         mergeMap(([contactGroupData, valuation]) => {
           if (contactGroupData.companyId) {
-            return this.peopleService.getCompanyPeopleDocs(contactGroupData.contactGroupId, valuation.valuationEventId)
+            return combineLatest([
+              this.peopleService.getCompanyPeopleDocs(contactGroupData.contactGroupId, valuation.valuationEventId),
+              this.compliancePassedDate$
+            ])
           } else if (valuation && valuation.propertyOwner) {
-            return this.peopleService.getPeopleDocs(valuation.propertyOwner.contactGroupId, valuation.valuationEventId)
+            return combineLatest([
+              this.peopleService.getPeopleDocs(valuation.propertyOwner.contactGroupId, valuation.valuationEventId),
+              this.compliancePassedDate$
+            ])
           }
         }),
-        mergeMap((data) => {
+        mergeMap(([data, passedDate]) => {
           let peopleData
           if (data.companyDocuments) {
             peopleData = data.companyDocuments.concat(data.personDocuments)
-            return of(this.patchState({ people: setContactsForCompliance(peopleData) }))
+            return of(this.patchState({ people: setContactsForCompliance(peopleData, passedDate) }))
           } else {
-            return of(this.patchState({ people: setContactsForCompliance(data) }))
+            return of(this.patchState({ people: setContactsForCompliance(data, passedDate) }))
           }
         }),
         mergeMap(() => this.validationMessage$),
@@ -256,11 +276,11 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   }
 
   /***
-   * @function passComplianceChecks
+   * @function onPassComplianceChecks
    * @description this function can only run if checks criteria has been met see this.checksAreValid$
    * it loops all people and stamps their personDateAmlCompleted property saving to API. Displays a message to user that AML checks have passed.
    */
-  public passComplianceChecks() {
+  public onPassComplianceChecks() {
     let valuationEventIdClosure
     combineLatest([this.checksAreValid$, this.valuationEventId$])
       .pipe(
@@ -305,11 +325,11 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   }
 
   /***
-   * @function addFilesToPerson
-   * @param data:
+   * @function onFileUploaded
+   * @param {Object} data - files object
    * @description calls API to save files to temp storage. Updates this store with those docs and pushes changes to valuation in valuationService. User will have to save valuation to persist files.
    */
-  public addFilesToPerson = (data: FileUpdateEvent) => {
+  public onFileUploaded = (data: FileUpdateEvent) => {
     if (!data.ev.tmpFiles) return
 
     const formData = new FormData()
@@ -331,12 +351,12 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   }
 
   /***
-   * @function deleteFileFromPerson
-   * @param data:
+   * @function onDeleteFileFromEntity
+   * @param {Object} data -
    * @description deletes a compliance doc from a person in the store. User will have to save valuation in order for changes to persist to API
    */
-  public deleteFileFromPerson = (data: FileDeletionPayload) => {
-    this.removeUserDocsFromStore(data)
+  public readonly onDeleteFileFromEntity = (data: FileDeletionPayload) => {
+    this.removeDocFromStore(data)
     this.pushContactsToValuationServiceForSave$
       .pipe(
         tap(() => {
@@ -353,11 +373,11 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   }
 
   /***
-   * @function addContact
-   * @param data:
+   * @function onAddContact
+   * @param {Object} data:
    * @description adds an existing contact to the valuation. grabs their docs & data from API and puts in the store
    */
-  public addContact = (data: any) => {
+  public onAddContact = (data: any) => {
     this.peopleService
       .getPersonDocs(data.id)
       .pipe(
@@ -373,11 +393,11 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   }
 
   /***
-   * @function addCompany
-   * @param data:
+   * @function onAddCompany
+   * @param {Object} data:
    * @description adds an existing company to the valuation. grabs their docs & data from API and puts in the store
    */
-  public addCompany = (data: any) => {
+  public onAddCompany = (data: any) => {
     this.peopleService
       .getCompanyDocs(data.companyId)
       .pipe(
@@ -392,21 +412,11 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   }
 
   /***
-   * @function toggleIsUBO
-   * @param data:
-   * @description toggles the isUBO flag against a company/contact by setting the necesary timestamps in the store for that person/company
-   */
-  public toggleIsUBO = (data: any) => {
-    this.toggleUserIsUBO(data.id)
-    this.pushContactsToValuationServiceForSave$.pipe(take(1)).subscribe()
-  }
-
-  /***
-   * @function removeContact
-   * @param data:
+   * @function onRemoveEntity
+   * @param {Object} data:
    * @description removes contact/company from the store and updates the valuation in valuation service. User will need to save valuation to persist the deletion
    */
-  public removeContact = (data: any) => {
+  public onRemoveEntity = (data: any) => {
     this.removeFromValuation(data.id)
     this.pushContactsToValuationServiceForSave$
       .pipe(
@@ -417,31 +427,47 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   }
 
   /***
-   * @function saveContact
-   * @param data:
+   * @function onUpdateEntity
+   * @param {Object} data - person or company in the store
    * @description
    */
-  public saveContact = (data: any) => {
-    console.log('saveContact: ', data)
+  public onUpdateEntity = (data: any) => {
+    console.log('onSaveContact: ', data)
+    this.updateEntity(data)
+    this.pushContactsToValuationServiceForSave$.pipe(take(1)).subscribe()
+  }
+
+  /***
+   * @function onToggleIsUBO
+   * @param data:
+   * @description toggles the isUBO flag against a company/contact by setting the necesary timestamps in the store for that person/company
+   */
+  public onToggleIsUBO = (data: any) => {
+    this.toggleUserIsUBO(data.id)
+    this.pushContactsToValuationServiceForSave$.pipe(take(1)).subscribe()
   }
 
   /***
    * @function onRefreshDocuments
-   * @param data: ?? todo
    * @description calls API to remove docs associated with the valuation. Updates store with docs returned from API call.
    */
-  public onRefreshDocuments = (data: any) => {
-    console.log('onRefreshDocuments: ', data)
+  public onRefreshDocuments = () => {
     combineLatest([this.contactGroupId$, this.valuationEventId$, this.companyOrContact$])
       .pipe(
         mergeMap(([contactGroupId, valuationEventId, companyOrContact]: [number, number, string]) => {
           if (companyOrContact === 'company') {
-            return this.peopleService.deleteCompanyDocs(contactGroupId, valuationEventId)
+            return combineLatest([
+             this.peopleService.deleteCompanyDocs(contactGroupId, valuationEventId),
+              this.compliancePassedDate$
+            ])
           } else {
-            return this.peopleService.deletePeopleDocs(contactGroupId, valuationEventId)
+            return combineLatest([
+              this.peopleService.deletePeopleDocs(contactGroupId, valuationEventId),
+              this.compliancePassedDate$
+            ])
           }
         }),
-        mergeMap((data) => {
+        mergeMap(([data, passedDate]) => {
           let peopleForStore
           if (data.companyId) {
             peopleForStore = data.companyDocuments.concat(data.personDocuments)
@@ -452,7 +478,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
             return { ...p, personDateAmlCompleted: null }
           })
           this.patchState({
-            people: setContactsForCompliance(people),
+            people: setContactsForCompliance(people, passedDate),
             isFrozen: false
           })
           return this.validationMessage$

@@ -1,4 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core'
+import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core'
+import { ContactGroup, PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-group'
 
 @Component({
   selector: 'app-pure-compliance-checks-shell',
@@ -10,21 +11,24 @@ export class PureComplianceChecksShellComponent {
   @Input() checksAreValid: boolean
   @Input() checkType: string // AML || KYC
   @Input() companyOrContact: string // company || contact
-  @Input() contactGroupDetails: any
+  @Input() contactGroupDetails: ContactGroup
   @Input() isFrozen: boolean
+  @Input() potentialDuplicatePeople: PotentialDuplicateResult
 
-  @Output() passComplianceChecks: EventEmitter<any> = new EventEmitter()
-  @Output() fileWasUploaded: EventEmitter<any> = new EventEmitter()
-  @Output() fileWasDeleted: EventEmitter<any> = new EventEmitter()
-  @Output() toggleIsUBO: EventEmitter<any> = new EventEmitter()
-  @Output() saveContact: EventEmitter<any> = new EventEmitter()
-  @Output() removeContact: EventEmitter<any> = new EventEmitter()
-  @Output() addCompany: EventEmitter<any> = new EventEmitter()
-  @Output() addContact: EventEmitter<any> = new EventEmitter()
-  @Output() refreshDocuments: EventEmitter<any> = new EventEmitter()
+  @Output() onPassComplianceChecks: EventEmitter<any> = new EventEmitter()
+  @Output() onFileWasUploaded: EventEmitter<any> = new EventEmitter()
+  @Output() onFileWasDeleted: EventEmitter<any> = new EventEmitter()
+  @Output() onToggleIsUBO: EventEmitter<any> = new EventEmitter()
+  @Output() onUpdateEntity: EventEmitter<any> = new EventEmitter()
+  @Output() onRemoveEntity: EventEmitter<any> = new EventEmitter()
+  @Output() onAddCompany: EventEmitter<any> = new EventEmitter()
+  @Output() onAddContact: EventEmitter<any> = new EventEmitter()
+  @Output() onRefreshDocuments: EventEmitter<any> = new EventEmitter()
+  @Output() onQueryDuplicates: EventEmitter<any> = new EventEmitter()
+  @Output() onNavigatePage: EventEmitter<any> = new EventEmitter()
 
   smartSearchAddedDate = new Date() // TODO
-
+  searchTerm: string = ''
   dialogs = {
     showContactDialog: false,
     showCompanyDialog: false,
@@ -32,7 +36,7 @@ export class PureComplianceChecksShellComponent {
   }
 
   openDialog(dialog) {
-    if (dialog === 'showContactDialog') {
+    if (dialog === 'ZZshowContactDialog') {
       console.log('showContactDialog running hard coded contact add')
       //       66910 1 NULL Andrew
       // 66911 1 Jean-Marc
@@ -61,40 +65,26 @@ export class PureComplianceChecksShellComponent {
         address: 'Top of the Stairs',
         name: 'Riaaz'
       }
-      this.addContact.emit(fakeContact)
+      this.onAddContact.emit(fakeContact)
     } else {
       this.dialogs[dialog] = !this.dialogs[dialog]
     }
   }
 
-  searchTerm: string = ''
-
   getAddedPersonDetails($event) {
     console.log('getAddedPersonDetails')
   }
 
-  getSelectedPerson($event) {
-    console.log('createNewPerson')
-  }
-
-  createNewPerson() {
-    console.log('createNewPerson')
+  addSelectedContact($event) {
+    console.log('addSelectedContact: ', $event)
+    this.onAddContact.emit({ id: $event.personId })
   }
 
   getCompanyName(ev) {
     console.log('getCompanyName: ', ev)
   }
 
-  selectCompany(ev) {
-    this.addCompany.emit(ev)
-  }
-
   setManualEntryFlag() {
     console.log('setManualEntryFlag')
-  }
-
-  getSelectedContactGroup(ev) {
-    console.log('getSelectedContactGroup: ', ev)
-    this.addContact.emit(ev)
   }
 }

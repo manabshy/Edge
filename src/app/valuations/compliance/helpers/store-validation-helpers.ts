@@ -119,7 +119,11 @@ const personValidForKYC = (person) => {
   if (person.companyId) {
     return companyValidForChecks(person)
   } else {
-    return idIsValid(person.documents.idDoc.files) && person.documents.proofOfAddressDoc.files.length
+    return (
+      idIsValid(person.documents.idDoc.files) &&
+      person.documents.proofOfAddressDoc.files.length &&
+      person.documents.reportDocs.files.length // added back in as per Bug 2990 https://dev.azure.com/Douglas-and-Gordon/Edge/_workitems/edit/2990/
+    )
   }
 }
 

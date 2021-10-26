@@ -2,6 +2,8 @@ import { Component } from '@angular/core'
 import { Observable } from 'rxjs'
 import { ComplianceChecksStore } from './compliance-checks.store'
 import { ComplianceChecksState } from './compliance-checks.interfaces'
+import { ComplianceChecksFacadeService } from './compliance-checks.facade.service'
+import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-group'
 
 /***
  * @description The outermost component for Company & Contact compliance checks. Uses compliance checks store for all server/service/biz logic interactions
@@ -18,62 +20,29 @@ import { ComplianceChecksState } from './compliance-checks.interfaces'
         [isFrozen]="vm.isFrozen"
         [companyOrContact]="vm.companyOrContact"
         [contactGroupDetails]="vm.contactGroupDetails"
-        (fileWasUploaded)="onFileUploaded($event)"
-        (fileWasDeleted)="onFileDeleted($event)"
-        (passComplianceChecks)="onPassComplianceChecks()"
-        (toggleIsUBO)="onToggleIsUBO($event)"
-        (removeContact)="onRemoveContact($event)"
-        (saveContact)="onSaveContact($event)"
-        (addContact)="onAddContact($event)"
-        (addCompany)="onAddCompany($event)"
-        (refreshDocuments)="onRefreshDocuments($event)">
-      </app-pure-compliance-checks-shell>
-    </div>`,
+        [potentialDuplicatePeople]="contactSearchResults$ | async"
+        (onFileWasUploaded)="store.onFileUploaded($event)"
+        (onFileWasDeleted)="store.onDeleteFileFromEntity($event)"
+        (onPassComplianceChecks)="store.onPassComplianceChecks()"
+        (onToggleIsUBO)="store.onToggleIsUBO($event)"
+        (onRemoveEntity)="store.onRemoveEntity($event)"
+        (onUpdateEntity)="store.onUpdateEntity($event)"
+        (onAddContact)="store.onAddContact($event)"
+        (onAddCompany)="store.onAddCompany($event)"
+        (onRefreshDocuments)="store.onRefreshDocuments()"
+        (onQueryDuplicates)="facadeSvc.onQueryDuplicates($event)"
+        (onNavigatePage)="facadeSvc.onNavigatePage($event)"
+      ></app-pure-compliance-checks-shell>
+    </div>
+  `,
   providers: [ComplianceChecksStore]
 })
 export class ComplianceChecksShellComponent {
-
   vm$: Observable<ComplianceChecksState>
+  contactSearchResults$: Observable<PotentialDuplicateResult>
 
-  constructor(
-    private readonly _complianceChecksStore: ComplianceChecksStore,
-  ) {
-    this.vm$ = this._complianceChecksStore.complianceChecksVm$
-  }
-
-  onPassComplianceChecks(): void {
-    this._complianceChecksStore.passComplianceChecks()
-  }
-
-  onFileUploaded(ev): void {
-    this._complianceChecksStore.addFilesToPerson(ev)
-  }
-
-  onFileDeleted(ev): void {
-    this._complianceChecksStore.deleteFileFromPerson(ev)
-  }
-  
-  onAddContact(ev): void {
-    this._complianceChecksStore.addContact(ev)
-  }
-  
-  onAddCompany(ev): void {
-    this._complianceChecksStore.addCompany(ev)
-  }
-
-  onToggleIsUBO(ev): void {
-    this._complianceChecksStore.toggleIsUBO(ev)
-  }
-  
-  onSaveContact(ev) :void {
-    this._complianceChecksStore.saveContact(ev)
-  }
-
-  onRemoveContact(ev) :void {
-    this._complianceChecksStore.removeContact(ev)
-  }
-
-  onRefreshDocuments(ev) :void {
-    this._complianceChecksStore.onRefreshDocuments(ev)
+  constructor(public readonly store: ComplianceChecksStore, public readonly facadeSvc: ComplianceChecksFacadeService) {
+    this.vm$ = this.store.complianceChecksVm$
+    this.contactSearchResults$ = this.facadeSvc.contactSearchResults$
   }
 }

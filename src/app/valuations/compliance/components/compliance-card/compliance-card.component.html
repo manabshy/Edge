@@ -43,8 +43,8 @@
         [files]="person.documents.idDoc.files"
         [isFrozen]="isFrozen"
         [isMultiple]="'false'"
-        (onFileUploaded)="fileUploaded.emit({ person: person, ev: $event })"
-        (deleteFile)="fileDeleted.emit({ person: person, ev: $event })"
+        (onFileUploaded)="onFileUploaded.emit({ person: person, ev: $event })"
+        (deleteFile)="onFileDeleted.emit({ person: person, ev: $event })"
       ></app-document-info>
     </div>
     <div class="w-100 md:w-1/2">
@@ -55,8 +55,8 @@
         [documentType]="person.documents.proofOfAddressDoc.documentType"
         [files]="person.documents.proofOfAddressDoc.files"
         [isFrozen]="isFrozen"
-        (onFileUploaded)="fileUploaded.emit({ person: person, ev: $event })"
-        (deleteFile)="fileDeleted.emit({ person: person, ev: $event })"
+        (onFileUploaded)="onFileUploaded.emit({ person: person, ev: $event })"
+        (deleteFile)="onFileDeleted.emit({ person: person, ev: $event })"
       ></app-document-info>
     </div>
   </div>
@@ -69,8 +69,8 @@
         [files]="person.documents.reportDocs.files"
         [personName]="person.personName"
         [isFrozen]="isFrozen"
-        (onFileUploaded)="fileUploaded.emit({ person: person, ev: $event })"
-        (deleteFile)="fileDeleted.emit({ person: person, ev: $event })"
+        (onFileUploaded)="onFileUploaded.emit({ person: person, ev: $event })"
+        (deleteFile)="onFileDeleted.emit({ person: person, ev: $event })"
       ></app-document-info>
     </div>
     <div class="w-100 flex-1">
@@ -80,8 +80,8 @@
         [files]="person.documents.additionalDocs.files"
         [personName]="person.personName"
         [isFrozen]="isFrozen"
-        (onFileUploaded)="fileUploaded.emit({ person: person, ev: $event })"
-        (deleteFile)="fileDeleted.emit({ person: person, ev: $event })"
+        (onFileUploaded)="onFileUploaded.emit({ person: person, ev: $event })"
+        (deleteFile)="onFileDeleted.emit({ person: person, ev: $event })"
       ></app-document-info>
     </div>
   </div>
@@ -94,7 +94,7 @@
 
   <p-dialog
     header="Edit Contact"
-    [(visible)]="dialogs.showEditContactDialog"
+    [(visible)]="dialogs.showEditDialog"
     [modal]="true"
     [draggable]="false"
     class="modal--small"
@@ -115,12 +115,12 @@
     </form>
     <div class="flex flex-row -mb-3">
       <span class="flex-1"></span>
-      <button (click)="dialogs.showEditContactDialog = false" type="button" class="btn btn--ghost">Cancel</button>
-      <button type="submit" class="ml-2 btn btn--positive" (click)="saveContactChanges()">Save</button>
+      <button (click)="dialogs.showEditDialog = false" type="button" class="btn btn--ghost">Cancel</button>
+      <button type="submit" class="ml-2 btn btn--positive" (click)="updateEntity()">Save</button>
     </div>
   </p-dialog>
 
-  <p-dialog header="Remove Contact" [(visible)]="dialogs.showRemoveContactDialog" [modal]="true" [draggable]="false">
+  <p-dialog header="Remove Contact" [(visible)]="dialogs.showRemoveDialog" [modal]="true" [draggable]="false">
     <div class="p-4">
       <p>
         Remove
@@ -130,8 +130,8 @@
     </div>
     <div class="flex flex-row mt-4 -mb-1">
       <span class="flex-1"></span>
-      <button (click)="dialogs.showRemoveContactDialog = false" type="button" class="btn btn--ghost">Cancel</button>
-      <button class="ml-2 btn btn--positive" (click)="confirmContactDelete()">Delete</button>
+      <button (click)="dialogs.showRemoveDialog = false" type="button" class="btn btn--ghost">Cancel</button>
+      <button class="ml-2 btn btn--positive" (click)="confirmDelete()">Delete</button>
     </div>
   </p-dialog>
 </div>

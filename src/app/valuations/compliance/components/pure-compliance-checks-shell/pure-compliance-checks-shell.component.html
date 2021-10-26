@@ -13,11 +13,11 @@
         [person]="person"
         [isFrozen]="isFrozen"
         [hasMenuBtn]="companyOrContact === 'company'"
-        (fileUploaded)="fileWasUploaded.emit($event)"
-        (fileDeleted)="fileWasDeleted.emit($event)"
-        (toggleIsUBO)="toggleIsUBO.emit($event)"
-        (removeContact)="removeContact.emit($event)"
-        (saveContact)="saveContact.emit($event)"
+        (onFileUploaded)="onFileWasUploaded.emit($event)"
+        (onFileDeleted)="onFileWasDeleted.emit($event)"
+        (onToggleIsUBO)="onToggleIsUBO.emit($event)"
+        (onRemoveEntity)="onRemoveEntity.emit($event)"
+        (onUpdateEntity)="onUpdateEntity.emit($event)"
       ></app-compliance-card>
     </div>
   </div>
@@ -26,8 +26,16 @@
     class="px-2 md:px-4 w-full flex flex-col md:flex-row gap-x-4 justify-center my-10"
     *ngIf="companyOrContact === 'company'"
   >
-    <app-big-button [label]="'Add Associated Company'" [disabled]="isFrozen" (onClick)="openDialog('showCompanyDialog')"></app-big-button>
-    <app-big-button [label]="'Add Contact'"  [disabled]="isFrozen" (onClick)="openDialog('showContactDialog')"></app-big-button>
+    <app-big-button
+      [label]="'Add Associated Company'"
+      [disabled]="isFrozen"
+      (onClick)="openDialog('showCompanyDialog')"
+    ></app-big-button>
+    <app-big-button
+      [label]="'Add Contact'"
+      [disabled]="isFrozen"
+      (onClick)="openDialog('showContactDialog')"
+    ></app-big-button>
   </div>
 
   <div class="border-t border-gray-300 flex flex-row pt-4 items-center mt-8">
@@ -42,7 +50,7 @@
     <button
       class="btn btn--positive"
       [disabled]="!checksAreValid || isFrozen"
-      (click)="passComplianceChecks.emit($event)"
+      (click)="onPassComplianceChecks.emit($event)"
     >
       {{ checkType === 'AML' ? 'Pass AML' : 'Pass KYC' }}
     </button>
@@ -58,10 +66,15 @@
   [appendTo]="'body'"
   class="modal--medium modal--hasFooter"
 >
-  <app-contact-group-finder 
-  (selectedContactGroup)="getSelectedContactGroup($event)"
-  >
-</app-contact-group-finder>
+  <app-contact-search
+    [contactGroupDetails]="contactGroupDetails"
+    [searchTerm]="searchTerm"
+    [potentialDuplicatePeople]="potentialDuplicatePeople"
+    (addedPersonDetails)="getAddedPersonDetails($event)"
+    (selectedPerson)="addSelectedContact($event)"
+    (findPotentialDuplicatePerson)="onQueryDuplicates.emit($event)"
+    (navigate)="onNavigatePage.emit($event)"
+  ></app-contact-search>
 </p-dialog>
 
 <!-- Company Finder Modal -->
@@ -75,7 +88,7 @@
   <app-company-finder
     [canCreateNewCompany]="true"
     (companyName)="getCompanyName($event)"
-    (selectedCompanyDetails)="selectCompany($event)"
+    (selectedCompanyDetails)="onAddCompany.emit($event)"
     (isManualEntry)="setManualEntryFlag()"
   ></app-company-finder>
 </p-dialog>
@@ -96,7 +109,7 @@
     <button (click)="dialogs.showRefreshDocumentstDialog = false" type="button" class="btn btn--ghost">Cancel</button>
     <button
       class="ml-2 btn btn--positive"
-      (click)="refreshDocuments.emit($event); dialogs.showRefreshDocumentstDialog = false"
+      (click)="onRefreshDocuments.emit(); dialogs.showRefreshDocumentstDialog = false"
     >
       Confirm
     </button>

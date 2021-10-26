@@ -8,34 +8,34 @@ export enum DOCUMENT_TYPE {
 }
 
 export interface ComplianceChecksState {
-    checksAreValid: Boolean
-    checkType: String // 'AML' || 'KYC'
-    contactGroupId: Number
-    companyOrContact?: String // 'company' || 'contact'
+    checksAreValid: boolean
+    checkType: string // 'AML' || 'KYC'
+    contactGroupId: number
+    companyOrContact?: string // 'company' || 'contact'
     message?: {
-      type: String // 'warn' || 'info' || 'error'
+      type: string // 'warn' || 'info' || 'error'
       text: Array<string>
     }
     people: Array<ComplianceChecksPeople>
     compliancePassedDate: Date
-    compliancePassedBy: String
-    valuationEventId: Number
-    companyId: Number
-    isFrozen: Boolean
+    compliancePassedBy: string
+    valuationEventId: number
+    companyId: number
+    isFrozen: boolean
   }
   
   export interface ComplianceChecksPeople {
-    id: Number
-    personId: Number
-    companyId: Number
-    name: String
-    address?: String
-    position?: String
+    id: number
+    personId: number
+    companyId: number
+    name: string
+    address?: string
+    position?: string
     documents: Array<any>
-    isMain: Boolean
-    isUBO?: Boolean
+    isMain: boolean
+    isUBO?: boolean
     personDateAmlCompleted?: Date
-    compliancePassedBy?: String
+    compliancePassedBy?: string
   }
   
   export interface ComplianceDocTypes {
@@ -46,7 +46,7 @@ export interface ComplianceChecksState {
   }
   
   export interface ComplianceDocs {
-    label: String
+    label: string
     documentType: DOCUMENT_TYPE
     files: Array<any>
   }
@@ -66,7 +66,7 @@ export interface ComplianceChecksState {
   
   export interface FileDeletionPayload {
     ev: {
-      id: Number
+      id: number
       documentType: DOCUMENT_TYPE
     }
     person: Person
