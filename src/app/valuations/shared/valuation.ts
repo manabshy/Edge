@@ -76,6 +76,7 @@ export interface Valuation extends ValuationInfo {
   userEnteredOwner?: string;
   leaseExpiryDate?: Date;
   complianceCheck?: ComplianceChecksStatus;
+  lockDate?: Date;
 }
 
 export interface ComplianceChecksStatus {
