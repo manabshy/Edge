@@ -404,6 +404,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuation = { valuationStatus: ValuationStatusEnum.None, valuationStatusDescription: 'New' };
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0);
       if (this.propertyId) {
+        this.controlPreviousValuations(this.propertyId);
         this.getPropertyInformation(this.propertyId);
       }
     }
@@ -1333,7 +1334,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.isAllowedForValueChangesSubscription = this.staffMemberService
           .hasCurrentUserValuationCreatePermission()
           .subscribe((userHasPermission: boolean) => {
-            if (this.valuation.lockDate > new Date()) this.isAllowedForValueChanges = userHasPermission;
+            if (new Date(this.valuation.lockDate) > new Date()) this.isAllowedForValueChanges = userHasPermission;
           });
       })
       .then(() => {
@@ -1733,31 +1734,35 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
+  controlPreviousValuations(propertyId) {
+    this.propertySubscription = this.propertyService
+      .getValuations(propertyId, true)
+      .pipe(
+        map((valuations: Valuation[]) =>
+          valuations.map((valuation: Valuation) => {
+            return {
+              ...valuation,
+              valuationStatusDescription: ValuationStatusEnum[valuation.valuationStatus],
+            };
+          }),
+        ),
+      )
+      .subscribe((valuations: Valuation[]) => {
+        if (valuations && valuations.length > 0) {
+          this.activeValuations = valuations.filter(
+            (x) =>
+              x.valuationStatus == ValuationStatusEnum.Booked ||
+              x.valuationStatus == ValuationStatusEnum.None ||
+              x.valuationStatus == ValuationStatusEnum.Valued,
+          );
+          this.isActiveValuationsVisible = this.activeValuations.length > 0 ? true : false;
+        }
+      });
+  }
+
   getSelectedProperty(property: Property) {
     if (property) {
-      this.propertySubscription = this.propertyService
-        .getValuations(property.propertyId, true)
-        .pipe(
-          map((valuations: Valuation[]) =>
-            valuations.map((valuation: Valuation) => {
-              return {
-                ...valuation,
-                valuationStatusDescription: ValuationStatusEnum[valuation.valuationStatus],
-              };
-            }),
-          ),
-        )
-        .subscribe((valuations: Valuation[]) => {
-          if (valuations && valuations.length > 0) {
-            this.activeValuations = valuations.filter(
-              (x) =>
-                x.valuationStatus == ValuationStatusEnum.Booked ||
-                x.valuationStatus == ValuationStatusEnum.None ||
-                x.valuationStatus == ValuationStatusEnum.Valued,
-            );
-            this.isActiveValuationsVisible = this.activeValuations.length > 0 ? true : false;
-          }
-        });
+      this.controlPreviousValuations(property.propertyId);
 
       this.showProperty = false;
 

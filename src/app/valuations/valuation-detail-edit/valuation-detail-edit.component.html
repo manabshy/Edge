@@ -648,9 +648,8 @@
                     <p-menu appendTo="body" #menu [popup]="true" [model]="valueMenuItems">
                     </p-menu>
                   </di>
-                  <div id="valuesTab"
-                    [ngClass]="{'opacity-75 pointer-events-none': (isCancelled || isAllowedForValueChanges)}"
-                    (click)="controlIsCancelled($event, isCancelled || isAllowedForValueChanges)">
+                  <div id="valuesTab" [ngClass]="{'opacity-75 pointer-events-none': (isCancelled)}"
+                    (click)="controlIsCancelled($event, isCancelled)">
                     <ol class="mb-4 cards" [ngStyle]="{'grid-gap': (!isEditable && !isNewValuation)?'30px':''}">
                       <li
                         *ngIf="valuation?.salesValuationBooking && isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
