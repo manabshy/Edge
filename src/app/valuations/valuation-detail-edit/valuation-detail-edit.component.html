@@ -634,9 +634,9 @@
 
                 <p-accordionTab header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible"
                   data-cy="valuationValues">
-                  <ng-template pTemplate="header" *ngIf="isAllowedForValueChanges">
-                    <div dropdown class="flexRight">
-                      <a #myHref class="bg-gray-100" href [id]="'button'" dropdownToggle
+                  <di class="flex items-end justify-end" *ngIf="isAllowedForValueChanges">
+                    <div dropdown>
+                      <a #myHref href [id]="'button'" dropdownToggle
                         (click)="$event.stopPropagation();menu.toggle($event); false" [attr.aria-controls]="'dropdown'">
                         <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
                           <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
@@ -647,7 +647,7 @@
                     </div>
                     <p-menu appendTo="body" #menu [popup]="true" [model]="valueMenuItems">
                     </p-menu>
-                  </ng-template>
+                  </di>
                   <div id="valuesTab"
                     [ngClass]="{'opacity-75 pointer-events-none': (isCancelled || isAllowedForValueChanges)}"
                     (click)="controlIsCancelled($event, isCancelled || isAllowedForValueChanges)">
