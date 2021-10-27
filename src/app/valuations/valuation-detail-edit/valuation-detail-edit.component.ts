@@ -207,7 +207,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   cancelReasonString: string = '';
   saveValuationSubscription = new Subscription();
   changedLastOwner: Signer;
-  isAllowedForValueChanges: boolean = true;
+  isAllowedForValueChanges: boolean = false;
   isAllowedForValueChangesSubscription = new Subscription();
   isEditValueActive = false;
   valueMenuItems: MenuItem[] = [
@@ -631,12 +631,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           });
       }
     }
-
-    this.isAllowedForValueChangesSubscription = this.staffMemberService
-      .hasCurrentUserValuationCreatePermission()
-      .subscribe((userHasPermission: boolean) => {
-        this.isAllowedForValueChanges = userHasPermission;
-      });
 
     this.setScrollInformation();
   }
@@ -1335,6 +1329,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         if (this.valuation && this.allOrigins && this.originTypes) {
           this.setOriginTypeId(this.valuation.originId);
         }
+
+        this.isAllowedForValueChangesSubscription = this.staffMemberService
+          .hasCurrentUserValuationCreatePermission()
+          .subscribe((userHasPermission: boolean) => {
+            if (this.valuation.lockDate > new Date()) this.isAllowedForValueChanges = userHasPermission;
+          });
       })
       .then(() => {
         this.valuationService.getToBLink(id).subscribe((data) => {
