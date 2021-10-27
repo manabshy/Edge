@@ -29,7 +29,6 @@ export const actionsData = {
   addedPersonDetails: action('addedPersonDetails'),
   selectedPerson: action('selectedPerson'),
   isCanvasHidden: action('isCanvasHidden'),
-  makeButtonVisible: action('makeButtonVisible'),
   creatingNewPerson: action('creatingNewPerson'),
   findPotentialDuplicatePerson: action('findPotentialDuplicatePerson'),
 }
@@ -48,6 +47,8 @@ Blank.args = {}
 export const ContactMatches = Primary.bind({})
 ContactMatches.args = {
   searchTerm: 'Dave Beazer',
+  isCreateNewPersonVisible: true,
+  existingIds: [407512, 86077],
   potentialDuplicatePeople: {
     firstName: 'Dave',
     lastName: 'Beazer',

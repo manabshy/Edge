@@ -9,7 +9,7 @@ import { mapDocsForAPI, mapDocumentsForView } from './helpers/store-documents-he
  * @returns Object containing properties for the compliance checks store
  */
 export const buildPartialLoadState = (companyId, valuationData) => {
-  console.log('valuationData.complianceCheck: ', valuationData.complianceCheck)
+  // console.log('valuationData.complianceCheck: ', valuationData.complianceCheck)
   return {
     contactGroupId: valuationData.propertyOwner?.contactGroupId,
     companyOrContact: companyId ? 'company' : 'contact',
@@ -29,7 +29,7 @@ export const buildPartialLoadState = (companyId, valuationData) => {
  * @description Builds entities array for store mapping from API shape to Store shape. Any API props for entities that need changing look here first
  */
 export const setContactsForCompliance = (entitites, passedDate) => {
-  console.log('RAW PEOPLE FROM API: ', entitites)
+  // console.log('RAW PEOPLE FROM API: ', entitites)
   return entitites.map((e) => {
     return {
       id: e.id,
@@ -100,7 +100,7 @@ export const addExistingEntity = (storeState, entity) => {
  * @description maps the store data into correct shape for saving to API. Payload differs between personal and company compliance checks
  */
 export const workOutDataShapeForApi = (entities, companyOrContact, companyId, contactGroupId) => {
-  console.log('workOutDataShapeForApi: ', entities)
+  // console.log('workOutDataShapeForApi: ', entities)
   if (companyOrContact === 'contact') {
     // console.log('build contacts array')
     const entitiesToSave = entities.map((entity) => {

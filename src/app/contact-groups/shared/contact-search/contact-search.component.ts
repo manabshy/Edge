@@ -12,12 +12,14 @@ export class ContactSearchComponent implements OnInit {
   @Input() contactGroupDetails: ContactGroup
   @Input() isOffCanvasVisible: boolean
   @Input() isCreateNewPerson = false
+  @Input() isCreateNewPersonVisible = false
   @Input() searchTerm: string
   @Input() potentialDuplicatePeople: PotentialDuplicateResult
+  @Input() existingIds: number[]
+
   @Output() addedPersonDetails = new EventEmitter<Person>()
   @Output() selectedPerson = new EventEmitter<Person>()
   @Output() isCanvasHidden = new EventEmitter<boolean>()
-  @Output() makeButtonVisible = new EventEmitter<boolean>()
   @Output() creatingNewPerson = new EventEmitter<boolean>()
   @Output() findPotentialDuplicatePerson = new EventEmitter<any>()
   @Output() navigate = new EventEmitter<any>()
@@ -26,12 +28,15 @@ export class ContactSearchComponent implements OnInit {
   personFinderForm: FormGroup
   selectedPersonId: number
   isPersonCanvasVisible = false
-  isCreateNewPersonVisible = false
   newPerson: BasicPerson
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
+    this.initialiseForm()
+  }
+
+  initialiseForm() {
     this.personFinderForm = this.fb.group({
       firstName: [''],
       lastName: [''],
@@ -45,34 +50,21 @@ export class ContactSearchComponent implements OnInit {
     this.personFinderForm.valueChanges.pipe(debounceTime(750)).subscribe((data: BasicPerson) => {
       if (data.fullName && (data.phoneNumber || data.emailAddress)) {
         this.isCreateNewPersonVisible = true
-        this.makeButtonVisible.emit(true)
-      } else {
-        this.isCreateNewPersonVisible = false
-        this.makeButtonVisible.emit(false)
       }
       this.findPotentialDuplicatePerson.emit(data)
     })
   }
 
-  createNewContactGroupPerson() {
-    this.navigate.emit()
-  }
-
   selectPerson(person) {
-    console.log('selectPerson: ', person)
-    this.selectedPerson.emit(person)
+    if (this.isAlreadyInContactgroup(person.personId)) {
+      alert('This person is already in the group') // TODO finish
+    } else {
+      this.selectedPerson.emit(person)
+    }
   }
 
   isAlreadyInContactgroup(id: number) {
-    let isDuplicate = false
-    if (this.contactGroupDetails && this.contactGroupDetails.contactPeople) {
-      this.contactGroupDetails.contactPeople.forEach((x) => {
-        if (x && x.personId === id) {
-          isDuplicate = true
-        }
-      })
-    }
-    return isDuplicate
+    return this.existingIds && this.existingIds.find((existingId) => existingId === id)
   }
 
   /* Only allow spaces, dashes, the plus sign and digits */

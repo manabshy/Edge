@@ -1,13 +1,13 @@
 import { Component } from '@angular/core'
 import { Observable } from 'rxjs'
+import { map, take } from 'rxjs/operators'
 import { ComplianceChecksStore } from './compliance-checks.store'
 import { ComplianceChecksState } from './compliance-checks.interfaces'
 import { ComplianceChecksFacadeService } from './compliance-checks.facade.service'
 import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-group'
-import { map } from 'rxjs/operators'
 
 /***
- * @description The outermost component for Company & Contact compliance checks. Uses compliance checks store for all server/service/biz logic interactions
+ * @description The outermost component for Company & Contact compliance checks inside the valuation edit page. Uses compliance checks store for all server/service/biz logic interactions
  */
 @Component({
   selector: 'app-compliance-checks-shell',
@@ -32,7 +32,7 @@ import { map } from 'rxjs/operators'
         (onAddCompany)="store.onAddCompany($event)"
         (onRefreshDocuments)="store.onRefreshDocuments()"
         (onQueryDuplicates)="facadeSvc.onQueryDuplicates($event)"
-        (onNavigatePage)="facadeSvc.onNavigatePage($event)"
+        (onNavigatePage)="facadeSvc.onNavigateToNewContactPage($event)"
       ></app-pure-compliance-checks-shell>
     </div>
   `,
@@ -46,11 +46,21 @@ export class ComplianceChecksShellComponent {
   constructor(public readonly store: ComplianceChecksStore, public readonly facadeSvc: ComplianceChecksFacadeService) {
     this.vm$ = this.store.complianceChecksVm$
     this.contactSearchResults$ = this.facadeSvc.contactSearchResults$
+
     this.facadeSvc.newCompanyAdded$
       .pipe(
+        take(1),
         map((company) => {
-          console.log('adding company via newCompanyChange observable')
           this.store.onAddNewCompany(company)
+        })
+      )
+      .subscribe()
+
+    this.facadeSvc.newPersonAdded$
+      .pipe(
+        take(1),
+        map((contact) => {
+          this.store.onAddNewContact(contact)
         })
       )
       .subscribe()

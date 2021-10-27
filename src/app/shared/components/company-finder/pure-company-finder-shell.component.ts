@@ -41,7 +41,7 @@ export class PureCompanyFinderShellComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
-    console.log('existingIds: ', this.existingIds)
+    // console.log('existingIds: ', this.existingIds)
     this.initialiseForm()
   }
 
@@ -101,8 +101,8 @@ export class PureCompanyFinderShellComponent implements OnInit {
   }
 
   enterDetailsManually(isNewCompany?: boolean) {
-    console.log({ isNewCompany })
-    console.log(this.companyNameControl.value)
+    // console.log({ isNewCompany })
+    // console.log(this.companyNameControl.value)
     this.isManualEntry.emit({ isNewCompany, companyName: this.companyNameControl.value })
   }
 

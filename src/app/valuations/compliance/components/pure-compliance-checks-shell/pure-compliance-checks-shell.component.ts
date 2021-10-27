@@ -63,7 +63,7 @@ export class PureComplianceChecksShellComponent implements OnInit, OnChanges {
   }
 
   addSelectedContact($event) {
-    console.log('addSelectedContact: ', $event)
+    // console.log('addSelectedContact: ', $event)
     this.onAddContact.emit({ id: $event.personId })
   }
 
