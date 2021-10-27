@@ -32,11 +32,11 @@ import {
 import { ValuationService } from '../shared/valuation.service';
 import { Instruction } from 'src/app/shared/models/instruction';
 import { ResultData } from 'src/app/shared/result-data';
-import { StaffMember } from 'src/app/shared/models/staff-member';
+import { Permission, StaffMember } from 'src/app/shared/models/staff-member';
 import { TabDirective } from 'ngx-bootstrap/tabs/ngx-bootstrap-tabs';
 import format from 'date-fns/format';
 import { BehaviorSubject, Observable, of, Subject, Subscription, combineLatest } from 'rxjs';
-import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { MenuItem, MessageService, PrimeNGConfig } from 'primeng/api';
 import { addYears, differenceInCalendarYears, isThisHour } from 'date-fns';
 import _ from 'lodash';
 import { CurrencyPipe, ViewportScroller } from '@angular/common';
@@ -137,7 +137,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isAdminContactVisible = false;
   isInstructVisible = false;
   accordionIndex: number;
-  propertySubsription = new Subscription();
+  propertySubscription = new Subscription();
 
   salesMeetingOwner;
   lettingsMeetingOwner;
@@ -201,10 +201,25 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   showStudioLabel = false;
   isCancelValuationVisible = false;
   isCancelled = false;
+  isPropertyInfoDisabled = false;
+  isTermsOfBusinessDisabled = false;
   cancelString: string = '';
   cancelReasonString: string = '';
   saveValuationSubscription = new Subscription();
   changedLastOwner: Signer;
+  isAllowedForValueChanges: boolean = true;
+  isAllowedForValueChangesSubscription = new Subscription();
+  isEditValueActive = false;
+  valueMenuItems: MenuItem[] = [
+    {
+      id: 'editValue',
+      label: 'Edit',
+      icon: 'pi pi-pencil',
+      command: () => {
+        this.isEditValueActive = true;
+      },
+    },
+  ];
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -318,8 +333,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  activeState: boolean[] = [true, true, true, true, true, false, false];
-  // activeState: boolean[] = [false, false, false, false, false, false, true];
+  activeState: boolean[] = [true, true, true, true, true, true, true];
   statuses = [
     { name: 'valuationNotes', value: 0, isValid: false },
     { name: 'propertyInfo', value: 1, isValid: false },
@@ -617,6 +631,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           });
       }
     }
+
+    this.isAllowedForValueChangesSubscription = this.staffMemberService
+      .hasCurrentUserValuationCreatePermission()
+      .subscribe((userHasPermission: boolean) => {
+        this.isAllowedForValueChanges = userHasPermission;
+      });
+
     this.setScrollInformation();
   }
 
@@ -697,8 +718,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     const interval = setTimeout(() => {
       if (this.valuation?.valuationStatus == ValuationStatusEnum.None) this.scrollSpecificElement('appointmentTabs');
       else if (this.valuation?.valuationStatus == ValuationStatusEnum.Booked) this.scrollSpecificElement('valuesTab');
-      else if (this.valuation?.valuationStatus == ValuationStatusEnum.Valued)
+      else if (this.valuation?.valuationStatus == ValuationStatusEnum.Valued) {
         this.scrollSpecificElement('termsOfBusinessTab');
+        this.activeState = [false, false, false, true, true, true, true];
+      } else if (this.valuation?.valuationStatus == ValuationStatusEnum.Instructed) {
+        this.isTermsOfBusinessDisabled = true;
+      }
     }, 1000);
   }
 
@@ -1232,6 +1257,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
           this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
         ) {
+          this.isPropertyInfoDisabled = true;
           this.canSaveValuation = false;
           this.property = {
             ...this.property,
@@ -1368,8 +1394,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   //   this.activeState[index] = true;
   // }
 
-  controlIsCancelled($event) {
-    if (this.isCancelled) {
+  controlIsCancelled($event, control: boolean) {
+    if (control) {
       $event.preventDefault();
       return false;
     }
@@ -1709,7 +1735,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   getSelectedProperty(property: Property) {
     if (property) {
-      this.propertySubsription = this.propertyService
+      this.propertySubscription = this.propertyService
         .getValuations(property.propertyId, true)
         .pipe(
           map((valuations: Valuation[]) =>
@@ -2879,9 +2905,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.removeContactGroupSubscription.unsubscribe();
     this.eSignSubscription.unsubscribe();
     this.cancelValuationSubscription.unsubscribe();
-    this.propertySubsription.unsubscribe();
+    this.propertySubscription.unsubscribe();
     this.contactGroupSubscription.unsubscribe();
     this.saveValuationSubscription.unsubscribe();
+    this.isAllowedForValueChangesSubscription.unsubscribe();
     this.storage.delete(this.mainPersonId?.toString()).subscribe();
     this.destroy.unsubscribe();
   }
