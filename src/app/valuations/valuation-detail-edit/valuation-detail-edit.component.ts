@@ -2583,7 +2583,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   addOrUpdateValuation() {
     this.setLeaseExpiryDate();
     this.isSubmitting = true;
-    const valuationValue = this.valuationService._valuation.getValue(); // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
+    let valuationValue = this.valuation;
+    if (this.valuation.valuationEventId > 0) {
+      valuationValue = this.valuationService._valuation.getValue(); // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
+    }
     const valuation = { ...valuationValue, ...this.valuationForm.value };
     valuation.propertyOwner = this.lastKnownOwner;
     valuation.OfficeId = this.property.officeId;
