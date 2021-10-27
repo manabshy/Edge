@@ -141,8 +141,10 @@
           <ng-container *ngIf="property">
             <p-accordion [multiple]="true">
               <div class="mr-8 md:m-0">
-                <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]"
-                  *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">
+                <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]" *ngIf="isEditable || isNewValuation || isStillInOneMonthPeriod ||
+                        (!isEditable && valuationForm.get('reason').value) ||
+                        (!isEditable && valuationForm.get('timeFrame').value) ||
+                        (!isEditable && valuationForm.get('generalNotes').value)">
 
                   <div id="valuationNotesTab" class="grid grid--9"
                     [ngClass]="{'opacity-75 pointer-events-none': isCancelled}"
@@ -748,7 +750,7 @@
                       <fieldset class="mb-3 inline-child" [ngClass]="{'invalid': formErrors?.valuationNote}">
                         <label for="valuationNote">Valuation Meeting Notes</label>
                         <textarea
-                          [attr.disabled]="!(valuation?.valuationStatus == 0 || valuation?.valuationStatus == 1 || valuation?.valuationStatus == 2)?true:null"
+                          [attr.disabled]="!(valuation?.valuationStatus == 0 || valuation?.valuationStatus == 1 || valuation?.valuationStatus == 2) && !isStillInOneMonthPeriod ?true:null"
                           class="p-2" name="valuationNote" id="valuationNote" cols="30" rows="3"
                           formControlName="valuationNote" data-cy="valuationNote"
                           [ngClass]="{'is-invalid': (formErrors?.valuationNote)}"></textarea>

@@ -208,6 +208,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   saveValuationSubscription = new Subscription();
   changedLastOwner: Signer;
   isAllowedForValueChanges: boolean = false;
+  isStillInOneMonthPeriod: boolean = false;
   isAllowedForValueChangesSubscription = new Subscription();
   isEditValueActive = false;
   valueMenuItems: MenuItem[] = [
@@ -1334,7 +1335,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.isAllowedForValueChangesSubscription = this.staffMemberService
           .hasCurrentUserValuationCreatePermission()
           .subscribe((userHasPermission: boolean) => {
-            if (new Date(this.valuation.lockDate) > new Date()) this.isAllowedForValueChanges = userHasPermission;
+            if (this.isStillInOneMonthPeriod) this.isAllowedForValueChanges = userHasPermission;
           });
       })
       .then(() => {
@@ -1473,6 +1474,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   populateForm(valuation: Valuation) {
     if (valuation) {
+      if (new Date(this.valuation.lockDate) > new Date()) {
+        this.isStillInOneMonthPeriod = true;
+      }
+
       this.studioLabelCheck(valuation.bedrooms);
       if (valuation.combinedValuationBooking || valuation.salesValuationBooking) {
         this.setValuationInformations(
@@ -1564,7 +1569,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
       this.onTenureChange(this.valuationForm.get('tenureId').value);
 
-      if (!this.isEditable && !this.isNewValuation) {
+      if (!this.isEditable && !this.isNewValuation && !this.isStillInOneMonthPeriod) {
         this.valuationForm.get('generalNotes').disable();
         this.valuationForm.get('timeFrame').disable();
         this.valuationForm.get('reason').disable();
