@@ -56,28 +56,12 @@ export class PureCompanyFinderShellComponent implements OnInit {
   }
 
   workOutCompanyName() {
-    /**
-     * let companyName = !!this.selectedCompany ? this.selectedCompany.companyName : !!this.existingCompany ? this.existingCompany.companyName : ''
-     */
-    let companyName2 = !!this.selectedCompany
+    const companyName = !!this.selectedCompany
       ? this.selectedCompany.companyName
       : !!this.existingCompany
       ? this.existingCompany.companyName
       : ''
-    console.log('companyName2: ', companyName2)
 
-    let companyName = ''
-    switch (true) {
-      case !!this.selectedCompany:
-        companyName = this.selectedCompany.companyName
-        break
-      case !!this.existingCompany:
-        companyName = this.existingCompany.companyName
-        break
-      default:
-        companyName = ''
-    }
-    console.log('companyName: ', companyName)
     return companyName
   }
 
