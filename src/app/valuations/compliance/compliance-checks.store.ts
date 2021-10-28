@@ -408,7 +408,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       id: entity.personId,
       documents: [],
       name: `${entity.addressee}`,
-      address: `${entity.address.addressLines}, ${entity.address.postCode}`
+      address: (entity.address && entity.address.addressLines && entity.address.postCode) ? `${entity.address.addressLines}, ${entity.address.postCode}` : ''
     })
   }
 
@@ -444,7 +444,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       name: entity.companyName,
       id: entity.companyId,
       documents: [],
-      address: `${entity.companyAddress.addressLines}, ${entity.companyAddress.postCode}`
+      address: (entity.companyAddress && entity.companyAddress.addressLines && entity.companyAddress.postCode) ? `${entity.companyAddress.addressLines}, ${entity.companyAddress.postCode}` : ''
     })
   }
   /***

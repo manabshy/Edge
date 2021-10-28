@@ -73,7 +73,7 @@
         (deleteFile)="onFileDeleted.emit({ entity: entity, ev: $event })"
       ></app-document-info>
     </div>
-    <div class="w-100 flex-1">
+    <div class="w-100" [ngClass]=" entity.companyId ? 'flex-1':'md:w-1/2' ">
       <app-document-info
         [label]="entity.documents.additionalDocs.label"
         [documentType]="entity.documents.additionalDocs.documentType"
