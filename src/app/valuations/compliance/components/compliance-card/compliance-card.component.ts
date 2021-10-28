@@ -54,30 +54,34 @@ export class ComplianceCardComponent implements OnInit {
   }
 
   private setMenuItems() {
-    this.items = [
+    const items = [
       {
         label: `Edit ${this.entity.companyId ? 'company' : 'contact'}`,
         icon: 'fa fa-edit',
-        command: (ev) => {
+        command: () => {
           this.dialogs.showEditDialog = !this.dialogs.showEditDialog
-        }
-      },
-      {
-        label: `Remove ${this.entity.companyId ? 'company' : 'contact'}`,
-        icon: 'fa fa-times',
-        command: (ev) => {
-          this.dialogs.showRemoveDialog = !this.dialogs.showRemoveDialog
         }
       },
       {
         label: this.entity.isUBO ? 'Remove as UBO' : 'Make UBO',
         icon: this.entity.isUBO ? 'fa fa-toggle-off' : 'fa fa-toggle-on',
-        command: (ev) => {
+        command: () => {
           this.setMenuItems() // refreshes options again
           this.onToggleIsUBO.emit(this.entity)
         }
       }
     ]
+    if (!this.entity.isMain) {
+      // the main contact should not be deletable!
+      items.splice(1, 0, {
+        label: `Remove ${this.entity.companyId ? 'company' : 'contact'}`,
+        icon: 'fa fa-times',
+        command: () => {
+          this.dialogs.showRemoveDialog = !this.dialogs.showRemoveDialog
+        }
+      })
+    }
+    this.items = items
   }
 
   public confirmDelete(): void {
