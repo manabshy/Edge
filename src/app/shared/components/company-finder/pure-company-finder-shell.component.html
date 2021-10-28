@@ -1,6 +1,6 @@
 <ng-container>
   <div class="row">
-    <div class="grid grid--25">
+    <div>
       <form [formGroup]="companyFinderForm" autocomplete="off">
         <fieldset>
           <!-- <label for="searchTerm">Find Company</label> -->
@@ -11,17 +11,17 @@
             id="company"
             formControlName="companyName"
             autofocus
-            (keydown.enter)="searchCompany($event)"
+            (keydown.enter)="searchCompany()"
             [ngbTypeahead]="suggestions"
             [focusFirst]="false"
             (selectItem)="selectedSuggestion($event)"
           />
         </fieldset>
         <fieldset>
-          <button class="btn btn--info mt-3" (click)="searchCompany($event)" data-cy="searchCompany">Search</button>
+          <button class="btn btn--info mt-3" (click)="searchCompany()" data-cy="searchCompany">Search</button>
         </fieldset>
       </form>
-      <p *ngIf="searchResults?.length">
+      <p *ngIf="searchResults?.length" class="mt-2">
         {{ searchResults?.length }} {{ searchResults?.length === 1 ? 'Result found' : 'Results found' }}
       </p>
     </div>
@@ -84,7 +84,7 @@
   <ng-container *ngIf="hasBeenSearched || noSuggestions">
     <footer class="footer footer--modal">
       <span class="btn--container">
-        <a class="btn btn--ghost" *ngIf="canCreateNewCompany" (click)="enterDetailsManually(true)">
+        <button class="btn btn--ghost" *ngIf="canCreateNewCompany" (click)="enterDetailsManually(true)">
           <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
             <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
             <path
@@ -93,8 +93,8 @@
             />
           </svg>
           New Company
-        </a>
-        <a class="btn btn--ghost" *ngIf="!canCreateNewCompany" (click)="enterDetailsManually(false)">
+        </button>
+        <button class="btn btn--ghost" *ngIf="!canCreateNewCompany" (click)="enterDetailsManually(false)">
           <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
             <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
             <path
@@ -103,7 +103,7 @@
             />
           </svg>
           Enter Name Manually
-        </a>
+        </button>
       </span>
     </footer>
   </ng-container>

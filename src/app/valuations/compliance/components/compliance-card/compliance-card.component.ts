@@ -44,11 +44,11 @@ export class ComplianceCardComponent implements OnInit {
   }
 
   private buildPills() {
+    this.pillClass = this.entity.isMain ? 'pill--positive' : 'bg-gray-400'
+
     if (this.entity.companyId) {
-      this.pillClass = this.entity.isMain ? 'pill--positive' : 'bg-gray-400'
       this.pillLabel = this.entity.isMain ? 'Company' : 'Associated Company'
     } else {
-      this.pillClass = this.entity.isMain ? 'pill--positive' : 'bg-gray-400'
       this.pillLabel = this.entity.isMain ? 'Lead Contact' : 'Associated Contact'
     }
   }

@@ -1,27 +1,19 @@
 <div class="row">
-  <div class="grid h-full grid--25">
-    <div>
-      <form [formGroup]="personFinderForm" autocomplete="off">
-        <fieldset class="mb-3">
-          <label for="fullName">Full Name</label>
-          <input class="p-2" type="text" id="fullName" autofocus formControlName="fullName" />
-        </fieldset>
-        <fieldset class="mb-3">
-          <label for="phone">Phone</label>
-          <input
-            class="p-2"
-            type="text"
-            id="phone"
-            formControlName="phoneNumber"
-            (keypress)="phoneNumberOnly($event)"
-          />
-        </fieldset>
-        <fieldset class="mb-3">
-          <label for="email">Email</label>
-          <input class="p-2" type="text" id="email" formControlName="emailAddress" />
-        </fieldset>
-      </form>
-    </div>
+  <div class="">
+    <form [formGroup]="personFinderForm" autocomplete="off">
+      <fieldset class="mb-3">
+        <label for="fullName">Full Name</label>
+        <input class="p-2" type="text" id="fullName" autofocus formControlName="fullName" />
+      </fieldset>
+      <fieldset class="mb-3">
+        <label for="phone">Phone</label>
+        <input class="p-2" type="text" id="phone" formControlName="phoneNumber" (keypress)="phoneNumberOnly($event)" />
+      </fieldset>
+      <fieldset class="mb-3">
+        <label for="email">Email</label>
+        <input class="p-2" type="text" id="email" formControlName="emailAddress" />
+      </fieldset>
+    </form>
     <div *ngIf="potentialDuplicatePeople?.matches?.length">
       <p>{{ potentialDuplicatePeople?.matches?.length }} Results found</p>
     </div>
@@ -109,7 +101,7 @@
 <ng-container *ngIf="isCreateNewPersonVisible">
   <footer class="footer footer--modal">
     <span class="btn--container">
-      <button class="btn btn--ghost" (click)="navigate.emit($event)">
+      <button class="btn btn--ghost" (click)="addNewPerson()">
         <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
           <path
             class="horizontal"

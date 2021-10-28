@@ -489,17 +489,14 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     this.storeContactPeople(this.contactGroupDetails?.contactPeople)
   }
 
-  navigateToNewPersonScreen() {
-    console.log('navigateToNewPersonScreen...')
-    const params = {
-      route: ['contact-centre', 'detail', 0, 'edit'],
+  navigateToNewPersonScreen(ev) {
+    this.createNewPerson()
+    this._router.navigate(['contact-centre', 'detail', 0, 'edit'], {
       queryParams: {
-        newPerson: JSON.stringify(this.newPerson),
+        newPerson: JSON.stringify(ev),
         emailPhoneRequired: true
       }
-    }
-    this.createNewPerson()
-    this._router.navigate(params.route)
+    })
   }
 
   setMainPerson(id: number) {

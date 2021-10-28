@@ -21,7 +21,7 @@ import { Router } from '@angular/router'
         [canCreateNewCompany]="canCreateNewCompany"
         (searchCompanyEmitter)="findCompany($event)"
         (selectedCompanyDetails)="selectedCompanyDetails.emit($event)"
-        (isManualEntry)="isManualEntry($event)"
+        (onManualEntry)="isManualEntry($event)"
       ></app-pure-company-finder-shell>
     </div>
   `

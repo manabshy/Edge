@@ -32,7 +32,7 @@ import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-
         (onAddCompany)="store.onAddCompany($event)"
         (onRefreshDocuments)="store.onRefreshDocuments()"
         (onQueryDuplicates)="facadeSvc.onQueryDuplicates($event)"
-        (onNavigatePage)="facadeSvc.onNavigateToNewContactPage($event)"
+        (onCreateNewPerson)="facadeSvc.onCreateNewPerson($event)"
       ></app-pure-compliance-checks-shell>
     </div>
   `,
@@ -41,7 +41,6 @@ import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-
 export class ComplianceChecksShellComponent {
   vm$: Observable<ComplianceChecksState>
   contactSearchResults$: Observable<PotentialDuplicateResult>
-  newCompanyAdded$: Observable<any>
 
   constructor(public readonly store: ComplianceChecksStore, public readonly facadeSvc: ComplianceChecksFacadeService) {
     this.vm$ = this.store.complianceChecksVm$

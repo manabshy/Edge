@@ -19,7 +19,7 @@ export class PureCompanyFinderShellComponent implements OnInit {
   @Input() suggestions: any
   @Input() existingIds: number[]
 
-  @Output() isManualEntry = new EventEmitter<object>()
+  @Output() onManualEntry = new EventEmitter<object>()
   @Output() createNew = new EventEmitter<boolean>()
   @Output() searchCompanyEmitter = new EventEmitter<any>()
   @Output() selectedCompanyDetails = new EventEmitter<any>()
@@ -41,7 +41,6 @@ export class PureCompanyFinderShellComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
-    // console.log('existingIds: ', this.existingIds)
     this.initialiseForm()
   }
 
@@ -57,6 +56,16 @@ export class PureCompanyFinderShellComponent implements OnInit {
   }
 
   workOutCompanyName() {
+    /**
+     * let companyName = !!this.selectedCompany ? this.selectedCompany.companyName : !!this.existingCompany ? this.existingCompany.companyName : ''
+     */
+    let companyName2 = !!this.selectedCompany
+      ? this.selectedCompany.companyName
+      : !!this.existingCompany
+      ? this.existingCompany.companyName
+      : ''
+    console.log('companyName2: ', companyName2)
+
     let companyName = ''
     switch (true) {
       case !!this.selectedCompany:
@@ -68,6 +77,7 @@ export class PureCompanyFinderShellComponent implements OnInit {
       default:
         companyName = ''
     }
+    console.log('companyName: ', companyName)
     return companyName
   }
 
@@ -75,9 +85,9 @@ export class PureCompanyFinderShellComponent implements OnInit {
     if (this.isAlreadyInContactgroup(company.companyId)) {
       alert('already in group!')
     } else {
-      // this.isCompanyAdded = true
-      // this.searchResults = null
-      // this.hasBeenSearched = false
+      // this.isCompanyAdded = true // what's this do?
+      // this.searchResults = null // what's this do?
+      // this.hasBeenSearched = false // what's this do?
       this.selectedCompanyDetails.emit(company)
     }
   }
@@ -90,9 +100,7 @@ export class PureCompanyFinderShellComponent implements OnInit {
     this.suggestedTerm = ''
   }
 
-  searchCompany(ev?) {
-    ev?.preventDefault()
-    ev?.stopPropagation()
+  searchCompany() {
     this.enterManually = false
     this.suggestedTerm
       ? (this.searchTerm = this.suggestedTerm)
@@ -101,9 +109,9 @@ export class PureCompanyFinderShellComponent implements OnInit {
   }
 
   enterDetailsManually(isNewCompany?: boolean) {
-    // console.log({ isNewCompany })
-    // console.log(this.companyNameControl.value)
-    this.isManualEntry.emit({ isNewCompany, companyName: this.companyNameControl.value })
+    console.log({ isNewCompany })
+    console.log(this.companyNameControl.value)
+    this.onManualEntry.emit({ isNewCompany, companyName: this.companyNameControl.value })
   }
 
   isAlreadyInContactgroup(id: number) {

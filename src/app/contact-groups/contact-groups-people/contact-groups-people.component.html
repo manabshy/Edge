@@ -690,7 +690,7 @@
             (addedPersonDetails)="getAddedPersonDetails($event)"
             (selectedPerson)="getSelectedPerson($event)"
             (findPotentialDuplicatePerson)="queryForDuplicatePeople($event)"
-            (navigate)="navigateToNewPersonScreen($event)"
+            (onCreateNewPerson)="navigateToNewPersonScreen($event)"
           ></app-contact-search>
         </p-dialog>
 
@@ -708,7 +708,7 @@
             [canCreateNewCompany]="true"
             (companyName)="getCompanyName($event)"
             (selectedCompanyDetails)="selectCompany($event)"
-            (isManualEntry)="editSelectedCompany($event)"
+            (onManualEntry)="editSelectedCompany($event)"
           ></app-company-finder>
         </p-dialog>
 

@@ -22,7 +22,7 @@ export class ContactSearchComponent implements OnInit {
   @Output() isCanvasHidden = new EventEmitter<boolean>()
   @Output() creatingNewPerson = new EventEmitter<boolean>()
   @Output() findPotentialDuplicatePerson = new EventEmitter<any>()
-  @Output() navigate = new EventEmitter<any>()
+  @Output() onCreateNewPerson = new EventEmitter<any>()
 
   isCompanyContactGroup: boolean = false
   personFinderForm: FormGroup
@@ -65,6 +65,13 @@ export class ContactSearchComponent implements OnInit {
 
   isAlreadyInContactgroup(id: number) {
     return this.existingIds && this.existingIds.find((existingId) => existingId === id)
+  }
+
+  addNewPerson() {
+    let newPerson = this.personFinderForm.value
+    newPerson.firstName = newPerson.fullName.trim().split(' ')[0]
+    newPerson.lastName = newPerson.fullName.trim().split(' ')[1]
+    this.onCreateNewPerson.emit(newPerson)
   }
 
   /* Only allow spaces, dashes, the plus sign and digits */
