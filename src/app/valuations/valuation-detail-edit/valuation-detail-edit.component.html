@@ -382,7 +382,7 @@
                           </fieldset>
                           <ng-template pTemplate="footer">
                             <div *ngIf="getTimeSalesValuationDate !== getTimeLettingsValuationDate">
-                              <fieldset>
+                              <fieldset [attr.disabled]="!(isNewValuation && canBookAppointment)">
                                 <label>Are we meeting the Owner ?</label>
                                 <span class="radio radio--inline">
                                   <span>
@@ -489,7 +489,7 @@
                           </fieldset>
                           <ng-template pTemplate="footer">
                             <div *ngIf="getTimeSalesValuationDate != getTimeLettingsValuationDate">
-                              <fieldset>
+                              <fieldset [attr.disabled]="!(isNewValuation && canBookAppointment)">
                                 <label>Are we meeting the Owner ?</label>
                                 <span class="radio radio--inline">
                                   <span>
@@ -564,9 +564,9 @@
                       *ngIf="getTimeSalesValuationDate && getTimeLettingsValuationDate &&  getTimeSalesValuationDate === getTimeLettingsValuationDate">
                       <div class="grid justify-center col-auto">
                         <div class="grid justify-center">
-                          <fieldset>
+                          <fieldset [attr.disabled]="!(isNewValuation && canBookAppointment)">
                             <label>Are we meeting the Owner ?</label>
-                            <span class="radio radio--inline">
+                            <span class="radio radio--inline ">
                               <span>
                                 <input class="p-2" type="radio" id="salesMeetingOwnerYes" [value]="true"
                                   name="salesMeetingOwner" formControlName="salesMeetingOwner"
