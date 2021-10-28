@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 export const buildComplianceChecksStatusMessages = (
-  people,
+  entities,
   amlOrKyc,
   compliancePassedDate,
   compliancePassedByFullName
@@ -15,20 +15,20 @@ export const buildComplianceChecksStatusMessages = (
   const validContacts = []
   const invalidContacts = []
   const contactsReadyForChecks = []
-  // console.log('buildComplianceChecksStatusMessages:', people)
-  people.forEach((person) => {
-    const validDocs = amlOrKyc === 'AML' ? personValidForAML(person) : personValidForKYC(person)
+  // console.log('buildComplianceChecksStatusMessages:', entities)
+  entities.forEach((entity) => {
+    const validDocs = amlOrKyc === 'AML' ? entityValidForAML(entity) : entityValidForKYC(entity)
     // console.log('validDocs: ', validDocs)
-    if (person.personDateAmlCompleted && validDocs) {
-      validContacts.push(person)
-    } else if (!person.personDateAmlCompleted && validDocs) {
-      contactsReadyForChecks.push(person)
+    if (entity.personDateAmlCompleted && validDocs) {
+      validContacts.push(entity)
+    } else if (!entity.personDateAmlCompleted && validDocs) {
+      contactsReadyForChecks.push(entity)
     } else {
-      invalidContacts.push(person)
+      invalidContacts.push(entity)
     }
   })
 
-  if (validContacts.length === people.length && !!compliancePassedDate) {
+  if (validContacts.length === entities.length && !!compliancePassedDate) {
     const difference = moment(compliancePassedDate).diff(Date.now(), 'months')
     if (difference <= -12) {
       messageObj.type = 'warn'
@@ -49,8 +49,8 @@ export const buildComplianceChecksStatusMessages = (
       messageObj.valid = true
     }
   } else if (
-    contactsReadyForChecks.length === people.length ||
-    contactsReadyForChecks.length + validContacts.length === people.length
+    contactsReadyForChecks.length === entities.length ||
+    contactsReadyForChecks.length + validContacts.length === entities.length
   ) {
     messageObj.type = 'info'
     messageObj.text = [
@@ -61,13 +61,13 @@ export const buildComplianceChecksStatusMessages = (
   } else {
     let warningMessage = ''
     if (invalidContacts.length > 1) {
-      invalidContacts.forEach((person, ix) => {
+      invalidContacts.forEach((entity, ix) => {
         if (ix == 0) {
-          warningMessage += person.name
+          warningMessage += entity.name
         } else if (ix == invalidContacts.length - 1) {
-          warningMessage += ' and ' + person.name
+          warningMessage += ' and ' + entity.name
         } else {
-          warningMessage += ', ' + person.name
+          warningMessage += ', ' + entity.name
         }
       })
     } else {
@@ -83,18 +83,18 @@ export const buildComplianceChecksStatusMessages = (
 }
 
 /***
- * AML | KYC validation for checking if all people in store are fit for passing checks
+ * AML | KYC validation for checking if all entities in store are fit for passing checks
  */
-export const checkAllPeopleHaveValidDocs = (people, checkType) => {
-  const checksAreValid = people.every((person) => {
+export const checkAllEntitiesHaveValidDocs = (entities, checkType) => {
+  const checksAreValid = entities.every((entity) => {
     if (checkType === 'AML') {
-      return personValidForAML(person)
+      return entityValidForAML(entity)
     } else if (checkType === 'KYC') {
-      return personValidForKYC(person)
+      return entityValidForKYC(entity)
     }
   })
   // console.log('checksAreValid: ', checksAreValid)
-  // console.log('people:', people)
+  // console.log('entities:', entities)
   return checksAreValid
 }
 
@@ -107,19 +107,23 @@ const companyValidForChecks = (company) => {
     return company.documents.additionalDocs.files.length >= 1
   }
 }
-const personValidForAML = (person) => {
-  if (person.companyId) {
-    return companyValidForChecks(person)
+const entityValidForAML = (entity) => {
+  if (entity.companyId) {
+    return companyValidForChecks(entity)
   } else {
-    return personValidForKYC(person) && person.documents.reportDocs.files.length
+    return entityValidForKYC(entity) && entity.documents.reportDocs.files.length
   }
 }
 
-const personValidForKYC = (person) => {
-  if (person.companyId) {
-    return companyValidForChecks(person)
+const entityValidForKYC = (entity) => {
+  if (entity.companyId) {
+    return companyValidForChecks(entity)
   } else {
-    return idIsValid(person.documents.idDoc.files) && person.documents.proofOfAddressDoc.files.length
+    return (
+      idIsValid(entity.documents.idDoc.files) &&
+      entity.documents.proofOfAddressDoc.files.length &&
+      entity.documents.reportDocs.files.length // added back in as per Bug 2990 https://dev.azure.com/Douglas-and-Gordon/Edge/_workitems/edit/2990/
+    )
   }
 }
 

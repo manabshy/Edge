@@ -1,0 +1,126 @@
+<div class="row">
+  <div class="">
+    <form [formGroup]="personFinderForm" autocomplete="off">
+      <fieldset class="mb-3">
+        <label for="fullName">Full Name</label>
+        <input class="p-2" type="text" id="fullName" autofocus formControlName="fullName" />
+      </fieldset>
+      <fieldset class="mb-3">
+        <label for="phone">Phone</label>
+        <input class="p-2" type="text" id="phone" formControlName="phoneNumber" (keypress)="phoneNumberOnly($event)" />
+      </fieldset>
+      <fieldset class="mb-3">
+        <label for="email">Email</label>
+        <input class="p-2" type="text" id="email" formControlName="emailAddress" />
+      </fieldset>
+    </form>
+    <div *ngIf="potentialDuplicatePeople?.matches?.length">
+      <p>{{ potentialDuplicatePeople?.matches?.length }} Results found</p>
+    </div>
+  </div>
+  <div class="grid grid--75 grid--dividerLeft">
+    <div class="table">
+      <table class="table--mobile table--rowHover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Telephone</th>
+            <th colspan="2">Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="potentialDuplicatePeople && !potentialDuplicatePeople?.matches?.length">
+            <td colspan="4">
+              No Person found.
+              <ng-container *ngIf="isCreateNewPersonVisible; else fillDetails">
+                Create a new one with the details provided
+              </ng-container>
+              <ng-template #fillDetails>Fill in the details to continue</ng-template>
+              .
+            </td>
+          </tr>
+          <tr
+            *ngFor="let foundPerson of potentialDuplicatePeople?.matches"
+            [ngClass]="{ disabled: isAlreadyInContactgroup(foundPerson?.personId) }"
+            (click)="selectPerson(foundPerson)"
+          >
+            <td data-title="Name">
+              <span class="cell-content">
+                {{ foundPerson?.addressee }}
+                <ng-container *ngIf="isAlreadyInContactgroup(foundPerson?.personId); else badge">
+                  <small>
+                    <svg
+                      aria-hidden="true"
+                      width="64"
+                      height="64"
+                      viewBox="0 0 64 64"
+                      class="icon icon--s icon--onLeft"
+                    >
+                      <path
+                        d="M32 3.7L0 60.3h64L32 3.7zM36.9 26l-1.6 18h-6.5l-1.7-18H36.9zM32 55.4c-2.3 0-4.1-1.8-4.1-4.1s1.8-4.1 4.1-4.1 4.1 1.8 4.1 4.1C36.1 53.6 34.3 55.4 32 55.4z"
+                      ></path>
+                    </svg>
+                    Already in this group
+                  </small>
+                </ng-container>
+              </span>
+              <ng-template #badge>
+                <span *ngIf="foundPerson?.matchType">
+                  <small class="txt--positive" *ngIf="foundPerson?.matchType == 'FullMatch'">Full Match</small>
+                  <small class="txt--warning" *ngIf="foundPerson?.matchType == 'GoodMatch'">Good Match</small>
+                </span>
+              </ng-template>
+            </td>
+            <td data-title="Telephone">
+              <span class="cell-content">
+                <ng-container *ngIf="!foundPerson?.phoneNumbers?.length">-</ng-container>
+                <ng-container *ngFor="let phoneNumber of foundPerson?.phoneNumbers">
+                  <span class="displayBlock">{{ phoneNumber }}</span>
+                </ng-container>
+              </span>
+            </td>
+            <td data-title="Email">
+              <span class="cell-content">
+                <ng-container *ngIf="!foundPerson?.emailAddresses?.length">-</ng-container>
+                <ng-container *ngFor="let email of foundPerson?.emailAddresses">
+                  <span class="displayBlock">{{ email }}</span>
+                </ng-container>
+              </span>
+            </td>
+            <td class="hide--mobile">
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s">
+                <path d="M1 35.4h48.8L37.5 47.8l4.9 4.9L63 32 42.3 11.3l-4.9 4.9 12.3 12.3H1V35.4z"></path>
+              </svg>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<ng-container *ngIf="isCreateNewPersonVisible">
+  <footer class="footer footer--modal">
+    <span class="btn--container">
+      <button class="btn btn--ghost" (click)="addNewPerson()">
+        <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+          <path
+            class="horizontal"
+            d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
+          ></path>
+          <path
+            class="vertical"
+            d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
+          ></path>
+        </svg>
+        Create new person
+      </button>
+    </span>
+  </footer>
+</ng-container>
+
+<ng-template #createNewPerson>
+  <!-- <app-contact-groups-detail-edit class="appWrapper" (addedPersonDetails)="getAddedPersonDetails($event)" (hideCanvas)="hideCanvas($event)"
+      (backToFinder)="backToFinder($event)" *ngIf="isCreateNewPerson && newPerson" [basicPerson]="newPerson"
+      [isCompanyContactGroup]="isCompanyContactGroup">
+    </app-contact-groups-detail-edit> -->
+</ng-template>

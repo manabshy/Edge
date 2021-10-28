@@ -79,11 +79,11 @@ ContactAMLCompletedAndValid.args = {
     type: 'success',
     text: ['AML Completed', '7th Sep 2020 (11:45)'],
   },
-  people: [
-    LeadContactValid.args.person,
-    { ...AssociatedContactValid.args.person, name: 'Jack Black' },
-    AssociatedContactValid.args.person,
-    { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
+  entities: [
+    LeadContactValid.args.entity,
+    { ...AssociatedContactValid.args.entity, name: 'Jack Black' },
+    AssociatedContactValid.args.entity,
+    { ...AssociatedContactValid.args.entity, name: 'Eddie Murphy' },
   ],
   isFrozen: true,
 };
@@ -96,11 +96,11 @@ ContactAMLCompleted1YearLater.args = {
     type: 'info',
     text: ['AML checks are more than a year old', 'Consider running updated checks'],
   },
-  people: [
-    LeadContactValid.args.person,
-    { ...AssociatedContactValid.args.person, name: 'Jack Black' },
-    AssociatedContactValid.args.person,
-    { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
+  entities: [
+    LeadContactValid.args.entity,
+    { ...AssociatedContactValid.args.entity, name: 'Jack Black' },
+    AssociatedContactValid.args.entity,
+    { ...AssociatedContactValid.args.entity, name: 'Eddie Murphy' },
   ],
   isFrozen: true,
 };
@@ -113,11 +113,11 @@ ContactAMLIncompleteAndInvalid.args = {
     type: 'error',
     text: ['AML not yet completed', 'Jack Black requires attention'],
   },
-  people: [
-    LeadContactValid.args.person,
-    { ...AssociatedContactInvalid.args.person, name: 'Jack Black' },
-    AssociatedContactBlank.args.person,
-    { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
+  entities: [
+    LeadContactValid.args.entity,
+    { ...AssociatedContactInvalid.args.entity, name: 'Jack Black' },
+    AssociatedContactBlank.args.entity,
+    { ...AssociatedContactValid.args.entity, name: 'Eddie Murphy' },
   ],
   isFrozen: false,
 };
@@ -131,11 +131,11 @@ ContactKYCCompletedAndValid.args = {
     type: 'success',
     text: ['KYC Completed', 'SmartSearch added: 7th Sep 2020 (11:45)'],
   },
-  people: [
-    LeadContactValid.args.person,
-    { ...AssociatedContactValid.args.person, name: 'Jack Black' },
-    AssociatedContactValid.args.person,
-    { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
+  entities: [
+    LeadContactValid.args.entity,
+    { ...AssociatedContactValid.args.entity, name: 'Jack Black' },
+    AssociatedContactValid.args.entity,
+    { ...AssociatedContactValid.args.entity, name: 'Eddie Murphy' },
   ],
   isFrozen: true,
 };
@@ -148,11 +148,11 @@ ContactKYCIncompleteAndInvalid.args = {
     type: 'warn',
     text: ['KYC not yet completed', 'SmartSearch added: 7th Sep 2020 (11:45)'],
   },
-  people: [
-    LeadContactValid.args.person,
-    { ...AssociatedContactValid.args.person, name: 'Jack Black' },
-    { ...AssociatedContactInvalid.args.person, name: 'Ian Blackford' },
-    { ...AssociatedContactValid.args.person, name: 'Eddie Murphy' },
+  entities: [
+    LeadContactValid.args.entity,
+    { ...AssociatedContactValid.args.entity, name: 'Jack Black' },
+    { ...AssociatedContactInvalid.args.entity, name: 'Ian Blackford' },
+    { ...AssociatedContactValid.args.entity, name: 'Eddie Murphy' },
   ],
   isFrozen: false,
 };
@@ -167,9 +167,9 @@ CompanyAMLIncomplete.args = {
     type: 'warn',
     text: ['AML incomplete'],
   },
-  people: [
-    { ...LeadContactValid.args.person, personDateAmlCompleted: null, companyId: LeadContactValid.args.person.id },
-    AssociatedContactValid.args.person,
+  entities: [
+    { ...LeadContactValid.args.entity, personDateAmlCompleted: null, companyId: LeadContactValid.args.entity.id },
+    AssociatedContactValid.args.entity,
   ],
   isFrozen: false,
 };
@@ -183,9 +183,9 @@ CompanyAMLComplete.args = {
     type: 'success',
     text: ['AML Completed', 'SmartSearch added: 7th Sep 2020 (11:45)'],
   },
-  people: [
-    { ...LeadContactValid.args.person, isUBO: true, companyId: LeadContactValid.args.person.id },
-    AssociatedContactValid.args.person,
+  entities: [
+    { ...LeadContactValid.args.entity, isUBO: true, companyId: LeadContactValid.args.entity.id },
+    AssociatedContactValid.args.entity,
   ],
   isFrozen: true,
 };
@@ -199,10 +199,10 @@ MultipleCompanyAMLComplete.args = {
     type: 'success',
     text: ['AML Completed', 'SmartSearch added: 7th Sep 2020 (11:45)'],
   },
-  people: [
-    { ...LeadContactValid.args.person, isUBO: true, companyId: LeadContactValid.args.person.id },
-    AssociatedContactValid.args.person,
-    AssociatedCompanyContact.args.person,
+  entities: [
+    { ...LeadContactValid.args.entity, isUBO: true, companyId: LeadContactValid.args.entity.id },
+    AssociatedContactValid.args.entity,
+    AssociatedCompanyContact.args.entity,
   ],
   isFrozen: true,
 };

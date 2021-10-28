@@ -3,62 +3,63 @@ import { mapDocsForAPI, mapDocumentsForView } from './helpers/store-documents-he
 
 /***
  * @function addFilesToPerson
- * @param contactGroupData: Object
- * @param valuationData: Object
+ * @param {string} companyId - ID of the company associated with a valuation
+ * @param {Object} valuationData: Object
  * @description Builds initial store state when a compliance state is initializing
+ * @returns Object containing properties for the compliance checks store
  */
-export const buildPartialLoadState = (contactGroupData, valuationData) => {
+export const buildPartialLoadState = (companyId, valuationData) => {
   // console.log('valuationData.complianceCheck: ', valuationData.complianceCheck)
   return {
     contactGroupId: valuationData.propertyOwner?.contactGroupId,
-    companyOrContact: contactGroupData.companyId ? 'company' : 'contact',
+    companyOrContact: companyId ? 'company' : 'contact',
     checkType: identifyAmlOrKyc(valuationData),
     compliancePassedBy: valuationData.complianceCheck?.compliancePassedByFullName,
     compliancePassedDate: valuationData.complianceCheck?.compliancePassedDate,
     valuationEventId: valuationData.valuationEventId,
-    companyId: contactGroupData.companyId,
+    companyId: companyId,
     isFrozen: valuationData.complianceCheck?.compliancePassedDate ? true : false
   }
 }
 
 /***
  * @function setContactsForCompliance
- * @param people: Array
- * @description Builds people array for store mapping from API shape to Store shape. Any API props for people that need changing look here first
+ * @param {Object[]} entitites
+ * @param {string} passedDate - date the valuation was passed. Temporarirly using this since individual compliance passed dates are not being set to null when docs are refreshed. Fixes Bug 2973
+ * @description Builds entities array for store mapping from API shape to Store shape. Any API props for entities that need changing look here first
  */
-export const setContactsForCompliance = (people) => {
-  console.log('RAW PEOPLE FROM API: ', people)
-  return people.map((p) => {
+export const setContactsForCompliance = (entitites, passedDate) => {
+  // console.log('RAW PEOPLE FROM API: ', entitites)
+  return entitites.map((e) => {
     return {
-      id: p.id,
-      personId: p.personId,
-      companyId: p.companyId,
-      // isContactOrCompany: p.personId ? 'contact' : 'company',
-      associatedCompanyId: p.associatedCompanyId,
-      name: p.name,
-      isMain: p.isMain,
-      address: p.address,
-      personDateAmlCompleted: p.personDateAmlCompleted ? p.personDateAmlCompleted : p.amlPassed,
-      amlPassed: p.amlPassed,
-      compliancePassedBy: p.compliancePassedByFullName,
-      isUBO: discernIsUBO(p),
-      documents: mapDocumentsForView(p.documents)
+      id: e.id,
+      personId: e.personId,
+      companyId: e.companyId,
+      associatedCompanyId: e.associatedCompanyId,
+      name: e.name,
+      isMain: e.companyId ? e.id === e.companyId : e.isMain,
+      address: e.address,
+      personDateAmlCompleted: e.personDateAmlCompleted && passedDate ? e.personDateAmlCompleted : e.amlPassed,
+      amlPassed: e.amlPassed,
+      compliancePassedBy: e.compliancePassedByFullName,
+      isUBO: discernIsUBO(e),
+      documents: mapDocumentsForView(e.documents || [])
     }
   })
 }
 
 /***
  * @function discernIsUBO
- * @param person: Object
- * @description logic for figuring out if user is currently UBO or not
+ * @param {Object} entity - person/company entity
+ * @description logic for figuring out if entity is currently UBO or not
  */
-const discernIsUBO = (person) => {
-  return !!person.uboAdded // TODO
+const discernIsUBO = (entity) => {
+  return !!entity.uboAdded // TODO
 }
 
 /***
  * @function identifyAmlOrKyc
- * @param valuation
+ * @param {Object} valuation - a valuation object from the API
  * @description looks at valuation and figures out to display AML or KYC labels
  */
 export const identifyAmlOrKyc = (valuation): string => {
@@ -78,59 +79,62 @@ export const identifyAmlOrKyc = (valuation): string => {
 }
 
 /***
- * @function addExistingPersonOrCompany
- * @param person
- * @description loads a single person or company into the store with data from the API
+ * @function addExistingEntity
+ * @param {Object} entity - person/company
+ * @description loads a single entity (person or company) into the store with data from the API
  */
-export const addExistingPersonOrCompany = (person) => {
+export const addExistingEntity = (storeState, entity) => {
   return {
-    ...person,
-    documents: mapDocumentsForView(person.documents)
+    ...entity,
+    isMain: storeState.companyId === entity.id,
+    documents: mapDocumentsForView(entity.documents)
   }
 }
 
 /***
  * @function workOutDataShapeForApi
- * @param people Array
- * @param companyOrContact String
- * @param companyId Number
- * @param contactGroupId Number
+ * @param {Object[]} entities - people/companies to be saved to API
+ * @param {string} companyOrContact - flag to determine which shape object to build
+ * @param {number} companyId - companyId to save to
+ * @param {number} contactGroupId
  * @description maps the store data into correct shape for saving to API. Payload differs between personal and company compliance checks
  */
-export const workOutDataShapeForApi = (people, companyOrContact, companyId, contactGroupId) => {
+export const workOutDataShapeForApi = (entities, companyOrContact, companyId, contactGroupId) => {
+  // console.log('workOutDataShapeForApi: ', entities)
   if (companyOrContact === 'contact') {
     // console.log('build contacts array')
-    const peopleToSave = people.map((person) => {
+    const entitiesToSave = entities.map((entity) => {
       return {
-        personId: person.personId,
-        name: person.name,
-        address: person.address ? person.address : 'Unset',
-        documents: mapDocsForAPI(person.documents),
-        isMain: person.isMain,
-        position: person.position ? person.position : 'Unset',
-        personDateAmlCompleted: person.personDateAmlCompleted ? person.personDateAmlCompleted : null
+        personId: entity.personId,
+        name: entity.name,
+        address: entity.address ? entity.address : 'Unset',
+        documents: mapDocsForAPI(entity.documents),
+        isMain: entity.isMain,
+        position: entity.position ? entity.position : 'Unset',
+        personDateAmlCompleted: entity.personDateAmlCompleted ? entity.personDateAmlCompleted : null
       }
     })
     return {
-      peopleToSave,
+      entitiesToSave,
       contactGroupId
     }
   } else if (companyOrContact === 'company') {
     // console.log('build company and contacts arrays sepearately');
     const personDocuments = []
     const companyDocuments = []
-    people.forEach((person) => {
+    entities.forEach((entity) => {
       const updatedPerson: any = {
-        uboAdded: person.uboAdded,
-        documents: mapDocsForAPI(person.documents)
+        uboAdded: entity.uboAdded,
+        documents: mapDocsForAPI(entity.documents)
       }
-      if (person.companyId) {
-        updatedPerson.associatedCompanyId = person.associatedCompanyId
+      if (entity.companyId) {
+        updatedPerson.associatedCompanyId = entity.associatedCompanyId
         companyDocuments.push(updatedPerson)
       } else {
-        updatedPerson.position = person.position ? person.position : 'Not set'
-        updatedPerson.address = person.address ? person.address : 'Not set'
-        updatedPerson.personId = person.personId
+        updatedPerson.position = entity.position ? entity.position : 'Not set'
+        updatedPerson.address = entity.address ? entity.address : 'Not set'
+        updatedPerson.personId = entity.personId
+        updatedPerson.name = entity.name
         personDocuments.push(updatedPerson)
       }
     })

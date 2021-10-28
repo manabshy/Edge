@@ -6,6 +6,7 @@ import { DocumentInfoComponent } from "./components/document-info/document-info.
 import { PureComplianceChecksShellComponent } from "./components/pure-compliance-checks-shell/pure-compliance-checks-shell.component"
 import { ComplianceChecksShellComponent } from "./compliance-checks-shell.component"
 import { ComponentsModule } from 'src/app/shared/components.module'
+import { ContactGroupsComponentsModule } from 'src/app/contact-groups/contact-groups.components.module'
 
 const components = [
   ComplianceCardComponent,
@@ -18,7 +19,8 @@ const components = [
   imports: [
     CommonModule,
     SharedModule,
-    ComponentsModule
+    ComponentsModule,
+    ContactGroupsComponentsModule
   ],
   declarations: [
    components

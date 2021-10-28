@@ -334,7 +334,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
+  // activeState: boolean[] = [false, false, false, false, false, false, false, false, false, true];
   activeState: boolean[] = [true, true, true, true, true, true, true];
+
   statuses = [
     { name: 'valuationNotes', value: 0, isValid: false },
     { name: 'propertyInfo', value: 1, isValid: false },
@@ -2510,7 +2512,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   saveValuation() {
     // console.log("saveValuation");
-    // return
     this.checkAvailabilityBooking();
     this.setValuersValidators();
 
@@ -2593,10 +2594,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   addOrUpdateValuation() {
     this.setLeaseExpiryDate();
     this.isSubmitting = true;
+<<<<<<< HEAD
+    const valuationValue = this.valuationService._valuation.getValue(); // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
+    // console.log('SAVING VALUATION valuationValue: ', valuationValue)
+=======
     let valuationValue = this.valuation;
     if (this.valuation.valuationEventId > 0) {
       valuationValue = this.valuationService._valuation.getValue(); // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
     }
+>>>>>>> a8a66cf2b8c430e56ed258803b64c619bd376d6a
     const valuation = { ...valuationValue, ...this.valuationForm.value };
     valuation.propertyOwner = this.lastKnownOwner;
     valuation.OfficeId = this.property.officeId;
@@ -2635,16 +2641,21 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.valuationForm.get('hasDisabledAccess').value)
       valuation.propertyFeature.push(PropertyFeatures.Disabled_Access);
 
-    valuation.suggestedAskingRentLongLetMonthly = this.sharedService.convertStringToNumber(
+    // console.log('typeof(this.suggestedAskingRentLongLetMonthly): ', typeof(valuation.suggestedAskingRentLongLetMonthly))
+    // console.log('typeof(this.suggestedAskingPrice): ', typeof(valuation.suggestedAskingPrice))
+    // console.log('typeof(this.suggestedAskingRentShortLet): ', typeof(valuation.suggestedAskingRentShortLet))
+    // console.log('typeof(this.suggestedAskingRentLongLet): ', typeof(valuation.suggestedAskingRentLongLet))
+    
+    valuation.suggestedAskingRentLongLetMonthly =  typeof(valuation.suggestedAskingRentLongLetMonthly) === 'string' ? this.sharedService.convertStringToNumber(
       valuation.suggestedAskingRentLongLetMonthly,
-    );
-    valuation.suggestedAskingPrice = this.sharedService.convertStringToNumber(valuation.suggestedAskingPrice);
-    valuation.suggestedAskingRentShortLet = this.sharedService.convertStringToNumber(
+    ) : valuation.suggestedAskingRentLongLetMonthly;
+    valuation.suggestedAskingPrice = typeof(valuation.suggestedAskingPrice) === 'string' ? this.sharedService.convertStringToNumber(valuation.suggestedAskingPrice) : valuation.suggestedAskingPrice;
+    valuation.suggestedAskingRentShortLet = typeof(valuation.suggestedAskingRentShortLet) === 'string' ? this.sharedService.convertStringToNumber(
       valuation.suggestedAskingRentShortLet,
-    );
-    valuation.suggestedAskingRentLongLet = this.sharedService.convertStringToNumber(
+    ) : valuation.suggestedAskingRentShortLet;
+    valuation.suggestedAskingRentLongLet = typeof(valuation.suggestedAskingRentLongLet) === 'string' ? this.sharedService.convertStringToNumber(
       valuation.suggestedAskingRentLongLet,
-    );
+    ) : valuation.suggestedAskingRentLongLet;
 
     this.checkValuers(valuation);
     if (this.approxLeaseExpiryDate) {

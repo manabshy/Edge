@@ -1,15 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { MarketingPreferences, Person, Referral } from '../models/person';
+import { Person, Referral } from '../models/person';
 import { Router } from '@angular/router';
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { ResultData } from '../result-data';
 import { MessageService } from 'primeng/api';
-import lodash from 'lodash';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
-import { Subject } from 'rxjs';
 import { PeopleService } from 'src/app/core/services/people.service';
 import { Permission, PermissionEnum, StaffMember } from '../models/staff-member';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
@@ -33,9 +31,11 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   @Input() referenceCount: number;
   @Input() index = 0;
   @Input() showEmailModal = false;
+  
   @Output() selectedPersonId = new EventEmitter<number>();
   @Output() removedPersonPersonId = new EventEmitter<number>();
   @Output() mainPersonPersonId = new EventEmitter<number>();
+  
   preferredNumber: string;
   preferredEmail: string;
   showRefDialog = false;

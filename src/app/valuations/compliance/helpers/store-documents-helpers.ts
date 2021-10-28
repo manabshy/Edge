@@ -1,26 +1,26 @@
 import { ComplianceDocTypes, DOCUMENT_TYPE } from '../compliance-checks.interfaces'
 
 /***
- * Adding/Removing/Merging documents from people
+ * Adding/Removing/Merging documents from entities
  */
  export const removeDocFromDocumentsObject = (data) => {
     return {
-      ...data.person,
-      documents: findAndRemoveDoc(data.person.documents, data.ev)
+      ...data.entity,
+      documents: findAndRemoveDoc(data.entity.documents, data.ev)
     }
   }
   
-  export const addFiles = (data, person) => {
+  export const addFiles = (data, entity) => {
     return {
-      ...person,
-      documents: addTmpFilesToFiles(data.ev, data.files, person)
+      ...entity,
+      documents: addTmpFilesToFiles(data.ev, data.files, entity)
     }
   }
   
-  export const mergeFiles = (data, person) => {
+  export const mergeFiles = (data, entity) => {
     return {
-      ...person,
-      documents: mergeTmpFilesWithFiles(data.ev, data.tmpFiles, person)
+      ...entity,
+      documents: mergeTmpFilesWithFiles(data.ev, data.tmpFiles, entity)
     }
   }
 
@@ -46,11 +46,11 @@ export const findAndRemoveDoc = (documents, ev) => {
     return documents
   }
   
-  export const addTmpFilesToFiles = (ev, files, person): ComplianceDocTypes => {
+  export const addTmpFilesToFiles = (ev, files, entity): ComplianceDocTypes => {
     files.forEach((file) => {
       switch (ev.documentType) {
         case DOCUMENT_TYPE.PROOF_OF_ADDRESS:
-          person.documents.proofOfAddressDoc.files[0] = {
+          entity.documents.proofOfAddressDoc.files[0] = {
             ...file,
             fileName: file.fileName,
             blobName: file.blobName,
@@ -59,7 +59,7 @@ export const findAndRemoveDoc = (documents, ev) => {
           break
   
         case DOCUMENT_TYPE.ID:
-          person.documents.idDoc.files[0] = {
+          entity.documents.idDoc.files[0] = {
             ...file,
             idValidationDateExpiry: ev.idValidationDateExpiry,
             fileName: file.fileName,
@@ -69,16 +69,17 @@ export const findAndRemoveDoc = (documents, ev) => {
           break
   
         case DOCUMENT_TYPE.REPORT:
-          person.documents.reportDocs.files.push({
+          entity.documents.reportDocs.files.push({
             ...file,
             fileName: file.fileName,
             blobName: file.blobName,
+            smartSearchId: ev.smartSearchId,
             blobFileTypeId: DOCUMENT_TYPE.REPORT
           })
           break
   
         case DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS:
-          person.documents.additionalDocs.files.push({
+          entity.documents.additionalDocs.files.push({
             ...file,
             fileName: file.fileName,
             blobName: file.blobName,
@@ -88,17 +89,17 @@ export const findAndRemoveDoc = (documents, ev) => {
           break
       }
     })
-    return person.documents
+    return entity.documents
   }
   
-  export const mergeTmpFilesWithFiles = (ev, files, person): ComplianceDocTypes => {
+  export const mergeTmpFilesWithFiles = (ev, files, entity): ComplianceDocTypes => {
     const filesToMerge = files.filter((file) => file.blobFileTypeId === ev.documentType)
   
     switch (ev.documentType) {
       case DOCUMENT_TYPE.PROOF_OF_ADDRESS:
-        person.documents.proofOfAddressDoc.files = []
+        entity.documents.proofOfAddressDoc.files = []
         filesToMerge.forEach((file) => {
-          person.documents.proofOfAddressDoc.files.push({
+          entity.documents.proofOfAddressDoc.files.push({
             ...file,
             fileName: file.fileName,
             blobName: file.blobName,
@@ -108,9 +109,9 @@ export const findAndRemoveDoc = (documents, ev) => {
         break
   
       case DOCUMENT_TYPE.ID:
-        person.documents.idDoc.files = []
+        entity.documents.idDoc.files = []
         filesToMerge.forEach((file) => {
-          person.documents.idDoc.files.push({
+          entity.documents.idDoc.files.push({
             ...file,
             idValidationDateExpiry: ev.idValidationDateExpiry,
             fileName: file.fileName,
@@ -121,9 +122,9 @@ export const findAndRemoveDoc = (documents, ev) => {
         break
   
       case DOCUMENT_TYPE.REPORT:
-        person.documents.reportDocs.files = []
+        entity.documents.reportDocs.files = []
         filesToMerge.forEach((file) => {
-          person.documents.reportDocs.files.push({
+          entity.documents.reportDocs.files.push({
             ...file,
             fileName: file.fileName,
             blobName: file.blobName,
@@ -133,9 +134,9 @@ export const findAndRemoveDoc = (documents, ev) => {
         break
   
       case DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS:
-        person.documents.additionalDocs.files = []
+        entity.documents.additionalDocs.files = []
         filesToMerge.forEach((file) => {
-          person.documents.additionalDocs.files.push({
+          entity.documents.additionalDocs.files.push({
             ...file,
             fileName: file.fileName,
             blobName: file.blobName,
@@ -145,7 +146,7 @@ export const findAndRemoveDoc = (documents, ev) => {
         })
         break
     }
-    return person.documents
+    return entity.documents
   }
   
   export const addDocsShell = () => {

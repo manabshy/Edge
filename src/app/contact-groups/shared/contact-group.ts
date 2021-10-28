@@ -101,6 +101,7 @@ export interface Company {
   email: string;
   amlCompleted: boolean;
   amlCompletedDate?: Date;
+  documents?: any[]
 }
 
 export interface ContactAddress extends Address {
