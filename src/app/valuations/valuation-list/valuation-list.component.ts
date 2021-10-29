@@ -7,7 +7,7 @@ import {
   OnDestroy,
 } from "@angular/core";
 import { Valuation, ValuationStatusEnum } from "../shared/valuation";
-import { ValuationService } from "../shared/valuation.service";
+import { ValuationFacadeService } from "../shared/valuation-facade.service";
 import { Router, ActivatedRoute } from "@angular/router";
 
 @Component({
@@ -23,7 +23,7 @@ export class ValuationListComponent implements OnInit, OnChanges, OnDestroy {
   page: number;
 
   constructor(
-    private valuationService: ValuationService,
+    private _valuationFacadeService: ValuationFacadeService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) {}
@@ -67,7 +67,7 @@ export class ValuationListComponent implements OnInit, OnChanges, OnDestroy {
         if (this.valuations && this.valuations.length) {
           this.page++;
           console.log("%c Not first request", "color:purple", this.page);
-          this.valuationService.valuationPageNumberChanged(this.page);
+          this._valuationFacadeService.valuationPageNumberChanged(this.page);
           console.log("valuations page number", this.page);
         }
       }
@@ -75,7 +75,7 @@ export class ValuationListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.valuationService.valuationPageNumberChanged(0);
+    this._valuationFacadeService.valuationPageNumberChanged(0);
     console.log("%c on destroy ", "color:blue", this.page);
   }
 }

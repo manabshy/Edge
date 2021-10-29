@@ -85,20 +85,20 @@ export const buildComplianceChecksStatusMessages = (
 /***
  * AML | KYC validation for checking if all entities in store are fit for passing checks
  */
-export const checkAllEntitiesHaveValidDocs = (entities, checkType) => {
-  const checksAreValid = entities.every((entity) => {
+export const checkAllEntitiesHaveValidDocs = (entities, checkType): boolean => {
+  const checksAreValid: boolean = entities.every((entity) => {
     if (checkType === 'AML') {
       return entityValidForAML(entity)
     } else if (checkType === 'KYC') {
       return entityValidForKYC(entity)
     }
   })
-  // console.log('checksAreValid: ', checksAreValid)
-  // console.log('entities:', entities)
+  console.log('entities:', entities)
+  console.log('checksAreValid: ', checksAreValid)
   return checksAreValid
 }
 
-const companyValidForChecks = (company) => {
+const companyValidForChecks = (company): boolean => {
   if (company.companyId === company.associatedCompanyId) {
     // this is the primary company and they must have 3 docs uploaded to additionalDocs
     return company.documents.additionalDocs.files.length >= 3
@@ -107,7 +107,7 @@ const companyValidForChecks = (company) => {
     return company.documents.additionalDocs.files.length >= 1
   }
 }
-const entityValidForAML = (entity) => {
+const entityValidForAML = (entity): boolean => {
   if (entity.companyId) {
     return companyValidForChecks(entity)
   } else {
@@ -115,7 +115,7 @@ const entityValidForAML = (entity) => {
   }
 }
 
-const entityValidForKYC = (entity) => {
+const entityValidForKYC = (entity): boolean => {
   if (entity.companyId) {
     return companyValidForChecks(entity)
   } else {
@@ -127,7 +127,7 @@ const entityValidForKYC = (entity) => {
   }
 }
 
-const idIsValid = (files: any[]) => {
+const idIsValid = (files: any[]): boolean => {
   const hasIdDoc = !!files.length
   if (!hasIdDoc) return false
   const hasValidExpiryDate = moment(files[0].idValidationDateExpiry) > moment()

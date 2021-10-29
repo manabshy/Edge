@@ -5,7 +5,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ValuationService } from '../shared/valuation.service';
+import { ValuationFacadeService } from '../shared/valuation-facade.service';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { BsModalService, BsModalRef, ModalModule } from 'ngx-bootstrap/modal';
 import { createStorageMapSpy } from 'src/testing/test-spies';
@@ -25,7 +25,7 @@ import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 let component: ValuationDetailEditComponent;
 let fixture: ComponentFixture<ValuationDetailEditComponent>;
 let propertyService;
-let valuationService: ValuationService;
+let _valuationFacadeService: ValuationFacadeService;
 const mockVals = MockVals;
 let valuation = mockVals[0] as unknown as Valuation;
 const property = {
@@ -100,7 +100,7 @@ describe('ValuationDetailEditComponent', () => {
     storageMapSpy.get.and.returnValue(of(MockDropdownListInfo));
     fixture.detectChanges();
     propertyService = TestBed.inject(PropertyService);
-    valuationService = TestBed.inject(ValuationService);
+    _valuationFacadeService = TestBed.inject(ValuationFacadeService);
   });
 
   describe('Template', () => {
@@ -293,7 +293,7 @@ describe('ValuationDetailEditComponent', () => {
     }));
 
     it('should get valuation', fakeAsync(() => {
-      spyOn(valuationService, 'getValuation').and.returnValue(of(valuation));
+      spyOn(_valuationFacadeService, 'getValuation').and.returnValue(of(valuation));
 
       component.getValuation(1234);
       fixture.detectChanges();

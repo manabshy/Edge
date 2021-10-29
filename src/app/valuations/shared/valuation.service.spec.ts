@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ValuationService } from './valuation.service';
+import { ValuationFacadeService } from './valuation.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ValuationRequestOption } from './valuation';
 import { MockValuations } from 'src/testing/fixture-data/valuations-data';
 import { format } from 'date-fns';
 
-describe('ValuationService', () => {
-  let service: ValuationService;
+describe('ValuationFacadeService', () => {
+  let service: ValuationFacadeService;
   let httpTestingController: HttpTestingController;
   let response = MockValuations;
   const baseUrl = `https://dandg-api-wedge-dev.azurewebsites.net/v10/valuations`;
@@ -20,7 +20,7 @@ describe('ValuationService', () => {
     });
 
     httpTestingController = TestBed.get(HttpTestingController);
-    service = TestBed.get(ValuationService);
+    service = TestBed.get(ValuationFacadeService);
 
   });
 

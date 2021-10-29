@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { Observable, EMPTY } from "rxjs";
-import { ValuationService } from "./shared/valuation.service";
+import { ValuationFacadeService } from "./shared/valuation-facade.service";
 import {
   debounceTime,
   distinctUntilChanged,
@@ -69,7 +69,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   public keepOriginalOrder = (a) => a.key;
 
   constructor(
-    private valuationService: ValuationService,
+    private _valuationFacadeService: ValuationFacadeService,
     private sharedService: SharedService,
     private staffMemberService: StaffMemberService,
     private officeService: OfficeService,
@@ -87,7 +87,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this.getOffices();
     this.getCurrentStaffMember();
 
-    this.valuationService.doValuationSearchBs.subscribe((data) => {
+    this._valuationFacadeService.doValuationSearchBs.subscribe((data) => {
       if (data == true) this.getValuations();
     });
   }
@@ -115,7 +115,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       officeId: this.selectControlModels.officeId,
     };
 
-    this.valuationService
+    this._valuationFacadeService
       .getValuations(request)
       .pipe(
         tap((res) => console.log("res", res)),
@@ -144,6 +144,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
           }
         },
         (error: WedgeError) => {
+          console.error('error: ', error)
           this.valuations = [];
           this.searchTerm = "";
           this.isHintVisible = true;
@@ -180,7 +181,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
 
   // PRIVATE
   private setPage() {
-    this.valuationService.valuationPageNumberChanges$
+    this._valuationFacadeService.valuationPageNumberChanges$
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((newPageNumber) => {
         this.page = newPageNumber;
@@ -195,7 +196,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
         debounceTime(200),
         distinctUntilChanged(),
         switchMap((term) =>
-          this.valuationService.getValuationSuggestions(term).pipe(
+          this._valuationFacadeService.getValuationSuggestions(term).pipe(
             catchError(() => {
               return EMPTY;
             })
