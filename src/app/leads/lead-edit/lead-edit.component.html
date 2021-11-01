@@ -16,7 +16,7 @@
     <ng-container [ngSwitch]="moreInfo">
       <app-shared-property-list *ngSwitchCase="'properties'" [moreInfo]="moreInfo" [canEditLead]="canEditLead"
         [isLeadClosed]="isLeadClosed" [isLead]="true" [personId]="person?.personId" [originId]="selectedOriginId"
-        (associatedProperty)="getAssociatedProperty($event)">
+        [leadTypeId]="selectedLeadTypeId" (associatedProperty)="getAssociatedProperty($event)">
       </app-shared-property-list>
       <app-contact-groups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
         [personId]="person?.personId" [closedCounter]="summaryTotals?.instructions?.inactive">

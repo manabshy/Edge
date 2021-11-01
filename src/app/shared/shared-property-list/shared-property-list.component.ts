@@ -16,6 +16,7 @@ export class SharedPropertyListComponent implements OnChanges {
   @Input() canEditLead: boolean
   @Input() moreInfo: string
   @Input() originId: number = 0
+  @Input() leadTypeId: number = 0
   @Output() associatedProperty = new EventEmitter<PersonProperty>()
   properties$ = new Observable<PersonProperty[]>()
   constructor(private router: Router, private peopleService: PeopleService) {}
@@ -42,7 +43,8 @@ export class SharedPropertyListComponent implements OnChanges {
         isNewValuation: true,
         isFromProperty: true,
         lastKnownOwnerId: this.personId,
-        originId: this.originId
+        originId: this.originId,
+        leadTypeId: this.leadTypeId
       }
     })
   }
