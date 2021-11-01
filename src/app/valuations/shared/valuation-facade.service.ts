@@ -4,7 +4,7 @@
  * @description this service encapsulates all component interactions required for valuations and acts as an interface to other services and stores
  */
 
-import { Injectable } from '@angular/core'
+import { Injectable, Injector } from '@angular/core'
 import { Router } from '@angular/router'
 import { BehaviorSubject, Observable, Subject } from 'rxjs'
 import { filter, map, mergeMap, take, tap } from 'rxjs/operators'
@@ -26,6 +26,7 @@ import { FileService } from 'src/app/core/services/file.service'
 import { PeopleService } from 'src/app/core/services/people.service'
 import { CompanyService } from 'src/app/company/shared/company.service'
 import { ContactGroup } from 'src/app/contact-groups/shared/contact-group'
+import { InfoService } from 'src/app/core/services/info.service'
 
 @Injectable({
   providedIn: 'root'
@@ -50,17 +51,30 @@ export class ValuationFacadeService {
   private readonly _valuationPricingInfo: BehaviorSubject<ValuationPricingInfo> = new BehaviorSubject({})
   public readonly valuationPricingInfo$ = this._valuationPricingInfo.asObservable()
 
+  private _infoService: InfoService
+  public get infoService(): InfoService {
+    if (!this._infoService) {
+      this._infoService = this.injector.get(InfoService)
+    }
+    return this._infoService
+  }
+
+
   constructor(
     private _apiSvc: ValuationApiService,
     private readonly _fileSvc: FileService,
     private _peopleSvc: PeopleService,
     private _companySvc: CompanyService,
     private _contactGroupsSvc: ContactGroupsService,
-    private _router: Router
+    private _router: Router,
+    private injector: Injector
   ) {
     console.log(' FACADE SERVICE INSTANTIATING =========== ')
   }
 
+  getDropDownInfo() {
+    return this.infoService.getDropdownListInfo()
+  }
   // CONTACT CARD / OWNER
 
   // VALUATION TICKET TAB
@@ -95,7 +109,7 @@ export class ValuationFacadeService {
   // VALUATION NOTES CARD
 
   // PROPERTY INFO CARD
-
+  
   // APPOINTMENT CARD
 
   // VALUES CARD

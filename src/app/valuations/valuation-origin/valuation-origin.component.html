@@ -1,0 +1,23 @@
+<div class="flex justify-between">
+  <fieldset [ngClass]="{'invalid': originErrorMessage}">
+    <p-dropdown name="originId" id="originId" [options]="originIdOptions" [(ngModel)]="valuation.bookedBy"
+      optionLabel="value" optionValue="id" [filter]="false" data-cy="originId" (onChange)="onOriginIdChanged($event)"
+      (ngModelChange)="controlValues()">
+    </p-dropdown>
+    <p class="message message--negative"> {{originErrorMessage}}</p>
+  </fieldset>
+  <fieldset>
+    <p-dropdown name="bookById" id="bookById" [options]="bookByOptions$ | async" formControlName="bookById"
+      optionLabel="value" optionValue="id" [filter]="false" data-cy="bookById"
+      (onChange)="onBookedByChanged($event.value)" (ngModelChange)="controlValues()">
+      <p class="message message--negative"> {{""}}</p>
+    </p-dropdown>
+  </fieldset>
+  <fieldset [ngClass]="{'invalid': bookedByErrorMessage}">
+    <p-dropdown name="bookBy" id="bookBy" [options]="bookByOptions$ | async" [(ngModel)]="valuation.bookedBy"
+      (ngModelChange)="controlValues()" optionLabel="fullName" optionValue="staffMemberId" [filter]="true"
+      data-cy="bookBy" (onChange)="onBookedByChanged($event)">
+    </p-dropdown>
+    <p class="message message--negative"> {{bookedByErrorMessage}}</p>
+  </fieldset>
+</div>

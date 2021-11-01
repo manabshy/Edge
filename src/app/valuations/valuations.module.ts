@@ -18,13 +18,15 @@ import { ValuationListComponent } from './valuation-list/valuation-list.componen
 import { ValuationDetailEditComponent } from './valuation-detail-edit/valuation-detail-edit.component'
 import { ValuationsLandRegisterComponent } from './valuation-land-register/valuation-land-register.component'
 import { CancelValuationComponent } from './cancel-valuation/cancel-valuation.component'
+import { ValuationOriginComponent } from './valuation-origin/valuation-origin.component'
 
 const components = [
   ValuationsComponent,
   ValuationListComponent,
   ValuationDetailEditComponent,
   ValuationsLandRegisterComponent,
-  CancelValuationComponent
+  CancelValuationComponent,
+  ValuationOriginComponent
 ]
 
 @NgModule({

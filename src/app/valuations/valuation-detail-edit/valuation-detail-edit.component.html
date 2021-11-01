@@ -208,22 +208,14 @@
             </ng-template>
           </p-messages>
         </div>
-        <div
-          class="mr-8 md:m-0"
-          [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled || isPropertyInfoDisabled }"
-          (click)="controlIsCancelled($event, isCancelled || isPropertyInfoDisabled)"
-        >
-          <app-property-card
-            class="appWrapper"
-            [propertyDetails]="property"
-            [isHorizontalCard]="true"
-            [showPropertyDetailActions]="false"
-            [showValuationActions]="true"
-            (showPhotos)="showPhotosModal()"
-            (showMap)="showMapModal()"
-            (changeProperty)="changeProperty()"
-            (changeLastknownOwner)="sharedService.addLastOwnerBs.next(true); isLastKnownOwnerVisible = true"
-          ></app-property-card>
+        <div class="mr-8 md:m-0" [ngClass]="{'opacity-75 pointer-events-none': isCancelled || isPropertyInfoDisabled}"
+          (click)="controlIsCancelled($event,(isCancelled || isPropertyInfoDisabled));">
+          <app-property-card class="appWrapper" [propertyDetails]="property" [isHorizontalCard]="true"
+            [showPropertyDetailActions]="false" [showValuationActions]="true"
+            [showActionButtons]="valuation?.valuationStatus == 0 || valuation?.valuationStatus == 2?true:false"
+            (showPhotos)="showPhotosModal()" (showMap)="showMapModal()" (changeProperty)="changeProperty()"
+            (changeLastknownOwner)="sharedService.addLastOwnerBs.next(true);isLastKnownOwnerVisible = true">
+          </app-property-card>
         </div>
 
         <form [formGroup]="valuationForm" autocompleteOff>
@@ -383,33 +375,22 @@
                     </div>
 
                     <div class="inline-parent inline-parent__hasLabels">
-                      <fieldset class="pb-4 pr-6">
+                      <fieldset class="pb-2 pr-6">
                         <span class="checkbox">
                           <span>
-                            <input
-                              class="p-2"
-                              type="checkbox"
-                              id="isNewBuild"
-                              name="isNewBuild"
-                              formControlName="isNewBuild"
-                              data-cy="isNewBuild"
-                            />
-                            <label style="font-weight: bolder" for="isNewBuild">New Build</label>
+                            <input class="p-2" type="checkbox" id="isNewBuild" name="isNewBuild"
+                              formControlName="isNewBuild" data-cy="isNewBuild">
+                            <label style="font-weight: bolder;" class="mb-1" for="isNewBuild">New Build</label>
                           </span>
                         </span>
                       </fieldset>
-                      <fieldset class="pb-4">
+                      <fieldset class="pb-2">
                         <span class="checkbox">
                           <span>
-                            <input
-                              class="p-2"
-                              type="checkbox"
-                              id="isRetirementHome"
-                              name="isRetirementHome"
-                              formControlName="isRetirementHome"
-                              data-cy="isRetirementHome"
-                            />
-                            <label style="font-weight: bolder" for="isRetirementHome">Retirement Home</label>
+                            <input class="p-2" type="checkbox" id="isRetirementHome" name="isRetirementHome"
+                              formControlName="isRetirementHome" data-cy="isRetirementHome">
+                            <label style="font-weight: bolder;" class="mb-1" for="isRetirementHome">Retirement
+                              Home</label>
                           </span>
                         </span>
                       </fieldset>
@@ -575,15 +556,9 @@
 
                     <fieldset class="pb-4 checkbox">
                       <span>
-                        <input
-                          class="p-2"
-                          type="checkbox"
-                          id="hasDisabledAccess"
-                          name="hasDisabledAccess"
-                          formControlName="hasDisabledAccess"
-                          data-cy="hasDisabledAccess"
-                        />
-                        <label style="font-weight: bolder" for="hasDisabledAccess">Disabled Access</label>
+                        <input class="p-2" type="checkbox" id="hasDisabledAccess" name="hasDisabledAccess"
+                          formControlName="hasDisabledAccess" data-cy="hasDisabledAccess">
+                        <label style="font-weight: bolder;" for="hasDisabledAccess" class="mb-1">Disabled Access</label>
                       </span>
                     </fieldset>
                   </div>
@@ -777,24 +752,13 @@
                         </p-card>
                       </fieldset>
 
-                      <fieldset
-                        class="flex self-center justify-center mb-3 md:mb-8 inline-child"
-                        *ngIf="this.valuation.valuationStatus == 0 || this.valuation.valuationStatus == 2"
-                      >
-                        <button
-                          [style]="{ width: '5rem' }"
-                          type="button"
-                          class="btn btn--positive"
-                          (click)="isSalesEdit = false; isLettingsEdit = false; isBothEdit = true; getAvailability()"
-                          data-cy="openAvailabilityBoth"
-                        >
-                          {{
-                            valuation?.lettingsValuationBooking && valuation?.salesValuationBooking
-                              ? 'Edit Both'
-                              : valuation?.salesValuationBooking
-                              ? 'Add Lettings'
-                              : 'Add Sales'
-                          }}
+                      <fieldset class="flex self-center justify-center mb-3 md:mb-8 inline-child"
+                        *ngIf="(valuation?.valuationStatus == 0 || valuation?.valuationStatus == 2)">
+                        <button [style]="{'width': '5rem'}" type="button" class="btn btn--positive"
+                          (click)="isSalesEdit =false;isLettingsEdit = false;isBothEdit =true;getAvailability()"
+                          data-cy="openAvailabilityBoth">{{valuation?.lettingsValuationBooking &&
+                          valuation?.salesValuationBooking ? 'Edit Both' :
+                          (valuation?.salesValuationBooking? 'Add Lettings':'Add Sales')}}
                         </button>
                       </fieldset>
 

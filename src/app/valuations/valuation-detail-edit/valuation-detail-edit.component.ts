@@ -23,16 +23,18 @@ import {
   OfficeMember,
   ValuersAvailabilityOption,
   ValuationStaffMembersCalanderEvents,
-  ValuationBooking
+  ValuationBooking,
 } from '../shared/valuation'
 import { Instruction } from 'src/app/shared/models/instruction'
 import { ResultData } from 'src/app/shared/result-data'
 import { StaffMember } from 'src/app/shared/models/staff-member'
 import format from 'date-fns/format'
-import { BehaviorSubject, of, Subject, Subscription } from 'rxjs'
+import { BehaviorSubject, Observable, of, Subject, Subscription, combineLatest } from 'rxjs'
 import { MenuItem, MessageService, PrimeNGConfig } from 'primeng/api'
-import { addYears, differenceInCalendarYears } from 'date-fns'
+import { addYears, differenceInCalendarYears, isThisHour } from 'date-fns'
 import _ from 'lodash'
+import { ViewportScroller } from '@angular/common'
+import { DiaryEventService } from 'src/app/diary/shared/diary-event.service'
 import { SideNavItem, SidenavService } from 'src/app/core/services/sidenav.service'
 import { Person } from 'src/app/shared/models/person'
 import moment from 'moment'
@@ -78,6 +80,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   canSaveValuation: boolean = true
   propertyId: number
   lastKnownOwnerId: number
+  originId: number
+  leadTypeId: number
   approxLeaseExpiryDate: Date
   instructionForm: FormGroup
   instruction: Instruction
@@ -354,7 +358,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     private router: Router,
     private fb: FormBuilder,
     private primengConfig: PrimeNGConfig,
-    private sidenavService: SidenavService
+    private diaryEventService: DiaryEventService,
+    private sidenavService: SidenavService,
+    private scroller: ViewportScroller
   ) {
     super()
   }
@@ -383,9 +389,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuationId = +this.route.snapshot.paramMap.get('id')
     this.propertyId = +this.route.snapshot.queryParamMap.get('propertyId')
     this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get('lastKnownOwnerId')
+    this.originId = +this.route.snapshot.queryParamMap.get('originId')
+    this.leadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId')
     this.isNewValuation = (this.route.snapshot.queryParamMap.get('isNewValuation') as unknown) as boolean
     this.isFromProperty = (this.route.snapshot.queryParamMap.get('isFromProperty') as unknown) as boolean
     this.isNewValuation && !this.isFromProperty ? (this.showProperty = true) : (this.showProperty = false)
+
     if (this.valuationId) {
       this.getValuation(this.valuationId)
     } else {
@@ -401,8 +410,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       if (info) {
         this.setupListInfo(info)
       } else {
-        this.infoService
-          .getDropdownListInfo()
+        this._valuationFacadeSvc
+          .getDropDownInfo()
           .pipe(takeUntil(this.ngUnsubscribe))
           .subscribe((data: ResultData | any) => {
             if (data) {
@@ -412,7 +421,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     })
 
-    this.getAddedProperty() // ?
+    this.getAddedProperty()
 
     this.contactGroupService.signer$.subscribe((data) => {
       if (data) {
@@ -1602,6 +1611,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   displayValuationPropInfo(info: ValuationPropertyInfo) {
     if (info) {
+      this.studioLabelCheck(info.bedrooms)
       this.valuationForm.patchValue({
         bedrooms: info.bedrooms || 0,
         bathrooms: info.bathrooms || 0,
@@ -2580,15 +2590,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.setLeaseExpiryDate()
     this.isSubmitting = true
     let valuationValue = this.valuation
-
-    console.log('valuationEventId: ', this.valuation.valuationEventId)
-
     if (this.valuation.valuationEventId > 0) {
       valuationValue = this._valuationFacadeSvc._valuationData.getValue() // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
-      console.log('valuationValue from valuation facade svc:  ', valuationValue)
     }
     const valuation = { ...valuationValue, ...this.valuationForm.value }
-    console.log('valuation: ', valuation)
     valuation.propertyOwner = this.lastKnownOwner
     valuation.OfficeId = this.property.officeId
     valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate
