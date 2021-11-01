@@ -12,7 +12,7 @@ import { ResultData } from "src/app/shared/result-data";
 import { ValuationCancellationReasons } from "../shared/valuation";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { FormErrors } from "src/app/core/shared/app-constants";
-import { ValuationService } from "../shared/valuation.service";
+import { ValuationFacadeService } from "../shared/valuation-facade.service";
 import { SharedService } from "src/app/core/services/shared.service";
 
 @Component({
@@ -32,7 +32,7 @@ export class CancelValuationComponent extends BaseComponent implements OnInit {
     private storage: StorageMap,
     private infoService: InfoService,
     private fb: FormBuilder,
-    private valuationService: ValuationService,
+    private _valuationFacadeSvc: ValuationFacadeService,
     private sharedService: SharedService
   ) {
     super();
@@ -102,7 +102,7 @@ export class CancelValuationComponent extends BaseComponent implements OnInit {
   cancelValuation() {
     this.controlForm();
     if (this.cancelValuationForm.valid) {
-      this.valuationService
+      this._valuationFacadeSvc
         .cancelValuation({
           typeId: this.cancelValuationForm.get("cancelTypeId").value,
           reason: this.cancelValuationForm.get("cancelReason").value,

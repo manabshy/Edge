@@ -1,5 +1,4 @@
-import { first } from 'rxjs/operators';
-import { ValuationService } from './../shared/valuation.service';
+import { ValuationFacadeService } from './../shared/valuation-facade.service';
 import { differenceInCalendarYears } from 'date-fns';
 import { FormErrors } from 'src/app/core/shared/app-constants';
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
@@ -8,7 +7,7 @@ import { ValuationTypeEnum } from '../shared/valuation';
 import { FileTypeEnum } from 'src/app/core/services/file.service';
 import { Observable, Subscription } from 'rxjs';
 import { SharedService } from 'src/app/core/services/shared.service';
-import { ContactGroup, ContactType } from 'src/app/contact-groups/shared/contact-group';
+import { ContactType } from 'src/app/contact-groups/shared/contact-group';
 import { Property } from 'src/app/property/shared/property';
 
 @Component({
@@ -70,7 +69,7 @@ export class ValuationsLandRegisterComponent implements OnInit, AfterViewInit, O
 
   constructor(
     private fb: FormBuilder,
-    private _valuationService: ValuationService,
+    private _valuationService: ValuationFacadeService,
     private _sharedService: SharedService,
   ) {}
 

@@ -23,17 +23,17 @@
     </div>
     <ng-template #menuTrigger></ng-template>
     <span class="flex-1"></span>
-    <button *ngIf="hasMenuBtn" class="w-10 h-10 rounded-full hover:shadow-md" (click)="menu.toggle($event)">
+    <button *ngIf="hasMenuBtn && !isFrozen" class="w-10 h-10 rounded-full hover:shadow-md" (click)="menu.toggle($event)">
       <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
         <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
         <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
         <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
       </svg>
     </button>
-    <p-menu #menu [popup]="true" [model]="items"></p-menu>
+    <p-menu [appendTo]="'body'" #menu [popup]="true" [model]="items"></p-menu>
   </div>
 
-  <p class="mt-3 -mb-2 font-medium">Documents</p>
+  <p class="mt-3 mb-2 font-medium">Documents</p>
   <div class="flex flex-col md:flex-row gap-x-2 gap-y-2 w-100" *ngIf="!entity.companyId">
     <div class="w-100 md:w-1/2">
       <app-document-info

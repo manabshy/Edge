@@ -29,7 +29,7 @@ import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-
         (onRemoveEntity)="store.onRemoveEntity($event)"
         (onUpdateEntity)="store.onUpdateEntity($event)"
         (onAddContact)="store.onAddContact($event)"
-        (onAddCompany)="store.onAddCompany($event)"
+        (onAddExistingCompany)="store.onAddExistingCompany($event)"
         (onRefreshDocuments)="store.onRefreshDocuments()"
         (onQueryDuplicates)="facadeSvc.onQueryDuplicates($event)"
         (onCreateNewPerson)="facadeSvc.onCreateNewPerson($event)"

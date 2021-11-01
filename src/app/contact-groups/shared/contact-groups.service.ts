@@ -135,7 +135,7 @@ export class ContactGroupsService {
     return this.http.get<SignerData>(url).pipe(map((response) => response.result))
   }
 
-  getContactGroupById(contactGroupId: number, includeOnlyImportantNotes?: boolean): Observable<ContactGroup> {
+  public getContactGroupById(contactGroupId: number, includeOnlyImportantNotes?: boolean): Observable<ContactGroup> {
     if (!includeOnlyImportantNotes) {
       includeOnlyImportantNotes = false
     }
@@ -152,13 +152,13 @@ export class ContactGroupsService {
         map((response) => {
           return {
             ...response.result,
-            addressee:
+            addressee:  
               response.result?.contactType == ContactType.CompanyContact
                 ? response.result?.companyName + '(' + response.result?.addressee + ')'
                 : response.result?.addressee
           }
         }),
-        tap((data) => (this.contactGroupNotes = data.contactNotes))
+        tap((data) => (this.contactGroupNotes = data.contactNotes)),
         // tap(data => console.log('contact group details here...', JSON.stringify(data)))
       )
   }
@@ -276,7 +276,7 @@ export class ContactGroupsService {
       .get<CompanyAutoCompleteData>(url, { params: options })
       .pipe(
         map((response) => response.result),
-        tap((data) => console.log('company list here here...', JSON.stringify(data)))
+        // tap((data) => console.log('company list here here...', JSON.stringify(data)))
       )
   }
 
