@@ -13,11 +13,7 @@
     >
       Exp: {{ moment(file.idValidationDateExpiry).format('DD/MM/YY') }}
     </span>
-    <span
-      *ngIf="documentType == DOCUMENT_TYPE.REPORT && file.smartSearchId"
-    >
-      ID: {{ file.smartSearchId }}
-    </span>
+    <span *ngIf="documentType == DOCUMENT_TYPE.REPORT && file.smartSearchId">ID: {{ file.smartSearchId }}</span>
     <span class="flex-1 text-right" [pTooltip]="'Upload Date'">{{ moment(file.uploadDate).format('DD/MM/YY') }}</span>
     <button
       (click)="deleteFile.emit({ id: file.fileStoreId, documentType: documentType })"
@@ -93,9 +89,9 @@
           <label for="">SmartSearch ID Number</label>
           <input
             class="p-2 mt-2"
-            type="number"
+            type="tel"
             formControlName="smartSearchId"
-            placeholder="1, 2, buckle my shoe"
+            placeholder="Enter SmartSearch ID here"
             (input)="onSmartSearchIdChange($event.target.value)"
           />
         </fieldset>

@@ -22,6 +22,10 @@ import { StorageMap } from '@ngx-pwa/local-storage'
 import { eSignTypes } from 'src/app/core/shared/eSignTypes'
 import { InfoService } from 'src/app/core/services/info.service'
 
+/***
+ * ValuationService original
+ * Keeps for reference whilst refactoring
+ */
 @Injectable({
   providedIn: 'root'
 })

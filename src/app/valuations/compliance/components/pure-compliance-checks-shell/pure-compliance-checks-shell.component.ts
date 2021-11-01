@@ -22,7 +22,7 @@ export class PureComplianceChecksShellComponent implements OnInit, OnChanges {
   @Output() onToggleIsUBO: EventEmitter<any> = new EventEmitter()
   @Output() onUpdateEntity: EventEmitter<any> = new EventEmitter()
   @Output() onRemoveEntity: EventEmitter<any> = new EventEmitter()
-  @Output() onAddCompany: EventEmitter<any> = new EventEmitter()
+  @Output() onAddExistingCompany: EventEmitter<any> = new EventEmitter()
   @Output() onAddContact: EventEmitter<any> = new EventEmitter()
   @Output() onRefreshDocuments: EventEmitter<any> = new EventEmitter()
   @Output() onQueryDuplicates: EventEmitter<any> = new EventEmitter()

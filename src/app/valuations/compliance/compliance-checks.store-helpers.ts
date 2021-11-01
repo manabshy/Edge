@@ -1,15 +1,16 @@
 import { ValuationTypeEnum } from '../shared/valuation'
 import { mapDocsForAPI, mapDocumentsForView } from './helpers/store-documents-helpers'
+import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload } from './compliance-checks.interfaces'
 
 /***
- * @function addFilesToPerson
+ * @function buildPartialLoadState
  * @param {string} companyId - ID of the company associated with a valuation
  * @param {Object} valuationData: Object
  * @description Builds initial store state when a compliance state is initializing
  * @returns Object containing properties for the compliance checks store
  */
 export const buildPartialLoadState = (companyId, valuationData) => {
-  // console.log('valuationData.complianceCheck: ', valuationData.complianceCheck)
+  console.log('valuationData.complianceCheck: ', valuationData.complianceCheck)
   return {
     contactGroupId: valuationData.propertyOwner?.contactGroupId,
     companyOrContact: companyId ? 'company' : 'contact',
@@ -32,18 +33,19 @@ export const setContactsForCompliance = (entitites, passedDate) => {
   // console.log('RAW PEOPLE FROM API: ', entitites)
   return entitites.map((e) => {
     return {
-      id: e.id,
-      personId: e.personId,
-      companyId: e.companyId,
-      associatedCompanyId: e.associatedCompanyId,
-      name: e.name,
-      isMain: e.companyId ? e.id === e.companyId : e.isMain,
-      address: e.address,
-      personDateAmlCompleted: e.personDateAmlCompleted && passedDate ? e.personDateAmlCompleted : e.amlPassed,
-      amlPassed: e.amlPassed,
-      compliancePassedBy: e.compliancePassedByFullName,
-      isUBO: discernIsUBO(e),
-      documents: mapDocumentsForView(e.documents || [])
+      id: e.id, // the object id. used for generic handling of entities in the store
+      personId: e.personId, // differentiator for person || company
+      companyId: e.companyId, // see above
+      associatedCompanyId: e.associatedCompanyId, // TODO what's this again? 🙈
+      isUBO: discernIsUBO(e), // shows UBO pill in the UI
+      position: e.position,
+      name: e.name, // TODO what displays on the card in the UI. Do we want this to be addressee for people?
+      isMain: e.companyId ? e.id === e.companyId : e.isMain, // drives which pill to show in the UI
+      address: e.address, // address that shows in UI
+      personDateAmlCompleted: e.personDateAmlCompleted && passedDate ? e.personDateAmlCompleted : e.amlPassed, // shows the individual compliance pass date in the UI under the entity card
+      amlPassed: e.amlPassed, // TODO is this a boolean or date?
+      compliancePassedBy: e.compliancePassedByFullName, // the name of user that passed the checks which shows in the UI
+      documents: mapDocumentsForView(e.documents || []) // the various documents that an entity has
     }
   })
 }
@@ -60,10 +62,9 @@ const discernIsUBO = (entity) => {
 /***
  * @function identifyAmlOrKyc
  * @param {Object} valuation - a valuation object from the API
- * @description looks at valuation and figures out to display AML or KYC labels
+ * @description looks at valuation and figures out to display AML or KYC labels in the UI
  */
 export const identifyAmlOrKyc = (valuation): string => {
-  // TODO check and add criteria for sale?
   const amlOrKyc =
     valuation.valuationType == ValuationTypeEnum.Lettings ||
     (valuation.suggestedAskingRentLongLetMonthly &&
@@ -100,52 +101,53 @@ export const addExistingEntity = (storeState, entity) => {
  * @description maps the store data into correct shape for saving to API. Payload differs between personal and company compliance checks
  */
 export const workOutDataShapeForApi = (entities, companyOrContact, companyId, contactGroupId) => {
-  // console.log('workOutDataShapeForApi: ', entities)
-  if (companyOrContact === 'contact') {
-    // console.log('build contacts array')
-    const entitiesToSave = entities.map((entity) => {
-      return {
-        personId: entity.personId,
-        name: entity.name,
-        address: entity.address ? entity.address : 'Unset',
-        documents: mapDocsForAPI(entity.documents),
-        isMain: entity.isMain,
-        position: entity.position ? entity.position : 'Unset',
-        personDateAmlCompleted: entity.personDateAmlCompleted ? entity.personDateAmlCompleted : null
+  switch (companyOrContact) {
+    case 'contact':
+      const entitiesToSave = entities.map((entity) => {
+        return {
+          personId: entity.personId,
+          name: entity.name,
+          address: entity.address ? entity.address : 'Unset',
+          documents: mapDocsForAPI(entity.documents),
+          isMain: entity.isMain,
+          position: entity.position ? entity.position : 'Unset',
+          personDateAmlCompleted: entity.personDateAmlCompleted ? entity.personDateAmlCompleted : null
+        }
+      })
+      const contactComplianceChecksSavePayload: ContactComplianceChecksSavePayload = {
+        entitiesToSave,
+        contactGroupId
       }
-    })
-    return {
-      entitiesToSave,
-      contactGroupId
-    }
-  } else if (companyOrContact === 'company') {
-    // console.log('build company and contacts arrays sepearately');
-    const personDocuments = []
-    const companyDocuments = []
-    entities.forEach((entity) => {
-      const updatedPerson: any = {
-        uboAdded: entity.uboAdded,
-        documents: mapDocsForAPI(entity.documents)
+      return contactComplianceChecksSavePayload
+
+    case 'company':
+      // console.log('build company and contacts arrays sepearately');
+      const personDocuments = []
+      const companyDocuments = []
+      entities.forEach((entity) => {
+        const updatedPerson: any = {
+          uboAdded: entity.uboAdded,
+          documents: mapDocsForAPI(entity.documents)
+        }
+        if (entity.companyId) {
+          updatedPerson.associatedCompanyId = entity.associatedCompanyId
+          companyDocuments.push(updatedPerson)
+        } else {
+          updatedPerson.position = entity.position ? entity.position : 'Not set'
+          updatedPerson.address = entity.address ? entity.address : 'Not set'
+          updatedPerson.personId = entity.personId
+          updatedPerson.name = entity.name
+          personDocuments.push(updatedPerson)
+        }
+      })
+      const companyComplianceChecksSavePayload: CompanyComplianceChecksSavePayload = {
+        savePayload: {
+          companyId,
+          companyDocuments,
+          personDocuments
+        },
+        contactGroupId
       }
-      if (entity.companyId) {
-        updatedPerson.associatedCompanyId = entity.associatedCompanyId
-        companyDocuments.push(updatedPerson)
-      } else {
-        updatedPerson.position = entity.position ? entity.position : 'Not set'
-        updatedPerson.address = entity.address ? entity.address : 'Not set'
-        updatedPerson.personId = entity.personId
-        updatedPerson.name = entity.name
-        personDocuments.push(updatedPerson)
-      }
-    })
-    const savePayload = {
-      companyId,
-      companyDocuments,
-      personDocuments
-    }
-    return {
-      savePayload,
-      contactGroupId
-    }
+      return companyComplianceChecksSavePayload
   }
 }
