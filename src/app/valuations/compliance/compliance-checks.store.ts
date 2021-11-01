@@ -1,14 +1,21 @@
+// compliance-checks.store.ts
+/**
+ * This is the doc comment for compliance-checks.store.ts
+ *
+ * @module ComplianceChecksStore
+ * @description an NGRX component store that manages compliance checks state for a valuation. Store life cycle is attached to the app-compliance-checks-shell component
+ */
 import { Injectable } from '@angular/core'
 import { ComponentStore } from '@ngrx/component-store'
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs'
-import { mergeMap, tap, filter, switchMap, take } from 'rxjs/operators'
+import { mergeMap, tap, filter, switchMap, take, map } from 'rxjs/operators'
 import {
   setContactsForCompliance,
   buildPartialLoadState,
   workOutDataShapeForApi,
   addExistingEntity
 } from './compliance-checks.store-helpers'
-import { ValuationFacadeService } from 'src/app/valuations/shared/valuation-facade.service'
+import { ComplianceChecksFacadeService } from './compliance-checks.facade.service'
 import { buildComplianceChecksStatusMessages, checkAllEntitiesHaveValidDocs } from './helpers/store-validation-helpers'
 import { mergeFiles, removeDocFromDocumentsObject, addFiles, addDocsShell } from './helpers/store-documents-helpers'
 import { ComplianceChecksState, FileUpdateEvent, FileDeletionPayload } from './compliance-checks.interfaces'
@@ -58,8 +65,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    */
   readonly contactGroupDetails$: Observable<any> = this.contactGroupId$.pipe(
     filter((val) => !!val),
-    switchMap((contactGroupId) => {
-      return this._valuationFacadeSvc.getContactGroupById(contactGroupId, true)
+    map((contactGroupId) => {
+      console.log('+++++++++++++++++++++++++ contactGroupId: ', contactGroupId)
+      return this._complianceChecksFacadeSvc.getContactGroupById(contactGroupId)
     })
   )
 
@@ -75,6 +83,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   ]).pipe(
     filter(([entities]) => !!entities.length),
     tap(([entities, checkType, compliancePassedDate, compliancePassedBy]) => {
+      console.log('validationMessageData: ', compliancePassedDate, compliancePassedBy)
       const validationMessageData = buildComplianceChecksStatusMessages(
         entities,
         checkType,
@@ -111,13 +120,12 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    * @description takes documents out of the store, shapes them for the API and puts them in the valuation service ready for picking up when user saves valuation
    */
   private pushContactsToValuationServiceForSave$: Observable<any> = this.entitiesArrayShapedForApi$.pipe(
-    tap((data) => {
-      // console.log('pushContactsToValuationServiceForSave RUNNING 🏃🏃🏃🏃', data)
+    mergeMap((data: any): any => {
+      console.log('pushContactsToValuationServiceForSave RUNNING 🏃🏃🏃🏃', data)
       if (data.savePayload) {
-        this._valuationFacadeSvc.updateCompanyDocuments(data.savePayload.companyDocuments)
-        this._valuationFacadeSvc.updatePersonDocuments(data.savePayload.personDocuments) // pops personDocuments array into valuation service to get picked up if/when valuation is saved
+        return this._complianceChecksFacadeSvc.updateCompanyAndPersonDocuments(data.savePayload)
       } else {
-        this._valuationFacadeSvc.updatePersonDocuments(data.entitiesToSave) // pops personDocuments array into valuation service to get picked up if/when valuation is saved
+        return this._complianceChecksFacadeSvc.updatePersonDocuments(data.entitiesToSave) // pops personDocuments array into valuation service to get picked up if/when valuation is saved
       }
     })
   )
@@ -238,28 +246,30 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     entities: state.entities.filter((p) => p.id != idToRemove)
   }))
 
-  constructor(private _valuationFacadeSvc: ValuationFacadeService) {
+  constructor(private _complianceChecksFacadeSvc: ComplianceChecksFacadeService) {
     super(defaultState)
     this.loadStore()
   }
 
   /***
    * @function loadStore
-   * @description builds store state for a given valuation
+   * @description builds compliance checks store state for the valuation in view
    */
   loadStore = (): void => {
-    // console.log('loading compliance checks store ')
-    combineLatest([this._valuationFacadeSvc.contactGroup$, this._valuationFacadeSvc.valuation$])
+    console.log('loading compliance checks store ')
+    combineLatest([this._complianceChecksFacadeSvc.contactGroup$, this._complianceChecksFacadeSvc.valuation$])
       .pipe(
         filter(([contactGroupData, valuation]: [ContactGroup, Valuation]) => !!valuation && !!contactGroupData),
         take(1),
         tap(([contactGroupData, valuationData]) => {
+          console.log('valuationData: ', valuationData)
           this.patchState(buildPartialLoadState(contactGroupData.companyId, valuationData))
         }),
         mergeMap(([contactGroupData, valuation]) => {
           if (contactGroupData.companyId) {
+            // contactGroupData required here in order to build company flavour of store
             return combineLatest([
-              this._valuationFacadeSvc.getCompanyDocsForValuation(
+              this._complianceChecksFacadeSvc.getCompanyDocsForValuation(
                 contactGroupData.contactGroupId,
                 valuation.valuationEventId
               ),
@@ -268,7 +278,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
             ])
           } else if (valuation && valuation.propertyOwner) {
             return combineLatest([
-              this._valuationFacadeSvc.getPeopleDocsForValuation(
+              this._complianceChecksFacadeSvc.getPeopleDocsForValuation(
                 valuation.propertyOwner.contactGroupId,
                 valuation.valuationEventId
               ),
@@ -292,7 +302,10 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         mergeMap(() => this.validationMessage$),
         take(1)
       )
-      .subscribe()
+      .subscribe(
+        (res) => console.log(res),
+        (err) => console.error(err)
+      )
   }
 
   /***
@@ -301,49 +314,35 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    * it loops all entities and stamps their personDateAmlCompleted property saving to API. Displays a message to user that AML checks have passed.
    */
   public onPassComplianceChecks(): void {
-    let valuationEventIdClosure
-    combineLatest([this.checksAreValid$, this.valuationEventId$])
+    combineLatest([this.entitiesArrayShapedForApi$, this.checksAreValid$])
       .pipe(
-        filter(([checksAreValid, valuationEventId]: [boolean, number]) => checksAreValid && !!valuationEventId),
-        mergeMap(([checksAreValid, valuationEventId]: [boolean, number]) => {
-          valuationEventIdClosure = valuationEventId
-          return this.entitiesArrayShapedForApi$
+        filter(([userDataForApi, checksAreValid]: [any, boolean]) => userDataForApi && checksAreValid),
+        take(1),
+        mergeMap(([userDataForApi, checksAreValid]: [any, boolean]) => {
+          console.log('passComplianceChecksForValution running....')
+          return this._complianceChecksFacadeSvc.passComplianceChecksForValution(userDataForApi)
         }),
-        mergeMap((userDataForApi) => {
-          if (userDataForApi.entitiesToSave) {
-            return this._valuationFacadeSvc.freezePeopleDocsForValuation(
-              userDataForApi.entitiesToSave,
-              userDataForApi.contactGroupId
-            )
-          } else {
-            return this._valuationFacadeSvc.freezeCompanyDocsForValuation(
-              userDataForApi.savePayload,
-              userDataForApi.contactGroupId
-            )
-          }
-        }),
-        mergeMap(() => {
-          return this._valuationFacadeSvc.passComplianceChecksForValution(valuationEventIdClosure)
-        }),
-        tap((res: any) => {
+        mergeMap((res: any) => {
           console.log('onPassComplianceChecks our server says...', res)
           this.addAmlCheckTimestampToUsers()
-          return this.patchState({
+          this.patchState({
             compliancePassedBy: res.compliancePassedByFullName,
             compliancePassedDate: res.compliancePassedDate,
             isFrozen: true
           })
-        }),
-        mergeMap(() => this.validationMessage$.pipe()),
-        take(1)
+          return this.validationMessage$
+        })
       )
-      .subscribe()
+      .subscribe(
+        (res) => console.log(res),
+        (err) => console.error(err)
+      )
   }
 
   /***
    * @function onFileUploaded
    * @param {Object} data - files object
-   * @description calls API to save files to temp storage. Updates this store with those docs and pushes changes to valuation in _valuationFacadeService. User will have to save valuation to persist files.
+   * @description calls API to save files to temp storage. Updates this store with those docs and pushes changes to valuation in _valuationFacadeSvc. User will have to save valuation to persist files.
    */
   public onFileUploaded = (data: FileUpdateEvent): void => {
     if (!data.ev.tmpFiles) return
@@ -353,7 +352,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       formData.append('files', x, x.name)
     })
 
-    this._valuationFacadeSvc
+    this._complianceChecksFacadeSvc
       .saveFileTemp(formData)
       .pipe(
         mergeMap((tmpFiles) => {
@@ -363,7 +362,10 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         mergeMap(() => this.validationMessage$.pipe()),
         take(1)
       )
-      .subscribe()
+      .subscribe(
+        (res) => console.log(res),
+        (err) => console.error(err)
+      )
   }
 
   /***
@@ -375,7 +377,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     this.removeDocFromStore(data)
     this.pushContactsToValuationServiceForSave$
       .pipe(
-        tap(() => {
+        map(() => {
           return this.patchState({
             checksAreValid: false
             // compliancePassedDate: null,
@@ -385,13 +387,16 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         mergeMap(() => this.validationMessage$.pipe()),
         take(1)
       )
-      .subscribe()
+      .subscribe(
+        (res) => console.log(res),
+        (err) => console.error(err)
+      )
   }
 
   /***
    * @function onAddNewContact
    * @param {Object} entity - the NEW contact to add to the store
-   * @description adds a new contact to the valuation. Since this is called before the valuation loads it's set as a BehaviorSubject so the load function can grab it on demand
+   * @description adds a NEW contact to the valuation. Since this is called before the valuation loads it's set as a BehaviorSubject so the load function can grab it on demand
    */
   public onAddNewContact = (entity: any): void => {
     // console.log('onAddNewContact.next(', data)
@@ -410,27 +415,30 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   /***
    * @function onAddContact
    * @param {Object} entity - the contact to add to the store
-   * @description adds an existing contact to the valuation. grabs their docs & data from API and puts in the store
+   * @description adds an EXISTING contact to the valuation. grabs their docs & data from API and puts in the store
    */
   public onAddContact = (entity: any): void => {
-    this._valuationFacadeSvc
+    this._complianceChecksFacadeSvc
       .getAllPersonDocs(entity.id)
       .pipe(
         switchMap((entityDataFromApi) => {
-          // console.log('Existing entity = ', entity)
+          console.log('Existing entity = ', entity)
           this.loadExistingEntity(entityDataFromApi)
           return this.pushContactsToValuationServiceForSave$
         }),
         mergeMap(() => this.validationMessage$.pipe()),
         take(1)
       )
-      .subscribe()
+      .subscribe(
+        (res) => console.log(res),
+        (err) => console.error(err)
+      )
   }
 
   /***
    * @function onAddNewCompany
    * @param {Object} entity - the NEW company to add to the store
-   * @description adds a new company to the valuation. Since this is called before the valuation loads it's set as a BehaviorSubject so the load function can grab it on demand
+   * @description adds a NEW company to the valuation. Since this is called before the valuation loads it's set as a BehaviorSubject so the load function can grab it on demand
    */
   public onAddNewCompany = (entity: any): void => {
     // console.log('onAddNewCompany.next(', entity)
@@ -445,14 +453,15 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           : ''
     })
   }
+
   /***
-   * @function onAddCompany
+   * @function onAddExistingCompany
    * @param {Object} entity - the NEW company to add to the store
-   * @description adds an existing company to the valuation. grabs their docs & data from API and puts in the store
+   * @description adds an EXISTING company to the valuation. grabs their docs & data from API and puts in the store
    */
-  public onAddCompany = (entity: any): void => {
-    // console.log('onAddCompany adding company to store: ', entity)
-    this._valuationFacadeSvc
+  public onAddExistingCompany = (entity: any): void => {
+    // console.log('onAddExistingCompany adding company to store: ', entity)
+    this._complianceChecksFacadeSvc
       .getAllDocsForCompany(entity.companyId)
       .pipe(
         switchMap((company) => {
@@ -462,7 +471,10 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         mergeMap(() => this.validationMessage$.pipe()),
         take(1)
       )
-      .subscribe()
+      .subscribe(
+        (res) => console.log(res),
+        (err) => console.error(err)
+      )
   }
 
   /***
@@ -477,7 +489,10 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         mergeMap(() => this.validationMessage$.pipe()),
         take(1)
       )
-      .subscribe()
+      .subscribe(
+        (res) => console.log(res),
+        (err) => console.error(err)
+      )
   }
 
   /***
@@ -488,7 +503,10 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   public onUpdateEntity = (entity: any): void => {
     // console.log('onUpdateEntity: ', entity)
     this.updateEntity(entity)
-    this.pushContactsToValuationServiceForSave$.pipe(take(1)).subscribe()
+    this.pushContactsToValuationServiceForSave$.pipe(take(1)).subscribe(
+      (res) => console.log(res),
+      (err) => console.error(err)
+    )
   }
 
   /***
@@ -498,7 +516,10 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    */
   public onToggleIsUBO = (entity: any): void => {
     this.toggleUserIsUBO(entity.id)
-    this.pushContactsToValuationServiceForSave$.pipe(take(1)).subscribe()
+    this.pushContactsToValuationServiceForSave$.pipe(take(1)).subscribe(
+      (res) => console.log(res),
+      (err) => console.error(err)
+    )
   }
 
   /***
@@ -511,12 +532,12 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         mergeMap(([contactGroupId, valuationEventId, companyOrContact]: [number, number, string]) => {
           if (companyOrContact === 'company') {
             return combineLatest([
-              this._valuationFacadeSvc.unfreezeCompanyDocuments(contactGroupId, valuationEventId),
+              this._complianceChecksFacadeSvc.unfreezeCompanyDocsForValuation(contactGroupId, valuationEventId),
               this.compliancePassedDate$
             ])
           } else {
             return combineLatest([
-              this._valuationFacadeSvc.unfreezePersonDocuments(contactGroupId, valuationEventId),
+              this._complianceChecksFacadeSvc.unfreezePeopleDocsForValuation(contactGroupId, valuationEventId),
               this.compliancePassedDate$
             ])
           }
@@ -539,6 +560,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         }),
         take(1)
       )
-      .subscribe()
+      .subscribe(
+        (res) => console.log(res),
+        (err) => console.error(err)
+      )
   }
 }

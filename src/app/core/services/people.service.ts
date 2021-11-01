@@ -1,3 +1,8 @@
+// people.service.ts
+/***
+ * @module PeopleService
+ * @description provides http endpoints that interact with people
+ */
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'

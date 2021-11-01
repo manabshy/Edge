@@ -32,7 +32,7 @@ export class CancelValuationComponent extends BaseComponent implements OnInit {
     private storage: StorageMap,
     private infoService: InfoService,
     private fb: FormBuilder,
-    private _valuationFacadeService: ValuationFacadeService,
+    private _valuationFacadeSvc: ValuationFacadeService,
     private sharedService: SharedService
   ) {
     super();
@@ -102,7 +102,7 @@ export class CancelValuationComponent extends BaseComponent implements OnInit {
   cancelValuation() {
     this.controlForm();
     if (this.cancelValuationForm.valid) {
-      this._valuationFacadeService
+      this._valuationFacadeSvc
         .cancelValuation({
           typeId: this.cancelValuationForm.get("cancelTypeId").value,
           reason: this.cancelValuationForm.get("cancelReason").value,

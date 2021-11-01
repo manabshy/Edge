@@ -61,23 +61,26 @@ export class ComplianceCardComponent implements OnInit {
         command: () => {
           this.dialogs.showEditDialog = !this.dialogs.showEditDialog
         }
-      },
-      {
+      }
+    ]
+    if (!this.entity.isMain) {
+      // the main contact should not be deletable!
+      items.push({
+        label: `Remove ${this.entity.companyId ? 'company' : 'contact'}`,
+        icon: 'fa fa-times',
+        command: () => {
+          this.dialogs.showRemoveDialog = !this.dialogs.showRemoveDialog
+        }
+      })
+    }
+    if (this.entity.companyId) {
+      // only businesses can have UBO status
+      items.push({
         label: this.entity.isUBO ? 'Remove as UBO' : 'Make UBO',
         icon: this.entity.isUBO ? 'fa fa-toggle-off' : 'fa fa-toggle-on',
         command: () => {
           this.setMenuItems() // refreshes options again
           this.onToggleIsUBO.emit(this.entity)
-        }
-      }
-    ]
-    if (!this.entity.isMain) {
-      // the main contact should not be deletable!
-      items.splice(1, 0, {
-        label: `Remove ${this.entity.companyId ? 'company' : 'contact'}`,
-        icon: 'fa fa-times',
-        command: () => {
-          this.dialogs.showRemoveDialog = !this.dialogs.showRemoveDialog
         }
       })
     }

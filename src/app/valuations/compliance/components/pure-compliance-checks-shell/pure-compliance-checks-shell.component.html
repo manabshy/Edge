@@ -90,7 +90,7 @@
     [canCreateNewCompany]="true"
     [existingIds]="existingCompanyIds$ | async"
     (companyName)="getCompanyName($event)"
-    (selectedCompanyDetails)="onAddCompany.emit($event)"
+    (selectedCompanyDetails)="onAddExistingCompany.emit($event)"
   ></app-company-finder>
 </p-dialog>
 

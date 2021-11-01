@@ -25,7 +25,7 @@ import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 let component: ValuationDetailEditComponent;
 let fixture: ComponentFixture<ValuationDetailEditComponent>;
 let propertyService;
-let _valuationFacadeService: ValuationFacadeService;
+let _valuationFacadeSvc: ValuationFacadeService;
 const mockVals = MockVals;
 let valuation = mockVals[0] as unknown as Valuation;
 const property = {
@@ -100,7 +100,7 @@ describe('ValuationDetailEditComponent', () => {
     storageMapSpy.get.and.returnValue(of(MockDropdownListInfo));
     fixture.detectChanges();
     propertyService = TestBed.inject(PropertyService);
-    _valuationFacadeService = TestBed.inject(ValuationFacadeService);
+    _valuationFacadeSvc = TestBed.inject(ValuationFacadeService);
   });
 
   describe('Template', () => {
@@ -293,7 +293,7 @@ describe('ValuationDetailEditComponent', () => {
     }));
 
     it('should get valuation', fakeAsync(() => {
-      spyOn(_valuationFacadeService, 'getValuation').and.returnValue(of(valuation));
+      spyOn(_valuationFacadeSvc, 'getValuation').and.returnValue(of(valuation));
 
       component.getValuation(1234);
       fixture.detectChanges();

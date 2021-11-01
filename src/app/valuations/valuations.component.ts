@@ -69,7 +69,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   public keepOriginalOrder = (a) => a.key;
 
   constructor(
-    private _valuationFacadeService: ValuationFacadeService,
+    private _valuationFacadeSvc: ValuationFacadeService,
     private sharedService: SharedService,
     private staffMemberService: StaffMemberService,
     private officeService: OfficeService,
@@ -87,7 +87,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this.getOffices();
     this.getCurrentStaffMember();
 
-    this._valuationFacadeService.doValuationSearchBs.subscribe((data) => {
+    this._valuationFacadeSvc.doValuationSearchBs.subscribe((data) => {
       if (data == true) this.getValuations();
     });
   }
@@ -115,7 +115,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       officeId: this.selectControlModels.officeId,
     };
 
-    this._valuationFacadeService
+    this._valuationFacadeSvc
       .getValuations(request)
       .pipe(
         tap((res) => console.log("res", res)),
@@ -181,7 +181,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
 
   // PRIVATE
   private setPage() {
-    this._valuationFacadeService.valuationPageNumberChanges$
+    this._valuationFacadeSvc.valuationPageNumberChanges$
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((newPageNumber) => {
         this.page = newPageNumber;
@@ -196,7 +196,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
         debounceTime(200),
         distinctUntilChanged(),
         switchMap((term) =>
-          this._valuationFacadeService.getValuationSuggestions(term).pipe(
+          this._valuationFacadeSvc.getValuationSuggestions(term).pipe(
             catchError(() => {
               return EMPTY;
             })

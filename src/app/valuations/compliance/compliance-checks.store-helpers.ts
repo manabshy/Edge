@@ -10,7 +10,7 @@ import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload 
  * @returns Object containing properties for the compliance checks store
  */
 export const buildPartialLoadState = (companyId, valuationData) => {
-  // console.log('valuationData.complianceCheck: ', valuationData.complianceCheck)
+  console.log('valuationData.complianceCheck: ', valuationData.complianceCheck)
   return {
     contactGroupId: valuationData.propertyOwner?.contactGroupId,
     companyOrContact: companyId ? 'company' : 'contact',
@@ -38,6 +38,7 @@ export const setContactsForCompliance = (entitites, passedDate) => {
       companyId: e.companyId, // see above
       associatedCompanyId: e.associatedCompanyId, // TODO what's this again? 🙈
       isUBO: discernIsUBO(e), // shows UBO pill in the UI
+      position: e.position,
       name: e.name, // TODO what displays on the card in the UI. Do we want this to be addressee for people?
       isMain: e.companyId ? e.id === e.companyId : e.isMain, // drives which pill to show in the UI
       address: e.address, // address that shows in UI

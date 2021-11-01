@@ -1,5 +1,13 @@
-import { Injectable, Injector } from '@angular/core'
+// valuation-facade.service.ts
+/***
+ * @module ValuationFacadeService
+ * @description this service encapsulates all component interactions required for valuations and acts as an interface to other services and stores
+ */
+
+import { Injectable } from '@angular/core'
+import { Router } from '@angular/router'
 import { BehaviorSubject, Observable, Subject } from 'rxjs'
+import { filter, map, mergeMap, take, tap } from 'rxjs/operators'
 import {
   Valuation,
   ValuationRequestOption,
@@ -11,19 +19,14 @@ import {
   valuationNote,
   ValuationPricingInfo
 } from './valuation'
-import { map, tap } from 'rxjs/operators'
 import { Instruction } from 'src/app/shared/models/instruction'
 import { ValuationApiService } from './valuation-api.service'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { FileService } from 'src/app/core/services/file.service'
 import { PeopleService } from 'src/app/core/services/people.service'
-import { Router } from '@angular/router'
 import { CompanyService } from 'src/app/company/shared/company.service'
 import { ContactGroup } from 'src/app/contact-groups/shared/contact-group'
-/***
- * ValuationFacadeService
- * @description this service encapsulates all component interactions required for valuations and acts as an interface to other services and stores
- */
+
 @Injectable({
   providedIn: 'root'
 })
@@ -41,8 +44,8 @@ export class ValuationFacadeService {
   landRegisterValid = new BehaviorSubject(false)
   doValuationSearchBs = new BehaviorSubject(false)
 
-  public readonly _valuation: BehaviorSubject<Valuation | any> = new BehaviorSubject({})
-  public readonly valuation$: Observable<Valuation | any> = this._valuation.asObservable()
+  public readonly _valuationData: BehaviorSubject<Valuation | any> = new BehaviorSubject({})
+  public readonly valuationData$: Observable<Valuation | any> = this._valuationData.asObservable()
 
   private readonly _valuationPricingInfo: BehaviorSubject<ValuationPricingInfo> = new BehaviorSubject({})
   public readonly valuationPricingInfo$ = this._valuationPricingInfo.asObservable()
@@ -54,7 +57,9 @@ export class ValuationFacadeService {
     private _companySvc: CompanyService,
     private _contactGroupsSvc: ContactGroupsService,
     private _router: Router
-  ) {}
+  ) {
+    console.log(' FACADE SERVICE INSTANTIATING =========== ')
+  }
 
   // CONTACT CARD / OWNER
 
@@ -63,8 +68,8 @@ export class ValuationFacadeService {
   public getValuationById(valuationId: number): Observable<Valuation | any> {
     return this._apiSvc.getValuationById(valuationId).pipe(
       tap((valuationObj) => {
-        console.log('👷 getValuation: ', valuationObj)
-        this._valuation.next(valuationObj)
+        console.log('👷👷👷 calling _valuationData.next in valuation service: ', valuationObj)
+        this._valuationData.next(valuationObj)
       })
     )
   }
@@ -100,9 +105,8 @@ export class ValuationFacadeService {
   // LAND REGISTRY CARD
 
   // COMPLIANCE CHECKS CARD FUNCTIONS
-  public getPotentialDuplicatePeople = this._contactGroupsSvc.getPotentialDuplicatePeople
 
-  public navigateToNewPersonScreen = (newPerson) => {
+  public navigateToNewPersonScreen(newPerson) {
     this._router.navigate(['/contact-centre/detail/0/edit'], {
       queryParams: {
         showDuplicateChecker: false,
@@ -116,22 +120,30 @@ export class ValuationFacadeService {
 
   public newPersonAdded$: Observable<any> = this._contactGroupsSvc.newPerson$
   public newCompanyAdded$: Observable<any> = this._companySvc.newCompanyChanges$
-  public newCompanyChanges$ = this._companySvc.newCompanyChanges$
+  public newCompanyChanges$: Observable<any> = this._companySvc.newCompanyChanges$
 
   /**
    * contact group service interface
    */
-  public getContactGroupById = this._contactGroupsSvc.getContactGroupById
+  public getContactGroupById(contactGroupId) {
+    return this._contactGroupsSvc.getContactGroupById(contactGroupId).pipe(
+      tap((contactGroupData) => {
+        this.contactGroupBs.next(contactGroupData)
+      })
+    )
+  }
   public newPerson$ = this._contactGroupsSvc.newPerson$
 
   /**
    * @function passComplianceChecksForValution
-   * @description passes compliance checks for a valuation
+   * @description passes compliance checks for a valuationData
    */
   public passComplianceChecksForValution(payload: any): Observable<any> {
-    return this.valuation$.pipe(
-      map((valuation) => {
-        return this._apiSvc.passComplianceChecksForValution(valuation.id, payload)
+    return this.valuationData$.pipe(
+      map((valuationData) => {
+        alert('still in use!')
+        console.log('passComplianceChecksForValuation: ', valuationData)
+        return this._apiSvc.passComplianceChecksForValution(valuationData.valuationEventId, payload)
       })
     )
   }
@@ -139,13 +151,47 @@ export class ValuationFacadeService {
   /***
    * People docs: For personal compliance checks
    */
-  public getAllPersonDocs = this._peopleSvc.getAllPersonDocs
-  public getPeopleDocsForValuation = this._peopleSvc.getPeopleDocsForValuation
+  public getAllPersonDocs(personId: number) {
+    return this._peopleSvc.getAllPersonDocs(personId)
+  }
 
-  /**
-   * entitiesToSave,
-   * contactGroupId,
+  public getPeopleDocsForValuation(contactGroupId: number, valuationEventId: number) {
+    return this._peopleSvc.getPeopleDocsForValuation(contactGroupId, valuationEventId)
+  }
+
+  /***
+   * @function updatePersonDocuments
+   * @param personDocuments {object[]} - array of entities and their docs ready to save to API
+   * @description emits and updated value for the valuationData in the store having updated the personDocuments array in the valuationData
+   **/
+  public updatePersonDocuments(personDocuments) {
+    console.log('🏃🏃🏃🏃 updatePersonDocuments running', personDocuments)
+    return this.valuationData$.pipe(
+      take(1),
+      map((valuationData) => {
+        console.log('🏆 updatePersonDocuments: this._valuationData.next ', valuationData)
+        this._valuationData.next({ ...valuationData, personDocuments })
+      })
+    )
+  }
+
+  /***
+   * updateCompanyAndPersonDocuments
+   * @description updates the company and person documents for the current valuationData in the service and pushes out a new valuationData value to subscribers
    */
+  public updateCompanyAndPersonDocuments(savePayload) {
+    console.log('🏃🏃🏃🏃 updateCompanyDocuments running', savePayload)
+    return this.valuationData$.pipe(
+      take(1),
+      map((valuationData) => {
+        console.log('🏆 updateCompanyDocuments: this._valuationData.next ', valuationData)
+        const updatedValuationData = { ...valuationData, companyDocuments: savePayload.companyDocuments, personDocuments: savePayload.personDocuments }
+        console.log('setting valuation data to : ', updatedValuationData)
+        this._valuationData.next(updatedValuationData)
+      })
+    )
+  }
+
   /***
    * @function freezePeopleDocsForValuation
    * @param {object[]} entities - entities array from the store
@@ -153,23 +199,31 @@ export class ValuationFacadeService {
    * @returns TODO
    */
   public freezePeopleDocsForValuation = (entities, contactGroupId) => {
-    return this.valuation$.pipe(
-      map((valuationData) => {
-        console.log(
-          '🥶 freezing docs for ' + JSON.stringify(entities) + ' contactGroupId ' + contactGroupId + ' id ',
-          valuationData.id
-        )
-        return this._peopleSvc.freezePeopleDocsForValuation(entities, contactGroupId, valuationData.id)
+    return this.valuationData$.pipe(
+      mergeMap((valuationData) => {
+        // console.log(
+        //   '🥶 freezing docs for ' + JSON.stringify(entities) + ' contactGroupId ' + contactGroupId + ' id ',
+        //   valuationData.id
+        // )
+        return this._peopleSvc.freezePeopleDocsForValuation(entities, contactGroupId, valuationData.valuationEventId)
       })
     )
   }
-  public unfreezePersonDocuments = this._peopleSvc.unfreezePeopleDocsForValuation
+
+  public unfreezePeopleDocsForValuation = (contactGroupId: number, valuationEventId: number) => {
+    return this._peopleSvc.unfreezePeopleDocsForValuation(contactGroupId, valuationEventId)
+  }
 
   /***
    * Company people docs: For company compliance checks
    */
-  public getAllDocsForCompany = this._companySvc.getAllDocsForCompany
-  public getCompanyDocsForValuation = this._companySvc.getCompanyDocsForValuation
+  public getAllDocsForCompany = (companyId: number) => {
+    return this._companySvc.getAllDocsForCompany(companyId)
+  }
+
+  public getCompanyDocsForValuation = (contactGroupId, valuationEventId) => {
+    return this._companySvc.getCompanyDocsForValuation(contactGroupId, valuationEventId)
+  }
 
   /***
    * @function freezeCompanyDocsForValuation
@@ -178,28 +232,27 @@ export class ValuationFacadeService {
    * @returns TODO
    */
   public freezeCompanyDocsForValuation = (entities, contactGroupId) => {
-    return this.valuation$.pipe(
-      map((valuationData) => {
+    return this.valuationData$.pipe(
+      mergeMap((valuationData) => {
         console.log(
-          '🥶 freezing docs for ' + JSON.stringify(entities) + ' contactGroupId ' + contactGroupId + ' id ',
-          valuationData.id
+          '🥶 freezing docs for contactGroupId ' +
+            contactGroupId +
+            ' id ' +
+            ' valuationEventId: ' +
+            valuationData.valuationEventId
         )
-        return this._companySvc.setCompanyDocsForValuation(entities, contactGroupId, valuationData.id)
+        return this._companySvc.setCompanyDocsForValuation(entities, contactGroupId, valuationData.valuationEventId)
       })
     )
   }
-  public unfreezeCompanyDocuments = this._companySvc.deleteCompanyDocsForValuation
 
-  /***
-   * updateCompanyDocuments
-   * @description updates the documents for the current valuation in the service and pushes out a new valuation value to subscribers
-   */
-  public updateCompanyDocuments(companyDocuments) {
-    const existingValuation = this._valuation.getValue() // TODO don't use get value!
-    this._valuation.next({ ...existingValuation, companyDocuments })
+  public unfreezeCompanyDocsForValuation = (contactGroupId: number, valuationEventId: number) => {
+    return this._companySvc.deleteCompanyDocsForValuation(contactGroupId, valuationEventId)
   }
 
-  public saveFileTemp = this._fileSvc.saveFileTemp
+  public saveFileTemp = (tmpFiles) => {
+    return this._fileSvc.saveFileTemp(tmpFiles)
+  }
 
   // END COMPLIANCE CHECKS FUNCTIONS
 
@@ -216,16 +269,16 @@ export class ValuationFacadeService {
     this.valuationPageNumberSubject.next(nextPage)
   }
 
-  public addValuation(valuation: Valuation): Observable<Valuation | any> {
-    return this._apiSvc.addValuation(valuation)
+  public addValuation(valuationData: Valuation): Observable<Valuation | any> {
+    return this._apiSvc.addValuation(valuationData)
   }
 
   public cancelValuation(valuationToCancel: CancelValuation): Observable<any> {
     return this._apiSvc.cancelValuation(valuationToCancel)
   }
 
-  public updateValuation(valuation: Valuation): Observable<Valuation | any> {
-    return this._apiSvc.updateValuation(valuation)
+  public updateValuation(valuationData: Valuation): Observable<Valuation | any> {
+    return this._apiSvc.updateValuation(valuationData)
   }
 
   public saveValuationNote(valuationNote: valuationNote): Observable<Valuation | any> {
@@ -249,9 +302,7 @@ export class ValuationFacadeService {
     return this._apiSvc.addInstruction(instruction)
   }
 
-  // behaviour subjects
-  public updatePersonDocuments(personDocuments) {
-    const existingValuation = this._valuation.getValue()
-    this._valuation.next({ ...existingValuation, personDocuments })
+  public getPotentialDuplicatePeople = (person) => {
+    return this._contactGroupsSvc.getPotentialDuplicatePeople(person)
   }
 }
