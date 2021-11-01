@@ -1,5 +1,5 @@
 <div class="card" *ngIf="propertyDetails" [ngClass]="{'card--horizontal': isHorizontalCard}">
-  <div class="positionTopRight">
+  <div class="positionTopRight" *ngIf="showActionButtons">
     <div dropdown placement="bottom right">
       <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle (click)="$event.stopPropagation(); false"
         [attr.aria-controls]="'dropdown'">
