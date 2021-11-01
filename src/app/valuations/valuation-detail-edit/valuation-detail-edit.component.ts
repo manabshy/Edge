@@ -90,6 +90,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   propertyId: number
   lastKnownOwnerId: number
   originId: number
+  leadTypeId: number
   approxLeaseExpiryDate: Date
   instructionForm: FormGroup
   instruction: Instruction
@@ -400,9 +401,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.propertyId = +this.route.snapshot.queryParamMap.get('propertyId')
     this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get('lastKnownOwnerId')
     this.originId = +this.route.snapshot.queryParamMap.get('originId')
+    this.leadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId')
     this.isNewValuation = (this.route.snapshot.queryParamMap.get('isNewValuation') as unknown) as boolean
     this.isFromProperty = (this.route.snapshot.queryParamMap.get('isFromProperty') as unknown) as boolean
     this.isNewValuation && !this.isFromProperty ? (this.showProperty = true) : (this.showProperty = false)
+
     if (this.valuationId) {
       this.getValuation(this.valuationId)
     } else {

@@ -210,6 +210,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
         this.leadEditForm.controls['originId'].setValidators(null)
         this.selectedOriginId = 0
       }
+      this.selectedLeadTypeId = +data
       this.leadEditForm.controls['originId'].updateValueAndValidity()
     })
   }
@@ -953,7 +954,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
         isNewValuation: true,
         isFromProperty: true,
         lastKnownOwnerId: this.personId,
-        originId: this.leadEditForm.controls['originId'].value
+        originId: this.leadEditForm.controls['originId'].value,
+        leadTypeId: this.leadEditForm.controls['leadTypeId'].value
       }
     })
   }

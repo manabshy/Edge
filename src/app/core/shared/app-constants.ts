@@ -335,13 +335,13 @@ export const ValidationMessages = {
     required: 'Lettings valuer is required'
   },
   originId: {
-    min: 'Vendor origin is required',
-    originIdIsEmpty: 'Vendor is required',
-    required: 'Vendor is required'
+    min: 'Origin is required',
+    originIdIsEmpty: 'Origin is required',
+    required: 'Origin is required'
   },
   originType: {
-    min: 'Vendor type is required',
-    originTypeIsEmpty: 'Vendor is required'
+    min: 'Origin type is required',
+    originTypeIsEmpty: 'Origin type is required'
   },
   endDateTime: {
     endDateIsBeforeStartDate: 'End date cannot be before start date'

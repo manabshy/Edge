@@ -12,6 +12,8 @@ import { Observable, Subscription } from 'rxjs'
 })
 export class ValuationOriginComponent implements OnInit {
   @Input() valuation: Valuation
+  @Input() leadTypeId: number
+  @Input() originId: number
   bookByOptions$: Observable<DashboardMember[]>
   originIdOptions: InfoDetail[]
   //bookByOptions: InfoDetail[];
@@ -25,7 +27,7 @@ export class ValuationOriginComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onBookByChanged(event: any) {}
+  onBookedByChanged(event: any) {}
   onOriginIdChanged(event: any) {}
   controlValues() {}
 }
