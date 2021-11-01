@@ -15,7 +15,7 @@
     </div>
     <ng-container [ngSwitch]="moreInfo">
       <app-shared-property-list *ngSwitchCase="'properties'" [moreInfo]="moreInfo" [canEditLead]="canEditLead"
-        [isLeadClosed]="isLeadClosed" [isLead]="true" [personId]="person?.personId"
+        [isLeadClosed]="isLeadClosed" [isLead]="true" [personId]="person?.personId" [originId]="selectedOriginId"
         (associatedProperty)="getAssociatedProperty($event)">
       </app-shared-property-list>
       <app-contact-groups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
@@ -51,36 +51,56 @@
             <h3 class="txt--title">Lead details<span class="pill pill--onRight" *ngIf="lead?.closedById">Closed</span>
             </h3>
             <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
-              <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.leadTypeId}">
-                <label for="leadType">Type</label>
-                <span class="select">
-                  <select id="leadType" formControlName="leadTypeId"
-                    [attr.disabled]="!canEditLead ||leadTypes?.length === 1 ? true : null">
-                    <option value=""></option>
-                    <option selected *ngFor="let leadType of leadTypes" [value]='leadType?.id'>{{leadType?.value}}
-                    </option>
-                  </select>
-                </span>
-                <p class="message message--negative"> {{formErrors?.leadTypeId}}</p>
-              </fieldset>
 
-              <fieldset class="inline-child" [ngClass]="{'invalid': (formErrors?.nextChaseDate)}">
-                <label for="chaseDate">Chase date</label>
-                <input class="p-2" type="text" id="chaseDate" placeholder="dd/mm/yyyy" formControlName="nextChaseDate"
-                  [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:tomorrowsDate, customTodayClass: 'font-weight-bold'}"
-                  bsDatepicker [attr.disabled]="!canEditLead ? true : null" #datepicker="bsDatepicker"
-                  [appNoDoubleTap]='datepicker' (bsValueChange)="onChaseDateChange($event)">
-                <p class="message message--negative">{{formErrors?.nextChaseDate}}</p>
-              </fieldset>
+              <div class="inline-child">
+                <fieldset [ngClass]="{'invalid': formErrors?.leadTypeId}">
+                  <label for="leadType">Type</label>
+                  <span class="select">
+                    <select id="leadType" formControlName="leadTypeId"
+                      [attr.disabled]="!canEditLead ||leadTypes?.length === 1 ? true : null">
+                      <option value=""></option>
+                      <option selected *ngFor="let leadType of leadTypes" [value]='leadType?.id'>{{leadType?.value}}
+                      </option>
+                    </select>
+                  </span>
+                  <p class="message message--negative"> {{formErrors?.leadTypeId}}</p>
+                </fieldset>
+                <fieldset class="mt-3" [ngClass]="{'invalid': formErrors?.originId}"
+                  *ngIf="leadEditForm.get('leadTypeId').value =='16'">
+                  <label for="originId">Origin</label>
+                  <span class="select">
+                    <select id="originId" formControlName="originId" [attr.disabled]="!canEditLead ? true : null">
+                      <option value=""></option>
+                      <option selected *ngFor="let origin of origins" [value]='origin?.id'>{{origin?.value}}
+                      </option>
+                    </select>
+                  </span>
+                  <p class="message message--negative"> {{formErrors?.originId}}</p>
+                </fieldset>
+              </div>
 
-              <fieldset class="inline-child">
-                <label for="chaser">Chaser</label>
-                <app-staff-member-finder class="appWrapper" [staffMemberId]="leadEditForm.get('ownerId').value"
-                  [listType]="'activeStaffMembers'" (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
-                  [isRequired]="!leadEditForm.get('ownerId').value && !isUnassignedLead"
-                  [isDisabled]="!canEditLead ? true : false">
-                </app-staff-member-finder>
-              </fieldset>
+              <div class="inline-child">
+                <fieldset [ngClass]="{'invalid': (formErrors?.nextChaseDate)}">
+                  <label for="chaseDate">Chase date</label>
+                  <input class="p-2" type="text" id="chaseDate" placeholder="dd/mm/yyyy" formControlName="nextChaseDate"
+                    [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:tomorrowsDate, customTodayClass: 'font-weight-bold'}"
+                    bsDatepicker [attr.disabled]="!canEditLead ? true : null" #datepicker="bsDatepicker"
+                    [appNoDoubleTap]='datepicker' (bsValueChange)="onChaseDateChange($event)">
+                  <p class="message message--negative">{{formErrors?.nextChaseDate}}</p>
+                </fieldset>
+              </div>
+
+              <div class="inline-child">
+                <fieldset>
+                  <label for="chaser">Chaser</label>
+                  <app-staff-member-finder class="appWrapper" [staffMemberId]="leadEditForm.get('ownerId').value"
+                    [listType]="'activeStaffMembers'" (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
+                    [isRequired]="!leadEditForm.get('ownerId').value && !isUnassignedLead"
+                    [isDisabled]="!canEditLead ? true : false">
+                  </app-staff-member-finder>
+                </fieldset>
+              </div>
+
             </div>
 
             <fieldset class="mb-3" *ngIf="canEditLead" class="close-lead">
@@ -98,12 +118,13 @@
               <ol class="list">
                 <li [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
                   {{lead?.relatedProperty?.address | formatAddress}}
-                  <span class="pill pill--negative pill--onRight mr-2" *ngIf="!lead?.isPropertyOwner">Not the Owner</span>
+                  <span class="mr-2 pill pill--negative pill--onRight" *ngIf="!lead?.isPropertyOwner">Not the
+                    Owner</span>
                   <div class="btn--container flexRight">
 
                     <button class="btn btn--positive" type="button" data-cy="createVal"
                       (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)" *ngIf="!isMessageVisible">
-                      Create Val.
+                      Create Valuation
                     </button>
 
                     <button class="btn btn--ghost btn--hoverNegative" type="button" aria-label="remove"

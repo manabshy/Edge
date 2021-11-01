@@ -89,6 +89,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   canSaveValuation: boolean = true
   propertyId: number
   lastKnownOwnerId: number
+  originId: number
   approxLeaseExpiryDate: Date
   instructionForm: FormGroup
   instruction: Instruction
@@ -398,6 +399,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuationId = +this.route.snapshot.paramMap.get('id')
     this.propertyId = +this.route.snapshot.queryParamMap.get('propertyId')
     this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get('lastKnownOwnerId')
+    this.originId = +this.route.snapshot.queryParamMap.get('originId')
     this.isNewValuation = (this.route.snapshot.queryParamMap.get('isNewValuation') as unknown) as boolean
     this.isFromProperty = (this.route.snapshot.queryParamMap.get('isFromProperty') as unknown) as boolean
     this.isNewValuation && !this.isFromProperty ? (this.showProperty = true) : (this.showProperty = false)
