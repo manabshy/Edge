@@ -244,25 +244,16 @@ export class StaffMemberService {
     return this.requestActiveStaffMembers()
   }
 
-  getCsStaffMembers(): Observable<BaseStaffMember[]> {
-    return this.http.get<any>(`${AppConstants.baseDashboardUrl}/cs/members`).pipe(
-      map((response) => {
-        let staffMembers: BaseStaffMember[] = []
-        if (response.result) {
-          response.result.forEach((member: DashboardMember) => {
-            staffMembers.push({
-              staffMemberId: member.staffMemberId,
-              firstName: '',
-              lastName: '',
-              fullName: member.staffMemberFullName,
-              emailAddress: null,
-              hasReminder: null,
-              exchangeGUID: ''
-            })
-          })
-        }
-        return staffMembers
-      })
+  getCsStaffMembers(): Observable<StaffMember[]> {
+    return this.getActiveStaffMembers().pipe(
+      map((response) =>
+        response.result.filter(
+          (x) =>
+            x.activeDepartments.findIndex(
+              (y) => y.departmentId === enumDepartments.BDD || y.departmentId === enumDepartments.corporate_services
+            ) > -1
+        )
+      )
     )
   }
 
