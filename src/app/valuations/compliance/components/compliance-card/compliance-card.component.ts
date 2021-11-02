@@ -1,91 +1,99 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { MenuItem } from 'primeng/api';
-import moment from 'moment';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core'
+import { FormControl, FormGroup } from '@angular/forms'
+import { MenuItem } from 'primeng/api'
+import moment from 'moment'
 
 /***
  * @description shows company or contact compliance data such as ID, proof of address, reports and additional documents
  */
 @Component({
   selector: 'app-compliance-card',
-  templateUrl: './compliance-card.component.html',
+  templateUrl: './compliance-card.component.html'
 })
 export class ComplianceCardComponent implements OnInit {
-  @Input() person: any;
-  @Input() isFrozen: boolean;
-  @Input() hasMenuBtn: boolean;
-  @Output() fileUploaded: EventEmitter<any> = new EventEmitter();
-  @Output() fileDeleted: EventEmitter<any> = new EventEmitter();
-  @Output() toggleIsUBO: EventEmitter<any> = new EventEmitter();
-  @Output() removeContact: EventEmitter<any> = new EventEmitter();
-  @Output() saveContact: EventEmitter<any> = new EventEmitter();
+  @Input() entity: any // TODO add type!
+  @Input() isFrozen: boolean
+  @Input() hasMenuBtn: boolean
+
+  @Output() onFileUploaded: EventEmitter<any> = new EventEmitter()
+  @Output() onFileDeleted: EventEmitter<any> = new EventEmitter()
+  @Output() onToggleIsUBO: EventEmitter<any> = new EventEmitter()
+  @Output() onRemoveEntity: EventEmitter<any> = new EventEmitter()
+  @Output() onUpdateEntity: EventEmitter<any> = new EventEmitter()
 
   contactForm: FormGroup = new FormGroup({
     name: new FormControl(),
     position: new FormControl(),
-    address: new FormControl(),
-  });
+    address: new FormControl()
+  })
 
-  pillClass: string;
-  items: MenuItem[] = [];
+  pillClass: string
+  items: MenuItem[] = []
   dialogs = {
-    showRemoveContactDialog: false,
-    showEditContactDialog: false,
-  };
-  moment = moment;
-  pillLabel: string;
+    showRemoveDialog: false,
+    showEditDialog: false
+  }
+  moment = moment
+  pillLabel: string
 
   constructor() {}
 
   ngOnInit(): void {
-    this.buildPills();
-    this.setMenuItems();
+    this.buildPills()
+    this.setMenuItems()
   }
 
   private buildPills() {
-    if (this.person.companyId) {
-      this.pillClass = this.person.id === this.person.companyId ? 'pill--positive' : 'bg-gray-400';
-      this.pillLabel = this.person.id === this.person.companyId ? 'Company' : 'Associated Company';
+    this.pillClass = this.entity.isMain ? 'pill--positive' : 'bg-gray-400'
+
+    if (this.entity.companyId) {
+      this.pillLabel = this.entity.isMain ? 'Company' : 'Associated Company'
     } else {
-      this.pillClass = this.person.isMain ? 'pill--positive' : 'bg-gray-400';
-      this.pillLabel = this.person.isMain ? 'Lead Contact' : 'Associated Contact';
+      this.pillLabel = this.entity.isMain ? 'Lead Contact' : 'Associated Contact'
     }
   }
 
   private setMenuItems() {
-    this.items = [
+    const items = [
       {
-        label: 'Edit Contact',
+        label: `Edit ${this.entity.companyId ? 'company' : 'contact'}`,
         icon: 'fa fa-edit',
-        command: (ev) => {
-          this.dialogs.showEditContactDialog = !this.dialogs.showEditContactDialog;
-        },
-      },
-      {
-        label: 'Remove Contact',
+        command: () => {
+          this.dialogs.showEditDialog = !this.dialogs.showEditDialog
+        }
+      }
+    ]
+    if (!this.entity.isMain) {
+      // the main contact should not be deletable!
+      items.push({
+        label: `Remove ${this.entity.companyId ? 'company' : 'contact'}`,
         icon: 'fa fa-times',
-        command: (ev) => {
-          this.dialogs.showRemoveContactDialog = !this.dialogs.showRemoveContactDialog;
-        },
-      },
-      {
-        label: this.person.isUBO ? 'Remove as UBO' : 'Make UBO',
-        icon: this.person.isUBO ? 'fa fa-toggle-off' : 'fa fa-toggle-on',
-        command: (ev) => {
-          this.setMenuItems(); // refreshes options again
-          this.toggleIsUBO.emit(this.person);
-        },
-      },
-    ];
+        command: () => {
+          this.dialogs.showRemoveDialog = !this.dialogs.showRemoveDialog
+        }
+      })
+    }
+    if (this.entity.companyId) {
+      // only businesses can have UBO status
+      items.push({
+        label: this.entity.isUBO ? 'Remove as UBO' : 'Make UBO',
+        icon: this.entity.isUBO ? 'fa fa-toggle-off' : 'fa fa-toggle-on',
+        command: () => {
+          this.setMenuItems() // refreshes options again
+          this.onToggleIsUBO.emit(this.entity)
+        }
+      })
+    }
+    this.items = items
   }
 
-  public confirmContactDelete(): void {
-    this.dialogs.showRemoveContactDialog = false;
-    this.removeContact.emit(this.person);
+  public confirmDelete(): void {
+    this.dialogs.showRemoveDialog = false
+    this.onRemoveEntity.emit(this.entity)
   }
 
-  public saveContactChanges(): void {
-    this.dialogs.showEditContactDialog = false;
-    this.saveContact.emit(this.contactForm.value);
+  public updateEntity(): void {
+    this.dialogs.showEditDialog = false
+    this.onUpdateEntity.emit({ id: this.entity.id, ...this.contactForm.value })
   }
 }

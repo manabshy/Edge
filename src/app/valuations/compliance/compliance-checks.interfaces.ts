@@ -4,70 +4,96 @@ export enum DOCUMENT_TYPE {
   PROOF_OF_ADDRESS = 54,
   ID = 49,
   ADDITIONAL_DOCUMENTS = 50,
-  REPORT = 51,
+  REPORT = 51
 }
 
 export interface ComplianceChecksState {
-    checksAreValid: Boolean
-    checkType: String // 'AML' || 'KYC'
-    contactGroupId: Number
-    companyOrContact?: String // 'company' || 'contact'
-    message?: {
-      type: String // 'warn' || 'info' || 'error'
-      text: Array<string>
-    }
-    people: Array<ComplianceChecksPeople>
-    compliancePassedDate: Date
-    compliancePassedBy: String
-    valuationEventId: Number
-    companyId: Number
-    isFrozen: Boolean
+  checksAreValid: boolean
+  checkType: string // 'AML' || 'KYC'
+  contactGroupId: number
+  companyOrContact?: string // 'company' || 'contact'
+  message?: {
+    type: string // 'warn' || 'info' || 'error'
+    text: Array<string>
   }
-  
-  export interface ComplianceChecksPeople {
-    id: Number
-    personId: Number
-    companyId: Number
-    name: String
-    address?: String
-    position?: String
-    documents: Array<any>
-    isMain: Boolean
-    isUBO?: Boolean
-    personDateAmlCompleted?: Date
-    compliancePassedBy?: String
-  }
-  
-  export interface ComplianceDocTypes {
-    idDoc: ComplianceDocs
-    proofOfAddressDoc: ComplianceDocs
-    reportDocs: ComplianceDocs
-    additionalDocs: ComplianceDocs
-  }
-  
-  export interface ComplianceDocs {
-    label: String
-    documentType: DOCUMENT_TYPE
-    files: Array<any>
-  }
-  
-  export interface FileUpdateEvent {
-    ev: {
-      tmpFiles: Array<any>
-      documentType?: DOCUMENT_TYPE
-      idValidationDateExpiry?: Date
-    }
-    person?: Person
-  }
-  
-  export interface FileUpdate {
+  entities: Array<ComplianceChecksPeople>
+  compliancePassedDate: Date
+  compliancePassedBy: string
+  valuationEventId: number
+  companyId: number
+  isFrozen: boolean
+}
+
+export interface ComplianceChecksPeople {
+  id: number
+  personId: number
+  companyId: number
+  name: string
+  address?: string
+  position?: string
+  documents: Array<any>
+  isMain: boolean
+  isUBO?: boolean
+  personDateAmlCompleted?: Date
+  compliancePassedBy?: string
+}
+
+export interface ComplianceDocTypes {
+  idDoc: ComplianceDocs
+  proofOfAddressDoc: ComplianceDocs
+  reportDocs: ComplianceDocs
+  additionalDocs: ComplianceDocs
+}
+
+export interface ComplianceDocs {
+  label: string
+  documentType: DOCUMENT_TYPE
+  files: Array<any>
+}
+
+export interface FileUpdateEvent {
+  ev: {
     tmpFiles: Array<any>
+    documentType?: DOCUMENT_TYPE
+    idValidationDateExpiry?: Date
   }
-  
-  export interface FileDeletionPayload {
-    ev: {
-      id: Number
-      documentType: DOCUMENT_TYPE
-    }
-    person: Person
+  entity?: Person
+}
+
+export interface FileUpdate {
+  tmpFiles: Array<any>
+}
+
+export interface FileDeletionPayload {
+  ev: {
+    id: number
+    documentType: DOCUMENT_TYPE
   }
+  entity: Person
+}
+
+export interface ValuationComplianceChecks {
+  compliancePassedByFullName: string
+  compliancePassedDate: Date
+}
+
+interface companyComplianceChecksGroup {
+  companyId: string
+  companyDocuments: any[]
+  personDocuments: any[]
+}
+
+export interface CompanyComplianceChecksSavePayload {
+  savePayload: companyComplianceChecksGroup
+  contactGroupId: number
+  companyOrContact: string
+}
+
+interface contactComplianceChecksGroup{
+  personDocuments: any[]
+}
+export interface ContactComplianceChecksSavePayload {
+  savePayload: contactComplianceChecksGroup
+  companyOrContact: string
+  contactGroupId: number
+}

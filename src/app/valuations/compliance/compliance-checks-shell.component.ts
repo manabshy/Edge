@@ -1,79 +1,67 @@
 import { Component } from '@angular/core'
 import { Observable } from 'rxjs'
+import { map, take } from 'rxjs/operators'
 import { ComplianceChecksStore } from './compliance-checks.store'
 import { ComplianceChecksState } from './compliance-checks.interfaces'
+import { ComplianceChecksFacadeService } from './compliance-checks.facade.service'
+import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-group'
 
 /***
- * @description The outermost component for Company & Contact compliance checks. Uses compliance checks store for all server/service/biz logic interactions
+ * @description The outermost component for Company & Contact compliance checks inside the valuation edit page. Uses compliance checks store for all server/service/biz logic interactions
  */
 @Component({
   selector: 'app-compliance-checks-shell',
   template: `
     <div *ngIf="vm$ | async as vm">
       <app-pure-compliance-checks-shell
-        [people]="vm.people"
+        [entities]="vm.entities"
         [checkType]="vm.checkType"
         [message]="vm.message"
         [checksAreValid]="vm.checksAreValid"
         [isFrozen]="vm.isFrozen"
         [companyOrContact]="vm.companyOrContact"
         [contactGroupDetails]="vm.contactGroupDetails"
-        (fileWasUploaded)="onFileUploaded($event)"
-        (fileWasDeleted)="onFileDeleted($event)"
-        (passComplianceChecks)="onPassComplianceChecks()"
-        (toggleIsUBO)="onToggleIsUBO($event)"
-        (removeContact)="onRemoveContact($event)"
-        (saveContact)="onSaveContact($event)"
-        (addContact)="onAddContact($event)"
-        (addCompany)="onAddCompany($event)"
-        (refreshDocuments)="onRefreshDocuments($event)">
-      </app-pure-compliance-checks-shell>
-    </div>`,
+        [potentialDuplicatePeople]="contactSearchResults$ | async"
+        (onFileWasUploaded)="store.onFileUploaded($event)"
+        (onFileWasDeleted)="store.onDeleteFileFromEntity($event)"
+        (onPassComplianceChecks)="store.onPassComplianceChecks()"
+        (onToggleIsUBO)="store.onToggleIsUBO($event)"
+        (onRemoveEntity)="store.onRemoveEntity($event)"
+        (onUpdateEntity)="store.onUpdateEntity($event)"
+        (onAddContact)="store.onAddContact($event)"
+        (onAddExistingCompany)="store.onAddExistingCompany($event)"
+        (onRefreshDocuments)="store.onRefreshDocuments()"
+        (onQueryDuplicates)="facadeSvc.onQueryDuplicates($event)"
+        (onCreateNewPerson)="facadeSvc.onCreateNewPerson($event)"
+      ></app-pure-compliance-checks-shell>
+    </div>
+  `,
   providers: [ComplianceChecksStore]
 })
 export class ComplianceChecksShellComponent {
-
   vm$: Observable<ComplianceChecksState>
+  contactSearchResults$: Observable<PotentialDuplicateResult>
 
-  constructor(
-    private readonly _complianceChecksStore: ComplianceChecksStore,
-  ) {
-    this.vm$ = this._complianceChecksStore.complianceChecksVm$
-  }
+  constructor(public readonly store: ComplianceChecksStore, public readonly facadeSvc: ComplianceChecksFacadeService) {
+    this.vm$ = this.store.complianceChecksVm$
+    this.contactSearchResults$ = this.facadeSvc.contactSearchResults$
 
-  onPassComplianceChecks(): void {
-    this._complianceChecksStore.passComplianceChecks()
-  }
+    this.facadeSvc.newCompanyAdded$
+      .pipe(
+        take(1),
+        map((company) => {
+          this.store.onAddNewCompany(company)
+        })
+      )
+      .subscribe()
 
-  onFileUploaded(ev): void {
-    this._complianceChecksStore.addFilesToPerson(ev)
-  }
-
-  onFileDeleted(ev): void {
-    this._complianceChecksStore.deleteFileFromPerson(ev)
-  }
-  
-  onAddContact(ev): void {
-    this._complianceChecksStore.addContact(ev)
-  }
-  
-  onAddCompany(ev): void {
-    this._complianceChecksStore.addCompany(ev)
-  }
-
-  onToggleIsUBO(ev): void {
-    this._complianceChecksStore.toggleIsUBO(ev)
-  }
-  
-  onSaveContact(ev) :void {
-    this._complianceChecksStore.saveContact(ev)
-  }
-
-  onRemoveContact(ev) :void {
-    this._complianceChecksStore.removeContact(ev)
-  }
-
-  onRefreshDocuments(ev) :void {
-    this._complianceChecksStore.onRefreshDocuments(ev)
+    this.facadeSvc.newPersonAdded$
+      .pipe(
+        take(1),
+        map((contact) => {
+          this.store.onAddNewContact(contact)
+        })
+      )
+      .subscribe()
   }
 }

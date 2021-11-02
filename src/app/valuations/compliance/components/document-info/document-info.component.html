@@ -11,8 +11,9 @@
       *ngIf="documentType == DOCUMENT_TYPE.ID && file.idValidationDateExpiry"
       [ngClass]="idHasExpired ? 'text-red-500' : 'text-green-500'"
     >
-      Exp {{ moment(file.idValidationDateExpiry).format('DD/MM/YY') }}
+      Exp: {{ moment(file.idValidationDateExpiry).format('DD/MM/YY') }}
     </span>
+    <span *ngIf="documentType == DOCUMENT_TYPE.REPORT && file.smartSearchId">ID: {{ file.smartSearchId }}</span>
     <span class="flex-1 text-right" [pTooltip]="'Upload Date'">{{ moment(file.uploadDate).format('DD/MM/YY') }}</span>
     <button
       (click)="deleteFile.emit({ id: file.fileStoreId, documentType: documentType })"
@@ -31,7 +32,9 @@
       <i class="fa fa-upload" aria-hidden="true"></i>
       <span class="ml-2 underline">Upload {{ label }}</span>
     </span>
-    <span class="ml-2 text-gray-400" *ngIf="isFrozen" [pTooltip]="'🥶 Doc upload disabled whilst frozen'">{{ label }}</span>
+    <span class="ml-2 text-gray-400" *ngIf="isFrozen" [pTooltip]="'🥶 Doc upload disabled whilst frozen'">
+      {{ label }}
+    </span>
   </button>
 </div>
 
@@ -74,6 +77,23 @@
             [ngClass]="{ invalid: idHasExpired }"
           />
           <p class="message message--negative" *ngIf="idHasExpired">Invalid Expiry Date</p>
+        </fieldset>
+      </form>
+    </div>
+    <div *ngIf="showAdditionalInput" class="mt-2 mb-0 ml-2">
+      <div class="animate__animated animate__pulse">
+        <app-messages [message]="additionalInputMessage"></app-messages>
+      </div>
+      <form [formGroup]="smartSearchIdForm">
+        <fieldset>
+          <label for="">SmartSearch ID Number</label>
+          <input
+            class="p-2 mt-2"
+            type="tel"
+            formControlName="smartSearchId"
+            placeholder="Enter SmartSearch ID here"
+            (input)="onSmartSearchIdChange($event.target.value)"
+          />
         </fieldset>
       </form>
     </div>

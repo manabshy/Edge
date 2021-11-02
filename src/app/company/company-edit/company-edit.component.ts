@@ -51,7 +51,7 @@ export class CompanyEditComponent implements OnInit {
     private _location: Location,
     private route: ActivatedRoute,
     private _router: Router,
-    private messageService: MessageService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -76,6 +76,8 @@ export class CompanyEditComponent implements OnInit {
       if (this.isNewCompany && !this.companyName) {
         this.showCompanyFinder = true
       }
+      this.isManualEntry = params['isManualEntry'] === 'true'
+      if (this.isManualEntry) this.showCompanyFinder = false
     })
     this.setupCompanyForm(this.companyName)
     const id = this.isNewCompany ? 0 : this.companyId
@@ -134,13 +136,13 @@ export class CompanyEditComponent implements OnInit {
       address: {
         postCode: company.companyAddress.postCode,
         countryId: company.companyAddress.countryId,
-        country: company.companyAddress.country,
+        country: company.companyAddress.country
       },
       telephone: company.telephone,
       fax: company.fax,
       website: company.website,
       email: company.email,
-      amlCompletedDate: this.sharedService.ISOToDate(company.amlCompletedDate),
+      amlCompletedDate: this.sharedService.ISOToDate(company.amlCompletedDate)
     })
     this.existingSigner = company.signer
   }
@@ -154,13 +156,13 @@ export class CompanyEditComponent implements OnInit {
       address: {
         postCode: this.companyDetails.companyAddress.postCode,
         countryId: this.defaultCountryCode,
-        country: this.companyDetails.companyAddress.country,
+        country: this.companyDetails.companyAddress.country
       },
       telephone: this.companyDetails.telephone,
       fax: this.companyDetails.fax,
       website: this.companyDetails.website,
       email: this.companyDetails.email,
-      amlCompletedDate: this.companyDetails.amlCompletedDate,
+      amlCompletedDate: this.companyDetails.amlCompletedDate
     })
   }
 
@@ -173,13 +175,13 @@ export class CompanyEditComponent implements OnInit {
       address: this.fb.group({
         addressLines: ['', { validators: Validators.maxLength(500) }],
         countryId: 0,
-        postCode: ['', { validators: [Validators.minLength(5), Validators.maxLength(8)] }],
+        postCode: ['', { validators: [Validators.minLength(5), Validators.maxLength(8)] }]
       }),
       telephone: ['', { validators: WedgeValidators.phoneNumberValidator() }],
       fax: ['', { validators: WedgeValidators.phoneNumberValidator() }],
       email: ['', { validators: Validators.pattern(AppConstants.emailPattern) }],
       website: [''],
-      amlCompletedDate: [''],
+      amlCompletedDate: ['']
     })
 
     if (companyName) {
@@ -272,6 +274,7 @@ export class CompanyEditComponent implements OnInit {
       this.errorMessage.displayMessage = 'Please correct validation errors'
     }
   }
+
   private AddOrUpdateCompany() {
     let companyAddress
     const company = { ...this.companyDetails, ...this.companyForm.value }
@@ -290,14 +293,14 @@ export class CompanyEditComponent implements OnInit {
         (res) => this.onSaveComplete(res.result),
         (error: WedgeError) => {
           this.isSubmitting = false
-        },
+        }
       )
     } else {
       this.companyService.updateCompany(company).subscribe(
         (res) => this.onSaveComplete(res.result),
         (error: WedgeError) => {
           this.isSubmitting = false
-        },
+        }
       )
     }
   }
@@ -320,12 +323,14 @@ export class CompanyEditComponent implements OnInit {
     this._router.navigate(['company-centre/detail', company.companyId])
     console.log('complete')
   }
+
   canDeactivate(): boolean {
     if (this.companyForm.dirty && !this.isSubmitting && !this.isCreatingNewSigner) {
       return false
     }
     return true
   }
+
   cancel() {
     this.sharedService.back()
   }

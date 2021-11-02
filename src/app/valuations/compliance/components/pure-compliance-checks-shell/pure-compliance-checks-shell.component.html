@@ -5,19 +5,19 @@
 
   <div class="w-full flex flex-col lg:flex-row lg:flex-wrap px-0">
     <div
-      *ngFor="let person of people; let i = index; let even = even"
+      *ngFor="let entity of entities; let i = index; let even = even"
       class="w-full lg:w-1/2"
-      [ngClass]="[even ? 'lg:border-r' : '', (i == 0 || i == 1) && people.length > 2 ? 'lg:border-b' : '']"
+      [ngClass]="[even ? 'lg:border-r' : '', (i == 0 || i == 1) && entities.length > 2 ? 'lg:border-b' : '']"
     >
       <app-compliance-card
-        [person]="person"
+        [entity]="entity"
         [isFrozen]="isFrozen"
         [hasMenuBtn]="companyOrContact === 'company'"
-        (fileUploaded)="fileWasUploaded.emit($event)"
-        (fileDeleted)="fileWasDeleted.emit($event)"
-        (toggleIsUBO)="toggleIsUBO.emit($event)"
-        (removeContact)="removeContact.emit($event)"
-        (saveContact)="saveContact.emit($event)"
+        (onFileUploaded)="onFileWasUploaded.emit($event)"
+        (onFileDeleted)="onFileWasDeleted.emit($event)"
+        (onToggleIsUBO)="onToggleIsUBO.emit($event)"
+        (onRemoveEntity)="onRemoveEntity.emit($event)"
+        (onUpdateEntity)="onUpdateEntity.emit($event)"
       ></app-compliance-card>
     </div>
   </div>
@@ -26,8 +26,16 @@
     class="px-2 md:px-4 w-full flex flex-col md:flex-row gap-x-4 justify-center my-10"
     *ngIf="companyOrContact === 'company'"
   >
-    <app-big-button [label]="'Add Associated Company'" [disabled]="isFrozen" (onClick)="openDialog('showCompanyDialog')"></app-big-button>
-    <app-big-button [label]="'Add Contact'"  [disabled]="isFrozen" (onClick)="openDialog('showContactDialog')"></app-big-button>
+    <app-big-button
+      [label]="'Add Associated Company'"
+      [disabled]="isFrozen"
+      (onClick)="openDialog('showCompanyDialog')"
+    ></app-big-button>
+    <app-big-button
+      [label]="'Add Contact'"
+      [disabled]="isFrozen"
+      (onClick)="openDialog('showContactDialog')"
+    ></app-big-button>
   </div>
 
   <div class="border-t border-gray-300 flex flex-row pt-4 items-center mt-8">
@@ -42,7 +50,7 @@
     <button
       class="btn btn--positive"
       [disabled]="!checksAreValid || isFrozen"
-      (click)="passComplianceChecks.emit($event)"
+      (click)="onPassComplianceChecks.emit($event)"
     >
       {{ checkType === 'AML' ? 'Pass AML' : 'Pass KYC' }}
     </button>
@@ -55,13 +63,19 @@
   [(visible)]="dialogs.showContactDialog"
   [modal]="true"
   [draggable]="false"
-  [appendTo]="'body'"
   class="modal--medium modal--hasFooter"
 >
-  <app-contact-group-finder 
-  (selectedContactGroup)="getSelectedContactGroup($event)"
-  >
-</app-contact-group-finder>
+  <app-contact-search
+    [contactGroupDetails]="contactGroupDetails"
+    [searchTerm]="searchTerm"
+    [potentialDuplicatePeople]="potentialDuplicatePeople"
+    [isCreateNewPersonVisible]="true"
+    [existingIds]="existingContactIds$ | async"
+    (addedPersonDetails)="getAddedPersonDetails($event)"
+    (selectedPerson)="addSelectedContact($event)"
+    (findPotentialDuplicatePerson)="onQueryDuplicates.emit($event)"
+    (onCreateNewPerson)="onCreateNewPerson.emit($event)"
+  ></app-contact-search>
 </p-dialog>
 
 <!-- Company Finder Modal -->
@@ -74,9 +88,9 @@
 >
   <app-company-finder
     [canCreateNewCompany]="true"
+    [existingIds]="existingCompanyIds$ | async"
     (companyName)="getCompanyName($event)"
-    (selectedCompanyDetails)="selectCompany($event)"
-    (isManualEntry)="setManualEntryFlag()"
+    (selectedCompanyDetails)="onAddExistingCompany.emit($event)"
   ></app-company-finder>
 </p-dialog>
 
@@ -96,7 +110,7 @@
     <button (click)="dialogs.showRefreshDocumentstDialog = false" type="button" class="btn btn--ghost">Cancel</button>
     <button
       class="ml-2 btn btn--positive"
-      (click)="refreshDocuments.emit($event); dialogs.showRefreshDocumentstDialog = false"
+      (click)="onRefreshDocuments.emit(); dialogs.showRefreshDocumentstDialog = false"
     >
       Confirm
     </button>
