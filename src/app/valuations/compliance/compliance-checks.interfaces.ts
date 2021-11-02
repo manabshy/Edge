@@ -86,9 +86,14 @@ interface companyComplianceChecksGroup {
 export interface CompanyComplianceChecksSavePayload {
   savePayload: companyComplianceChecksGroup
   contactGroupId: number
+  companyOrContact: string
 }
 
+interface contactComplianceChecksGroup{
+  personDocuments: any[]
+}
 export interface ContactComplianceChecksSavePayload {
-  entitiesToSave: any[]
+  savePayload: contactComplianceChecksGroup
+  companyOrContact: string
   contactGroupId: number
 }

@@ -1,4 +1,69 @@
-import { ComplianceDocTypes, DOCUMENT_TYPE } from '../compliance-checks.interfaces'
+import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload, ComplianceDocTypes, DOCUMENT_TYPE } from '../compliance-checks.interfaces'
+
+/***
+ * @function workOutDataShapeForApi
+ * @param {Object[]} entities - people/companies to be saved to API
+ * @param {string} companyOrContact - flag to determine which shape object to build
+ * @param {number} companyId - companyId to save to
+ * @param {number} contactGroupId
+ * @description maps the store data into correct shape for saving to API. Payload differs between personal and company compliance checks
+ * @returns {object} payload ready for sending to the API to save personal || company compliance docs
+ */
+ export const workOutDataShapeForApi = (entities, companyOrContact, companyId, contactGroupId) => {
+  switch (companyOrContact) {
+    case 'contact':
+      const entitiesToSave = entities.map((entity) => {
+        return {
+          personId: entity.personId,
+          name: entity.name,
+          address: entity.address ? entity.address : 'Unset',
+          documents: mapDocsForAPI(entity.documents),
+          isMain: entity.isMain,
+          position: entity.position ? entity.position : 'Unset',
+          personDateAmlCompleted: entity.personDateAmlCompleted ? entity.personDateAmlCompleted : null
+        }
+      })
+      const contactComplianceChecksSavePayload: ContactComplianceChecksSavePayload = {
+        savePayload: {
+          personDocuments: entitiesToSave
+        },
+        contactGroupId,
+        companyOrContact
+      }
+      return contactComplianceChecksSavePayload
+
+    case 'company':
+      // console.log('build company and contacts arrays sepearately');
+      const personDocuments = []
+      const companyDocuments = []
+      entities.forEach((entity) => {
+        const updatedPerson: any = {
+          uboAdded: entity.uboAdded,
+          documents: mapDocsForAPI(entity.documents)
+        }
+        if (entity.companyId) {
+          updatedPerson.associatedCompanyId = entity.associatedCompanyId
+          companyDocuments.push(updatedPerson)
+        } else {
+          updatedPerson.position = entity.position ? entity.position : 'Not set'
+          updatedPerson.address = entity.address ? entity.address : 'Not set'
+          updatedPerson.personId = entity.personId
+          updatedPerson.name = entity.name
+          personDocuments.push(updatedPerson)
+        }
+      })
+      const companyComplianceChecksSavePayload: CompanyComplianceChecksSavePayload = {
+        savePayload: {
+          companyId,
+          companyDocuments,
+          personDocuments
+        },
+        contactGroupId,
+        companyOrContact
+      }
+      return companyComplianceChecksSavePayload
+  }
+}
 
 /***
  * Adding/Removing/Merging documents from entities
