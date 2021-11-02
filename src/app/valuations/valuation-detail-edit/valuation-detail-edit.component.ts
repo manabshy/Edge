@@ -2527,6 +2527,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     valuation.propertyOwner = this.lastKnownOwner
     valuation.OfficeId = this.property.officeId
     valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate
+    valuation.originId = this.valuation.originId
+    valuation.bookedBy = this.valuation.bookedBy
 
     valuation.isPowerOfAttorney =
       this.adminContact && this.adminContact.contactGroupId > 0 ? this.adminContact?.isPowerOfAttorney : false
