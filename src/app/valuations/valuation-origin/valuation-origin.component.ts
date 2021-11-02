@@ -19,8 +19,9 @@ export class ValuationOriginComponent implements OnInit, AfterViewInit {
   @Input() allOrigins: InfoDetail[]
   @Input() allOriginTypes: InfoDetail[]
   bookByOptions$: Observable<StaffMember[]>
-  origins$: Observable<InfoDetail[]>
+  origins: InfoDetail[]
   bookedByErrorMessage: string = null
+  originIdMessage: string = null
 
   constructor(private staffMembersService: StaffMemberService) {
     this.bookByOptions$ = this.staffMembersService.getCsStaffMembers()
@@ -81,17 +82,24 @@ export class ValuationOriginComponent implements OnInit, AfterViewInit {
   setOriginTypeId(originTypeId: number) {
     if (originTypeId) {
       this.valuation.originTypeId = originTypeId
-      this.origins$ = of(this.allOrigins.filter((x) => x.parentId == originTypeId && x.isActive === true))
+      this.origins = this.allOrigins.filter((x) => x.parentId == originTypeId && x.isActive === true)
+      this.origins.unshift({ id: 0, value: ' ' })
     }
   }
 
   controlValues() {
-    this.setOriginTypeId(this.valuation.originTypeId)
     if (this.valuation.originTypeId == 13 || this.valuation.originTypeId == 14) {
       if (!this.valuation.bookedBy) this.bookedByErrorMessage = 'Booked by field is required'
       else this.bookedByErrorMessage = null
     } else {
       this.valuation.bookedBy = null
     }
+
+    if (!(this.valuation.originId > 0)) this.originIdMessage = 'Origin field is required'
+    else this.originIdMessage = null
+  }
+  originTypeIdChanged(value) {
+    this.valuation.originId = 0
+    this.setOriginTypeId(value)
   }
 }
