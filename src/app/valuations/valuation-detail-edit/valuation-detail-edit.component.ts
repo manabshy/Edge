@@ -2733,10 +2733,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
 
     // Why is the route reloaded here?
-    // if (valuation && valuation.valuationEventId > 0)
-    //   this.router
-    //     .navigateByUrl('/', { skipLocationChange: true })
-    //     .then(() => this.router.navigate(['/valuations-register/detail', valuation.valuationEventId, 'edit']))
+    if (valuation && valuation.valuationEventId > 0)
+      this.router
+        .navigateByUrl('/', { skipLocationChange: true })
+        .then(() => this.router.navigate(['/valuations-register/detail', valuation.valuationEventId, 'edit']))
   }
 
   onInstructionSaveComplete(status?: boolean) {
