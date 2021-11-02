@@ -283,7 +283,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       if (data) {
         this.listInfo = data
         this.allLeadTypes = this.listInfo.leadTypes
-        this.origins = this.listInfo.origins.filter((x) => this.originListIds.findIndex((y) => y == x.id) > -1)
+        this.origins = this.listInfo.origins.filter(
+          (x) => this.originListIds.findIndex((y) => y == x.id) > -1 && x.isActive === true
+        )
         console.log(' list info in lead edit from storage', data)
       } else {
         this.infoService.getDropdownListInfo().subscribe((info: ResultData | any) => {
@@ -482,7 +484,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
         personId: lead.personId,
         leadTypeId: lead.leadTypeId,
         nextChaseDate: lead.nextChaseDate ? new Date(lead.nextChaseDate) : null,
-        closeLead: lead.closedById
+        closeLead: lead.closedById,
+        originId: lead.originId
       })
     }
     this.onLoading = false
