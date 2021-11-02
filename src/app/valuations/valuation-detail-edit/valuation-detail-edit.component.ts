@@ -95,8 +95,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   // valuers: BaseStaffMember[] = [];
   showDateAndDuration: boolean
   hasDateWithValuer = false
-  activeOriginId: InfoDetail
-  showOriginId: boolean
   allOriginTypes: InfoDetail[] = []
   associateTypes: InfoDetail[] = []
   isSelectingDate = false
@@ -228,15 +226,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     return null
   }
 
-  get originTypeControl() {
-    return this.valuationForm.get('originType') as FormControl
-  }
   get valuationTypeControl() {
     return this.availabilityForm.get('type') as FormControl
   }
-  get originIdControl() {
-    return this.valuationForm.get('originId') as FormControl
-  }
+
   get salesValuerIdControl() {
     return this.availabilityForm.get('salesValuerId') as FormControl
   }
@@ -372,17 +365,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.storage.get('currentUser').subscribe((currentStaffMember: StaffMember) => {
       if (currentStaffMember) {
         this.currentStaffMember = currentStaffMember
-        // for testing purposes
         if (
           currentStaffMember.activeDepartments[0].departmentId === enumDepartments.corporate_services ||
           currentStaffMember.activeDepartments[0].departmentId === enumDepartments.BDD
         ) {
           this.isClientService = true
-          this.setOriginTypeValidator()
-          this.setOriginIdValidator()
         } else {
           this.isClientService = false
-          this.originIdControl.setValue(1)
         }
       }
     })
@@ -1492,7 +1481,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuationForm.patchValue({
         property: valuation.property,
         propertyOwner: valuation.propertyOwner,
-        originId: !!this.activeOriginId ? valuation.originId : 0,
         reason: valuation.reason,
         timeFrame: valuation.timeFrame,
         generalNotes: valuation.generalNotes,
@@ -2340,26 +2328,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } else {
       lettingsAgencyControl.clearValidators()
       lettingsAgencyControl.updateValueAndValidity()
-    }
-  }
-
-  private setOriginTypeValidator() {
-    if (this.originTypeControl) {
-      this.originTypeControl.setValidators([Validators.required, Validators.min(1)])
-      this.originTypeControl.updateValueAndValidity()
-    } else {
-      this.originTypeControl.clearValidators()
-      this.originTypeControl.updateValueAndValidity()
-    }
-  }
-
-  private setOriginIdValidator() {
-    if (this.originIdControl) {
-      this.originIdControl.setValidators([Validators.required, Validators.min(1)])
-      this.originIdControl.updateValueAndValidity()
-    } else {
-      this.originIdControl.clearValidators()
-      this.originIdControl.updateValueAndValidity()
     }
   }
 
