@@ -59,7 +59,6 @@ export class ValuationFacadeService {
     return this._infoService
   }
 
-
   constructor(
     private _apiSvc: ValuationApiService,
     private readonly _fileSvc: FileService,
@@ -109,7 +108,7 @@ export class ValuationFacadeService {
   // VALUATION NOTES CARD
 
   // PROPERTY INFO CARD
-  
+
   // APPOINTMENT CARD
 
   // VALUES CARD
@@ -153,11 +152,30 @@ export class ValuationFacadeService {
    * @description passes compliance checks for a valuationData
    */
   public passComplianceChecksForValution(payload: any): Observable<any> {
+    let valuationEventIdClosure
     return this.valuationData$.pipe(
-      map((valuationData) => {
-        alert('still in use!')
+      mergeMap((valuationData) => {
         console.log('passComplianceChecksForValuation: ', valuationData)
-        return this._apiSvc.passComplianceChecksForValution(valuationData.valuationEventId, payload)
+        valuationEventIdClosure = valuationData.valuationEventId
+        if (payload.companyOrContact === 'contact') {
+          return this._peopleSvc.freezePeopleDocsForValuation(
+            payload.savePayload.personDocuments,
+            payload.contactGroupId,
+            valuationData.valuationEventId
+          )
+        } else {
+          return this._companySvc.setCompanyDocsForValuation(
+            payload.savePayload,
+            payload.contactGroupId,
+            valuationData.valuationEventId
+          )
+        }
+      }),
+      mergeMap((res) => {
+        return this._apiSvc.passComplianceChecksForValution(valuationEventIdClosure, {
+          customPassedDate: new Date(),
+          isPassed: true
+        })
       })
     )
   }
@@ -199,27 +217,13 @@ export class ValuationFacadeService {
       take(1),
       map((valuationData) => {
         console.log('🏆 updateCompanyDocuments: this._valuationData.next ', valuationData)
-        const updatedValuationData = { ...valuationData, companyDocuments: savePayload.companyDocuments, personDocuments: savePayload.personDocuments }
+        const updatedValuationData = {
+          ...valuationData,
+          companyDocuments: savePayload.companyDocuments,
+          personDocuments: savePayload.personDocuments
+        }
         console.log('setting valuation data to : ', updatedValuationData)
         this._valuationData.next(updatedValuationData)
-      })
-    )
-  }
-
-  /***
-   * @function freezePeopleDocsForValuation
-   * @param {object[]} entities - entities array from the store
-   * @description 🥶 freezes documents for all people (entities) for a valuation
-   * @returns TODO
-   */
-  public freezePeopleDocsForValuation = (entities, contactGroupId) => {
-    return this.valuationData$.pipe(
-      mergeMap((valuationData) => {
-        // console.log(
-        //   '🥶 freezing docs for ' + JSON.stringify(entities) + ' contactGroupId ' + contactGroupId + ' id ',
-        //   valuationData.id
-        // )
-        return this._peopleSvc.freezePeopleDocsForValuation(entities, contactGroupId, valuationData.valuationEventId)
       })
     )
   }
@@ -237,27 +241,6 @@ export class ValuationFacadeService {
 
   public getCompanyDocsForValuation = (contactGroupId, valuationEventId) => {
     return this._companySvc.getCompanyDocsForValuation(contactGroupId, valuationEventId)
-  }
-
-  /***
-   * @function freezeCompanyDocsForValuation
-   * @param {object[]} entities - entities array from the store
-   * @description 🥶 freezes documents for all companies and associated people (entities) for a valuation
-   * @returns TODO
-   */
-  public freezeCompanyDocsForValuation = (entities, contactGroupId) => {
-    return this.valuationData$.pipe(
-      mergeMap((valuationData) => {
-        console.log(
-          '🥶 freezing docs for contactGroupId ' +
-            contactGroupId +
-            ' id ' +
-            ' valuationEventId: ' +
-            valuationData.valuationEventId
-        )
-        return this._companySvc.setCompanyDocsForValuation(entities, contactGroupId, valuationData.valuationEventId)
-      })
-    )
   }
 
   public unfreezeCompanyDocsForValuation = (contactGroupId: number, valuationEventId: number) => {

@@ -53,9 +53,7 @@ export class ComplianceChecksFacadeService {
   public updateCompanyAndPersonDocuments(savePayload) {
     return this._valuationFacadeSvc.updateCompanyAndPersonDocuments(savePayload)
   }
-  public unfreezeCompanyDocsForValuation(contactGroupId: number, valuationEventId: number) {
-    return this._valuationFacadeSvc.unfreezeCompanyDocsForValuation(contactGroupId, valuationEventId)
-  }
+  
 
   // Personal compliance checks documents management functions 📚
   public getAllPersonDocs(personId) {
@@ -67,23 +65,18 @@ export class ComplianceChecksFacadeService {
   public updatePersonDocuments(personDocuments) {
     return this._valuationFacadeSvc.updatePersonDocuments(personDocuments)
   }
-  public unfreezePeopleDocsForValuation(contactGroupId: number, valuationEventId: number) {
-    return this._valuationFacadeSvc.unfreezePeopleDocsForValuation(contactGroupId, valuationEventId)
-  }
 
   // Passing compliance tests ✔️
   public passComplianceChecksForValution(entitiesToPass) {
-    if (entitiesToPass.entitiesToSave) {
-      return this._valuationFacadeSvc.freezePeopleDocsForValuation(
-        entitiesToPass.entitiesToSave,
-        entitiesToPass.contactGroupId
-      )
-    } else {
-      return this._valuationFacadeSvc.freezeCompanyDocsForValuation(
-        entitiesToPass.savePayload,
-        entitiesToPass.contactGroupId
-      )
-    }
+    return this._valuationFacadeSvc.passComplianceChecksForValution(entitiesToPass)
+  }
+
+  // Refreshing / Unfreezing a valuation
+  public unfreezeCompanyDocsForValuation(contactGroupId: number, valuationEventId: number) {
+    return this._valuationFacadeSvc.unfreezeCompanyDocsForValuation(contactGroupId, valuationEventId)
+  }
+  public unfreezePeopleDocsForValuation(contactGroupId: number, valuationEventId: number) {
+    return this._valuationFacadeSvc.unfreezePeopleDocsForValuation(contactGroupId, valuationEventId)
   }
 
   // Generic save temp file 💾
