@@ -1,14 +1,9 @@
 import { ValuationStatusEnum, ValuationTypeEnum } from './../valuations/shared/valuation';
 import {
   Component,
-  ElementRef,
-  HostListener,
-  Input,
   OnDestroy,
   OnInit,
-  ViewChild,
   AfterViewInit,
-  ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { MenuItem, PrimeNGConfig } from 'primeng/api';
@@ -19,7 +14,6 @@ import { HeaderService } from '../core/services/header.service';
 import { BaseComponent } from '../shared/models/base-component';
 import { BaseStaffMember } from '../shared/models/base-staff-member';
 import { StaffMember } from '../shared/models/staff-member';
-import { Menu } from 'primeng/menu';
 import { SharedService } from '../core/services/shared.service';
 import { combineLatest, Subscription } from 'rxjs';
 import { eSignTypes } from '../core/shared/eSignTypes';
@@ -43,13 +37,6 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy,
   openContactGroupSubscription = new Subscription();
   valuationStatusSubscription = new Subscription();
   addRemoveItemSubscription;
-
-  @HostListener('document:click', ['$event'])
-  clickout(event) {
-    if (this.menu) this.menu.hide();
-  }
-
-  @ViewChild('menu', { static: false }) menu: Menu;
 
   constructor(
     public authService: AuthService,
