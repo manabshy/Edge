@@ -83,12 +83,12 @@ export class CompanyService {
   }
 
   /***
-   * @function setCompanyDocsForValuation
+   * @function freezeCompanyDocsForValuation
    * @param {number} contactGroupId - ID of the contact group to set docs for
    * @param {number} valuationEventId - ID of the valuation documents are attached to
-   * @description sets documents for a company linked to a specific valuation
+   * @description freezes documents for a company linked to a specific valuation
    */
-  setCompanyDocsForValuation(people, contactGroupId: number, valuationEventId: number): Observable<any> {
+   freezeCompanyDocsForValuation(people, contactGroupId: number, valuationEventId: number): Observable<any> {
     const url = `${AppConstants.baseCompanyDocumentUrl}/${contactGroupId}/${valuationEventId}`
     return this.http.post<any>(url, people).pipe(map((response) => response.result))
   }

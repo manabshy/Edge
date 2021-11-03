@@ -154,8 +154,8 @@ export class ValuationFacadeService {
   public passComplianceChecksForValution(payload: any): Observable<any> {
     let valuationEventIdClosure
     return this.valuationData$.pipe(
+      take(1),
       mergeMap((valuationData) => {
-        // console.log('passComplianceChecksForValuation: ', valuationData)
         valuationEventIdClosure = valuationData.valuationEventId
         if (payload.companyOrContact === 'contact') {
           return this._peopleSvc.freezePeopleDocsForValuation(
@@ -164,7 +164,7 @@ export class ValuationFacadeService {
             valuationData.valuationEventId
           )
         } else {
-          return this._companySvc.setCompanyDocsForValuation(
+          return this._companySvc.freezeCompanyDocsForValuation(
             payload.savePayload,
             payload.contactGroupId,
             valuationData.valuationEventId
