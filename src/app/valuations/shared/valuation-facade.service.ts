@@ -68,7 +68,7 @@ export class ValuationFacadeService {
     private _router: Router,
     private injector: Injector
   ) {
-    console.log(' FACADE SERVICE INSTANTIATING =========== ')
+    // console.log(' FACADE SERVICE INSTANTIATING =========== ')
   }
 
   getDropDownInfo() {
@@ -81,7 +81,7 @@ export class ValuationFacadeService {
   public getValuationById(valuationId: number): Observable<Valuation | any> {
     return this._apiSvc.getValuationById(valuationId).pipe(
       tap((valuationObj) => {
-        console.log('👷👷👷 calling _valuationData.next in valuation service: ', valuationObj)
+        // console.log('👷👷👷 calling _valuationData.next in valuation service: ', valuationObj)
         this._valuationData.next(valuationObj)
       })
     )
@@ -155,7 +155,7 @@ export class ValuationFacadeService {
     let valuationEventIdClosure
     return this.valuationData$.pipe(
       mergeMap((valuationData) => {
-        console.log('passComplianceChecksForValuation: ', valuationData)
+        // console.log('passComplianceChecksForValuation: ', valuationData)
         valuationEventIdClosure = valuationData.valuationEventId
         if (payload.companyOrContact === 'contact') {
           return this._peopleSvc.freezePeopleDocsForValuation(
@@ -197,7 +197,7 @@ export class ValuationFacadeService {
    * @description emits and updated value for the valuationData in the store having updated the personDocuments array in the valuationData
    **/
   public updatePersonDocuments(personDocuments) {
-    console.log('🏃🏃🏃🏃 updatePersonDocuments running', personDocuments)
+    // console.log('🏃🏃🏃🏃 updatePersonDocuments running', personDocuments)
     return this.valuationData$.pipe(
       take(1),
       map((valuationData) => {
@@ -212,17 +212,17 @@ export class ValuationFacadeService {
    * @description updates the company and person documents for the current valuationData in the service and pushes out a new valuationData value to subscribers
    */
   public updateCompanyAndPersonDocuments(savePayload) {
-    console.log('🏃🏃🏃🏃 updateCompanyDocuments running', savePayload)
+    // console.log('🏃🏃🏃🏃 updateCompanyDocuments running', savePayload)
     return this.valuationData$.pipe(
       take(1),
       map((valuationData) => {
-        console.log('🏆 updateCompanyDocuments: this._valuationData.next ', valuationData)
+        // console.log('🏆 updateCompanyDocuments: this._valuationData.next ', valuationData)
         const updatedValuationData = {
           ...valuationData,
           companyDocuments: savePayload.companyDocuments,
           personDocuments: savePayload.personDocuments
         }
-        console.log('setting valuation data to : ', updatedValuationData)
+        // console.log('setting valuation data to : ', updatedValuationData)
         this._valuationData.next(updatedValuationData)
       })
     )

@@ -1,22 +1,24 @@
-<div class="flex justify-between">
-  <fieldset [ngClass]="{'invalid': originErrorMessage}">
-    <p-dropdown name="originId" id="originId" [options]="originIdOptions" [(ngModel)]="valuation.bookedBy"
-      optionLabel="value" optionValue="id" [filter]="false" data-cy="originId" (onChange)="onOriginIdChanged($event)"
-      (ngModelChange)="controlValues()">
-    </p-dropdown>
-    <p class="message message--negative"> {{originErrorMessage}}</p>
-  </fieldset>
+<div class="flex space-x-4">
   <fieldset>
-    <p-dropdown name="bookById" id="bookById" [options]="bookByOptions$ | async" formControlName="bookById"
-      optionLabel="value" optionValue="id" [filter]="false" data-cy="bookById"
-      (onChange)="onBookedByChanged($event.value)" (ngModelChange)="controlValues()">
-      <p class="message message--negative"> {{""}}</p>
+    <label for="originTypeId">Origin Type</label>
+    <p-dropdown name="originTypeId" id="originTypeId" [options]="allOriginTypes" [(ngModel)]="valuation.originTypeId"
+      optionLabel="value" optionValue="id" [filter]="false" data-cy="originTypeId"
+      (ngModelChange)="originTypeIdChanged($event)" (onChange)="controlValues()">
     </p-dropdown>
   </fieldset>
-  <fieldset [ngClass]="{'invalid': bookedByErrorMessage}">
-    <p-dropdown name="bookBy" id="bookBy" [options]="bookByOptions$ | async" [(ngModel)]="valuation.bookedBy"
-      (ngModelChange)="controlValues()" optionLabel="fullName" optionValue="staffMemberId" [filter]="true"
-      data-cy="bookBy" (onChange)="onBookedByChanged($event)">
+  <fieldset [ngClass]="{'invalid': originIdMessage}">
+    <label for="originId">Origin</label>
+    <p-dropdown name="originId" id="originId" [options]="origins" [(ngModel)]="valuation.originId" optionLabel="value"
+      optionValue="id" [filter]="false" data-cy="originId" (onChange)="controlValues()">
+    </p-dropdown>
+    <p class="message message--negative"> {{originIdMessage}}</p>
+  </fieldset>
+  <fieldset [ngClass]="{'invalid': bookedByErrorMessage}"
+    *ngIf="valuation.originTypeId == 13 ||valuation.originTypeId == 14">
+    <label for="bookedBy">Booked By</label>
+    <p-dropdown name="bookedBy" id="bookedBy" placeholder="Select a CS Member" [options]="bookByOptions$ | async"
+      [(ngModel)]="valuation.bookedBy" [filter]="true" data-cy="bookedBy" optionLabel="fullName"
+      (ngModelChange)="controlValues()" [showClear]="true">
     </p-dropdown>
     <p class="message message--negative"> {{bookedByErrorMessage}}</p>
   </fieldset>
