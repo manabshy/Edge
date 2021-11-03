@@ -28,8 +28,8 @@
       <tr (click)="navigateToDetail(valuation)" *ngFor="let valuation of valuations" class="cursor-pointer">
         <td data-title="Status">
           <span class="cell-content">
-            <span class="pill pill--positive" *ngIf="valuation?.isActive">{{valuation?.valuationStatusLabel}}</span>
-            <span class="pill" *ngIf="!valuation.isActive">{{valuation?.valuationStatusLabel}}</span>
+            <span class="pill"
+              [ngStyle]="{'background-color': getStatusColor(valuation),'color':'white' }">{{valuation?.valuationStatusLabel}}</span>
           </span>
         </td>
         <td data-title="Address">

@@ -21,8 +21,12 @@
     <tbody>
       <tr *ngFor="let val of valuations" (click)="navigateTo(val)" data-cy="valuationList" class="cursor-pointer">
         <td data-title="Status">
-          <span class="cell-content">{{val?.valuationStatusLabel}}</span>
+          <span class="cell-content">
+            <span class="pill"
+              [ngStyle]="{'background-color': getStatusColor(val),'color':'white' }">{{val?.valuationStatusLabel}}</span>
+          </span>
         </td>
+
         <td data-title="Address">
           <span class="cell-content">
             <a class="underline table-link" (click)="navigateTo(val);$event.stopPropagation()">{{val?.property?.address
