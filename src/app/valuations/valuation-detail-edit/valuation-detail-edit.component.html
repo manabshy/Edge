@@ -234,7 +234,7 @@
                         <label for="propertyTypeId">Property Type</label>
                         <p-dropdown name="propertyTypeId" id="propertyTypeId" [options]="propertyTypes"
                           formControlName="propertyTypeId" optionLabel="value" optionValue="id" [filter]="false"
-                          data-cy="propertyTypeId"></p-dropdown>
+                          (onChange)="onPropertyType($event.value)" data-cy="propertyTypeId"></p-dropdown>
                         <p class="message message--negative">{{ formErrors?.propertyTypeId }}</p>
                       </fieldset>
                       <fieldset class="inline-child" [ngClass]="{ invalid: formErrors?.propertyStyleId }">

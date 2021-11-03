@@ -163,10 +163,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   lettingsValuer: BaseStaffMember
   salesValuer: BaseStaffMember
   bookingButtonLabel = 'Book For Sales and Lettings'
-  propertyTypes: any[]
-  propertyStyles: any[]
-  propertyFloors: any[]
-  allPropertyStyles: any[]
+  propertyTypes: InfoDetail[]
+  propertyStyles: InfoDetail[]
+  propertyFloors: InfoDetail[]
+  allPropertyStyles: InfoDetail[]
   activeValuations: Valuation[] = []
   isActiveValuationsVisible = false
   isCanDeactivate = false
@@ -945,7 +945,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.interestList = info.section21Statuses
     this.associateTypes = info.associations
     this.propertyTypes = [{ id: 0, value: ' ' }, ...info.propertyTypes]
-    this.allPropertyStyles = [info.propertyStyles]
+    this.allPropertyStyles = [{ id: 0, value: ' ' }, ...info.propertyStyles]
     this.propertyStyles = [{ id: 0, value: ' ' }, ...info.propertyStyles]
     this.propertyFloors = info.propertyFloors
   }
@@ -1000,6 +1000,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } as BaseProperty
     this.valuationForm.get('property').setValue(baseProperty)
 
+    this.onPropertyType(this.property.propertyTypeId)
     this.valuationForm.patchValue({
       propertyStyleId: this.property.propertyStyleId,
       propertyTypeId: this.property.propertyTypeId,
@@ -1477,6 +1478,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         isPowerOfAttorney: valuation.isPowerOfAttorney,
         ccOwner: valuation.ccOwner
       }
+
+      this.onPropertyType(valuation.property?.propertyTypeId)
 
       this.valuationForm.patchValue({
         property: valuation.property,
@@ -2018,7 +2021,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   onPropertyType(value) {
-    this.propertyStyles = this.allPropertyStyles?.filter((x: InfoDetail) => +x.parentId === +value)
+    this.propertyStyles = this.allPropertyStyles.filter((x) => x.id == 0 || x.parentId == value)
 
     if (value == PropertyType.House) {
       this.valuationForm.controls['propertyFloorId'].setValue(null)
