@@ -467,11 +467,11 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   }
 
   /***
-   * @function onAddContact
+   * @function onAddExistingContact
    * @param {Object} entity - the contact to add to the store
    * @description adds an EXISTING contact to the valuation. grabs their docs & data from API and puts in the store
    */
-  public onAddContact = (entity: any): void => {
+  public onAddExistingContact = (entity: any): void => {
     this._complianceChecksFacadeSvc
       .getAllPersonDocs(entity.id)
       .pipe(
@@ -515,9 +515,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    * @description adds an EXISTING company to the valuation. grabs their docs & data from API and puts in the store
    */
   public onAddExistingCompany = (entity: any): void => {
-    // console.log('onAddExistingCompany adding company to store: ', entity)
+    console.log('onAddExistingCompany adding company to store: ', entity)
     this._complianceChecksFacadeSvc
-      .getAllDocsForCompany(entity.companyId)
+      .getAllDocsForCompany(entity.id)
       .pipe(
         switchMap((company) => {
           this.loadExistingEntity(company)
