@@ -436,7 +436,8 @@
                           </fieldset>
                           <ng-template pTemplate="footer">
                             <div *ngIf="getTimeSalesValuationDate !== getTimeLettingsValuationDate">
-                              <fieldset [attr.disabled]="!(isNewValuation && canBookAppointment)">
+                              <fieldset
+                                [attr.disabled]="(valuation?.valuationStatus == 0 || valuation?.valuationStatus == 2) == false?true:null">
                                 <label>Are we meeting the Owner ?</label>
                                 <span class="radio radio--inline">
                                   <span>
@@ -547,7 +548,8 @@
                           </fieldset>
                           <ng-template pTemplate="footer">
                             <div *ngIf="getTimeSalesValuationDate != getTimeLettingsValuationDate">
-                              <fieldset [attr.disabled]="!(isNewValuation && canBookAppointment)">
+                              <fieldset
+                                [attr.disabled]="(valuation?.valuationStatus == 0 || valuation?.valuationStatus == 2) == false?true:null">
                                 <label>Are we meeting the Owner ?</label>
                                 <span class="radio radio--inline">
                                   <span>
@@ -629,7 +631,8 @@
                       ">
                       <div class="grid justify-center col-auto">
                         <div class="grid justify-center">
-                          <fieldset [attr.disabled]="!(isNewValuation && canBookAppointment)">
+                          <fieldset
+                            [attr.disabled]="(valuation?.valuationStatus == 0 || valuation?.valuationStatus == 2) == false?true:null">
                             <label>Are we meeting the Owner ?</label>
                             <span class="radio radio--inline">
                               <span>
