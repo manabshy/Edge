@@ -234,7 +234,7 @@
                         <label for="propertyTypeId">Property Type</label>
                         <p-dropdown name="propertyTypeId" id="propertyTypeId" [options]="propertyTypes"
                           formControlName="propertyTypeId" optionLabel="value" optionValue="id" [filter]="false"
-                          data-cy="propertyTypeId"></p-dropdown>
+                          (onChange)="onPropertyType($event.value)" data-cy="propertyTypeId"></p-dropdown>
                         <p class="message message--negative">{{ formErrors?.propertyTypeId }}</p>
                       </fieldset>
                       <fieldset class="inline-child" [ngClass]="{ invalid: formErrors?.propertyStyleId }">
@@ -436,7 +436,8 @@
                           </fieldset>
                           <ng-template pTemplate="footer">
                             <div *ngIf="getTimeSalesValuationDate !== getTimeLettingsValuationDate">
-                              <fieldset [attr.disabled]="!(isNewValuation && canBookAppointment)">
+                              <fieldset
+                                [attr.disabled]="(valuation?.valuationStatus == 0 || valuation?.valuationStatus == 2) == false?true:null">
                                 <label>Are we meeting the Owner ?</label>
                                 <span class="radio radio--inline">
                                   <span>
@@ -547,7 +548,8 @@
                           </fieldset>
                           <ng-template pTemplate="footer">
                             <div *ngIf="getTimeSalesValuationDate != getTimeLettingsValuationDate">
-                              <fieldset [attr.disabled]="!(isNewValuation && canBookAppointment)">
+                              <fieldset
+                                [attr.disabled]="(valuation?.valuationStatus == 0 || valuation?.valuationStatus == 2) == false?true:null">
                                 <label>Are we meeting the Owner ?</label>
                                 <span class="radio radio--inline">
                                   <span>
@@ -629,7 +631,8 @@
                       ">
                       <div class="grid justify-center col-auto">
                         <div class="grid justify-center">
-                          <fieldset [attr.disabled]="!(isNewValuation && canBookAppointment)">
+                          <fieldset
+                            [attr.disabled]="(valuation?.valuationStatus == 0 || valuation?.valuationStatus == 2) == false?true:null">
                             <label>Are we meeting the Owner ?</label>
                             <span class="radio radio--inline">
                               <span>

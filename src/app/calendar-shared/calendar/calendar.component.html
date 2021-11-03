@@ -90,25 +90,18 @@
   </div>
 </ng-template>
 
-<ng-template #monthCell let-day="day" let-openDay="openDay" let-locale="locale"
-  let-highlightDay="highlightDay" let-unhighlightDay="unhighlightDay" let-eventClicked="eventClicked"
-  let-tooltipTemplate="tooltipTemplate" let-tooltipAppendToBody="tooltipAppendToBody">
+<ng-template #monthCell let-day="day" let-openDay="openDay" let-locale="locale" let-highlightDay="highlightDay"
+  let-unhighlightDay="unhighlightDay" let-eventClicked="eventClicked" let-tooltipTemplate="tooltipTemplate"
+  let-tooltipAppendToBody="tooltipAppendToBody">
   <div class="cal-cell-top">
     <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
     <div class="cal-event-container" [ngClass]="event?.cssClass" *ngFor="let event of day.events; trackBy:trackByFn">
-      <div class="cal-event" 
-        [style.backgroundColor]="event.color?.primary"
-        (mouseenter)="highlightDay.emit({event: event})" 
-        (mouseleave)="unhighlightDay.emit({event: event})"
-        [mwlCalendarTooltip]="event.title | calendarEventTitle:'monthTooltip':event"
-        [tooltipEvent]="event" 
-        [tooltipTemplate]="tooltipTemplate"
-        [tooltipAppendToBody]="tooltipAppendToBody" 
-        mwlDraggable 
-        [class.cal-draggable]="event.draggable"
-        dragActiveClass="cal-drag-active" 
-        [dropData]="{event: event, draggedFrom: day}"
-        [dragAxis]="{x: event.draggable, y: event.draggable}" 
+      <div class="cal-event" [style.backgroundColor]="event.color?.primary"
+        (mouseenter)="highlightDay.emit({event: event})" (mouseleave)="unhighlightDay.emit({event: event})"
+        [mwlCalendarTooltip]="event.title | calendarEventTitle:'monthTooltip':event" [tooltipEvent]="event"
+        [tooltipTemplate]="tooltipTemplate" [tooltipAppendToBody]="tooltipAppendToBody" mwlDraggable
+        [class.cal-draggable]="event.draggable" dragActiveClass="cal-drag-active"
+        [dropData]="{event: event, draggedFrom: day}" [dragAxis]="{x: event.draggable, y: event.draggable}"
         (mwlClick)="eventClicked.emit({ event: event })">
         <mwl-calendar-event-actions [event]="event" [customTemplate]="eventActionsTemplate">
         </mwl-calendar-event-actions>
@@ -160,19 +153,10 @@
         (eventClicked)="eventClicked($event)" [eventTitleTemplate]='customLabelTemplate'>
         <!-- [allDayEventsLabelTemplate]='customLabelTemplate' -->
       </mwl-calendar-week-view>
-      <mwl-calendar-day-view 
-        *ngSwitchCase="'day'" 
-        [viewDate]="viewDate" 
-        [events]="events"
-        (beforeViewRender)="beforeDayViewRender($event)" 
-        [tooltipAppendToBody]="true" 
-        [tooltipTemplate]="customTooltip"
-        (hourSegmentClicked)="getClickedDate($event.date)" 
-        [hourSegmentTemplate]="weekViewHourSegmentTemplate"
-        (eventClicked)="eventClicked($event)" 
-        [dayStartHour]="1" 
-        [dayEndHour]="20"
-        [tooltipPlacement]="tooltipPlacement"
+      <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events"
+        (beforeViewRender)="beforeDayViewRender($event)" [tooltipAppendToBody]="true" [tooltipTemplate]="customTooltip"
+        (hourSegmentClicked)="getClickedDate($event.date)" [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+        (eventClicked)="eventClicked($event)" [tooltipPlacement]="tooltipPlacement"
         [eventTitleTemplate]='customLabelTemplate'>
       </mwl-calendar-day-view>
     </ng-container>
