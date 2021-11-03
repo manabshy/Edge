@@ -1134,8 +1134,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       declarableInterest: [null, Validators.required],
       ageOfSuggestedAskingPrice: [],
       section21StatusId: [],
-      salesMeetingOwner: [true],
-      lettingsMeetingOwner: [true],
+      salesMeetingOwner: [null],
+      lettingsMeetingOwner: [null],
       salesOwnerAssociateName: [''],
       salesOwnerAssociateContactNumber: [''],
       salesOwnerAssociateEmail: [''],
@@ -1515,8 +1515,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           : 0,
         declarableInterest: valuation.declarableInterest?.toString(),
         section21StatusId: valuation.section21StatusId,
-        salesMeetingOwner: this.salesMeetingOwner ? this.salesMeetingOwner : true,
-        lettingsMeetingOwner: this.lettingsMeetingOwner ? this.lettingsMeetingOwner : true,
+        salesMeetingOwner: this.salesMeetingOwner ? this.salesMeetingOwner : null,
+        lettingsMeetingOwner: this.lettingsMeetingOwner ? this.lettingsMeetingOwner : null,
         salesOwnerAssociateName: this.salesOwnerAssociateName,
         salesOwnerAssociateContactNumber: this.salesOwnerAssociateContactNumber,
         salesOwnerAssociateEmail: this.salesOwnerAssociateEmail,
@@ -2500,6 +2500,21 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       })
       return
     }
+
+    if (
+      !(
+        this.valuationForm.controls['salesMeetingOwner'].value ||
+        this.valuationForm.controls['lettingsMeetingOwner'].value
+      )
+    ) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'You must select who we are meeting options',
+        closable: false
+      })
+      return
+    }
+
     //this._valuationFacadeSvc.validationControlBs.getValue()
     if (this.valuationForm.valid) {
       this.addOrUpdateValuation()
@@ -2848,6 +2863,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     this.getTimeSalesValuationDate = this.selectedSalesDate?.getTime()
     this.getTimeLettingsValuationDate = this.selectedLettingsDate?.getTime()
+
+    this.valuationForm.controls['lettingsMeetingOwner'].setValue(null)
+    this.valuationForm.controls['salesMeetingOwner'].setValue(null)
 
     this.setCloseState()
 
