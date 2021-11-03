@@ -37,19 +37,22 @@ import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload,
       const personDocuments = []
       const companyDocuments = []
       entities.forEach((entity) => {
-        const updatedPerson: any = {
+        console.log('entity: ', entity)
+        const updatedEntity: any = {
           uboAdded: entity.uboAdded,
           documents: mapDocsForAPI(entity.documents)
         }
         if (entity.companyId) {
-          updatedPerson.associatedCompanyId = entity.associatedCompanyId
-          companyDocuments.push(updatedPerson)
+          updatedEntity.companyId = entity.companyId
+          updatedEntity.associatedCompanyId = entity.associatedCompanyId
+          companyDocuments.push(updatedEntity)
         } else {
-          updatedPerson.position = entity.position ? entity.position : 'Not set'
-          updatedPerson.address = entity.address ? entity.address : 'Not set'
-          updatedPerson.personId = entity.personId
-          updatedPerson.name = entity.name
-          personDocuments.push(updatedPerson)
+          updatedEntity.personId = entity.personId
+          updatedEntity.position = entity.position ? entity.position : 'Not set'
+          updatedEntity.address = entity.address ? entity.address : 'Not set'
+          updatedEntity.personId = entity.personId
+          updatedEntity.name = entity.name
+          personDocuments.push(updatedEntity)
         }
       })
       const companyComplianceChecksSavePayload: CompanyComplianceChecksSavePayload = {
@@ -61,6 +64,7 @@ import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload,
         contactGroupId,
         companyOrContact
       }
+      console.log('companyComplianceChecksSavePayload: ', companyComplianceChecksSavePayload)
       return companyComplianceChecksSavePayload
   }
 }
