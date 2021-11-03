@@ -4,6 +4,7 @@
   </div>
 
   <div class="w-full flex flex-col lg:flex-row lg:flex-wrap px-0">
+    <ng-template #loading>Loading...</ng-template>
     <div
       *ngFor="let entity of entities; let i = index; let even = even"
       class="w-full lg:w-1/2"
@@ -24,16 +25,14 @@
 
   <div
     class="px-2 md:px-4 w-full flex flex-col md:flex-row gap-x-4 justify-center my-10"
-    *ngIf="companyOrContact === 'company'"
+    *ngIf="companyOrContact === 'company' && !isFrozen"
   >
     <app-big-button
       [label]="'Add Associated Company'"
-      [disabled]="isFrozen"
       (onClick)="openDialog('showCompanyDialog')"
     ></app-big-button>
     <app-big-button
       [label]="'Add Contact'"
-      [disabled]="isFrozen"
       (onClick)="openDialog('showContactDialog')"
     ></app-big-button>
   </div>
@@ -90,7 +89,7 @@
     [canCreateNewCompany]="true"
     [existingIds]="existingCompanyIds$ | async"
     (companyName)="getCompanyName($event)"
-    (selectedCompanyDetails)="onAddExistingCompany.emit($event)"
+    (selectedCompanyDetails)="addSelectedCompany($event)"
   ></app-company-finder>
 </p-dialog>
 
@@ -99,8 +98,7 @@
   [(visible)]="dialogs.showRefreshDocumentstDialog"
   [modal]="true"
   [draggable]="false"
-  [appendTo]="'body'"
->
+  >
   <div class="p-4">
     <h1>Refresh documents for this valuation?</h1>
     <p>Documents associated with this valuation will be deleted.</p>

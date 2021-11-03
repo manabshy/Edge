@@ -176,7 +176,8 @@
           <ng-container *ngIf="property">
             <p-accordion [multiple]="true">
               <div class="mr-8 md:m-0">
-                <div class="mb-5" (click)="controlIsCancelled($event,!canSaveValuation);">
+                <div class="mb-5" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
+                  (click)="controlIsCancelled($event, isCancelled)">
                   <app-valuation-origin [allOriginTypes]="allOriginTypes" [allOrigins]="allOrigins"
                     [isClientService]="isClientService" [(valuation)]="valuation" [leadTypeId]="leadTypeId">
                   </app-valuation-origin>
@@ -699,24 +700,23 @@
                   </div>
                 </p-accordionTab>
 
-                <p-accordionTab header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible"
-                  data-cy="valuationValues">
-                  <di class="flex items-end justify-end" *ngIf="isAllowedForValueChanges">
-                    <div dropdown>
-                      <a #myHref href [id]="'button'" dropdownToggle
-                        (click)="$event.stopPropagation(); menu.toggle($event); (false)"
-                        [attr.aria-controls]="'dropdown'">
-                        <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
-                          <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
-                          <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
-                          <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
-                        </svg>
-                      </a>
-                    </div>
-                    <p-menu appendTo="body" #menu [popup]="true" [model]="valueMenuItems"></p-menu>
-                  </di>
-                  <div id="valuesTab" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
-                    (click)="controlIsCancelled($event, isCancelled)">
+                <p-accordionTab
+                  header="Values"
+                  [(selected)]="activeState[3]"
+                  *ngIf="areValuesVisible"
+                  data-cy="valuationValues"
+                >
+                  <div class="w-full flex flex-row">
+                    <span class="flex-1"></span>
+                    <ng-container *ngIf="isAllowedForValueChanges">
+                      <app-menu [menuItems]="valueMenuItems"></app-menu>
+                    </ng-container>
+                  </div>
+                  <div
+                    id="valuesTab"
+                    [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
+                    (click)="controlIsCancelled($event, isCancelled)"
+                  >
                     <ol class="mb-4 cards" [ngStyle]="{ 'grid-gap': !isEditable && !isNewValuation ? '30px' : '' }">
                       <li *ngIf="
                           (valuation?.salesValuationBooking && isEditable) ||
@@ -925,6 +925,21 @@
   class="modal--medium modal--hasFooter">
   <app-contact-group-finder (selectedContactGroup)="getSelectedOwner($event)" [showCreateNewCompanyContact]="true"
     (isCreatingNewGroup)="createNewLastKnownOwner()"></app-contact-group-finder>
+</p-dialog>
+
+<p-dialog [(visible)]="hasLiveInstruct" [modal]="true" [draggable]="false" class="modal--xsmall modal--hasFooter">
+  <p-header class="row">
+    <p class="text-lg text-red-900">Error</p>
+  </p-header>
+  <p data-cy="activeInstructionMessage">
+    This Property already has a live {{instructionTypeMessage}} ticket. Please complete or withdraw the existing
+    instruction ticket before you crete a new one.
+  </p>
+  <footer class="footer--modal">
+    <div class="btn--container">
+      <button type="button" class="btn btn--ghost" (click)="hasLiveInstruct = false">Cancel</button>
+    </div>
+  </footer>
 </p-dialog>
 
 <!-- Contactgroup Finder for admin contact Modal -->

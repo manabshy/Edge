@@ -6,7 +6,7 @@
 
 import { Injectable, Injector } from '@angular/core'
 import { Router } from '@angular/router'
-import { BehaviorSubject, Observable, Subject } from 'rxjs'
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs'
 import { filter, map, mergeMap, take, tap } from 'rxjs/operators'
 import {
   Valuation,
@@ -154,8 +154,8 @@ export class ValuationFacadeService {
   public passComplianceChecksForValution(payload: any): Observable<any> {
     let valuationEventIdClosure
     return this.valuationData$.pipe(
+      take(1),
       mergeMap((valuationData) => {
-        // console.log('passComplianceChecksForValuation: ', valuationData)
         valuationEventIdClosure = valuationData.valuationEventId
         if (payload.companyOrContact === 'contact') {
           return this._peopleSvc.freezePeopleDocsForValuation(
@@ -164,7 +164,7 @@ export class ValuationFacadeService {
             valuationData.valuationEventId
           )
         } else {
-          return this._companySvc.setCompanyDocsForValuation(
+          return this._companySvc.freezeCompanyDocsForValuation(
             payload.savePayload,
             payload.contactGroupId,
             valuationData.valuationEventId
@@ -274,8 +274,21 @@ export class ValuationFacadeService {
     return this._apiSvc.cancelValuation(valuationToCancel)
   }
 
+  /**
+   *
+   * @param valuationData
+   * @returns response from API as a stream
+   */
   public updateValuation(valuationData: Valuation): Observable<Valuation | any> {
+    // console.log('valuation is being saved: ', valuationData)
+    // console.log('this._valuationData.getValue(): ', this._valuationData.getValue())
     return this._apiSvc.updateValuation(valuationData)
+    // .pipe(
+    //   tap((res) => {
+    //     console.log('in response from valuation PUT: ', res)
+        
+    //   })
+    // )
   }
 
   public saveValuationNote(valuationNote: valuationNote): Observable<Valuation | any> {

@@ -119,10 +119,9 @@ export class DocumentInfoComponent implements OnInit {
     } else if (this.documentType === DOCUMENT_TYPE.REPORT) {
       emitData.smartSearchId = this.smartSearchIdForm.get('smartSearchId').value
     }
-    console.log('emitData: ', emitData)
     this.onFileUploaded.emit(emitData)
-    this.saveFileBtnDisabled = true
     this.showFileUploadDialog = false
+    this.saveFileBtnDisabled = true
   }
 
   onDateChange(expiryDate): void {

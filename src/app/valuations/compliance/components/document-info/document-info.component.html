@@ -32,7 +32,7 @@
       <i class="fa fa-upload" aria-hidden="true"></i>
       <span class="ml-2 underline">Upload {{ label }}</span>
     </span>
-    <span class="ml-2 text-gray-400" *ngIf="isFrozen" [pTooltip]="'🥶 Doc upload disabled whilst frozen'">
+    <span class="ml-2 text-gray-400" *ngIf="isFrozen">
       {{ label }}
     </span>
   </button>
@@ -53,9 +53,11 @@
       [isMultiple]="isMultiple"
     ></app-file-upload>
     <div *ngIf="showExpiryDatePicker" class="mt-2 mb-0 ml-2">
-      <div class="animate__animated animate__pulse">
-        <app-messages [message]="expiryDateMessage"></app-messages>
-      </div>
+      <ng-container *ngIf="saveFileBtnDisabled">
+        <div class="animate__animated animate__pulse">
+          <app-messages [message]="expiryDateMessage"></app-messages>
+        </div>
+      </ng-container>
       <form [formGroup]="idExpiryForm">
         <fieldset [ngClass]="{ invalid: idHasExpired }">
           <label for="">ID Expiry Date</label>
@@ -81,9 +83,11 @@
       </form>
     </div>
     <div *ngIf="showAdditionalInput" class="mt-2 mb-0 ml-2">
-      <div class="animate__animated animate__pulse">
-        <app-messages [message]="additionalInputMessage"></app-messages>
-      </div>
+      <ng-container *ngIf="saveFileBtnDisabled">
+        <div class="animate__animated animate__pulse" >
+          <app-messages [message]="additionalInputMessage"></app-messages>
+        </div>
+      </ng-container>
       <form [formGroup]="smartSearchIdForm">
         <fieldset>
           <label for="">SmartSearch ID Number</label>

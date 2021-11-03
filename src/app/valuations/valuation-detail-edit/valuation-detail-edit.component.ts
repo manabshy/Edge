@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { StorageMap } from '@ngx-pwa/local-storage'
-import { debounceTime, takeUntil, distinctUntilChanged, map, tap } from 'rxjs/operators'
+import { debounceTime, takeUntil, distinctUntilChanged, map, tap, finalize } from 'rxjs/operators'
 import { ContactGroup, ContactNote, PersonSummaryFigures, Signer } from 'src/app/contact-groups/shared/contact-group'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service'
@@ -200,6 +200,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isStillInOneMonthPeriod: boolean = false
   isAllowedForValueChangesSubscription = new Subscription()
   isEditValueActive = false
+  hasLiveInstruct = false
+  instructionTypeMessage: string
   valueMenuItems: MenuItem[] = [
     {
       id: 'editValue',
@@ -1132,8 +1134,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       declarableInterest: [null, Validators.required],
       ageOfSuggestedAskingPrice: [],
       section21StatusId: [],
-      salesMeetingOwner: [true],
-      lettingsMeetingOwner: [true],
+      salesMeetingOwner: [null],
+      lettingsMeetingOwner: [null],
       salesOwnerAssociateName: [''],
       salesOwnerAssociateContactNumber: [''],
       salesOwnerAssociateEmail: [''],
@@ -1513,8 +1515,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           : 0,
         declarableInterest: valuation.declarableInterest?.toString(),
         section21StatusId: valuation.section21StatusId,
-        salesMeetingOwner: this.salesMeetingOwner ? this.salesMeetingOwner : true,
-        lettingsMeetingOwner: this.lettingsMeetingOwner ? this.lettingsMeetingOwner : true,
+        salesMeetingOwner: this.salesMeetingOwner ? this.salesMeetingOwner : null,
+        lettingsMeetingOwner: this.lettingsMeetingOwner ? this.lettingsMeetingOwner : null,
         salesOwnerAssociateName: this.salesOwnerAssociateName,
         salesOwnerAssociateContactNumber: this.salesOwnerAssociateContactNumber,
         salesOwnerAssociateEmail: this.salesOwnerAssociateEmail,
@@ -2179,23 +2181,37 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       return
     }
 
-    let val: Valuation
-    val = { ...this.valuation, ...this.valuationForm.value }
+    this.propertyService
+      .getPropertyInstructions(this.propertyId, false)
+      .toPromise()
+      .then((data) => {
+        if (data && data.length > 0) {
+          this.hasLiveInstruct = true
+          if (data.findIndex((x) => x.type == 'Sales' || x.type == 'sales') > -1) {
+            this.instructionTypeMessage = 'sales instruction'
+          } else {
+            this.instructionTypeMessage = 'lettings instruction'
+          }
+        } else {
+          let val: Valuation
+          val = { ...this.valuation, ...this.valuationForm.value }
 
-    const instruction = {
-      valuationEventId: val.valuationEventId,
-      salesAgencyType: '',
-      lettingsAgencyType: '',
-      askingPrice: val.suggestedAskingPrice,
-      askingRentShortLet: val.suggestedAskingRentShortLet,
-      askingRentLongLet: val.suggestedAskingRentLongLet,
-      askingRentShortLetMonthly: val.suggestedAskingRentShortLetMonthly,
-      askingRentLongLetMonthly: val.suggestedAskingRentLongLetMonthly
-    } as Instruction
-    this.instruction = instruction
-    this.isInstructVisible = true
-    this.populateInstructionForm(instruction)
-    this.setInstructionFlags(instruction)
+          const instruction = {
+            valuationEventId: val.valuationEventId,
+            salesAgencyType: '',
+            lettingsAgencyType: '',
+            askingPrice: val.suggestedAskingPrice,
+            askingRentShortLet: val.suggestedAskingRentShortLet,
+            askingRentLongLet: val.suggestedAskingRentLongLet,
+            askingRentShortLetMonthly: val.suggestedAskingRentShortLetMonthly,
+            askingRentLongLetMonthly: val.suggestedAskingRentLongLetMonthly
+          } as Instruction
+          this.instruction = instruction
+          this.isInstructVisible = true
+          this.populateInstructionForm(instruction)
+          this.setInstructionFlags(instruction)
+        }
+      })
   }
 
   setInstructionFlags(instruction: Instruction) {
@@ -2484,6 +2500,21 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       })
       return
     }
+
+    if (
+      !(
+        this.valuationForm.controls['salesMeetingOwner'].value ||
+        this.valuationForm.controls['lettingsMeetingOwner'].value
+      )
+    ) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'You must select who we are meeting options',
+        closable: false
+      })
+      return
+    }
+
     //this._valuationFacadeSvc.validationControlBs.getValue()
     if (this.valuationForm.valid) {
       this.addOrUpdateValuation()
@@ -2832,6 +2863,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     this.getTimeSalesValuationDate = this.selectedSalesDate?.getTime()
     this.getTimeLettingsValuationDate = this.selectedLettingsDate?.getTime()
+
+    this.valuationForm.controls['lettingsMeetingOwner'].setValue(null)
+    this.valuationForm.controls['salesMeetingOwner'].setValue(null)
 
     this.setCloseState()
 

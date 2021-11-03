@@ -28,7 +28,7 @@ import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-
         (onToggleIsUBO)="store.onToggleIsUBO($event)"
         (onRemoveEntity)="store.onRemoveEntity($event)"
         (onUpdateEntity)="store.onUpdateEntity($event)"
-        (onAddContact)="store.onAddContact($event)"
+        (onAddExistingContact)="store.onAddExistingContact($event)"
         (onAddExistingCompany)="store.onAddExistingCompany($event)"
         (onRefreshDocuments)="store.onRefreshDocuments()"
         (onQueryDuplicates)="facadeSvc.onQueryDuplicates($event)"

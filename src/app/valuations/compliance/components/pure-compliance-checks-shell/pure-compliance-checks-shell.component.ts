@@ -23,7 +23,7 @@ export class PureComplianceChecksShellComponent implements OnInit, OnChanges {
   @Output() onUpdateEntity: EventEmitter<any> = new EventEmitter()
   @Output() onRemoveEntity: EventEmitter<any> = new EventEmitter()
   @Output() onAddExistingCompany: EventEmitter<any> = new EventEmitter()
-  @Output() onAddContact: EventEmitter<any> = new EventEmitter()
+  @Output() onAddExistingContact: EventEmitter<any> = new EventEmitter()
   @Output() onRefreshDocuments: EventEmitter<any> = new EventEmitter()
   @Output() onQueryDuplicates: EventEmitter<any> = new EventEmitter()
   @Output() onCreateNewPerson: EventEmitter<any> = new EventEmitter()
@@ -63,8 +63,13 @@ export class PureComplianceChecksShellComponent implements OnInit, OnChanges {
   }
 
   addSelectedContact($event) {
-    // console.log('addSelectedContact: ', $event)
-    this.onAddContact.emit({ id: $event.personId })
+    this.dialogs['showContactDialog'] = false
+    this.onAddExistingContact.emit({ id: $event.personId })
+  }
+
+  addSelectedCompany($event) {
+    this.dialogs['showCompanyDialog'] = false
+    this.onAddExistingCompany.emit({ id: $event.companyId })
   }
 
   getCompanyName(ev) {
