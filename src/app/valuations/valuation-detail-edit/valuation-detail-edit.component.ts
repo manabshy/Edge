@@ -695,11 +695,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.statuses.find((x) => x.value == 9).isValid = false
       }
     }
-
-    // termsOfBusinessBs = new BehaviorSubject(false);
-    // antiMoneyLaunderingStatusBs = new BehaviorSubject(false);
-    // landRegistryStatusBs = new BehaviorSubject(false);
-    // complianceCheckStatusBs = new BehaviorSubject(false);
   }
 
   setScrollInformation() {
