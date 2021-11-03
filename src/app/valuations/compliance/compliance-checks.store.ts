@@ -233,6 +233,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       ...state.entities,
       {
         ...entityToAdd,
+        associatedCompanyId: state.companyId,
         isMain: state.companyId === entityToAdd.id,
         documents: mapDocumentsForView(entityToAdd.documents)
       }
@@ -476,7 +477,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       .getAllPersonDocs(entity.id)
       .pipe(
         switchMap((entityDataFromApi) => {
-          // console.log('Existing entity = ', entity)
+          console.log('onAddExistingCompany result from server: ', entityDataFromApi)
           this.loadExistingEntity(entityDataFromApi)
           return this.pushContactsToValuationServiceForSave$
         }),
@@ -519,8 +520,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     this._complianceChecksFacadeSvc
       .getAllDocsForCompany(entity.id)
       .pipe(
-        switchMap((company) => {
-          this.loadExistingEntity(company)
+        switchMap((entityDataFromApi) => {
+          console.log('onAddExistingCompany result from server: ', entityDataFromApi)
+          this.loadExistingEntity(entityDataFromApi)
           return this.pushContactsToValuationServiceForSave$
         }),
         mergeMap(() => this.validationMessage$.pipe()),
