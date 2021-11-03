@@ -1049,25 +1049,12 @@
                   *ngIf="areValuesVisible"
                   data-cy="valuationValues"
                 >
-                  <di class="flex items-end justify-end" *ngIf="isAllowedForValueChanges">
-                    <div dropdown>
-                      <a
-                        #myHref
-                        href
-                        [id]="'button'"
-                        dropdownToggle
-                        (click)="$event.stopPropagation(); menu.toggle($event); (false)"
-                        [attr.aria-controls]="'dropdown'"
-                      >
-                        <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
-                          <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
-                          <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
-                          <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
-                        </svg>
-                      </a>
-                    </div>
-                    <p-menu appendTo="body" #menu [popup]="true" [model]="valueMenuItems"></p-menu>
-                  </di>
+                  <div class="w-full flex flex-row">
+                    <span class="flex-1"></span>
+                    <ng-container *ngIf="isAllowedForValueChanges">
+                      <app-menu [menuItems]="valueMenuItems"></app-menu>
+                    </ng-container>
+                  </div>
                   <div
                     id="valuesTab"
                     [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
@@ -1308,6 +1295,9 @@
                     [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)"
                   >
+                  <!-- <pre>
+                    {{}}
+                  </pre> -->
                     <app-compliance-checks-shell></app-compliance-checks-shell>
                   </div>
                 </p-accordionTab>
