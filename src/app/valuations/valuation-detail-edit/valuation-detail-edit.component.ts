@@ -2423,6 +2423,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       !(this.valuation.bookedBy && this.valuation.bookedBy.staffMemberId > 0)
     )
       return false
+
     return true
   }
 
@@ -2430,10 +2431,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.checkAvailabilityBooking()
     this.setValuersValidators()
 
-    if (!this.checkOriginBookedBy()) {
+    if (!this.checkOriginBookedBy() || !(this.valuation.originId > 0)) {
       this.messageService.add({
         severity: 'warn',
-        summary: 'You must select a CS member!',
+        summary: 'You must complete origin information!',
         closable: false
       })
       return
@@ -2526,6 +2527,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     valuation.propertyOwner = this.lastKnownOwner
     valuation.OfficeId = this.property.officeId
     valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate
+    valuation.originId = this.valuation.originId
+    valuation.bookedBy = this.valuation.bookedBy
 
     valuation.isPowerOfAttorney =
       this.adminContact && this.adminContact.contactGroupId > 0 ? this.adminContact?.isPowerOfAttorney : false
