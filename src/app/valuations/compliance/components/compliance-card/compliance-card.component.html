@@ -21,16 +21,11 @@
         {{ entity.address }}
       </p>
     </div>
-    <ng-template #menuTrigger></ng-template>
+    <!-- <ng-template #menuTrigger></ng-template> -->
     <span class="flex-1"></span>
-    <button *ngIf="hasMenuBtn && !isFrozen" class="w-10 h-10 rounded-full hover:shadow-md" (click)="menu.toggle($event)">
-      <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
-        <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
-        <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
-        <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
-      </svg>
-    </button>
-    <p-menu [appendTo]="'body'" #menu [popup]="true" [model]="items"></p-menu>
+    <ng-container  *ngIf="hasMenuBtn && !isFrozen" >
+      <app-menu [menuItems]="menuItems"></app-menu>
+    </ng-container >
   </div>
 
   <p class="mt-3 mb-2 font-medium">Documents</p>
@@ -93,21 +88,23 @@
   </div>
 
   <p-dialog
-    header="Edit Contact"
+    header="{{editEntityHeader}}"
     [(visible)]="dialogs.showEditDialog"
     [modal]="true"
     [draggable]="false"
-    class="modal--small"
+    class="modal--small "
   >
     <form [formGroup]="contactForm">
       <fieldset class="p-2 form-control">
         <label for="name">Name:</label>
         <input id="name" class="px-2" type="text" formControlName="name" [ngModel]="entity.name" />
       </fieldset>
-      <fieldset class="p-2 form-control">
-        <label for="position">Position:</label>
-        <input id="name" class="px-2" type="text" formControlName="position" [ngModel]="entity.position" />
-      </fieldset>
+      <ng-container *ngIf="!entity.companyId">
+        <fieldset class="p-2 form-control">
+          <label for="position">Position:</label>
+          <input id="name" class="px-2" type="text" formControlName="position" [ngModel]="entity.position" />
+        </fieldset>
+      </ng-container>
       <fieldset class="p-2 form-control">
         <label for="address">Address:</label>
         <input id="name" class="px-2" type="text" formControlName="address" [ngModel]="entity.address" />

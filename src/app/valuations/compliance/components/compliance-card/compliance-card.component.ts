@@ -28,18 +28,20 @@ export class ComplianceCardComponent implements OnInit {
   })
 
   pillClass: string
-  items: MenuItem[] = []
+  menuItems: MenuItem[] = []
   dialogs = {
     showRemoveDialog: false,
     showEditDialog: false
   }
   moment = moment
   pillLabel: string
+  editEntityHeader: string = ' edit me'
 
   constructor() {}
 
   ngOnInit(): void {
     this.buildPills()
+    this.buildEntityEditHeader()
     this.setMenuItems()
   }
 
@@ -54,7 +56,7 @@ export class ComplianceCardComponent implements OnInit {
   }
 
   private setMenuItems() {
-    const items = [
+    const menuItems = [
       {
         label: `Edit ${this.entity.companyId ? 'company' : 'contact'}`,
         icon: 'fa fa-edit',
@@ -65,7 +67,7 @@ export class ComplianceCardComponent implements OnInit {
     ]
     if (!this.entity.isMain) {
       // the main contact should not be deletable!
-      items.push({
+      menuItems.push({
         label: `Remove ${this.entity.companyId ? 'company' : 'contact'}`,
         icon: 'fa fa-times',
         command: () => {
@@ -75,7 +77,7 @@ export class ComplianceCardComponent implements OnInit {
     }
     if (this.entity.companyId) {
       // only businesses can have UBO status
-      items.push({
+      menuItems.push({
         label: this.entity.isUBO ? 'Remove as UBO' : 'Make UBO',
         icon: this.entity.isUBO ? 'fa fa-toggle-off' : 'fa fa-toggle-on',
         command: () => {
@@ -84,7 +86,11 @@ export class ComplianceCardComponent implements OnInit {
         }
       })
     }
-    this.items = items
+    this.menuItems = menuItems
+  }
+
+  private buildEntityEditHeader() {
+    this.editEntityHeader = this.entity.companyId ? 'Edit Company' : 'Edit Contact'
   }
 
   public confirmDelete(): void {
