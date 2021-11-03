@@ -23,7 +23,7 @@ import {
   OfficeMember,
   ValuersAvailabilityOption,
   ValuationStaffMembersCalanderEvents,
-  ValuationBooking,
+  ValuationBooking
 } from '../shared/valuation'
 import { Instruction } from 'src/app/shared/models/instruction'
 import { ResultData } from 'src/app/shared/result-data'
@@ -40,6 +40,7 @@ import { Person } from 'src/app/shared/models/person'
 import moment from 'moment'
 import { eSignTypes } from 'src/app/core/shared/eSignTypes'
 import { ValuationFacadeService } from '../shared/valuation-facade.service'
+import { enumDepartments } from 'src/app/core/shared/departments'
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -87,8 +88,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   instruction: Instruction
   originTypes: InfoDetail[] = []
   allOrigins: InfoDetail[] = []
-  origins: InfoDetail[] = []
-  origin: string
   valuers: Valuer[] = []
   lettingsValuers: OfficeMember[] = []
   salesValuers: OfficeMember[] = []
@@ -96,8 +95,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   // valuers: BaseStaffMember[] = [];
   showDateAndDuration: boolean
   hasDateWithValuer = false
-  activeOriginId: InfoDetail
-  showOriginId: boolean
   allOriginTypes: InfoDetail[] = []
   associateTypes: InfoDetail[] = []
   isSelectingDate = false
@@ -105,7 +102,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   currentStaffMember: StaffMember
   isClientService: boolean
   activeOriginTypes: InfoDetail[] = []
-  isOriginUnknown = false
   salesValuerLabel: string
   lettingsValuerLabel: string
   isSalesAndLettings: boolean
@@ -167,10 +163,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   lettingsValuer: BaseStaffMember
   salesValuer: BaseStaffMember
   bookingButtonLabel = 'Book For Sales and Lettings'
-  propertyTypes: any[]
-  propertyStyles: any[]
-  propertyFloors: any[]
-  allPropertyStyles: any[]
+  propertyTypes: InfoDetail[]
+  propertyStyles: InfoDetail[]
+  propertyFloors: InfoDetail[]
+  allPropertyStyles: InfoDetail[]
   activeValuations: Valuation[] = []
   isActiveValuationsVisible = false
   isCanDeactivate = false
@@ -230,15 +226,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     return null
   }
 
-  get originTypeControl() {
-    return this.valuationForm.get('originType') as FormControl
-  }
   get valuationTypeControl() {
     return this.availabilityForm.get('type') as FormControl
   }
-  get originIdControl() {
-    return this.valuationForm.get('originId') as FormControl
-  }
+
   get salesValuerIdControl() {
     return this.availabilityForm.get('salesValuerId') as FormControl
   }
@@ -369,22 +360,22 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this._valuationFacadeSvc.landRegisterValid.next(false)
     this.primengConfig.ripple = true
     this.setupForm()
+
+    // todo checking client service
     this.storage.get('currentUser').subscribe((currentStaffMember: StaffMember) => {
       if (currentStaffMember) {
         this.currentStaffMember = currentStaffMember
-        // for testing purposes
-        if (currentStaffMember.activeDepartments[0].departmentId === 90) {
+        if (
+          currentStaffMember.activeDepartments[0].departmentId === enumDepartments.corporate_services ||
+          currentStaffMember.activeDepartments[0].departmentId === enumDepartments.BDD
+        ) {
           this.isClientService = true
-          this.setOriginTypeValidator()
-          this.setOriginIdValidator()
         } else {
           this.isClientService = false
-          this.isOriginUnknown = true
-          this.originIdControl.setValue(1)
-          this.origin = 'Not Known'
         }
       }
     })
+
     this.setupInstructionForm()
     this.valuationId = +this.route.snapshot.paramMap.get('id')
     this.propertyId = +this.route.snapshot.queryParamMap.get('propertyId')
@@ -398,7 +389,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.valuationId) {
       this.getValuation(this.valuationId)
     } else {
-      this.valuation = { valuationStatus: ValuationStatusEnum.None, valuationStatusDescription: 'New' }
+      this.valuation = {
+        valuationStatus: ValuationStatusEnum.None,
+        valuationStatusDescription: 'New',
+        originId: this.originId | 0,
+        originTypeId: 0
+      }
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0)
       if (this.propertyId) {
         this.controlPreviousValuations(this.propertyId)
@@ -699,11 +695,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.statuses.find((x) => x.value == 9).isValid = false
       }
     }
-
-    // termsOfBusinessBs = new BehaviorSubject(false);
-    // antiMoneyLaunderingStatusBs = new BehaviorSubject(false);
-    // landRegistryStatusBs = new BehaviorSubject(false);
-    // complianceCheckStatusBs = new BehaviorSubject(false);
   }
 
   setScrollInformation() {
@@ -944,13 +935,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.outsideSpaces = info.outsideSpaces
     this.parkings = info.parkings
     this.features = info.propertyFeatures
-    this.allOrigins = info.origins
+    this.allOrigins = info.origins.filter((x) => x.isActive)
     this.allOriginTypes = info.originTypes
-    this.setOriginTypes(info.originTypes) // TODO: Issue on refresh
     this.interestList = info.section21Statuses
     this.associateTypes = info.associations
     this.propertyTypes = [{ id: 0, value: ' ' }, ...info.propertyTypes]
-    this.allPropertyStyles = [info.propertyStyles]
+    this.allPropertyStyles = [{ id: 0, value: ' ' }, ...info.propertyStyles]
     this.propertyStyles = [{ id: 0, value: ' ' }, ...info.propertyStyles]
     this.propertyFloors = info.propertyFloors
   }
@@ -1005,6 +995,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } as BaseProperty
     this.valuationForm.get('property').setValue(baseProperty)
 
+    this.onPropertyType(this.property.propertyTypeId)
     this.valuationForm.patchValue({
       propertyStyleId: this.property.propertyStyleId,
       propertyTypeId: this.property.propertyTypeId,
@@ -1318,16 +1309,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.populateForm(this.valuation)
         this.setupInitialRentFigures(this.valuation)
 
-        if (this.valuation && this.allOrigins) {
-          this.activeOriginId = this.allOrigins.find((x) => x.id === +this.valuation.originId)
-          this.activeOriginId && !this.isEditable ? (this.showOriginId = true) : (this.showOriginId = false)
-          this.setOriginIdValue(this.valuation.originId)
-        }
-
-        if (this.valuation && this.allOrigins && this.originTypes) {
-          this.setOriginTypeId(this.valuation.originId)
-        }
-
         this.isAllowedForValueChangesSubscription = this.staffMemberService
           .hasCurrentUserValuationCreatePermission()
           .subscribe((userHasPermission: boolean) => {
@@ -1493,10 +1474,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         ccOwner: valuation.ccOwner
       }
 
+      this.onPropertyType(valuation.property?.propertyTypeId)
+
       this.valuationForm.patchValue({
         property: valuation.property,
         propertyOwner: valuation.propertyOwner,
-        originId: !!this.activeOriginId ? valuation.originId : 0,
         reason: valuation.reason,
         timeFrame: valuation.timeFrame,
         generalNotes: valuation.generalNotes,
@@ -1675,11 +1657,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  setOriginTypes(allOriginTypes: InfoDetail[]) {
-    this.activeOriginTypes = allOriginTypes.filter((x: InfoDetail) => x.isActive)
-    // this.isNewValuation ? this.originTypes = this.activeOriginTypes : this.originTypes = allOriginTypes;
-  }
-
   ageColor(value: any): string {
     if (value >= 0) {
       if (value < 4) return 'green'
@@ -1687,53 +1664,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       return 'red'
     }
     return null
-  }
-
-  onSelectType(originTypeId: number) {
-    this.showOriginId = true
-    const allOrigins = this.allOrigins.filter((x: InfoDetail) => +x.parentId === +originTypeId)
-    const activeOrigins = this.allOrigins.filter((x: InfoDetail) => +x.parentId === +originTypeId && x.isActive)
-    // this.isNewValuation ? this.origins = activeOrigins : this.origins = allOrigins;
-    this.origins = activeOrigins
-    this.valuationForm.get('originId').setValue(0)
-  }
-
-  setOriginIdValue(id: number) {
-    if (id) {
-      this.allOrigins.forEach((x) => {
-        if (+x.id === id && this.isClientService && !this.isEditable) {
-          this.origin = x.value
-        }
-      })
-    }
-  }
-
-  setOriginTypeId(originId: number) {
-    if (originId) {
-      this.allOrigins.forEach((x) => {
-        if (+x.id === originId) {
-          if (this.activeOriginTypes.find((t) => +t.id === x.parentId)) {
-            this.valuationForm.get('originType').setValue(x.parentId)
-            this.onSelectType(x.parentId)
-            this.valuationForm.get('originId').setValue(originId)
-          } else {
-            this.addInactiveOriginType(x)
-          }
-        }
-      })
-    }
-  }
-
-  private addInactiveOriginType(origin: InfoDetail) {
-    const originType = this.allOriginTypes.find((t) => +t.id === origin.parentId)
-    const originId = this.allOrigins.find((o) => +o.id === origin.id)
-    if (originType) {
-      this.activeOriginTypes.push(originType)
-      this.valuationForm.get('originType').setValue(originType.id)
-      this.onSelectType(origin.parentId)
-      this.valuationForm.get('originId').setValue(origin.id)
-      this.origins.push(originId)
-    }
   }
 
   controlPreviousValuations(propertyId) {
@@ -2086,7 +2016,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   onPropertyType(value) {
-    this.propertyStyles = this.allPropertyStyles?.filter((x: InfoDetail) => +x.parentId === +value)
+    this.propertyStyles = this.allPropertyStyles.filter((x) => x.id == 0 || x.parentId == value)
 
     if (value == PropertyType.House) {
       this.valuationForm.controls['propertyFloorId'].setValue(null)
@@ -2399,26 +2329,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  private setOriginTypeValidator() {
-    if (this.originTypeControl) {
-      this.originTypeControl.setValidators([Validators.required, Validators.min(1)])
-      this.originTypeControl.updateValueAndValidity()
-    } else {
-      this.originTypeControl.clearValidators()
-      this.originTypeControl.updateValueAndValidity()
-    }
-  }
-
-  private setOriginIdValidator() {
-    if (this.originIdControl) {
-      this.originIdControl.setValidators([Validators.required, Validators.min(1)])
-      this.originIdControl.updateValueAndValidity()
-    } else {
-      this.originIdControl.clearValidators()
-      this.originIdControl.updateValueAndValidity()
-    }
-  }
-
   saveInstruction() {
     this.setAgencyTypeValidator()
     this.setInstructionFormValidators()
@@ -2505,10 +2415,28 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
+  checkOriginBookedBy(): boolean {
+    if (
+      (this.valuation.originTypeId == 13 || this.valuation.originTypeId == 14) &&
+      !(this.valuation.bookedBy && this.valuation.bookedBy.staffMemberId > 0)
+    )
+      return false
+
+    return true
+  }
+
   saveValuation() {
-    // console.log("saveValuation");
     this.checkAvailabilityBooking()
     this.setValuersValidators()
+
+    if (!this.checkOriginBookedBy() || !(this.valuation.originId > 0)) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'You must complete origin information!',
+        closable: false
+      })
+      return
+    }
 
     if (!this.lastKnownOwner) {
       this.messageService.add({
@@ -2597,6 +2525,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     valuation.propertyOwner = this.lastKnownOwner
     valuation.OfficeId = this.property.officeId
     valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate
+    valuation.originId = this.valuation.originId
+    valuation.bookedBy = this.valuation.bookedBy
 
     valuation.isPowerOfAttorney =
       this.adminContact && this.adminContact.contactGroupId > 0 ? this.adminContact?.isPowerOfAttorney : false

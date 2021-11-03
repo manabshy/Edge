@@ -32,7 +32,8 @@ export interface Valuation extends ValuationInfo {
   sqFt?: number
   tenureId?: number
   originId?: number
-  bookedBy?: BaseStaffMember
+  bookedBy?: StaffMember
+  originTypeId?: number
   approxLeaseExpiryDate?: Date
   outsideSpace?: any
   parking?: any
