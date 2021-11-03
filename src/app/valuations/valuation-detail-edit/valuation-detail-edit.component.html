@@ -176,7 +176,8 @@
           <ng-container *ngIf="property">
             <p-accordion [multiple]="true">
               <div class="mr-8 md:m-0">
-                <div class="mb-5" (click)="controlIsCancelled($event,!canSaveValuation);">
+                <div class="mb-5" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
+                  (click)="controlIsCancelled($event, isCancelled)">
                   <app-valuation-origin [allOriginTypes]="allOriginTypes" [allOrigins]="allOrigins"
                     [isClientService]="isClientService" [(valuation)]="valuation" [leadTypeId]="leadTypeId">
                   </app-valuation-origin>
@@ -924,6 +925,21 @@
   class="modal--medium modal--hasFooter">
   <app-contact-group-finder (selectedContactGroup)="getSelectedOwner($event)" [showCreateNewCompanyContact]="true"
     (isCreatingNewGroup)="createNewLastKnownOwner()"></app-contact-group-finder>
+</p-dialog>
+
+<p-dialog [(visible)]="hasLiveInstruct" [modal]="true" [draggable]="false" class="modal--xsmall modal--hasFooter">
+  <p-header class="row">
+    <p class="text-lg text-red-900">Error</p>
+  </p-header>
+  <p data-cy="activeInstructionMessage">
+    This Property already has a live {{instructionTypeMessage}} ticket. Please complete or withdraw the existing
+    instruction ticket before you crete a new one.
+  </p>
+  <footer class="footer--modal">
+    <div class="btn--container">
+      <button type="button" class="btn btn--ghost" (click)="hasLiveInstruct = false">Cancel</button>
+    </div>
+  </footer>
 </p-dialog>
 
 <!-- Contactgroup Finder for admin contact Modal -->
