@@ -700,23 +700,16 @@
                   </div>
                 </p-accordionTab>
 
-                <p-accordionTab
-                  header="Values"
-                  [(selected)]="activeState[3]"
-                  *ngIf="areValuesVisible"
-                  data-cy="valuationValues"
-                >
-                  <div class="w-full flex flex-row">
+                <p-accordionTab header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible"
+                  data-cy="valuationValues">
+                  <div class="flex flex-row w-full">
                     <span class="flex-1"></span>
                     <ng-container *ngIf="isAllowedForValueChanges">
                       <app-menu [menuItems]="valueMenuItems"></app-menu>
                     </ng-container>
                   </div>
-                  <div
-                    id="valuesTab"
-                    [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
-                    (click)="controlIsCancelled($event, isCancelled)"
-                  >
+                  <div id="valuesTab" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
+                    (click)="controlIsCancelled($event, isCancelled)">
                     <ol class="mb-4 cards" [ngStyle]="{ 'grid-gap': !isEditable && !isNewValuation ? '30px' : '' }">
                       <li *ngIf="
                           (valuation?.salesValuationBooking && isEditable) ||
@@ -929,7 +922,8 @@
 
 <p-dialog [(visible)]="hasLiveInstruct" [modal]="true" [draggable]="false" class="modal--xsmall modal--hasFooter">
   <p-header class="row">
-    <p class="text-lg text-red-900">Error</p>
+    <p class="text-lg" [ngClass]="{'text-red-900':!liveInstructWarning,'text-yellow-900':liveInstructWarning}">
+      {{liveInstructHeader}}</p>
   </p-header>
   <p data-cy="activeInstructionMessage">
     This Property already has a live {{instructionTypeMessage}} ticket. Please complete or withdraw the existing
@@ -938,6 +932,9 @@
   <footer class="footer--modal">
     <div class="btn--container">
       <button type="button" class="btn btn--ghost" (click)="hasLiveInstruct = false">Cancel</button>
+      <button type="button" class="btn btn--positive" (click)="goInstruction()" data-cy="startInstruction">
+        Instruct
+      </button>
     </div>
   </footer>
 </p-dialog>
