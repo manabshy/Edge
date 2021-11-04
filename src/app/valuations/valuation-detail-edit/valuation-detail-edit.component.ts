@@ -201,6 +201,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isAllowedForValueChangesSubscription = new Subscription()
   isEditValueActive = false
   hasLiveInstruct = false
+  liveInstructWarning = false
+  liveInstructHeader = 'Error'
   instructionTypeMessage: string
   valueMenuItems: MenuItem[] = [
     {
@@ -2182,7 +2184,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
 
     this.propertyService
-      .getPropertyInstructions(this.propertyId, false)
+      .getPropertyInstructions(this.propertyId, true)
       .toPromise()
       .then((data) => {
         if (data && data.length > 0) {
@@ -2190,28 +2192,42 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           if (data.findIndex((x) => x.type == 'Sales' || x.type == 'sales') > -1) {
             this.instructionTypeMessage = 'sales instruction'
           } else {
-            this.instructionTypeMessage = 'lettings instruction'
+            if (data.filter((x) => x.status == 'UO' || x.status == 'EXCH' || x.status == 'LET').length == data.length) {
+              this.liveInstructWarning = true
+              this.liveInstructHeader = 'Warning'
+            } else {
+              this.liveInstructWarning = false
+            }
           }
         } else {
-          let val: Valuation
-          val = { ...this.valuation, ...this.valuationForm.value }
-
-          const instruction = {
-            valuationEventId: val.valuationEventId,
-            salesAgencyType: '',
-            lettingsAgencyType: '',
-            askingPrice: val.suggestedAskingPrice,
-            askingRentShortLet: val.suggestedAskingRentShortLet,
-            askingRentLongLet: val.suggestedAskingRentLongLet,
-            askingRentShortLetMonthly: val.suggestedAskingRentShortLetMonthly,
-            askingRentLongLetMonthly: val.suggestedAskingRentLongLetMonthly
-          } as Instruction
-          this.instruction = instruction
-          this.isInstructVisible = true
-          this.populateInstructionForm(instruction)
-          this.setInstructionFlags(instruction)
+          this.openInstructionForm()
         }
       })
+  }
+
+  openInstructionForm() {
+    this.hasLiveInstruct = false
+    let val: Valuation
+    val = { ...this.valuation, ...this.valuationForm.value }
+
+    const instruction = {
+      valuationEventId: val.valuationEventId,
+      salesAgencyType: '',
+      lettingsAgencyType: '',
+      askingPrice: val.suggestedAskingPrice,
+      askingRentShortLet: val.suggestedAskingRentShortLet,
+      askingRentLongLet: val.suggestedAskingRentLongLet,
+      askingRentShortLetMonthly: val.suggestedAskingRentShortLetMonthly,
+      askingRentLongLetMonthly: val.suggestedAskingRentLongLetMonthly
+    } as Instruction
+    this.instruction = instruction
+    this.isInstructVisible = true
+    this.populateInstructionForm(instruction)
+    this.setInstructionFlags(instruction)
+  }
+
+  goInstruction() {
+    this.openInstructionForm()
   }
 
   setInstructionFlags(instruction: Instruction) {
