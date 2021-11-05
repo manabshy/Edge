@@ -397,7 +397,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         valuationStatus: ValuationStatusEnum.None,
         valuationStatusDescription: 'New',
         originId: this.originId | 0,
-        originTypeId: 0
+        originTypeId: 0,
+        bookedBy: this.isClientService == true ? this.currentStaffMember : null
       }
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0)
       if (this.propertyId) {
@@ -940,7 +941,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.parkings = info.parkings
     this.features = info.propertyFeatures
     this.allOrigins = info.origins.filter((x) => x.isActive)
-    this.allOriginTypes = info.originTypes
+    this.allOriginTypes = info.originTypes.filter((x) => x.id == 12 || x.id == 13 || x.id == 14)
     this.interestList = info.section21Statuses
     this.associateTypes = info.associations
     this.propertyTypes = [{ id: 0, value: ' ' }, ...info.propertyTypes]
@@ -2519,8 +2520,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     if (
       !(
-        this.valuationForm.controls['salesMeetingOwner'].value ||
-        this.valuationForm.controls['lettingsMeetingOwner'].value
+        this.valuationForm.controls['salesMeetingOwner'].value != null ||
+        this.valuationForm.controls['lettingsMeetingOwner'].value != null
       )
     ) {
       this.messageService.add({
