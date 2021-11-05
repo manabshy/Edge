@@ -538,7 +538,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       leadTypeId: ['', Validators.required],
       nextChaseDate: ['', [Validators.required, WedgeValidators.nextChaseDateValidator()]],
       closeLead: false,
-      originId: []
+      originId: [null]
     })
   }
 

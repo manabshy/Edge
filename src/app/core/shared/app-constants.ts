@@ -286,16 +286,19 @@ export const ValidationMessages = {
     nextChaseDatePassed: 'Next chase date cannot be in the past'
   },
   reason: {
-    required: 'Reason is required'
+    required: 'Reason is required',
+    maxlength: 'Reason must be less than 3000 characters'
   },
   timeFrame: {
-    required: 'Time frame is required'
+    required: 'Time frame is required',
+    maxlength: 'Time frame must be less than 3000 characters'
   },
   marketChat: {
     required: 'Market chat is required'
   },
   generalNotes: {
-    required: 'Property note is required'
+    required: 'Property note is required',
+    maxlength: 'Property note must be less than 3000 characters'
   },
   approxLeaseExpiryDate: {
     min: 'Approximate lease length cannot be less than 0',
