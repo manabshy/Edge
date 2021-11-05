@@ -1294,9 +1294,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         }
 
         if (this.valuation.property) {
-          this.lastKnownOwner = this.valuation.property.lastKnownOwner
-            ? this.valuation.property.lastKnownOwner
-            : this.valuation.propertyOwner
+          if (
+            this.valuation &&
+            (this.valuation.valuationStatus == ValuationStatusEnum.Closed ||
+              this.valuation.valuationStatus == ValuationStatusEnum.Cancelled ||
+              this.valuation.valuationStatus == ValuationStatusEnum.Instructed)
+          ) {
+            this.lastKnownOwner = this.valuation?.propertyOwner
+          } else {
+            this.lastKnownOwner = this.valuation.property.lastKnownOwner
+              ? this.valuation.property.lastKnownOwner
+              : this.valuation.propertyOwner
+          }
 
           this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner)
 
