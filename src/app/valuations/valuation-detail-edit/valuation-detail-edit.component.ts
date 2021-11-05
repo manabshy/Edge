@@ -1227,14 +1227,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
                 ? this.valuation.cancellationReason
                 : this.removeUnderLine(ValuationCancellationReasons[this.valuation.cancellationTypeId]))
           } else {
-            this.cancelString = 'Closed'
+            this.cancelString = this.valuation.cancellationReason
           }
         }
 
         if (
           this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
           this.valuation.valuationStatus === ValuationStatusEnum.Valued ||
-          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
+          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Closed
         ) {
           this.isEditable = false
         } else {
@@ -1243,7 +1244,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
         if (
           this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
-          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
+          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Closed
         ) {
           this.isPropertyInfoDisabled = true
           this.canSaveValuation = false
