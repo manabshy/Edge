@@ -21,8 +21,7 @@ import { ValuationApiHelperService } from './valuation-api-helper.service'
   providedIn: 'root'
 })
 export class ValuationApiService {
-
-    constructor(private http: HttpClient, private helperSvc: ValuationApiHelperService) {}
+  constructor(private http: HttpClient, private helperSvc: ValuationApiHelperService) {}
 
   getValuations(request: ValuationRequestOption): Observable<Valuation[] | any> {
     console.log('request for valuations query: ', request)
@@ -138,6 +137,17 @@ export class ValuationApiService {
       .pipe(
         map((response) => response.result),
         tap((data) => console.log('availability', JSON.stringify(data)))
+      )
+  }
+
+  getValuersCalendarAvailability(availability: ValuersAvailabilityOption): Observable<CalendarAvailibility | any> {
+    const options = this.helperSvc.setAvailabilityQueryParams(availability)
+    const url = `${AppConstants.baseValuationUrl}/valuers/calendar-availability`
+    return this.http
+      .get<any>(url, { params: options })
+      .pipe(
+        map((response) => response.result),
+        tap((data) => console.log('calendar-availability', JSON.stringify(data)))
       )
   }
 
