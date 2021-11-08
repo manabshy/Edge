@@ -397,7 +397,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         valuationStatus: ValuationStatusEnum.None,
         valuationStatusDescription: 'New',
         originId: this.originId | 0,
-        originTypeId: 0
+        originTypeId: 0,
+        bookedBy: this.isClientService == true ? this.currentStaffMember : null
       }
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0)
       if (this.propertyId) {
@@ -940,7 +941,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.parkings = info.parkings
     this.features = info.propertyFeatures
     this.allOrigins = info.origins.filter((x) => x.isActive)
-    this.allOriginTypes = info.originTypes
+    this.allOriginTypes = info.originTypes.filter((x) => x.id == 12 || x.id == 13 || x.id == 14)
     this.interestList = info.section21Statuses
     this.associateTypes = info.associations
     this.propertyTypes = [{ id: 0, value: ' ' }, ...info.propertyTypes]
@@ -1111,9 +1112,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       propertyOwner: [''],
       originType: [0],
       originId: [0],
-      reason: ['', Validators.required],
-      timeFrame: ['', Validators.required],
-      generalNotes: ['', Validators.required],
+      reason: ['', [Validators.required, Validators.maxLength(3000)]],
+      timeFrame: ['', [Validators.required, Validators.maxLength(3000)]],
+      generalNotes: ['', [Validators.required, Validators.maxLength(3000)]],
       bedrooms: [0, Validators.max(99)],
       bathrooms: [0, Validators.max(99)],
       receptions: [0, Validators.max(99)],
@@ -1226,14 +1227,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
                 ? this.valuation.cancellationReason
                 : this.removeUnderLine(ValuationCancellationReasons[this.valuation.cancellationTypeId]))
           } else {
-            this.cancelString = 'Closed'
+            this.cancelString = this.valuation.cancellationReason
           }
         }
 
         if (
           this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
           this.valuation.valuationStatus === ValuationStatusEnum.Valued ||
-          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
+          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Closed
         ) {
           this.isEditable = false
         } else {
@@ -1242,7 +1244,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
         if (
           this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
-          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
+          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Closed
         ) {
           this.isPropertyInfoDisabled = true
           this.canSaveValuation = false
@@ -1291,9 +1294,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         }
 
         if (this.valuation.property) {
-          this.lastKnownOwner = this.valuation.property.lastKnownOwner
-            ? this.valuation.property.lastKnownOwner
-            : this.valuation.propertyOwner
+          if (
+            this.valuation &&
+            (this.valuation.valuationStatus == ValuationStatusEnum.Closed ||
+              this.valuation.valuationStatus == ValuationStatusEnum.Cancelled ||
+              this.valuation.valuationStatus == ValuationStatusEnum.Instructed)
+          ) {
+            this.lastKnownOwner = this.valuation?.propertyOwner
+          } else {
+            this.lastKnownOwner = this.valuation.property.lastKnownOwner
+              ? this.valuation.property.lastKnownOwner
+              : this.valuation.propertyOwner
+          }
 
           this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner)
 
@@ -1517,8 +1529,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           : 0,
         declarableInterest: valuation.declarableInterest?.toString(),
         section21StatusId: valuation.section21StatusId,
-        salesMeetingOwner: this.salesMeetingOwner ? this.salesMeetingOwner : null,
-        lettingsMeetingOwner: this.lettingsMeetingOwner ? this.lettingsMeetingOwner : null,
+        salesMeetingOwner: this.salesMeetingOwner,
+        lettingsMeetingOwner: this.lettingsMeetingOwner,
         salesOwnerAssociateName: this.salesOwnerAssociateName,
         salesOwnerAssociateContactNumber: this.salesOwnerAssociateContactNumber,
         salesOwnerAssociateEmail: this.salesOwnerAssociateEmail,
@@ -2519,8 +2531,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     if (
       !(
-        this.valuationForm.controls['salesMeetingOwner'].value ||
-        this.valuationForm.controls['lettingsMeetingOwner'].value
+        this.valuationForm.controls['salesMeetingOwner'].value != null ||
+        this.valuationForm.controls['lettingsMeetingOwner'].value != null
       )
     ) {
       this.messageService.add({
