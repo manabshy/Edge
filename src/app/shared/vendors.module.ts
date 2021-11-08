@@ -18,7 +18,7 @@ import { CarouselModule } from "ngx-bootstrap/carousel";
 // vendor
 import { OrderModule } from "ngx-order-pipe";
 import { ToastrModule, ToastContainerModule } from "ngx-toastr";
-import { AgmCoreModule } from "@agm/core";
+// import { AgmCoreModule } from "@agm/core";
 import { LoadingBarHttpClientModule } from "@ngx-loading-bar/http-client";
 import { AngularStickyThingsModule } from "@w11k/angular-sticky-things";
 import { NgSelectModule } from "@ng-select/ng-select";
@@ -71,7 +71,7 @@ const externalModules = [
   OrderModule,
   ToastrModule,
   ToastContainerModule,
-  AgmCoreModule,
+  // AgmCoreModule,
   CarouselModule,
   NgbModule,
   LoadingBarHttpClientModule,
