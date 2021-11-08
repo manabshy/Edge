@@ -293,6 +293,6 @@ export class ContactgroupsDetailComponent
   }
   ngOnDestroy() {
     this.sidenavService.resetCurrentFlag();
-    this.destroy.next();
+    this.destroy.next(true);
   }
 }

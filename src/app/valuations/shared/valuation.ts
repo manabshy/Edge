@@ -1,7 +1,5 @@
 import { StaffMember } from './../../shared/models/staff-member'
-
 import { DiaryEvent } from 'src/app/diary/shared/diary'
-import { BaseProperty } from 'src/app/shared/models/base-property'
 import { BaseRequestOption } from 'src/app/shared/models/base-request-option'
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member'
 import { Property } from 'src/app/property/shared/property'
@@ -63,7 +61,7 @@ export interface Valuation extends ValuationInfo {
   isPowerOfAttorney?: boolean
   ccOwner?: boolean
   adminContact?: Signer
-  valuationFiles?: ValuationFile[]
+  eSignSignatureTob?: eSignTermsOfBusinessDoc
   valuationType?: ValuationTypeEnum
   dateRequestSent?: Date
   cancellationReason?: string
@@ -78,7 +76,25 @@ export interface Valuation extends ValuationInfo {
   userEnteredOwner?: string
   leaseExpiryDate?: Date
   complianceCheck?: ComplianceChecksStatus
+  personDocuments?: any
+  companyDocuments?: any
   lockDate?: Date
+}
+
+export interface eSignTermsOfBusinessDoc {
+  toBLetting?: ToBDocument
+  toBSale?: ToBDocument
+  dateRequestSent: Date
+}
+
+export interface ToBDocument {
+  isLongLetInstruction: boolean
+  isManagement: boolean
+  isShortLetInstruction: boolean
+  signatureFile: EdgeFile
+  signedOn: Date
+  zeroDepositAccepted: boolean
+  instructionPriceDirection?: string
 }
 
 export interface ComplianceChecksStatus {

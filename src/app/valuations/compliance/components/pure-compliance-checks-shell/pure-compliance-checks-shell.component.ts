@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges, OnInit } from '@angular/core'
-import { Observable, of } from 'rxjs'
 import { ContactGroup, PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-group'
+import { Observable, of } from 'rxjs'
 
 @Component({
   selector: 'app-pure-compliance-checks-shell',
