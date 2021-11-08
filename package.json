@@ -15,7 +15,8 @@
     "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
     "serve-storybook": "npm run ng lint && start-storybook -p 6006",
     "storybook": "npm run docs:json && start-storybook -p 6006",
-    "build-storybook": "npm run docs:json && build-storybook"
+    "build-storybook": "npm run docs:json && build-storybook",
+    "updateNg":"ng update @angular/cli@12"
   },
   "private": true,
   "dependencies": {
