@@ -6,7 +6,7 @@ describe('Leads register should', () => {
   const dateTo = '21/09/2020';
 
   beforeEach(() => {
-    cy.visit('/leads-register');
+    cy.visit('/leads');
   });
 
   // xit('search for leads using a search term and lead type', () => {

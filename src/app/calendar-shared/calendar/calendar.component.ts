@@ -448,7 +448,7 @@ export class CalendarComponent
       ) {
         this.router.navigate(
           [
-            "/valuations-register/detail",
+            "/valuations/detail",
             clickedEvent.properties[0].propertyEventId,
             "edit",
           ],

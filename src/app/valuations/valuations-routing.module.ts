@@ -1,44 +1,44 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-import { ValuationsComponent } from "./valuations.component";
-import { ValuationDetailEditComponent } from "./valuation-detail-edit/valuation-detail-edit.component";
-import { CanDeactivateGuard } from "../core/shared/can-deactivate.guard";
+import { NgModule } from '@angular/core'
+import { Routes, RouterModule } from '@angular/router'
+import { ValuationsComponent } from './valuations.component'
+import { ValuationDetailEditComponent } from './valuation-detail-edit/valuation-detail-edit.component'
+import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard'
 
 const routes: Routes = [
   {
-    path: "",
+    path: '',
     component: ValuationsComponent,
-    data: { shouldDetach: true, title: "Valuations Register" },
+    data: { shouldDetach: true, title: 'Valuations' }
   },
   {
-    path: "detail/:id",
+    path: 'detail/:id',
     children: [
       {
-        path: "edit",
+        path: 'edit',
         component: ValuationDetailEditComponent,
         data: {
           shouldDetach: false,
-          title: "Valuation",
-          showMenuEditItem: true,
+          title: 'Valuation',
+          showMenuEditItem: true
         },
-        canDeactivate: [CanDeactivateGuard],
+        canDeactivate: [CanDeactivateGuard]
       },
       {
-        path: "cancelled",
+        path: 'cancelled',
         component: ValuationDetailEditComponent,
         data: {
           shouldDetach: false,
-          title: "Valuation",
-          showMenuEditItem: false,
+          title: 'Valuation',
+          showMenuEditItem: false
         },
-        canDeactivate: [CanDeactivateGuard],
-      },
-    ],
-  },
-];
+        canDeactivate: [CanDeactivateGuard]
+      }
+    ]
+  }
+]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class ValuationsRoutingModule {}

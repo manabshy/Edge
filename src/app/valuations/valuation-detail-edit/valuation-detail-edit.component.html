@@ -850,10 +850,14 @@
                   <div id="termsOfBusinessTab"
                     [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled || isTermsOfBusinessDisabled }"
                     (click)="controlIsCancelled($event, isCancelled || isTermsOfBusinessDisabled)">
-                    <app-terms-of-business [valuationForm]="valuationForm" [interestList]="interestList"
-                      [valuationFiles]="valuation.valuationFiles" [formErrors]="formErrors"
-                      [tableType]="valuation.valuationType" [valuationStatus]="valuation.valuationStatus"
-                      [dateRequestSent]="valuation.dateRequestSent"></app-terms-of-business>
+                    <app-terms-of-business 
+                      [valuationData]="valuation" 
+                      [interestList]="interestList"
+                      [termsOfBusinessDocument]="valuation.eSignSignatureTob"
+                      (onSendTermsOfBusinessReminder)="onSendTermsOfBusinessReminder($event)"
+                      (onFileUploaded)="onTermsOfBusinessFileUploaded($event)"
+                      (onModelChange)="onUpdateToBForm($event)">
+                    </app-terms-of-business>
                   </div>
                 </p-accordionTab>
 
@@ -870,7 +874,8 @@
                 <p-accordionTab header="Compliance Checks" *ngIf="isLandRegisterVisible" [(selected)]="activeState[6]">
                   <div id="complianceChecksTab" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)">
-                    <app-compliance-checks-shell></app-compliance-checks-shell>
+                    <app-compliance-checks-shell>
+                    </app-compliance-checks-shell>
                   </div>
                 </p-accordionTab>
 

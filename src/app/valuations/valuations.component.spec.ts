@@ -43,8 +43,8 @@ describe('ValuationsComponent', () => {
               path: 'detail/:id',
               children: [{ path: 'edit', component: ValuationDetailEditComponent }]
             }
-            // { path: 'valuations-register/:detail/:id/edit', component: ValuationDetailEditComponent }
-            // TODO: add valuations-register to path
+            // { path: 'valuations/:detail/:id/edit', component: ValuationDetailEditComponent }
+            // TODO: add valuations to path
           ])
         ],
         declarations: [ValuationsComponent],

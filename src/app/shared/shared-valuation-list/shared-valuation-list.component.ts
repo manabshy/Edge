@@ -52,7 +52,7 @@ export class SharedValuationListComponent implements OnChanges {
   navigateToDetail(valuation: Valuation) {
     // Commented out for release : 08/04
     if (valuation) {
-      this.router.navigate(['valuations-register/detail/', valuation.valuationEventId, 'edit'])
+      this.router.navigate(['valuations/detail/', valuation.valuationEventId, 'edit'])
     }
   }
 

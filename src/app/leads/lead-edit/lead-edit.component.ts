@@ -616,7 +616,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     if (item === 'leads') {
       localStorage.setItem('currentUrl', this.router.url)
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-        this.router.navigate(['leads-register/edit', 0], {
+        this.router.navigate(['leads/edit', 0], {
           queryParams: {
             isNewLead: true,
             showNotes: true,
@@ -794,7 +794,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       console.log('current route BEFORE', this.currentUrl)
       if (this.exitOnSave && this.backToOrigin && this.leadId) {
         console.log('exist on save', this.exitOnSave)
-        this.router.navigate(['/leads-register/edit/', this.leadId], {
+        this.router.navigate(['/leads/edit/', this.leadId], {
           queryParams: {
             showNotes: true,
             isMyLead: true,
@@ -819,14 +819,14 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
 
       localStorage.setItem('currentUrl', this.router.url)
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-        this.router.navigate(['leads-register/edit', leadId], {
+        this.router.navigate(['leads/edit', leadId], {
           queryParams: this.leadsService.previousLeadQueryParam.value
         })
       )
     } else {
       this.isSubmitting = true
       this.validationService.clearFormValidators(this.leadEditForm, this.formErrors)
-      this.router.navigateByUrl('leads-register')
+      this.router.navigateByUrl('leads')
     }
   }
 
@@ -903,7 +903,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   replaceLeadIdInRoute(id: number) {
     this.leadSearchInfo.startLeadId = id
     if (id) {
-      this.router.navigate(['/leads-register/edit/', id], {
+      this.router.navigate(['/leads/edit/', id], {
         queryParams: {
           showNotes: true,
           showSaveAndNext: true,
@@ -951,7 +951,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       })
       return
     }
-    this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
+    this.router.navigate(['valuations/detail/', 0, 'edit'], {
       queryParams: {
         propertyId: propertyId,
         isNewValuation: true,

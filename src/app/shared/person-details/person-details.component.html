@@ -90,7 +90,7 @@
                   </li>
                   <li *ngIf="!isPersonInfoOnly" role="menuitem">
                     <a class="dropdown-item" (click)="$event.stopPropagation();"
-                      [routerLink]="['/leads-register/edit/', 0]"
+                      [routerLink]="['/leads/edit/', 0]"
                       [queryParams]="{isNewLead: true, personId: personDetails?.personId}">
                       <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
                         <path

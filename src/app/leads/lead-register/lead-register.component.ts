@@ -365,7 +365,7 @@ export class LeadRegisterComponent implements OnInit {
         leadSearchInfo: this.info,
       };
       this.leadService.previousLeadQueryParam.next(queryParams);
-      this.router.navigate(['/leads-register/edit', lead.leadId], {
+      this.router.navigate(['/leads/edit', lead.leadId], {
         queryParams: queryParams,
       });
     }
@@ -384,7 +384,7 @@ export class LeadRegisterComponent implements OnInit {
       this.leadSearchInfo = this.getSearchInfo(true);
     }
     const url = this.router.url;
-    const isLeadsRegister = url.endsWith('/leads-register');
+    const isLeadsRegister = url.endsWith('/leads');
 
     if (isLeadsRegister) {
       if (!this.bottomReached) {
