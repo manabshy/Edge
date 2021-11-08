@@ -1183,7 +1183,7 @@
                     <li *ngFor="let hours of key['hours']">
                       <button type="button" class="btn btn--ghost" [ngClass]="hours.class"
                         (click)="selectAvailableDate(hours); properties = null">
-                        {{ hours.value | date: 'HH:mm' }}
+                        {{ hours.clock | date: 'HH:mm' }}
                       </button>
                     </li>
                   </ol>
@@ -1202,7 +1202,7 @@
                     <li *ngFor="let hours of key['hours']">
                       <button type="button" class="btn btn--ghost" [ngClass]="hours.class"
                         (click)="selectAvailableDate(hours); properties = null">
-                        {{ hours.value | date: 'HH:mm' }}
+                        {{ hours.clock | date: 'HH:mm' }}
                       </button>
                     </li>
                   </ol>
@@ -1217,12 +1217,11 @@
                       {{ key['date'] | date: 'EEEE d/M/yy' }}
                     </app-subnav-item>
                   </div>
-                  <!-- <span class="txt--date">{{key['date'] | date:'fullDate'}}</span> -->
                   <ol class="cards cards--small">
                     <li *ngFor="let hours of key['hours']">
                       <button type="button" class="btn btn--ghost" [ngClass]="hours.class"
                         (click)="selectAvailableDate(hours); properties = null">
-                        {{ hours.value | date: 'HH:mm' }}
+                        {{ hours.clock | date: 'HH:mm' }}
                       </button>
                     </li>
                   </ol>
