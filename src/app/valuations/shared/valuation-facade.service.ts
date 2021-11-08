@@ -286,7 +286,7 @@ export class ValuationFacadeService {
     // .pipe(
     //   tap((res) => {
     //     console.log('in response from valuation PUT: ', res)
-        
+
     //   })
     // )
   }
@@ -305,6 +305,12 @@ export class ValuationFacadeService {
 
   public getValuersAvailability(availability: ValuersAvailabilityOption): Observable<CalendarAvailibility | any> {
     return this._apiSvc.getValuersAvailability(availability)
+  }
+
+  public getValuersCalendarAvailability(
+    availability: ValuersAvailabilityOption
+  ): Observable<CalendarAvailibility | any> {
+    return this._apiSvc.getValuersCalendarAvailability(availability)
   }
 
   // Extract to instruction service

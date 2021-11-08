@@ -112,7 +112,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   selectedValuerIdList = []
   selectedValuerId: number
   availabilityForm: FormGroup
-  availableDates: ValuationStaffMembersCalanderEvents
   canBookAppointment = true
   isAvailabilityRequired = false
   oldClass: string = 'null'
@@ -1795,7 +1794,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   getAvailability() {
-    this.availableDates = {} as any
     this.isAppointmentVisible = true
     this.sideBarControlVisible = true
     this.isSplitAppointment = false
@@ -1850,48 +1848,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   async getAvailableSlots(request) {
-    // user chooses both sales and lettings
-    let lettingsValuerId
-    let salesValuerId
-    lettingsValuerId = request.lettingsValuerId
-    if (request.salesValuerId) {
-      request.lettingsValuerId = null
-      await this._valuationFacadeSvc
-        .getValuersAvailability(request)
-        .toPromise()
-        .then((res) => {
-          this.salesValuerOpenSlots = res.valuationStaffMembersCalanderEvents
-          this.availableDates = { ...this.salesValuerOpenSlots }
-        })
-    }
-
-    request.lettingsValuerId = lettingsValuerId
-
-    if (request.lettingsValuerId) {
-      salesValuerId = request.salesValuerId
-      request.lettingsValuerId = lettingsValuerId
-      request.salesValuerId = null
-      await this._valuationFacadeSvc
-        .getValuersAvailability(request)
-        .toPromise()
-        .then((res) => {
-          this.lettingsValuerOpenSlots = res.valuationStaffMembersCalanderEvents
-          this.availableDates = { ...this.lettingsValuerOpenSlots }
-        })
-    }
-
-    request.salesValuerId = salesValuerId
-
-    if (request.salesValuerId && request.lettingsValuerId && request.salesValuerId != request.lettingsValuerId) {
-      this._valuationFacadeSvc.getValuersAvailability(request).subscribe((res) => {
-        this.availableDates = res.valuationStaffMembersCalanderEvents
-        this.setWeeks()
-        this.setFirstFreeSlot()
-      })
-    } else {
+    await this._valuationFacadeSvc.getValuersCalendarAvailability(request).subscribe((x) => {
+      this.thisWeek = x[0].days
+      this.nextWeek = x[1].days
+      this.nextTwoWeek = x[2].days
       this.setWeeks()
       this.setFirstFreeSlot()
-    }
+    })
   }
 
   setFirstFreeSlot() {
@@ -1907,20 +1870,20 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         firstAvailableSlot = this.nextTwoWeek[0]
       }
     }
-    this.selectedCalendarDate = firstAvailableSlot.date
+    this.selectedCalendarDate = new Date(firstAvailableSlot.date)
     this.showCalendar = true
     this.selectAvailableDate(firstAvailableSlot.hours[0])
   }
 
   setWeeks() {
-    this.thisWeek = []
-    this.nextWeek = []
-    this.nextTwoWeek = []
-
-    if (this.availableDates) {
-      this.thisWeek = this.setWeekData(this.availableDates.thisWeek)
-      this.nextWeek = this.setWeekData(this.availableDates.nextWeek)
-      this.nextTwoWeek = this.setWeekData(this.availableDates.next2Weeks)
+    if (this.thisWeek) {
+      this.setWeekData(this.thisWeek)
+    }
+    if (this.nextWeek) {
+      this.setWeekData(this.nextWeek)
+    }
+    if (this.nextTwoWeek) {
+      this.setWeekData(this.nextTwoWeek)
     }
   }
 
@@ -1936,8 +1899,23 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  setWeekData(allData: Date[]): any[] {
-    let weekData
+  setWeekData(allData: any[]) {
+    allData.forEach((x) => {
+      if (x.hours) {
+        x.hours.forEach((hour) => {
+          if (hour.isFirstAvailable == false && hour.isSecondAvailable == false) {
+            hour.class = 'hourColorsForBoth'
+          } else if (hour.isFirstAvailable == false) {
+            hour.class = 'hourColorsForSales'
+          } else if (hour.isSecondAvailable == false) {
+            hour.class = 'hourColorsForLettings'
+          }
+        })
+      }
+    })
+  }
+
+  /*    let weekData
     let hours: any[] = []
     let newData = []
     if (allData && allData.length > 0) {
@@ -1996,9 +1974,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
             hours: [...hours]
           })
       }
-    }
-    return newData
-  }
+    }*/
 
   findIndexSlot(date: Date, slots: ValuationStaffMembersCalanderEvents): number {
     let index = -1
@@ -2019,7 +1995,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   selectAvailableDate(hours) {
     if (hours) {
-      this.selectedDate = hours.value
+      this.selectedDate = new Date(hours.clock)
       this.selectCalendarDate(this.selectedDate)
       this.isAvailabilityRequired = false
 
@@ -2055,7 +2031,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   selectCalendarDate(date: Date) {
-    this.selectedCalendarDate = date
+    this.selectedCalendarDate = new Date(date)
     this.showCalendar = true
   }
 
