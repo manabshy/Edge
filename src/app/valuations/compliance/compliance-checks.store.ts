@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core'
 import { ComponentStore } from '@ngrx/component-store'
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs'
 import { mergeMap, tap, filter, switchMap, take, map } from 'rxjs/operators'
-import { setContactsForCompliance, buildPartialLoadState } from './compliance-checks.store-helpers'
+import { buildStoreState, buildEntitiesArray } from './compliance-checks.store-helpers'
 import { ComplianceChecksFacadeService } from './compliance-checks.facade.service'
 import { buildComplianceChecksStatusMessages, checkAllEntitiesHaveValidDocs } from './helpers/store-validation-helpers'
 import {
@@ -21,21 +21,20 @@ import {
   mapDocumentsForView
 } from './helpers/store-documents-helpers'
 import { ComplianceChecksState, FileUpdateEvent, FileDeletionPayload } from './compliance-checks.interfaces'
-import { Company, ContactGroup } from 'src/app/contact-groups/shared/contact-group'
+import { Company } from 'src/app/contact-groups/shared/contact-group'
 import { Person } from 'src/app/shared/models/person'
-import { Valuation } from '../shared/valuation'
 
 const defaultState: ComplianceChecksState = {
+  valuationEventId: null,
   contactGroupId: null,
   companyId: null,
-  valuationEventId: null,
   companyOrContact: '',
   checkType: '',
   isFrozen: null,
-  checksAreValid: null,
   compliancePassedDate: null,
   compliancePassedBy: '',
-  entities: []
+  entities: [],
+  checksAreValid: null
 }
 
 @Injectable()
@@ -84,7 +83,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   ]).pipe(
     filter(([entities]) => !!entities.length),
     tap(([entities, checkType, compliancePassedDate, compliancePassedBy]) => {
-      console.log('validationMessageData: ', compliancePassedDate, compliancePassedBy)
+      // console.log('validationMessageData: ', compliancePassedDate, compliancePassedBy)
       const validationMessageData = buildComplianceChecksStatusMessages(
         entities,
         checkType,
@@ -252,7 +251,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
 
   constructor(private _complianceChecksFacadeSvc: ComplianceChecksFacadeService) {
     super(defaultState)
-    this.loadStore()
+    // this.loadStore()
   }
 
   /***
@@ -261,55 +260,13 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    */
   loadStore = (): void => {
     console.log('loading compliance checks store ')
-    combineLatest([this._complianceChecksFacadeSvc.contactGroup$, this._complianceChecksFacadeSvc.valuation$])
+    combineLatest([this.newEntityStream$, this._complianceChecksFacadeSvc.valuation$])
       .pipe(
-        filter(([contactGroupData, valuation]: [ContactGroup, Valuation]) => !!valuation && !!contactGroupData),
         take(1),
-        tap(([contactGroupData, valuationData]) => {
-          // console.log('valuationData: ', valuationData)
-          this.patchState(buildPartialLoadState(contactGroupData.companyId, valuationData))
-        }),
-        mergeMap(([contactGroupData, valuation]) => {
-          if (contactGroupData.companyId) {
-            // contactGroupData required here in order to build company flavour of store
-            return combineLatest([
-              this._complianceChecksFacadeSvc.getCompanyDocsForValuation(
-                contactGroupData.contactGroupId,
-                valuation.valuationEventId
-              ),
-              this.compliancePassedDate$,
-              this.newEntityStream$
-            ])
-          } else if (valuation && valuation.propertyOwner) {
-            return combineLatest([
-              this._complianceChecksFacadeSvc.getPeopleDocsForValuation(
-                valuation.propertyOwner.contactGroupId,
-                valuation.valuationEventId
-              ),
-              this.compliancePassedDate$,
-              this.newEntityStream$
-            ])
-          }
-        }),
-        mergeMap(([data, passedDate, entityToAdd]: [any, Date, any]) => {
-          let entitiesData
-          if (data.companyDocuments) {
-            // TODO this will become a lot cleaner if/once compliance docs are sent down with initial valuation GET request
-            // brittle
-            entitiesData = data.companyDocuments.concat(data.personDocuments)
-          } else {
-            entitiesData = data
-          }
-          if (entityToAdd){
-            const entityAlreadyExists = entitiesData.find((e) => e.id === entityToAdd.id)
-            if (!entityAlreadyExists) {
-              entitiesData.push(entityToAdd)
-            }
-          }
-          return of(this.patchState({ entities: setContactsForCompliance(entitiesData, passedDate) }))
-        }),
-        mergeMap(() => this.validationMessage$),
-        take(1)
+        mergeMap(([entityToAdd, valuationData]: [any, any]) => {
+          this.patchState(buildStoreState(valuationData, entityToAdd))
+          return this.validationMessage$
+        })
       )
       .subscribe(
         (res) => console.log(res),
@@ -379,7 +336,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
             return { ...p, personDateAmlCompleted: null }
           })
           this.patchState({
-            entities: setContactsForCompliance(entities, passedDate),
+            entities: buildEntitiesArray(entities, passedDate),
             isFrozen: false
           })
           return this.validationMessage$
@@ -400,13 +357,8 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   public onFileUploaded = (data: FileUpdateEvent): void => {
     if (!data.ev.tmpFiles) return
 
-    const formData = new FormData()
-    data.ev.tmpFiles.forEach((x) => {
-      formData.append('files', x, x.name)
-    })
-
     this._complianceChecksFacadeSvc
-      .saveFileTemp(formData)
+      .saveFileTemp(data.ev.tmpFiles)
       .pipe(
         mergeMap((tmpFiles) => {
           console.log('files after temp save: ', tmpFiles)
