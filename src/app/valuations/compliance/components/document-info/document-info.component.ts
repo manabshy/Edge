@@ -45,11 +45,11 @@ export class DocumentInfoComponent implements OnInit {
   showAdditionalInput = false
   expiryDateMessage = {
     type: 'info',
-    text: ['Please enter the ID expiry date below']
+    text: ['Please enter the ID expiry date']
   }
   additionalInputMessage = {
     type: 'info',
-    text: ['Please enter the ID for the SmartSearch below']
+    text: ['Please enter the ID for the SmartSearch']
   }
   additionalLabel: string
 
@@ -67,7 +67,6 @@ export class DocumentInfoComponent implements OnInit {
   }
 
   openUploadDialog(): void {
-    this.showFileUploadDialog = true
     let label
     switch (this.documentType) {
       case DOCUMENT_TYPE.ID:
@@ -87,6 +86,7 @@ export class DocumentInfoComponent implements OnInit {
         break
     }
     this.uploadDialogHeaderText = label
+    this.showFileUploadDialog = true
   }
 
   private checkIdIsValid(): void {
@@ -120,8 +120,13 @@ export class DocumentInfoComponent implements OnInit {
       emitData.smartSearchId = this.smartSearchIdForm.get('smartSearchId').value
     }
     this.onFileUploaded.emit(emitData)
-    this.showFileUploadDialog = false
+   
+    this.closeDialog()
     this.saveFileBtnDisabled = true
+  }
+
+  closeDialog(){
+    this.showFileUploadDialog = false
   }
 
   onDateChange(expiryDate): void {

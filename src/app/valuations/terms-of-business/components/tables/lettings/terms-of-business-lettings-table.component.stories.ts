@@ -6,7 +6,7 @@ import { Story, Meta } from '@storybook/angular/types-6-0';
 import { TermsOfBusinessTableLettingsComponent } from './terms-of-business-lettings-table.component';
 
 export default {
-  title: 'Components/Valuations/TermsOfBusinessTables/LettingsTable',
+  title: 'Valuations/TermsOfBusiness/TermsOfBusinessTables/LettingsTable',
   component: TermsOfBusinessTableLettingsComponent,
   decorators: [
     moduleMetadata({
@@ -27,7 +27,7 @@ const LettingsTemplate: Story<TermsOfBusinessTableLettingsComponent> = (args: Te
 
 export const SingleEntry = LettingsTemplate.bind({});
 SingleEntry.args = {
-  data: [{
+  data: {
     signedOn: new Date(),
     isShortLetInstruction: 'Yes',
     isLongLetInstruction: 'Yes',
@@ -36,28 +36,5 @@ SingleEntry.args = {
     signatureFile:{
       fileUri: 'http://www.google.co.uk'
     }
-  }],
-};
-
-export const MultipleEntry = LettingsTemplate.bind({});
-MultipleEntry.args = {
-  data: [{
-    signedOn: new Date(),
-    isShortLetInstruction: 'Yes',
-    isLongLetInstruction: 'Yes',
-    isManagement: 'Yes',
-    zeroDepositAccepted: 'No',
-    signatureFile:{
-      fileUri: 'http://www.google.co.uk'
-    }
-  },{
-    signedOn: new Date(),
-    isShortLetInstruction: 'No',
-    isLongLetInstruction: 'No',
-    isManagement: 'No',
-    zeroDepositAccepted: 'Yes',
-    signatureFile: {
-      fileUri: 'http://www.google.co.uk'
-    }
-  }],
+  }
 };

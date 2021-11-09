@@ -93,10 +93,10 @@ export class AppComponent extends BaseComponent implements OnInit {
       const homes = [
         '/',
         '/contact-centre',
-        '/leads-register',
+        '/leads',
         '/company-centre',
         '/property-centre',
-        '/valuations-register'
+        '/valuations'
       ];
       const pathEqual = (elem) => elem === current;
       if (homes.some(pathEqual) && this.serviceWorker.getIsupdateAvailable()) {

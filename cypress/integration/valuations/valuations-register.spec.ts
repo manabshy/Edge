@@ -11,7 +11,7 @@ describe('Valuation register should', () => {
   const longLetWeeklyRent = 900;
 
   beforeEach(() => {
-    cy.visit('/valuations-register');
+    cy.visit('/valuations');
   });
 
   it('search for a valuation using valution date and status', () => {

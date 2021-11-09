@@ -195,7 +195,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
 
   navigateToNewValuation(propertyId: number) {
     event.stopPropagation();
-    this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
+    this.router.navigate(['valuations/detail/', 0, 'edit'], {
       queryParams: {
         propertyId: propertyId,
         isNewValuation: true,

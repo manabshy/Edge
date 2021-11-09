@@ -12,14 +12,14 @@ const routes: Routes = [
     canActivate: [MsalGuard],
   },
   {
-    path: "leads-register",
+    path: "leads",
     data: { preload: true },
     loadChildren: () =>
       import("./leads/leads.module").then((m) => m.LeadsModule),
     canActivate: [MsalGuard],
   },
   {
-    path: "valuations-register",
+    path: "valuations",
     data: { preload: true },
     loadChildren: () =>
       import("./valuations/valuations.module").then((m) => m.ValuationsModule),

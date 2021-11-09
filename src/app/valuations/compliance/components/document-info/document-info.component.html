@@ -1,3 +1,4 @@
+<!-- FILE LIST WITH DELETE & UPLOAD BUTTONS -->
 <div
   class="w-full p-2 py-2 border rounded-sm cursor-pointer border-grey-100"
   [ngClass]="idHasExpired ? 'border-red-500 bg-red-100' : ''"
@@ -7,14 +8,22 @@
     <a class="mr-2 tracking-tight truncate" href="{{ file.url }}" target="_blank">
       {{ file.label || label }}
     </a>
+  
+    <!-- ID EXPIRY LABEL -->
     <span
       *ngIf="documentType == DOCUMENT_TYPE.ID && file.idValidationDateExpiry"
       [ngClass]="idHasExpired ? 'text-red-500' : 'text-green-500'"
     >
       Exp: {{ moment(file.idValidationDateExpiry).format('DD/MM/YY') }}
     </span>
+  
+    <!-- SMART SEARCH ID LABEL -->
     <span *ngIf="documentType == DOCUMENT_TYPE.REPORT && file.smartSearchId">ID: {{ file.smartSearchId }}</span>
+  
+    <!-- FILE UPLOAD DATE -->
     <span class="flex-1 text-right" [pTooltip]="'Upload Date'">{{ moment(file.uploadDate).format('DD/MM/YY') }}</span>
+  
+    <!-- DELETE BTN -->
     <button
       (click)="deleteFile.emit({ id: file.fileStoreId, documentType: documentType })"
       [pTooltip]="'Delete Document'"
@@ -27,6 +36,8 @@
       </svg>
     </button>
   </div>
+
+  <!-- OPEN UPLOAD FILE DIALOG BTN -->
   <button *ngIf="showFilesUploadButton()" [disabled]="isFrozen" (click)="openUploadDialog()" class="py-2">
     <span *ngIf="!isFrozen">
       <i class="fa fa-upload" aria-hidden="true"></i>
@@ -38,6 +49,7 @@
   </button>
 </div>
 
+<!-- DIALOG FOR UPLOADING COMPLIANCE DOCUMENTS -->
 <p-dialog
   header="{{ uploadDialogHeaderText }}"
   appendTo="body"
@@ -46,18 +58,17 @@
   [draggable]="false"
 >
   <div class="flex flex-col" style="width: 500px">
+    
+    <!-- FILE UPLOADER -->
     <app-file-upload
       [uploadedFiles]="files"
       [fileType]="fileType"
       (getFiles)="getFiles($event)"
       [isMultiple]="isMultiple"
     ></app-file-upload>
+
+    <!-- ID EXPIRTY DATE PICKER -->
     <div *ngIf="showExpiryDatePicker" class="mt-2 mb-0 ml-2">
-      <ng-container *ngIf="saveFileBtnDisabled">
-        <div class="animate__animated animate__pulse">
-          <app-messages [message]="expiryDateMessage"></app-messages>
-        </div>
-      </ng-container>
       <form [formGroup]="idExpiryForm">
         <fieldset [ngClass]="{ invalid: idHasExpired }">
           <label for="">ID Expiry Date</label>
@@ -81,13 +92,15 @@
           <p class="message message--negative" *ngIf="idHasExpired">Invalid Expiry Date</p>
         </fieldset>
       </form>
-    </div>
-    <div *ngIf="showAdditionalInput" class="mt-2 mb-0 ml-2">
       <ng-container *ngIf="saveFileBtnDisabled">
-        <div class="animate__animated animate__pulse" >
-          <app-messages [message]="additionalInputMessage"></app-messages>
+        <div class="animate__animated animate__pulse">
+          <app-messages [message]="expiryDateMessage"></app-messages>
         </div>
       </ng-container>
+    </div>
+
+    <!-- SMART SEARCH ID INPUT -->
+    <div *ngIf="showAdditionalInput" class="mt-2 mb-0 ml-2">
       <form [formGroup]="smartSearchIdForm">
         <fieldset>
           <label for="">SmartSearch ID Number</label>
@@ -100,7 +113,14 @@
           />
         </fieldset>
       </form>
+      <ng-container *ngIf="saveFileBtnDisabled">
+        <div class="animate__animated animate__pulse" >
+          <app-messages [message]="additionalInputMessage"></app-messages>
+        </div>
+      </ng-container>
     </div>
+
+    <!-- BTNS -->
     <footer class="mt-10">
       <div class="flex flex-row space-x-4">
         <span class="flex-1"></span>

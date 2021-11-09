@@ -69,7 +69,7 @@ import { CarouselModule } from "ngx-bootstrap/carousel";
 // vendor
 import { OrderModule } from "ngx-order-pipe";
 import { ToastrModule, ToastContainerModule } from "ngx-toastr";
-import { AgmCoreModule } from "@agm/core";
+// import { AgmCoreModule } from "@agm/core";
 import { CalendarModule, DateAdapter } from "angular-calendar";
 import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
 import { LoadingBarHttpClientModule } from "@ngx-loading-bar/http-client";
@@ -151,9 +151,9 @@ const externalModulesImports = [
     provide: DateAdapter,
     useFactory: adapterFactory,
   }),
-  AgmCoreModule.forRoot({
-    apiKey: "AIzaSyC1Hv_vNkUxvvRibyjPbfgNhrTNi30jNtQ",
-  }),
+  // AgmCoreModule.forRoot({
+  //   apiKey: "AIzaSyC1Hv_vNkUxvvRibyjPbfgNhrTNi30jNtQ",
+  // }),
 ];
 const externalModulesExports = [
   InfiniteScrollModule,
@@ -173,7 +173,7 @@ const externalModulesExports = [
   OrderModule,
   ToastrModule,
   ToastContainerModule,
-  AgmCoreModule,
+  // AgmCoreModule,
   CarouselModule,
   NgbModule,
   LoadingBarHttpClientModule,
