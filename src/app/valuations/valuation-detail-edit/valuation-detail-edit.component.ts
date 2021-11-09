@@ -1450,7 +1450,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.salesOwnerAssociateEmail = valuationBooking.emailAddress
       this.salesOwnerAssociateType = valuationBooking.associationId
     } else if (type == 'lettings') {
-      this.lettingsMeetingOwner = valuationBooking.meetingOwner ? valuationBooking.meetingOwner : true
+      this.lettingsMeetingOwner = valuationBooking.meetingOwner
       this.lettingsOwnerAssociateName = valuationBooking.name
       this.lettingsOwnerAssociateContactNumber = valuationBooking.contactNumber
       this.lettingsOwnerAssociateEmail = valuationBooking.emailAddress
@@ -1476,7 +1476,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           valuation.combinedValuationBooking ? valuation.combinedValuationBooking : valuation.salesValuationBooking,
           'both'
         )
-      } else if (valuation.lettingsValuationBooking) {
+      }
+      if (valuation.lettingsValuationBooking) {
         this.setValuationInformations(valuation.lettingsValuationBooking, 'lettings')
       }
 
@@ -1591,6 +1592,21 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuationForm.get('lettingsOwnerAssociateContactNumber').disable()
         this.valuationForm.get('lettingsOwnerAssociateEmail').disable()
         this.valuationForm.get('lettingsOwnerAssociateType').disable()
+      }
+    }
+  }
+
+  getStatusColor() {
+    if (this.valuation) {
+      if (this.valuation.valuationStatus == ValuationStatusEnum.Booked) return '#4DA685'
+      else if (this.valuation.valuationStatus == ValuationStatusEnum.Cancelled) {
+        return '#E02020'
+      } else if (this.valuation.valuationStatus == ValuationStatusEnum.Instructed) {
+        return '#0A1A4A'
+      } else if (this.valuation.valuationStatus == ValuationStatusEnum.Valued) {
+        return '#3498DB'
+      } else if (this.valuation.valuationStatus == ValuationStatusEnum.Closed) {
+        return '#FFB134'
       }
     }
   }
@@ -2690,15 +2706,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
       if (valuation.lettingsValuationBooking) {
         valuation.lettingsValuationBooking = {
-          name: valuation.lettingMeetingOwner == false ? valuation.lettingsOwnerAssociateName : '',
-          emailAddress: valuation.lettingMeetingOwner == false ? valuation.lettingsOwnerAssociateEmail : '',
-          contactNumber: valuation.lettingMeetingOwner == false ? valuation.lettingsOwnerAssociateContactNumber : '',
-          associationId: valuation.lettingMeetingOwner == false ? valuation.lettingsOwnerAssociateType : '',
-          meetingOwner: valuation.lettingMeetingOwner,
+          name: valuation.lettingsMeetingOwner == false ? valuation.lettingsOwnerAssociateName : '',
+          emailAddress: valuation.lettingsMeetingOwner == false ? valuation.lettingsOwnerAssociateEmail : '',
+          contactNumber: valuation.lettingsMeetingOwner == false ? valuation.lettingsOwnerAssociateContactNumber : '',
+          associationId: valuation.lettingsMeetingOwner == false ? valuation.lettingsOwnerAssociateType : '',
+          meetingOwner: valuation.lettingsMeetingOwner,
           startDateTime: valuation.lettingsValuationBooking?.startDateTime,
           totalHours: 1
         }
-        valuation.lettingsValuationBooking.meetingOwner = valuation.lettingMeetingOwner == false ? false : true
+        valuation.lettingsValuationBooking.meetingOwner = valuation.lettingsMeetingOwner == false ? false : true
       }
     }
   }

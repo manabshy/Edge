@@ -303,9 +303,9 @@ export class ValuationFacadeService {
     return this._apiSvc.getValuers(propertyId)
   }
 
-  public getValuersAvailability(availability: ValuersAvailabilityOption): Observable<CalendarAvailibility | any> {
-    return this._apiSvc.getValuersAvailability(availability)
-  }
+  // public getValuersAvailability(availability: ValuersAvailabilityOption): Observable<CalendarAvailibility | any> {
+  //   return this._apiSvc.getValuersAvailability(availability)
+  // }
 
   public getValuersCalendarAvailability(
     availability: ValuersAvailabilityOption
