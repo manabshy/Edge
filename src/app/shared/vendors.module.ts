@@ -82,6 +82,7 @@ const externalModules = [
   NgxFileDropModule,
   GalleriaModule,
   DialogModule,
+  PanelModule,
   AccordionModule,
   DynamicDialogModule,
   ToastModule,
@@ -92,7 +93,6 @@ const externalModules = [
   ChipModule,
   AutoCompleteModule,
   ChipsModule,
-  PanelModule,
   ChartModule,
   SidebarModule,
   CardModule,
@@ -104,9 +104,7 @@ const externalModules = [
   CheckboxModule,
   FileUploadModule,
   FormlyModule.forRoot({
-    validationMessages: [
-      { name: 'required', message: 'This field is required'}
-    ]
+    validationMessages: [{ name: 'required', message: 'This field is required' }]
   }),
   FormlyPrimeNGModule
 ]

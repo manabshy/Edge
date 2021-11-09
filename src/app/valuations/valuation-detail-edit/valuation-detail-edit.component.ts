@@ -308,7 +308,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       return !(
         this.valuation.valuationStatus === ValuationStatusEnum.None ||
         this.valuation.valuationStatus === ValuationStatusEnum.Booked
-      );
+      )
     }
   }
 
@@ -1211,30 +1211,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.approxLeaseExpiryDate ? (this.showLeaseExpiryDate = true) : (this.showLeaseExpiryDate = false)
 
         if (
-          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
-          this.valuation.valuationStatus === ValuationStatusEnum.Closed
-        ) {
-          if (this.route.snapshot.routeConfig?.path?.indexOf('edit') > -1) {
-            let path = ['valuations/detail', this.valuation.valuationEventId, 'cancelled']
-            this.router.navigate(path)
-            return
-          }
-          this.isCancelled = true
-          if (this.valuation.valuationStatus === ValuationStatusEnum.Cancelled) {
-            this.cancelString = `Cancelled ${moment(this.valuation.cancelledDate).format('Do MMM YYYY (HH:mm)')} by ${
-              this.valuation.cancelledBy?.fullName
-            } `
-            this.cancelReasonString =
-              'Reason for cancellation: ' +
-              (this.valuation.cancellationTypeId == ValuationCancellationReasons.Other
-                ? this.valuation.cancellationReason
-                : this.removeUnderLine(ValuationCancellationReasons[this.valuation.cancellationTypeId]))
-          } else {
-            this.cancelString = this.valuation.cancellationReason
-          }
-        }
-
-        if (
           this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
           this.valuation.valuationStatus === ValuationStatusEnum.Valued ||
           this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
@@ -1261,6 +1237,30 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.valuation.property = this.property
         } else {
           this.canSaveValuation = true
+        }
+
+        if (
+          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Closed
+        ) {
+          if (this.route.snapshot.routeConfig?.path?.indexOf('edit') > -1) {
+            let path = ['valuations/detail', this.valuation.valuationEventId, 'cancelled']
+            this.router.navigate(path)
+            return
+          }
+          this.isCancelled = true
+          if (this.valuation.valuationStatus === ValuationStatusEnum.Cancelled) {
+            this.cancelString = `Cancelled ${moment(this.valuation.cancelledDate).format('Do MMM YYYY (HH:mm)')} by ${
+              this.valuation.cancelledBy?.fullName
+            } `
+            this.cancelReasonString =
+              'Reason for cancellation: ' +
+              (this.valuation.cancellationTypeId == ValuationCancellationReasons.Other
+                ? this.valuation.cancellationReason
+                : this.removeUnderLine(ValuationCancellationReasons[this.valuation.cancellationTypeId]))
+          } else {
+            this.cancelString = this.valuation.cancellationReason
+          }
         }
 
         if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
