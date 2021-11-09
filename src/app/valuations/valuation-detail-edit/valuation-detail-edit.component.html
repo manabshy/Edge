@@ -841,14 +841,11 @@
                     [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled || isTermsOfBusinessDisabled }"
                     (click)="controlIsCancelled($event, isCancelled || isTermsOfBusinessDisabled)">
                     <ng-container *ngIf="valuationData$ | async as valuationData">
-                      <app-terms-of-business
-                        [valuationData]="valuationData"
-                        [interestList]="interestList"
+                      <app-terms-of-business [valuationData]="valuationData" [interestList]="interestList"
                         [termsOfBusinessDocument]="valuationData?.eSignSignatureTob"
                         (onSendTermsOfBusinessReminder)="onSendTermsOfBusinessReminder($event)"
                         (onFileUploaded)="onTermsOfBusinessFileUploaded($event)"
-                        (onModelChange)="onUpdateToBForm($event)"
-                      ></app-terms-of-business>
+                        (onModelChange)="onUpdateToBForm($event)"></app-terms-of-business>
                     </ng-container>
                   </div>
                 </p-accordionTab>
