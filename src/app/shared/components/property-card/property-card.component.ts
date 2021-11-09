@@ -86,7 +86,7 @@ export class PropertyCardComponent implements OnInit, OnChanges {
 
   navigateToNewValuation(propertyId: number) {
     event.stopPropagation()
-    this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
+    this.router.navigate(['valuations/detail/', 0, 'edit'], {
       queryParams: {
         propertyId: propertyId,
         isNewValuation: true,

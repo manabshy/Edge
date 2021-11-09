@@ -272,7 +272,7 @@ export class ContactgroupsDetailComponent
   create(item: string) {
     console.log({ item }, "item to create");
     if (item === "leads") {
-      this.router.navigate(["leads-register", "edit", 0], {
+      this.router.navigate(["leads", "edit", 0], {
         queryParams: {
           isNewLead: true,
           personId: this.searchedPersonDetails?.personId,
@@ -293,6 +293,6 @@ export class ContactgroupsDetailComponent
   }
   ngOnDestroy() {
     this.sidenavService.resetCurrentFlag();
-    this.destroy.next();
+    this.destroy.next(true);
   }
 }

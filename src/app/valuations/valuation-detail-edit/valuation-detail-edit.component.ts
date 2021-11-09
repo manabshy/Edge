@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { StorageMap } from '@ngx-pwa/local-storage'
-import { debounceTime, takeUntil, distinctUntilChanged, map, tap, finalize } from 'rxjs/operators'
+import { debounceTime, takeUntil, distinctUntilChanged, map } from 'rxjs/operators'
 import { ContactGroup, ContactNote, PersonSummaryFigures, Signer } from 'src/app/contact-groups/shared/contact-group'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service'
@@ -29,9 +29,9 @@ import { Instruction } from 'src/app/shared/models/instruction'
 import { ResultData } from 'src/app/shared/result-data'
 import { StaffMember } from 'src/app/shared/models/staff-member'
 import format from 'date-fns/format'
-import { BehaviorSubject, Observable, of, Subject, Subscription, combineLatest } from 'rxjs'
+import { BehaviorSubject, of, Subject, Subscription } from 'rxjs'
 import { MenuItem, MessageService, PrimeNGConfig } from 'primeng/api'
-import { addYears, differenceInCalendarYears, isThisHour } from 'date-fns'
+import { addYears, differenceInCalendarYears } from 'date-fns'
 import _ from 'lodash'
 import { ViewportScroller } from '@angular/common'
 import { DiaryEventService } from 'src/app/diary/shared/diary-event.service'
@@ -303,13 +303,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   get isTermsOfBusinessVisible() {
-    return true
-    // if (this.valuation) {
-    //   return !(
-    //     this.valuation.valuationStatus === ValuationStatusEnum.None ||
-    //     this.valuation.valuationStatus === ValuationStatusEnum.Booked
-    //   );
-    // }
+    // return true
+    if (this.valuation) {
+      return !(
+        this.valuation.valuationStatus === ValuationStatusEnum.None ||
+        this.valuation.valuationStatus === ValuationStatusEnum.Booked
+      );
+    }
   }
 
   get isLandRegisterVisible() {
@@ -321,7 +321,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  // activeState: boolean[] = [false, false, false, false, false, false, false, false, false, true];
+  // activeState: boolean[] = [false, false, false, false, true, false, false, false, false, true]
   activeState: boolean[] = [true, true, true, true, true, true, true]
 
   statuses = [
@@ -338,6 +338,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   setRequirementValuationNoteBs = new BehaviorSubject(false)
 
   interestList: any[] = []
+
+  valuationData$ = this._valuationFacadeSvc.valuationData$
 
   constructor(
     private _valuationFacadeSvc: ValuationFacadeService,
@@ -931,7 +933,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     this.router
       .navigateByUrl('/', { skipLocationChange: false })
-      .then(() => this.router.navigate(['valuations-register/detail/', valuation?.data?.valuationEventId, 'edit']))
+      .then(() => this.router.navigate(['valuations/detail/', valuation?.data?.valuationEventId, 'edit']))
   }
 
   private setupListInfo(info: DropdownListInfo) {
@@ -966,11 +968,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   setPropertyDetail(propertyDetails) {
+    // ?
     if (propertyDetails.lastKnownOwner) this.lastKnownOwner = propertyDetails.lastKnownOwner
     else {
       this.lastKnownOwner = this.valuation?.propertyOwner
     }
-
+    // ?
     this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner)
 
     if (this.changedLastOwner && this.changedLastOwner.contactGroupId > 0) {
@@ -979,8 +982,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.changedLastOwner = null
     }
 
-    this.property = propertyDetails
-    this.valuation.property = { ...this.property }
+    this.property = propertyDetails // valuation object is set to property within component
+    this.valuation.property = { ...this.property } // the property on the valuation gets set to the valuation ?
     this.valuation.officeId = this.property.officeId
     // this.valuers = result.valuers;
     if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
@@ -1133,11 +1136,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       suggestedAskingRentShortLet: [],
       suggestedAskingRentLongLetMonthly: [],
       suggestedAskingRentShortLetMonthly: [],
-      declarableInterest: [null, Validators.required],
+      // declarableInterest: [null, Validators.required],
       ageOfSuggestedAskingPrice: [],
-      section21StatusId: [],
-      salesMeetingOwner: [null],
-      lettingsMeetingOwner: [null],
+      // section21StatusId: [],
+      salesMeetingOwner: [true],
+      lettingsMeetingOwner: [true],
       salesOwnerAssociateName: [''],
       salesOwnerAssociateContactNumber: [''],
       salesOwnerAssociateEmail: [''],
@@ -1185,6 +1188,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       .toPromise()
       .then((data) => {
         if (data) {
+          console.log('getValuation: ', data)
           this.valuation = data
           this.propertyId = this.valuation.property.propertyId
           if (this.propertyId) {
@@ -1194,9 +1198,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         }
       })
       .then((result) => {
-        this.setPropertyDetail(result)
-        this.getValuationPropertyInfo(this.propertyId)
-        this.getValuers(this.propertyId)
+        this.setPropertyDetail(result) // ?
+        this.getValuationPropertyInfo(this.propertyId) // ?
+        this.getValuers(this.propertyId) // ?
       })
       .then(() => {
         console.log(this.valuation.property)
@@ -1211,7 +1215,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.valuation.valuationStatus === ValuationStatusEnum.Closed
         ) {
           if (this.route.snapshot.routeConfig?.path?.indexOf('edit') > -1) {
-            let path = ['valuations-register/detail', this.valuation.valuationEventId, 'cancelled']
+            let path = ['valuations/detail', this.valuation.valuationEventId, 'cancelled']
             this.router.navigate(path)
             return
           }
@@ -1246,6 +1250,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
           this.valuation.valuationStatus === ValuationStatusEnum.Closed
         ) {
+          console.log(' this.canSaveValuation FALSE. valuation is instructed or cancelled')
           this.isPropertyInfoDisabled = true
           this.canSaveValuation = false
           this.property = {
@@ -1329,18 +1334,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           .subscribe((userHasPermission: boolean) => {
             if (this.isStillInOneMonthPeriod) this.isAllowedForValueChanges = userHasPermission
           })
-      })
-      .then(() => {
-        this._valuationFacadeSvc.getToBLink(id).subscribe((data) => {
-          this.valuation.dateRequestSent = data.dateRequestSent
-          if (data.toBSales.length > data.toBLetting.length) {
-            this.valuation.valuationFiles = data.toBSales
-            this.valuation.valuationType = 1
-          } else {
-            this.valuation.valuationFiles = data.toBLetting
-            this.valuation.valuationType = 2
-          }
-        })
       })
       .catch((err) => {
         console.log('err: ', err)
@@ -1527,7 +1520,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         ageOfSuggestedAskingPrice: valuation.valuationDate
           ? this.sharedService.calculateDateToNowInMonths(new Date(valuation.valuationDate))
           : 0,
-        declarableInterest: valuation.declarableInterest?.toString(),
+        // declarableInterest: valuation.declarableInterest?.toString(),
         section21StatusId: valuation.section21StatusId,
         salesMeetingOwner: this.salesMeetingOwner,
         lettingsMeetingOwner: this.lettingsMeetingOwner,
@@ -1756,13 +1749,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   onClosePropertyFinder() {
     if (!(this.property && this.property.propertyId > 0)) {
-      this.router.navigate(['/valuations-register'])
+      this.router.navigate(['/valuations'])
     }
   }
 
   createNewValuation() {
     this.isActiveValuationsVisible = false
-    this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
+    this.router.navigate(['valuations/detail/', 0, 'edit'], {
       queryParams: {
         propertyId: this.propertyId,
         isNewValuation: true
@@ -1777,7 +1770,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       closable: false
     })
     this._valuationFacadeSvc.doValuationSearchBs.next(true)
-    this.router.navigate(['/valuations-register'])
+    this.router.navigate(['/valuations'])
   }
 
   private getValuationPropertyInfo(propertyId: number) {
@@ -2165,16 +2158,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   startInstruction() {
-    if (this.valuationForm.controls['declarableInterest'].invalid) {
-      this.accordionIndex = 4
-      this.activeState[4] = true
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Please complete terms of business!',
-        closable: false
-      })
-      return
-    }
+    // TODO
+    // if (this.valuationForm.controls['declarableInterest'].invalid) {
+    //   this.accordionIndex = 4
+    //   this.activeState[4] = true
+    //   this.messageService.add({
+    //     severity: 'warn',
+    //     summary: 'Please complete terms of business!',
+    //     closable: false
+    //   })
+    //   return
+    // }
 
     if (!this._valuationFacadeSvc.landRegisterValid.getValue()) {
       this.accordionIndex = 5
@@ -2501,16 +2495,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     // validation of land register
     //this._valuationFacadeSvc.valuationValidationSubject.next(true);
 
-    if (this.formErrors['declarableInterest']) {
-      this.accordionIndex = 4
-      this.activeState[4] = true
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'You must complete terms of business',
-        closable: false
-      })
-      return
-    }
+    // TODO DB put this logic in service
+    // if (this.formErrors['declarableInterest']) {
+    //   this.accordionIndex = 4
+    //   this.activeState[4] = true
+    //   this.messageService.add({
+    //     severity: 'warn',
+    //     summary: 'You must complete terms of business',
+    //     closable: false
+    //   })
+    //   return
+    // }
 
     if (this.isAvailabilityRequired) {
       this.messageService.add({
@@ -2571,8 +2566,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     let valuationValue = this.valuation
     if (this.valuation.valuationEventId > 0) {
       valuationValue = this._valuationFacadeSvc._valuationData.getValue() // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
+      console.log('valuationValue: ', valuationValue)
     }
     const valuation = { ...valuationValue, ...this.valuationForm.value }
+    console.log('valuation after merge: ', valuation)
     valuation.propertyOwner = this.lastKnownOwner
     valuation.OfficeId = this.property.officeId
     valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate
@@ -2752,7 +2749,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     const propertyId = this.property.propertyId
     const lastKnownOwnerId = this.lastKnownOwner.contactGroupId
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-      this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
+      this.router.navigate(['valuations/detail/', 0, 'edit'], {
         queryParams: {
           propertyId: propertyId,
           lastKnownOwnerId: lastKnownOwnerId,
@@ -2783,11 +2780,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       })
     }
 
-    // Why is the route reloaded here?
+    // Why is the route reloaded here? TODO: make necessary state changes on client to not have to reload the page
     if (valuation && valuation.valuationEventId > 0)
       this.router
         .navigateByUrl('/', { skipLocationChange: true })
-        .then(() => this.router.navigate(['/valuations-register/detail', valuation.valuationEventId, 'edit']))
+        .then(() => this.router.navigate(['/valuations/detail', valuation.valuationEventId, 'edit']))
   }
 
   onInstructionSaveComplete(status?: boolean) {
@@ -2897,6 +2894,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       return false
     }
     return true
+  }
+
+  onUpdateToBForm(ev) {
+    this._valuationFacadeSvc.updateLocalModel(ev)
+  }
+
+  onTermsOfBusinessFileUploaded(ev) {
+    this._valuationFacadeSvc.termsOfBusinessFileUploaded(ev)
+  }
+
+  onSendTermsOfBusinessReminder() {
+    this._valuationFacadeSvc.sendTermsOfBusinessReminder()
   }
 
   ngOnDestroy() {

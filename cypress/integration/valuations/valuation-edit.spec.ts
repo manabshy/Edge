@@ -11,14 +11,14 @@ describe('Valuation edit should', () => {
     valuationId = '162269';
     const reasonText = 'Cypress testing here';
 
-    cy.visit(`/valuations-register/detail/${valuationId}/edit`);
+    cy.visit(`/valuations/detail/${valuationId}/edit`);
     cy.get('#reason').clear().type(reasonText);
     cy.get('#saveVal').click();
 
   });
 
   xit('value a booked valuation', () => {
-    cy.visit(`/valuations-register/detail/${valuationId}/edit`);
+    cy.visit(`/valuations/detail/${valuationId}/edit`);
     cy.get('[data-cy=valuationValues]').then(() => {
       cy.get('[data-cy=sellValue]').clear().type(saleValue.toString());
       cy.get('[data-cy=shortLetValue]').clear().type(shortLetWeeklyRent.toString());
@@ -31,7 +31,7 @@ describe('Valuation edit should', () => {
 
   xit('instruct a lettings valuation', () => {
     valuationId = '162276'; // 162282
-    cy.visit(`/valuations-register/detail/${valuationId}/edit`);
+    cy.visit(`/valuations/detail/${valuationId}/edit`);
     cy.get('[data-cy=startInstruction]').click();
     cy.get('[data-cy=instructLet]').check({ force: true });
     cy.get('[data-cy=soleAgencyLettings]').check({ force: true });
@@ -44,7 +44,7 @@ describe('Valuation edit should', () => {
 
   xit('instruct a sales valuation', () => {
     valuationId = '161256'; // 162282
-    cy.visit(`/valuations-register/detail/${valuationId}/edit`);
+    cy.visit(`/valuations/detail/${valuationId}/edit`);
     cy.get('[data-cy=startInstruction]').click();
     cy.get('[data-cy=instructSale]').check({ force: true });
     cy.get('[data-cy=soleAgencySales]').check({ force: true });

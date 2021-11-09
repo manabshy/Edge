@@ -195,7 +195,7 @@ export class ContactGroupsComponent implements OnInit {
 
   navigateToNewGroup(contactType: string) {
     if (contactType === 'new') {
-      // TODO db remove
+      // TODO db remove before Nov release
       this.router.navigate(['detail', 0, 'people', 0], {
         queryParams: { showDuplicateChecker: true, emailPhoneRequired: true },
         relativeTo: this.route

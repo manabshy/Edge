@@ -8,7 +8,7 @@ const routes: Routes = [
   {
     path: '',
     component: ValuationsComponent,
-    data: { shouldDetach: true, title: 'Valuations Register' }
+    data: { shouldDetach: true, title: 'Valuations' }
   },
   {
     path: 'detail/:id',

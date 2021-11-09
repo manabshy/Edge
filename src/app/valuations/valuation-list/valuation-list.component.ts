@@ -52,7 +52,7 @@ export class ValuationListComponent implements OnInit, OnChanges, OnDestroy {
     scrollHeight = document.body.scrollHeight
     totalHeight = window.scrollY + window.innerHeight
     const url = this.router.url
-    const isValuationsRegister = url.endsWith('/valuations-register')
+    const isValuationsRegister = url.endsWith('/valuations')
 
     if (isValuationsRegister) {
       if (totalHeight >= scrollHeight && !this.bottomReached) {

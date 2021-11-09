@@ -179,6 +179,10 @@
     }
   },
   "cli": {
-    "analytics": false
+    "cache": {
+        "enabled": true,
+        "path": ".cache",
+        "environment": "all"
+    }
   }
 }

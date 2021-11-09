@@ -2,34 +2,34 @@ import { ValuationTypeEnum } from '../shared/valuation'
 import { mapDocumentsForView } from './helpers/store-documents-helpers'
 
 /***
- * @function buildPartialLoadState
- * @param {string} companyId - ID of the company associated with a valuation
- * @param {Object} valuationData: Object
- * @description Builds initial store state when a compliance state is initializing
+ * @function buildStoreState
+ * @param {Valuation} valuationData - the current valuation loaded into _valuationFacadeSvc
+ * @param {Person|Company} entityToAdd? - optional parameter of newly created company | contact that needs to be loaded into the store when it builds
+ * @description Builds initial store state when the store is loaded
  * @returns Object containing properties for the compliance checks store
  */
-export const buildPartialLoadState = (companyId, valuationData) => {
-  console.log('valuationData.complianceCheck: ', valuationData.complianceCheck)
+export const buildStoreState = (valuationData, entityToAdd) => {
+  const entitiesData = mergeEntitiesReadyForStore(entityToAdd, valuationData)
   return {
-    contactGroupId: valuationData.propertyOwner?.contactGroupId,
-    companyOrContact: companyId ? 'company' : 'contact',
-    checkType: identifyAmlOrKyc(valuationData),
-    compliancePassedBy: valuationData.complianceCheck?.compliancePassedByFullName,
-    compliancePassedDate: valuationData.complianceCheck?.compliancePassedDate,
     valuationEventId: valuationData.valuationEventId,
-    companyId: companyId,
-    isFrozen: valuationData.complianceCheck?.compliancePassedDate ? true : false
+    contactGroupId: valuationData.propertyOwner?.contactGroupId,
+    companyId: valuationData.propertyOwner.companyId,
+    companyOrContact: valuationData.propertyOwner.companyId ? 'company' : 'contact',
+    checkType: identifyAmlOrKyc(valuationData),
+    isFrozen: valuationData.complianceCheck?.compliancePassedDate ? true : false,
+    compliancePassedDate: valuationData.complianceCheck?.compliancePassedDate,
+    compliancePassedBy: valuationData.complianceCheck?.compliancePassedByFullName,
+    entities: buildEntitiesArray(entitiesData, valuationData.complianceCheck.compliancePassedDate)
   }
 }
 
 /***
- * @function setContactsForCompliance
+ * @function buildEntitiesArray
  * @param {Object[]} entitites - array of company | person objects for the store
  * @param {string} passedDate - date the valuation was passed. Temporarirly using this since individual compliance passed dates are not being set to null when docs are refreshed. Fixes Bug 2973
  * @description Builds entities array for store mapping from API shape to Store shape. Any API props for entities that need changing look here first
  */
-export const setContactsForCompliance = (entitites, passedDate) => {
-  // console.log('[[[[[[[[[[[[[[[[[[[[[[ ===== setContactsForCompliance: ', entitites)
+export const buildEntitiesArray = (entitites, passedDate) => {
   return entitites.map((e) => {
     return {
       id: e.id, // the object id. used for generic handling of entities in the store
@@ -51,7 +51,7 @@ export const setContactsForCompliance = (entitites, passedDate) => {
 
 /***
  * @function identifyAmlOrKyc
- * @param {Object} valuation - a valuation object from the API
+ * @param {Object} valuation - a raw valuation object from the API
  * @description looks at valuation and figures out to display AML or KYC labels in the UI
  */
 export const identifyAmlOrKyc = (valuation): string => {
@@ -59,16 +59,32 @@ export const identifyAmlOrKyc = (valuation): string => {
   // console.log('valuation.valuationType: ', valuation.valuationType)
   // console.log('valuation.suggestedAskingRentLongLetMonthly: ', valuation.suggestedAskingRentLongLetMonthly)
   // console.log('valuation.suggestedAskingRentShortLetMonthly: ', valuation.suggestedAskingRentShortLetMonthly)
-  const amlOrKyc =
-    valuation.valuationType == ValuationTypeEnum.Lettings ||
-    (valuation.suggestedAskingRentLongLetMonthly &&
-      (valuation.suggestedAskingRentLongLetMonthly < 7500 || valuation.suggestedAskingRentShortLetMonthly < 7500))
-      ? 'KYC'
-      : valuation.valuationType == ValuationTypeEnum.Sales ||
-        valuation.suggestedAskingRentLongLetMonthly >= 7500 ||
-        valuation.suggestedAskingRentShortLetMonthly >= 7500
-      ? 'AML'
-      : 'KYC'
-  console.log('setting compliance check type to amlOrKyc: = ', amlOrKyc)
-  return amlOrKyc
+  try {
+    const amlOrKyc =
+      valuation.suggestedAskingRentLongLetMonthly < 7500 || valuation.suggestedAskingRentShortLetMonthly < 7500
+        ? 'KYC'
+        : valuation.suggestedAskingRentLongLetMonthly >= 7500 || valuation.suggestedAskingRentShortLetMonthly >= 7500
+        ? 'AML'
+        : 'KYC'
+    console.log('setting compliance check type to amlOrKyc: = ', amlOrKyc)
+    return amlOrKyc
+  } catch (e) {
+    console.error('error figuring out AML || KYC ', e)
+  }
+}
+
+const mergeEntitiesReadyForStore = (entityToAdd, valuationData) => {
+  let entitiesData
+  if (valuationData.companyDocuments) {
+    entitiesData = valuationData.companyDocuments.concat(valuationData.personDocuments)
+  } else {
+    entitiesData = valuationData.personDocuments
+  }
+  if (entityToAdd) {
+    const entityAlreadyExists = entitiesData.find((e) => e.id === entityToAdd.id)
+    if (!entityAlreadyExists) {
+      entitiesData.push(entityToAdd)
+    }
+  }
+  return entitiesData
 }

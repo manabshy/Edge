@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { FileUploadControl, FileUploadValidators } from '@iplab/ngx-file-upload';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { BehaviorSubject, Subscription } from 'rxjs';
