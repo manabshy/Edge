@@ -69,7 +69,8 @@
                   *ngIf="leadEditForm.get('leadTypeId').value =='16'">
                   <label for="originId">Origin</label>
                   <span class="select">
-                    <select id="originId" formControlName="originId" [attr.disabled]="!canEditLead ? true : null">
+                    <select id="originId" formControlName="originId"
+                      [attr.disabled]="!canEditLead ||leadTypes?.length === 1 ? (leadEditForm.get('originId').value == null ?true:null) : null">
                       <option value=""></option>
                       <option selected *ngFor="let origin of origins" [value]='origin?.id'>{{origin?.value}}
                       </option>

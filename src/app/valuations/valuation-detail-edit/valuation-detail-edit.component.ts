@@ -112,7 +112,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   selectedValuerIdList = []
   selectedValuerId: number
   availabilityForm: FormGroup
-  availableDates: ValuationStaffMembersCalanderEvents
   canBookAppointment = true
   isAvailabilityRequired = false
   oldClass: string = 'null'
@@ -201,6 +200,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isAllowedForValueChangesSubscription = new Subscription()
   isEditValueActive = false
   hasLiveInstruct = false
+  liveInstructWarning = false
+  liveInstructHeader = 'Error'
   instructionTypeMessage: string
   valueMenuItems: MenuItem[] = [
     {
@@ -397,7 +398,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         valuationStatus: ValuationStatusEnum.None,
         valuationStatusDescription: 'New',
         originId: this.originId | 0,
-        originTypeId: 0
+        originTypeId: 0,
+        bookedBy: this.isClientService == true ? this.currentStaffMember : null
       }
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0)
       if (this.propertyId) {
@@ -940,7 +942,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.parkings = info.parkings
     this.features = info.propertyFeatures
     this.allOrigins = info.origins.filter((x) => x.isActive)
-    this.allOriginTypes = info.originTypes
+    this.allOriginTypes = info.originTypes.filter((x) => x.id == 12 || x.id == 13 || x.id == 14)
     this.interestList = info.section21Statuses
     this.associateTypes = info.associations
     this.propertyTypes = [{ id: 0, value: ' ' }, ...info.propertyTypes]
@@ -1112,9 +1114,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       propertyOwner: [''],
       originType: [0],
       originId: [0],
-      reason: ['', Validators.required],
-      timeFrame: ['', Validators.required],
-      generalNotes: ['', Validators.required],
+      reason: ['', [Validators.required, Validators.maxLength(3000)]],
+      timeFrame: ['', [Validators.required, Validators.maxLength(3000)]],
+      generalNotes: ['', [Validators.required, Validators.maxLength(3000)]],
       bedrooms: [0, Validators.max(99)],
       bathrooms: [0, Validators.max(99)],
       receptions: [0, Validators.max(99)],
@@ -1228,14 +1230,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
                 ? this.valuation.cancellationReason
                 : this.removeUnderLine(ValuationCancellationReasons[this.valuation.cancellationTypeId]))
           } else {
-            this.cancelString = 'Closed'
+            this.cancelString = this.valuation.cancellationReason
           }
         }
 
         if (
           this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
           this.valuation.valuationStatus === ValuationStatusEnum.Valued ||
-          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
+          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Closed
         ) {
           this.isEditable = false
         } else {
@@ -1244,7 +1247,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
         if (
           this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
-          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
+          this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Closed
         ) {
           console.log(' this.canSaveValuation FALSE. valuation is instructed or cancelled')
           this.isPropertyInfoDisabled = true
@@ -1294,9 +1298,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         }
 
         if (this.valuation.property) {
-          this.lastKnownOwner = this.valuation.property.lastKnownOwner
-            ? this.valuation.property.lastKnownOwner
-            : this.valuation.propertyOwner
+          if (
+            this.valuation &&
+            (this.valuation.valuationStatus == ValuationStatusEnum.Closed ||
+              this.valuation.valuationStatus == ValuationStatusEnum.Cancelled ||
+              this.valuation.valuationStatus == ValuationStatusEnum.Instructed)
+          ) {
+            this.lastKnownOwner = this.valuation?.propertyOwner
+          } else {
+            this.lastKnownOwner = this.valuation.property.lastKnownOwner
+              ? this.valuation.property.lastKnownOwner
+              : this.valuation.propertyOwner
+          }
 
           this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner)
 
@@ -1430,7 +1443,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.salesOwnerAssociateEmail = valuationBooking.emailAddress
       this.salesOwnerAssociateType = valuationBooking.associationId
     } else if (type == 'lettings') {
-      this.lettingsMeetingOwner = valuationBooking.meetingOwner ? valuationBooking.meetingOwner : true
+      this.lettingsMeetingOwner = valuationBooking.meetingOwner
       this.lettingsOwnerAssociateName = valuationBooking.name
       this.lettingsOwnerAssociateContactNumber = valuationBooking.contactNumber
       this.lettingsOwnerAssociateEmail = valuationBooking.emailAddress
@@ -1456,7 +1469,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           valuation.combinedValuationBooking ? valuation.combinedValuationBooking : valuation.salesValuationBooking,
           'both'
         )
-      } else if (valuation.lettingsValuationBooking) {
+      }
+      if (valuation.lettingsValuationBooking) {
         this.setValuationInformations(valuation.lettingsValuationBooking, 'lettings')
       }
 
@@ -1508,8 +1522,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           : 0,
         // declarableInterest: valuation.declarableInterest?.toString(),
         section21StatusId: valuation.section21StatusId,
-        salesMeetingOwner: this.salesMeetingOwner ? this.salesMeetingOwner : true,
-        lettingsMeetingOwner: this.lettingsMeetingOwner ? this.lettingsMeetingOwner : true,
+        salesMeetingOwner: this.salesMeetingOwner,
+        lettingsMeetingOwner: this.lettingsMeetingOwner,
         salesOwnerAssociateName: this.salesOwnerAssociateName,
         salesOwnerAssociateContactNumber: this.salesOwnerAssociateContactNumber,
         salesOwnerAssociateEmail: this.salesOwnerAssociateEmail,
@@ -1571,6 +1585,21 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuationForm.get('lettingsOwnerAssociateContactNumber').disable()
         this.valuationForm.get('lettingsOwnerAssociateEmail').disable()
         this.valuationForm.get('lettingsOwnerAssociateType').disable()
+      }
+    }
+  }
+
+  getStatusColor() {
+    if (this.valuation) {
+      if (this.valuation.valuationStatus == ValuationStatusEnum.Booked) return '#4DA685'
+      else if (this.valuation.valuationStatus == ValuationStatusEnum.Cancelled) {
+        return '#E02020'
+      } else if (this.valuation.valuationStatus == ValuationStatusEnum.Instructed) {
+        return '#0A1A4A'
+      } else if (this.valuation.valuationStatus == ValuationStatusEnum.Valued) {
+        return '#3498DB'
+      } else if (this.valuation.valuationStatus == ValuationStatusEnum.Closed) {
+        return '#FFB134'
       }
     }
   }
@@ -1774,7 +1803,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   getAvailability() {
-    this.availableDates = {} as any
     this.isAppointmentVisible = true
     this.sideBarControlVisible = true
     this.isSplitAppointment = false
@@ -1829,48 +1857,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   async getAvailableSlots(request) {
-    // user chooses both sales and lettings
-    let lettingsValuerId
-    let salesValuerId
-    lettingsValuerId = request.lettingsValuerId
-    if (request.salesValuerId) {
-      request.lettingsValuerId = null
-      await this._valuationFacadeSvc
-        .getValuersAvailability(request)
-        .toPromise()
-        .then((res) => {
-          this.salesValuerOpenSlots = res.valuationStaffMembersCalanderEvents
-          this.availableDates = { ...this.salesValuerOpenSlots }
-        })
-    }
-
-    request.lettingsValuerId = lettingsValuerId
-
-    if (request.lettingsValuerId) {
-      salesValuerId = request.salesValuerId
-      request.lettingsValuerId = lettingsValuerId
-      request.salesValuerId = null
-      await this._valuationFacadeSvc
-        .getValuersAvailability(request)
-        .toPromise()
-        .then((res) => {
-          this.lettingsValuerOpenSlots = res.valuationStaffMembersCalanderEvents
-          this.availableDates = { ...this.lettingsValuerOpenSlots }
-        })
-    }
-
-    request.salesValuerId = salesValuerId
-
-    if (request.salesValuerId && request.lettingsValuerId && request.salesValuerId != request.lettingsValuerId) {
-      this._valuationFacadeSvc.getValuersAvailability(request).subscribe((res) => {
-        this.availableDates = res.valuationStaffMembersCalanderEvents
-        this.setWeeks()
-        this.setFirstFreeSlot()
-      })
-    } else {
+    await this._valuationFacadeSvc.getValuersCalendarAvailability(request).subscribe((x) => {
+      this.thisWeek = x[0].days
+      this.nextWeek = x[1].days
+      this.nextTwoWeek = x[2].days
       this.setWeeks()
       this.setFirstFreeSlot()
-    }
+    })
   }
 
   setFirstFreeSlot() {
@@ -1886,20 +1879,20 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         firstAvailableSlot = this.nextTwoWeek[0]
       }
     }
-    this.selectedCalendarDate = firstAvailableSlot.date
+    this.selectedCalendarDate = new Date(firstAvailableSlot.date)
     this.showCalendar = true
     this.selectAvailableDate(firstAvailableSlot.hours[0])
   }
 
   setWeeks() {
-    this.thisWeek = []
-    this.nextWeek = []
-    this.nextTwoWeek = []
-
-    if (this.availableDates) {
-      this.thisWeek = this.setWeekData(this.availableDates.thisWeek)
-      this.nextWeek = this.setWeekData(this.availableDates.nextWeek)
-      this.nextTwoWeek = this.setWeekData(this.availableDates.next2Weeks)
+    if (this.thisWeek) {
+      this.setWeekData(this.thisWeek)
+    }
+    if (this.nextWeek) {
+      this.setWeekData(this.nextWeek)
+    }
+    if (this.nextTwoWeek) {
+      this.setWeekData(this.nextTwoWeek)
     }
   }
 
@@ -1915,8 +1908,23 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  setWeekData(allData: Date[]): any[] {
-    let weekData
+  setWeekData(allData: any[]) {
+    allData.forEach((x) => {
+      if (x.hours) {
+        x.hours.forEach((hour) => {
+          if (hour.isFirstAvailable == false && hour.isSecondAvailable == false) {
+            hour.class = 'hourColorsForBoth'
+          } else if (hour.isFirstAvailable == false) {
+            hour.class = 'hourColorsForSales'
+          } else if (hour.isSecondAvailable == false) {
+            hour.class = 'hourColorsForLettings'
+          }
+        })
+      }
+    })
+  }
+
+  /*    let weekData
     let hours: any[] = []
     let newData = []
     if (allData && allData.length > 0) {
@@ -1975,9 +1983,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
             hours: [...hours]
           })
       }
-    }
-    return newData
-  }
+    }*/
 
   findIndexSlot(date: Date, slots: ValuationStaffMembersCalanderEvents): number {
     let index = -1
@@ -1998,7 +2004,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   selectAvailableDate(hours) {
     if (hours) {
-      this.selectedDate = hours.value
+      this.selectedDate = new Date(hours.clock)
       this.selectCalendarDate(this.selectedDate)
       this.isAvailabilityRequired = false
 
@@ -2034,7 +2040,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   selectCalendarDate(date: Date) {
-    this.selectedCalendarDate = date
+    this.selectedCalendarDate = new Date(date)
     this.showCalendar = true
   }
 
@@ -2176,7 +2182,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
 
     this.propertyService
-      .getPropertyInstructions(this.propertyId, false)
+      .getPropertyInstructions(this.propertyId, true)
       .toPromise()
       .then((data) => {
         if (data && data.length > 0) {
@@ -2184,28 +2190,42 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           if (data.findIndex((x) => x.type == 'Sales' || x.type == 'sales') > -1) {
             this.instructionTypeMessage = 'sales instruction'
           } else {
-            this.instructionTypeMessage = 'lettings instruction'
+            if (data.filter((x) => x.status == 'UO' || x.status == 'EXCH' || x.status == 'LET').length == data.length) {
+              this.liveInstructWarning = true
+              this.liveInstructHeader = 'Warning'
+            } else {
+              this.liveInstructWarning = false
+            }
           }
         } else {
-          let val: Valuation
-          val = { ...this.valuation, ...this.valuationForm.value }
-
-          const instruction = {
-            valuationEventId: val.valuationEventId,
-            salesAgencyType: '',
-            lettingsAgencyType: '',
-            askingPrice: val.suggestedAskingPrice,
-            askingRentShortLet: val.suggestedAskingRentShortLet,
-            askingRentLongLet: val.suggestedAskingRentLongLet,
-            askingRentShortLetMonthly: val.suggestedAskingRentShortLetMonthly,
-            askingRentLongLetMonthly: val.suggestedAskingRentLongLetMonthly
-          } as Instruction
-          this.instruction = instruction
-          this.isInstructVisible = true
-          this.populateInstructionForm(instruction)
-          this.setInstructionFlags(instruction)
+          this.openInstructionForm()
         }
       })
+  }
+
+  openInstructionForm() {
+    this.hasLiveInstruct = false
+    let val: Valuation
+    val = { ...this.valuation, ...this.valuationForm.value }
+
+    const instruction = {
+      valuationEventId: val.valuationEventId,
+      salesAgencyType: '',
+      lettingsAgencyType: '',
+      askingPrice: val.suggestedAskingPrice,
+      askingRentShortLet: val.suggestedAskingRentShortLet,
+      askingRentLongLet: val.suggestedAskingRentLongLet,
+      askingRentShortLetMonthly: val.suggestedAskingRentShortLetMonthly,
+      askingRentLongLetMonthly: val.suggestedAskingRentLongLetMonthly
+    } as Instruction
+    this.instruction = instruction
+    this.isInstructVisible = true
+    this.populateInstructionForm(instruction)
+    this.setInstructionFlags(instruction)
+  }
+
+  goInstruction() {
+    this.openInstructionForm()
   }
 
   setInstructionFlags(instruction: Instruction) {
@@ -2495,6 +2515,21 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       })
       return
     }
+
+    if (
+      !(
+        this.valuationForm.controls['salesMeetingOwner'].value != null ||
+        this.valuationForm.controls['lettingsMeetingOwner'].value != null
+      )
+    ) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'You must select who we are meeting options',
+        closable: false
+      })
+      return
+    }
+
     //this._valuationFacadeSvc.validationControlBs.getValue()
     if (this.valuationForm.valid) {
       this.addOrUpdateValuation()
@@ -2668,15 +2703,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
       if (valuation.lettingsValuationBooking) {
         valuation.lettingsValuationBooking = {
-          name: valuation.lettingMeetingOwner == false ? valuation.lettingsOwnerAssociateName : '',
-          emailAddress: valuation.lettingMeetingOwner == false ? valuation.lettingsOwnerAssociateEmail : '',
-          contactNumber: valuation.lettingMeetingOwner == false ? valuation.lettingsOwnerAssociateContactNumber : '',
-          associationId: valuation.lettingMeetingOwner == false ? valuation.lettingsOwnerAssociateType : '',
-          meetingOwner: valuation.lettingMeetingOwner,
+          name: valuation.lettingsMeetingOwner == false ? valuation.lettingsOwnerAssociateName : '',
+          emailAddress: valuation.lettingsMeetingOwner == false ? valuation.lettingsOwnerAssociateEmail : '',
+          contactNumber: valuation.lettingsMeetingOwner == false ? valuation.lettingsOwnerAssociateContactNumber : '',
+          associationId: valuation.lettingsMeetingOwner == false ? valuation.lettingsOwnerAssociateType : '',
+          meetingOwner: valuation.lettingsMeetingOwner,
           startDateTime: valuation.lettingsValuationBooking?.startDateTime,
           totalHours: 1
         }
-        valuation.lettingsValuationBooking.meetingOwner = valuation.lettingMeetingOwner == false ? false : true
+        valuation.lettingsValuationBooking.meetingOwner = valuation.lettingsMeetingOwner == false ? false : true
       }
     }
   }
@@ -2845,6 +2880,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     this.getTimeSalesValuationDate = this.selectedSalesDate?.getTime()
     this.getTimeLettingsValuationDate = this.selectedLettingsDate?.getTime()
+
+    this.valuationForm.controls['lettingsMeetingOwner'].setValue(null)
+    this.valuationForm.controls['salesMeetingOwner'].setValue(null)
 
     this.setCloseState()
 

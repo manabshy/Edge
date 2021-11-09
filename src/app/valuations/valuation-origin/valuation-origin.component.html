@@ -16,8 +16,8 @@
   <fieldset [ngClass]="{'invalid': bookedByErrorMessage}"
     *ngIf="valuation.originTypeId == 13 ||valuation.originTypeId == 14">
     <label for="bookedBy">Booked By</label>
-    <p-dropdown name="bookedBy" id="bookedBy" placeholder="Select a CS Member" [options]="bookByOptions$ | async"
-      [(ngModel)]="valuation.bookedBy" [filter]="true" data-cy="bookedBy" optionLabel="fullName"
+    <p-dropdown name="bookedBy" id="bookedBy" [options]="bookByOptions$ | async" [(ngModel)]="valuation.bookedBy"
+      optionValue="staffMemberId" [filter]="true" data-cy="bookedBy" optionLabel="fullName"
       (ngModelChange)="controlValues()" [showClear]="true">
     </p-dropdown>
     <p class="message message--negative"> {{bookedByErrorMessage}}</p>
