@@ -23,20 +23,20 @@ import { ToBDocument } from '../../../terms-of-business.component'
               <span class="cell-content">{{ moment(data?.signedOn).format('Do MMM YYYY (HH:mm)') || '-' }}</span>
             </td>
             <td data-title="Short Lets Instruction">
-              <span class="cell-content">{{ data.isShortLetInstruction ? 'Yes' : 'No' }}</span>
+              <span class="cell-content">{{ data?.isShortLetInstruction ? 'Yes' : 'No' }}</span>
             </td>
             <td data-title="Long Lets Instruction">
-              <span class="cell-content">{{ data.isLongLetInstruction ? 'Yes' : 'No' }}</span>
+              <span class="cell-content">{{ data?.isLongLetInstruction ? 'Yes' : 'No' }}</span>
             </td>
             <td data-title="Management">
-              <span class="cell-content">{{ data.isManagement ? 'Yes' : 'No' }}</span>
+              <span class="cell-content">{{ data?.isManagement ? 'Yes' : 'No' }}</span>
             </td>
             <td data-title="Zero Deposit">
-              <span class="cell-content">{{ data.zeroDepositAccepted ? 'Yes' : 'No' }}</span>
+              <span class="cell-content">{{ data?.zeroDepositAccepted ? 'Yes' : 'No' }}</span>
             </td>
             <td data-title="Document(s)">
               <span class="cell-content">
-                <a href="{{ data.signatureFile?.fileUri }}" target="_blank" style="color: #4DA685">
+                <a href="{{ data?.signatureFile?.fileUri }}" target="_blank" style="color: #4DA685">
                   <i class="fa fa-file"></i>
                   &nbsp;
                   <span class="underline">Terms of Business</span>

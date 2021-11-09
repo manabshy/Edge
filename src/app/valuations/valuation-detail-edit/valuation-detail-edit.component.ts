@@ -302,13 +302,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   get isTermsOfBusinessVisible() {
-    return true
-    // if (this.valuation) {
-    //   return !(
-    //     this.valuation.valuationStatus === ValuationStatusEnum.None ||
-    //     this.valuation.valuationStatus === ValuationStatusEnum.Booked
-    //   );
-    // }
+    // return true
+    if (this.valuation) {
+      return !(
+        this.valuation.valuationStatus === ValuationStatusEnum.None ||
+        this.valuation.valuationStatus === ValuationStatusEnum.Booked
+      );
+    }
   }
 
   get isLandRegisterVisible() {
@@ -320,8 +320,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  activeState: boolean[] = [false, false, false, false, true, false, false, false, false, true]
-  // activeState: boolean[] = [true, true, true, true, true, true, true]
+  // activeState: boolean[] = [false, false, false, false, true, false, false, false, false, true]
+  activeState: boolean[] = [true, true, true, true, true, true, true]
 
   statuses = [
     { name: 'valuationNotes', value: 0, isValid: false },
@@ -337,6 +337,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   setRequirementValuationNoteBs = new BehaviorSubject(false)
 
   interestList: any[] = []
+
+  valuationData$ = this._valuationFacadeSvc.valuationData$
 
   constructor(
     private _valuationFacadeSvc: ValuationFacadeService,
@@ -2857,17 +2859,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   onUpdateToBForm(ev) {
-    console.log('onUpdateToBForm: ', ev)
     this._valuationFacadeSvc.updateLocalModel(ev)
   }
 
   onTermsOfBusinessFileUploaded(ev) {
-    console.log('onTermsOfBusinessFileUploaded: save file and update local valuation ready for save ', ev)
     this._valuationFacadeSvc.termsOfBusinessFileUploaded(ev)
   }
 
-  onSendTermsOfBusinessReminder(ev) {
-    console.log('onSendTermsOfBusinessReminder: ', ev)
+  onSendTermsOfBusinessReminder() {
     this._valuationFacadeSvc.sendTermsOfBusinessReminder()
   }
 

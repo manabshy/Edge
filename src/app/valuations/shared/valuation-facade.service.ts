@@ -159,35 +159,32 @@ export class ValuationFacadeService {
   }
 
   public sendTermsOfBusinessReminder() {
-    console.log('WIP: sendTermsOfBusinessReminder')
-    // POST: valuations/{valuationId}/tobreminder
+    
     let valuationDataClosure
     return this.valuationData$.pipe(
       take(1),
       mergeMap((valuationData) => {
         valuationDataClosure = valuationData
-        console.log('🏆 sendTermsOfBusinessReminder ', valuationData)
         return this._apiSvc.resendToBLink(valuationData.valuationEventId)
       }),
       tap((res):any => {
+        // TODO tidy up model refresh once confirmed
         const updatedToBDoc = valuationDataClosure.eSignSignatureTob ? valuationDataClosure.eSignSignatureTob : {}
         updatedToBDoc.dateRequestSent = new Date()
         const newValuationValue = {...valuationDataClosure, eSignSignatureTob: updatedToBDoc}
-        console.log('newValuationValue: ', newValuationValue)
         this._valuationData.next(newValuationValue)
       })
     )
     .subscribe(res => {
-      console.log('resend tob done. update local timestamp',res)
-      // const updatedToBDoc = 
+      console.log('resend tob done.')
     })
   }
 
   public updateLocalModel(data){
-    console.log('updateLocalModel: ', data)
+    // console.log('updateLocalModel, pushing data update out: ', data)
     const valuationData = this._valuationData.getValue()
     const updatedValuationData = { ...valuationData, ...data }
-    console.log('updatedValuationData: ', updatedValuationData)
+    // console.log('updatedValuationData: ', updatedValuationData)
     this._valuationData.next(updatedValuationData)
   }
   // LAND REGISTRY CARD

@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core'
+import { Component, Input, OnInit, EventEmitter, Output, OnChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { MenuItem } from 'primeng/api/menuitem'
 import { EdgeFile } from 'src/app/shared/models/edgeFile'
@@ -66,7 +66,7 @@ interface toBSale {
           <div data-cy="termsofbusinessWarningMessage" class="p-ml-2">Please select terms of business</div>
         </ng-template>
       </p-messages>
-      -->
+      
 
       <ng-container *ngIf="showSalesToB">
         <app-terms-of-business-table-sales [data]="termsOfBusinessDocument"></app-terms-of-business-table-sales>
@@ -87,11 +87,14 @@ interface toBSale {
           [termsOfBusinessModel]="termsOfBusinessDocument.toBLetting"
         ></app-lettings-tob-dialog>
       </ng-container>
+      -->
+
     </div>
   `
 })
-export class TermsOfBusinessComponent implements OnInit {
+export class TermsOfBusinessComponent implements OnInit, OnChanges {
   @Input() valuationData: Valuation
+  @Input() termsOfBusinessDocument: any = { dateRequestSent: null, toBLetting: {}, toBSale: {} }
   @Input() interestList: any[] = []
   @Input() formErrors
 
@@ -105,7 +108,7 @@ export class TermsOfBusinessComponent implements OnInit {
   options: FormlyFormOptions = {}
   fields: FormlyFieldConfig[]
 
-  termsOfBusinessDocument: ToBDocument
+  // termsOfBusinessDocument: ToBDocument
   moment = moment
   menuItems: MenuItem[]
   message: any
@@ -125,26 +128,35 @@ export class TermsOfBusinessComponent implements OnInit {
 
   constructor() {}
 
+  ngOnChanges(changes) {
+    // console.log('termsOfBusinessDocument changes: ', changes)
+    if (changes.termsOfBusinessDocument && !changes.termsOfBusinessDocument.firstChange) {
+        this.message.text.push( `Last Emailed : ${moment(this.termsOfBusinessDocument?.dateRequestSent).format('Do MMM YYYY (HH:mm)')}`)
+      }
+  }
+
   ngOnInit(): void {
     this.fields = this.termsOfBusinessFormFields()
-    this.termsOfBusinessDocument = this.valuationData.eSignSignatureTob
-      ? this.valuationData.eSignSignatureTob
-      : { dateRequestSent: null, toBLetting: {}, toBSale: {} }
+    // this.termsOfBusinessDocument = this.valuationData.eSignSignatureTob
+    //   ? this.valuationData.eSignSignatureTob
+    //   : { dateRequestSent: null, toBLetting: {}, toBSale: {} }
     this.valuationType = this.valuationData.valuationType
     this.showSalesToB = this.isSalesToB()
     this.showLettingsToB = this.isLettingsToB()
 
-    console.log('initting tob component: ', this.termsOfBusinessDocument)
-
+    console.log('initting tob component: ', this.valuationData.declarableInterest, this.valuationData.section21StatusId)
+    
+    this.model.declarableInterest = this.valuationData.declarableInterest
+    this.model.section21StatusId = this.valuationData.section21StatusId
+    
     this.defaultMessage = {
       type: 'warn',
-      text: [
-        'Terms of business not yet signed',
-        `Last Emailed : ${moment(this.termsOfBusinessDocument?.dateRequestSent).format('Do MMM YYYY (HH:mm)')}`
-      ]
+      text: ['Terms of business not yet signed']
     }
 
     this.menuItems = this.setMenuItems()
+
+    // TODO initial message logic should be more readable
     this.message =
       this.valuationData.valuationStatus == 3 ||
       this.valuationData.valuationStatus == 4 ||
@@ -205,9 +217,10 @@ export class TermsOfBusinessComponent implements OnInit {
   private termsOfBusinessFormFields(): FormlyFieldConfig[] {
     return [
       {
-        fieldGroupClassName: 'w-full md:w-1/2 my-2',
+        fieldGroupClassName: 'w-full md:w-1/2',
         fieldGroup: [
           {
+            className: 'p-2 flex-1',
             key: 'declarableInterest',
             type: 'radio',
             templateOptions: {
@@ -229,7 +242,7 @@ export class TermsOfBusinessComponent implements OnInit {
         ]
       },
       {
-        template: '<hr /><div><strong>Address:</strong></div>',
+        template: '<div class="h-3"></div>'
       },
       {
         fieldGroupClassName: 'flex flex-col',
