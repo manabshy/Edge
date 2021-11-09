@@ -151,7 +151,6 @@
         [tooltipTemplate]="customTooltip" [weekStartsOn]="weekStartsOn" [daysInWeek]="daysInWeek"
         [hourSegmentTemplate]="weekViewHourSegmentTemplate" (hourSegmentClicked)="getClickedDate($event.date)"
         (eventClicked)="eventClicked($event)" [eventTitleTemplate]='customLabelTemplate'>
-        <!-- [allDayEventsLabelTemplate]='customLabelTemplate' -->
       </mwl-calendar-week-view>
       <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events"
         (beforeViewRender)="beforeDayViewRender($event)" [tooltipAppendToBody]="true" [tooltipTemplate]="customTooltip"
