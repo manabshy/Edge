@@ -67,9 +67,14 @@ export class ValuationApiService {
       .pipe(map((response) => response.result))
   }
 
-  getToBLink(valuationId: number): Observable<any> {
+  public getToBLink(valuationId: number): Observable<any> {
     const url = `${AppConstants.esignUrl}/signatureLinks/${valuationId}`
     return this.http.get<any>(url).pipe(map((response) => response.result))
+  }
+  
+  public resendToBLink(valuationId: number): Observable<any> {
+    const url = `${AppConstants.baseValuationUrl}/${valuationId}/tobreminder`
+    return this.http.post<any>(url, {}).pipe(map((response) => response.result))
   }
 
   createValuationESign(eSignTypeId: number, valuationEventId: number): Observable<any> {

@@ -982,6 +982,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     }
     this.sideNavItems.splice(1, 0, contactGroups)
     this.sidenavService.resetCurrentFlag()
-    this.destroy.next()
+    this.destroy.next(true)
   }
 }

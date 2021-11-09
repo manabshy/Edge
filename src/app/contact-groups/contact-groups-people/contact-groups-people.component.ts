@@ -1009,7 +1009,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.setPageLabel(true)
-    this.destroy.next()
+    this.destroy.next(true)
     console.log('destroy component now')
   }
 }

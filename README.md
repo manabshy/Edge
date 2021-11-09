@@ -29,9 +29,17 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Developing with Storybook
 
-To run storybook in development run `npm run storybook` and once running open localhost:6060 in a browser to view storybook.  Open the component(s) you're working on from the sidebar and develop away. Use the .stories files of your components to manage the different states of your component for each story.
+To run storybook in development run `npm run storybook` and once running open localhost:6060 in a browser to view storybook.  Open the component(s) you're working on from the sidebar and develop away. Use the .stories files of your components to manage the different states of your component for each story and to set Inputs & Outputs.
 
 For more information on storybook see src/stories/Introductions.stories.mdx
 
 ## Storybook static site for team use
 Run `npm run storybook-build` to generate a static website of the component library that can be deployed to test/qa environments for team consumption and discussion. TODO: css style imports incomplete on build (some CSS needs importing from somewhere)
+
+## Documentation
+
+This application uses Compodoc to generate a static documentation website.  It follows typedoc conventions for structuring comments in the code.
+Storybook also has a docs plugin that leverages these same comments to provide documetation there, also.
+
+## Running scripts
+if running scripts has been disabled by admin persmissions then you may need a way of running update schematics or other dev scripts. One way around this is to run the scripts via package.json scripts block. From there you can use packages such as rimraf to remove node_modules etc etc

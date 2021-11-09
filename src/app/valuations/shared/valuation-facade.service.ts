@@ -6,8 +6,8 @@
 
 import { Injectable, Injector } from '@angular/core'
 import { Router } from '@angular/router'
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs'
-import { filter, map, mergeMap, take, tap } from 'rxjs/operators'
+import { BehaviorSubject, Observable, Subject } from 'rxjs'
+import { map, mergeMap, take, tap } from 'rxjs/operators'
 import {
   Valuation,
   ValuationRequestOption,
@@ -17,7 +17,8 @@ import {
   CalendarAvailibility,
   CancelValuation,
   valuationNote,
-  ValuationPricingInfo
+  ValuationPricingInfo,
+  ValuationTypeEnum
 } from './valuation'
 import { Instruction } from 'src/app/shared/models/instruction'
 import { ValuationApiService } from './valuation-api.service'
@@ -114,7 +115,81 @@ export class ValuationFacadeService {
   // VALUES CARD
 
   // TERMS OF BUSINESS CARD
+  public termsOfBusinessFileUploaded(data) {
+    console.log('WIP: termsOfBusinessFileUploaded: ', data)
+    
+    return this.saveFileTemp(data.file)
+      .pipe(
+        take(1),
+        tap((res) => {
+          try {
+            console.log('upload ToB file res: ', res)
+            const valuationData = this._valuationData.getValue()
 
+            let eSignSignatureTob = {
+              toBLetting: {
+              },
+              toBSale: {
+              }
+            }
+            
+            if (valuationData.valuationType === ValuationTypeEnum.Lettings) {
+              console.log('LETTINGS TOB set: ')
+              eSignSignatureTob.toBLetting = {...data.model, signatureFile: res.files[0]}
+              
+            } else if (valuationData.valuationType === ValuationTypeEnum.Sales) {
+              console.log('SALES TOB set: ')
+              eSignSignatureTob.toBSale = {...data.model, signatureFile: res.files[0]}
+            }
+            const updatedValuationData = { ...valuationData, eSignSignatureTob }
+            console.log('updatedValuationData: ', updatedValuationData)
+            this._valuationData.next(updatedValuationData)
+            return 'that worked'
+          } catch (e) {
+            console.log('tap error: ', e)
+          }
+        })
+      )
+      .subscribe(
+        (res) => {
+          console.log('subscribe: ', res)
+        },
+        (err) => console.error
+      )
+  }
+
+  public sendTermsOfBusinessReminder() {
+    console.log('WIP: sendTermsOfBusinessReminder')
+    // POST: valuations/{valuationId}/tobreminder
+    let valuationDataClosure
+    return this.valuationData$.pipe(
+      take(1),
+      mergeMap((valuationData) => {
+        valuationDataClosure = valuationData
+        console.log('🏆 sendTermsOfBusinessReminder ', valuationData)
+        return this._apiSvc.resendToBLink(valuationData.valuationEventId)
+      }),
+      tap((res):any => {
+        const updatedToBDoc = valuationDataClosure.eSignSignatureTob ? valuationDataClosure.eSignSignatureTob : {}
+        updatedToBDoc.dateRequestSent = new Date()
+        const newValuationValue = {...valuationDataClosure, eSignSignatureTob: updatedToBDoc}
+        console.log('newValuationValue: ', newValuationValue)
+        this._valuationData.next(newValuationValue)
+      })
+    )
+    .subscribe(res => {
+      console.log('resend tob done. update local timestamp',res)
+      // const updatedToBDoc = 
+    })
+  }
+
+  public updateLocalModel(data){
+    console.log('updateLocalModel: ', data)
+    const valuationData = this._valuationData.getValue()
+    const updatedValuationData = { ...valuationData, ...data }
+    console.log('updatedValuationData: ', updatedValuationData)
+    this._valuationData.next(updatedValuationData)
+  }
   // LAND REGISTRY CARD
 
   // COMPLIANCE CHECKS CARD FUNCTIONS
@@ -286,7 +361,7 @@ export class ValuationFacadeService {
     // .pipe(
     //   tap((res) => {
     //     console.log('in response from valuation PUT: ', res)
-        
+
     //   })
     // )
   }
