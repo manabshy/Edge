@@ -31,13 +31,6 @@ const components = [
 
 @NgModule({
   declarations: components,
-  imports: [
-    CommonModule,
-    SharedModule,
-    ValuationsRoutingModule,
-    CalendarSharedModule,
-    ComplianceModule,
-    TermsOfBusinessModule
-  ]
+  imports: [CommonModule, SharedModule, ValuationsRoutingModule, ComplianceModule, TermsOfBusinessModule]
 })
 export class ValuationsModule {}
