@@ -21,7 +21,7 @@ import { ToBDocument } from '../../../terms-of-business.component'
             <td data-title="Signed On">
               <span class="cell-content">{{ moment(data?.signedOn).format('Do MMM YYYY (HH:mm)') || '-' }}</span>
             </td>
-           <!-- <td data-title="Instruction Price Direction">
+            <td data-title="Instruction Price Direction">
               <span class="cell-content">{{ data.instructionPriceDirection | currency: 'GBP':'symbol':'3.0' }}</span>
             </td>
             <td data-title="Sole or Multi">
@@ -36,7 +36,7 @@ import { ToBDocument } from '../../../terms-of-business.component'
                   <span class="underline">Terms of Business</span>
                 </a>
               </span>
-            </td> -->
+            </td>
           </tr>
         </tbody>
       </table>

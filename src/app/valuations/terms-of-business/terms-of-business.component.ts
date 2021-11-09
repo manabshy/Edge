@@ -46,7 +46,7 @@ interface toBSale {
             <app-messages [message]="message"></app-messages>
           </div>
         </ng-container>
-        <span class="flex-1"></span>
+        <span class="flex-1 mr-2"></span>
         <app-menu [menuItems]="menuItems"></app-menu>
       </div>
 
@@ -66,35 +66,35 @@ interface toBSale {
           <div data-cy="termsofbusinessWarningMessage" class="p-ml-2">Please select terms of business</div>
         </ng-template>
       </p-messages>
-      
+      -->
 
-      <ng-container *ngIf="showSalesToB">
+      <ng-container *ngIf="showSalesToB && termsOfBusinessDocument">
+      
         <app-terms-of-business-table-sales [data]="termsOfBusinessDocument"></app-terms-of-business-table-sales>
 
         <app-sales-tob-dialog
           (onSubmitTermsOfBusiness)="submitTermsOfBusiness($event)"
           [showDialog]="showSalesDialog"
-          [termsOfBusinessModel]="termsOfBusinessDocument.toBSale"
+          [data]="termsOfBusinessDocument"
         ></app-sales-tob-dialog>
       </ng-container>
 
       <ng-container *ngIf="showLettingsToB">
         <app-terms-of-business-table-lettings [data]="termsOfBusinessDocument"></app-terms-of-business-table-lettings>
-
-        <app-lettings-tob-dialog
-          (onSubmitTermsOfBusiness)="submitTermsOfBusiness($event)"
-          [showDialog]="showLettingsDialog"
-          [termsOfBusinessModel]="termsOfBusinessDocument.toBLetting"
-        ></app-lettings-tob-dialog>
+        <ng-container *ngIf="termsOfBusinessDocument">
+          <app-lettings-tob-dialog
+            (onSubmitTermsOfBusiness)="submitTermsOfBusiness($event)"
+            [showDialog]="showLettingsDialog"
+            [data]="termsOfBusinessDocument"
+          ></app-lettings-tob-dialog>
+        </ng-container>
       </ng-container>
-      -->
-
     </div>
   `
 })
 export class TermsOfBusinessComponent implements OnInit, OnChanges {
   @Input() valuationData: Valuation
-  @Input() termsOfBusinessDocument: any = { dateRequestSent: null, toBLetting: {}, toBSale: {} }
+  @Input() termsOfBusinessDocument: ToBDocument = { dateRequestSent: null, toBLetting: {}, toBSale: {} }
   @Input() interestList: any[] = []
   @Input() formErrors
 
@@ -131,24 +131,22 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges {
   ngOnChanges(changes) {
     // console.log('termsOfBusinessDocument changes: ', changes)
     if (changes.termsOfBusinessDocument && !changes.termsOfBusinessDocument.firstChange) {
-        this.message.text.push( `Last Emailed : ${moment(this.termsOfBusinessDocument?.dateRequestSent).format('Do MMM YYYY (HH:mm)')}`)
-      }
+      this.message.text.push(
+        `Last Emailed : ${moment(this.termsOfBusinessDocument?.dateRequestSent).format('Do MMM YYYY (HH:mm)')}`
+      )
+    }
   }
 
   ngOnInit(): void {
     this.fields = this.termsOfBusinessFormFields()
-    // this.termsOfBusinessDocument = this.valuationData.eSignSignatureTob
-    //   ? this.valuationData.eSignSignatureTob
-    //   : { dateRequestSent: null, toBLetting: {}, toBSale: {} }
+
     this.valuationType = this.valuationData.valuationType
     this.showSalesToB = this.isSalesToB()
     this.showLettingsToB = this.isLettingsToB()
 
-    console.log('initting tob component: ', this.valuationData.declarableInterest, this.valuationData.section21StatusId)
-    
     this.model.declarableInterest = this.valuationData.declarableInterest
     this.model.section21StatusId = this.valuationData.section21StatusId
-    
+
     this.defaultMessage = {
       type: 'warn',
       text: ['Terms of business not yet signed']
@@ -166,14 +164,18 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges {
   }
 
   isSalesToB() {
-    return (
-      (this.valuationType == this.valuationTypeGetter.Sales && this.valuationData.valuationStatus === 3) ||
-      this.valuationData.valuationStatus === 4
-    )
+    const isSalesTOB =
+      this.valuationType == this.valuationTypeGetter.Sales 
+      && (this.valuationData.valuationStatus === 3 
+      || this.valuationData.valuationStatus === 4)
+    console.log('isSalesToB: ', isSalesTOB)
+    return isSalesTOB
   }
 
   isLettingsToB() {
-    return this.valuationType == this.valuationTypeGetter.Lettings
+    const isLettingsTOB = this.valuationType == this.valuationTypeGetter.Lettings
+    console.log('isLettingsToB: ', isLettingsTOB)
+    return isLettingsTOB
   }
 
   public submitTermsOfBusiness(ev) {

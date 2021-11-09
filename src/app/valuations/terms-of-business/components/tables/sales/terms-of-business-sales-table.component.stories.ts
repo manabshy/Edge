@@ -25,8 +25,8 @@ const SalesTemplate: Story<TermsOfBusinessTableSalesComponent> = (args: TermsOfB
   props: args
 })
 
-export const SingleEntry = SalesTemplate.bind({})
-SingleEntry.args = {
+export const SingleEntrySales = SalesTemplate.bind({})
+SingleEntrySales.args = {
   data: {
     signedOn: new Date(),
     instructionPriceDirection: '890000',

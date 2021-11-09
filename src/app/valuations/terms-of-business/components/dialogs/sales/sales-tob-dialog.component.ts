@@ -45,7 +45,7 @@ import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core'
 export class SalesToBDialogComponent implements OnInit {
   @Output() onSubmitTermsOfBusiness: EventEmitter<any> = new EventEmitter()
   @Input() showDialog: boolean = false
-  @Input() termsOfBusinessModel: any
+  @Input() data: any
 
   form = new FormGroup({})
   model: any = {}
@@ -57,8 +57,8 @@ export class SalesToBDialogComponent implements OnInit {
   fileUploaded: boolean = false
 
   ngOnInit() {
-    // console.log('termsOfBusinessModel SalesToBDialogComponent: ', this.termsOfBusinessModel)
-    this.model = this.termsOfBusinessModel
+    // console.log('data SalesToBDialogComponent: ', this.data)
+    this.model = this.data
   }
 
   public getFiles(files): void {
@@ -67,6 +67,7 @@ export class SalesToBDialogComponent implements OnInit {
   }
 
   public submit() {
+    console.log('submit: ', this)
     if (!this.form.valid) return
     const payload = {
       model: this.model,
@@ -88,7 +89,6 @@ export class SalesToBDialogComponent implements OnInit {
             type: 'input',
             templateOptions: {
               label: 'Instruction price direction',
-              description: 'In order to proceed, please accept terms',
               required: true
             }
           },
@@ -98,7 +98,6 @@ export class SalesToBDialogComponent implements OnInit {
             type: 'select',
             templateOptions: {
               label: 'Sole or Multi',
-              description: 'In order to proceed, please accept terms',
               required: true,
               options: [
                 { value: 1, label: 'Sole' },

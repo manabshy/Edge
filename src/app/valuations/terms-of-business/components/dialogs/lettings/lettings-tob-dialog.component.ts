@@ -45,7 +45,7 @@ import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core'
 export class LettingsToBDialogComponent implements OnInit {
   @Output() onSubmitTermsOfBusiness: EventEmitter<any> = new EventEmitter()
   @Input() showDialog: boolean = false
-  @Input() termsOfBusinessModel: any
+  @Input() data: any
 
   form = new FormGroup({})
   model: any = {}
@@ -57,8 +57,8 @@ export class LettingsToBDialogComponent implements OnInit {
   fileUploaded: boolean = false
 
   ngOnInit() {
-    // console.log('termsOfBusinessModel LettingsToBDialogComponent: ', this.termsOfBusinessModel)
-    this.model = this.termsOfBusinessModel
+    console.log('data LettingsToBDialogComponent: ', this.data)
+    this.model = this.data
   }
 
   public getFiles(files): void {
