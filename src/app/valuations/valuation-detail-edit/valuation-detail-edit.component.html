@@ -10,10 +10,7 @@
         <div class="card" *ngIf="property">
           <div class="card__header">
             Status
-            <span class="pill flexRight" [ngClass]="{
-                'pill--negative': valuation.valuationStatus == 5,
-                'pill--positive': valuation.valuationStatus != 5
-              }">
+            <span class="pill flexRight" [ngStyle]="{'background-color': getStatusColor(),'color':'white' }">
               {{ valuation?.valuationStatusDescription }}
             </span>
           </div>
