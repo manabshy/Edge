@@ -31,15 +31,16 @@ export const SingleEntryLettings = LettingsTemplate.bind({})
 SingleEntryLettings.args = {
   data: {
     signedOn: new Date(),
-    isLongLetInstruction: true,
+    // isLongLetInstruction: true,
+    // isShortLetInstruction: true,
+    gasCertRequired: true,
     isManagement: false,
-    isShortLetInstruction: true,
     zeroDepositAccepted: false,
     signatureFile: {
       fileStoreId: 15746702,
       fileName: 'Completed_Landlord__Property_Questionnaire_3_69_Ch…eet_SW1V_4PG_deac4b4228134092b743340f37a4d4e7.pdf',
       updateDate: '2021-04-28T20:42:04.183+01:00',
-      fileUri: 'https://google.com'
+      url: 'https://google.com'
     }
   }
 }

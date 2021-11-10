@@ -329,7 +329,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     { name: 'propertyInfo', value: 1, isValid: false },
     { name: 'appointment', value: 2, isValid: false },
     { name: 'values', value: 3, isValid: false },
-    { name: 'termsOfBusinesses', value: 4, isValid: false },
+    { name: 'termsOfBusiness', value: 4, isValid: false },
     { name: 'landRegistry', value: 6, isValid: false },
     { name: 'complianceChecks', value: 9, isValid: false },
     { name: 'instruct', value: 8, isValid: false }
@@ -968,12 +968,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   setPropertyDetail(propertyDetails) {
-    // ?
+    
     if (propertyDetails.lastKnownOwner) this.lastKnownOwner = propertyDetails.lastKnownOwner
     else {
       this.lastKnownOwner = this.valuation?.propertyOwner
     }
-    // ?
+    
     this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner)
 
     if (this.changedLastOwner && this.changedLastOwner.contactGroupId > 0) {
@@ -1198,9 +1198,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         }
       })
       .then((result) => {
-        this.setPropertyDetail(result) // ?
-        this.getValuationPropertyInfo(this.propertyId) // ?
-        this.getValuers(this.propertyId) // ?
+        this.setPropertyDetail(result) 
+        this.getValuationPropertyInfo(this.propertyId) 
+        this.getValuers(this.propertyId) 
       })
       .then(() => {
         console.log(this.valuation.property)
@@ -2900,12 +2900,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this._valuationFacadeSvc.updateLocalModel(ev)
   }
 
-  onTermsOfBusinessFileUploaded(ev) {
-    this._valuationFacadeSvc.termsOfBusinessFileUploaded(ev)
-  }
-
   onSendTermsOfBusinessReminder() {
     this._valuationFacadeSvc.sendTermsOfBusinessReminder()
+  }
+
+  submitTermsOfBusiness(ev){
+    console.log('onSubmitTermsOfBusiness: ', ev)
+    this._valuationFacadeSvc.termsOfBusinessFileUploaded(ev)
   }
 
   ngOnDestroy() {

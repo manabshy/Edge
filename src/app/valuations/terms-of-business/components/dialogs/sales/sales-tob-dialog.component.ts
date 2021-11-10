@@ -54,10 +54,10 @@ export class SalesToBDialogComponent implements OnInit {
 
   isMultiple: boolean = false
   tmpFiles: File[]
-  fileUploaded: boolean = false
+  fileUploaded: boolean = true
 
   ngOnInit() {
-    // console.log('data SalesToBDialogComponent: ', this.data)
+    console.log('data SalesToBDialogComponent: ', this.data)
     this.model = this.data
   }
 

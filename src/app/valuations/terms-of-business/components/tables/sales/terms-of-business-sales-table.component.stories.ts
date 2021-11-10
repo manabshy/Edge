@@ -32,7 +32,7 @@ SingleEntrySales.args = {
     instructionPriceDirection: '890000',
     salesAgencyTypeId: 1,
     signatureFile: {
-      fileUri: 'http://www.google.co.uk'
+      url: 'http://www.google.co.uk'
     }
   }
 }

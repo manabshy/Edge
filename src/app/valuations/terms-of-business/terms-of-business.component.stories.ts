@@ -16,6 +16,7 @@ import { FileUploadComponent } from 'src/app/shared/components/file-upload/file-
 import { MessageService } from 'primeng/api'
 import { SingleEntrySales } from './components/tables/sales/terms-of-business-sales-table.component.stories'
 import { SingleEntryLettings } from './components/tables/lettings/terms-of-business-lettings-table.component.stories'
+import { LettingsToBDialogComponent } from './components/dialogs/lettings/lettings-tob-dialog.component'
 
 export default {
   title: 'Valuations/TermsOfBusiness/TermsOfBusinessComponent',
@@ -28,6 +29,7 @@ export default {
         TermsOfBusinessComponent,
         TermsOfBusinessTableLettingsComponent,
         TermsOfBusinessTableSalesComponent,
+        LettingsToBDialogComponent,
         MessagesComponent,
         MenuComponent,
         FileUploadComponent

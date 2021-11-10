@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core'
-import { FormGroup } from '@angular/forms'
-import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { FormlyFieldConfig } from '@ngx-formly/core'
 
 @Component({
   selector: 'app-lettings-tob-dialog',
@@ -19,8 +19,54 @@ import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core'
           [isMultiple]="isMultiple"
         ></app-file-upload>
 
-        <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="fileUploaded">
-          <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
+        <form [formGroup]="form" class="my-4">
+          <fieldset class="mb-2">
+            <fieldset class="row">
+              <label style="width: auto; margin-top: 10px">Is a gas certificate required?</label>
+            </fieldset>
+            <span class="radio radio--inline">
+              <span style="margin-right: 8px">
+                <input class="p-2" id="gasCertRequiredYes" type="radio" [value]="true" formControlName="gasCertRequired" />
+                <label for="gasCertRequiredYes" class="mb-1">Yes</label>
+              </span>
+              <span style="margin-right: 8px">
+                <input class="p-2" id="gasCertRequiredNo" type="radio" [value]="false" formControlName="gasCertRequired" />
+                <label for="gasCertRequiredNo" class="mb-1">No</label>
+              </span>
+            </span>
+          </fieldset>
+         
+          <fieldset class="mb-2">
+            <fieldset class="row">
+              <label style="width: auto; margin-top: 10px">Will it be managed?</label>
+            </fieldset>
+            <span class="radio radio--inline">
+              <span style="margin-right: 8px">
+                <input class="p-2" type="radio" id="isManagementYes" [value]="true" formControlName="isManagement" />
+                <label for="isManagementYes" class="mb-1">Yes</label>
+              </span>
+              <span style="margin-right: 8px">
+                <input class="p-2" type="radio" id="isManagementNo" [value]="false" formControlName="isManagement" />
+                <label for="isManagementNo" class="mb-1">No</label>
+              </span>
+            </span>
+          </fieldset>
+         
+          <fieldset class="mb-2">
+            <fieldset class="row">
+              <label style="width: auto; margin-top: 10px">Are zero deposits accepted?</label>
+            </fieldset>
+            <span class="radio radio--inline">
+              <span style="margin-right: 8px">
+                <input class="p-2" type="radio" id="zeroDepositAcceptedYes" [value]="true" formControlName="zeroDepositAccepted" />
+                <label for="zeroDepositAcceptedYes" class="mb-1">Yes</label>
+              </span>
+              <span style="margin-right: 8px">
+                <input class="p-2" type="radio" id="zeroDepositAcceptedNo" [value]="false" formControlName="zeroDepositAccepted" />
+                <label for="zeroDepositAcceptedNo" class="mb-1">No</label>
+              </span>
+            </span>
+          </fieldset>
         </form>
 
         <footer class="mt-10">
@@ -45,20 +91,30 @@ import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core'
 export class LettingsToBDialogComponent implements OnInit {
   @Output() onSubmitTermsOfBusiness: EventEmitter<any> = new EventEmitter()
   @Input() showDialog: boolean = false
-  @Input() data: any
+  @Input() data: any = {}
 
-  form = new FormGroup({})
+  form: FormGroup
   model: any = {}
-  options: FormlyFormOptions = {}
   fields: FormlyFieldConfig[] = this.lettingsTermsOfBusinessFormFields()
- 
+
   isMultiple: boolean = false
   tmpFiles: File[]
-  fileUploaded: boolean = false
+  fileUploaded: boolean = true
+
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
-    console.log('data LettingsToBDialogComponent: ', this.data)
-    this.model = this.data
+    this.model = {
+      gasCertRequired: null,
+      isManagement: null,
+      zeroDepositAccepted: null,
+      ...this.data
+    }
+    this.form = this.fb.group({
+      gasCertRequired: [this.model.gasCertRequired, Validators.required],
+      isManagement: [this.model.isManagement, Validators.required],
+      zeroDepositAccepted: [this.model.zeroDepositAccepted, Validators.required]
+    })
   }
 
   public getFiles(files): void {
@@ -72,57 +128,72 @@ export class LettingsToBDialogComponent implements OnInit {
       model: this.model,
       file: this.tmpFiles
     }
-    // console.log('submit: ', payload)
     this.onSubmitTermsOfBusiness.emit(payload)
     this.showDialog = false
   }
 
+  // <form [formGroup]="form" (ngSubmit)="submit()">
+  //    <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
+  // </form>
+  //
   private lettingsTermsOfBusinessFormFields(): FormlyFieldConfig[] {
     return [
       {
-        fieldGroupClassName: 'flex flex-col pl-4 mt-4',
-        fieldGroup: [
-          {
-            className: 'w-full',
-            key: 'isShortLetInstruction',
-            type: 'checkbox',
-            templateOptions: {
-              label: 'Is short let instruction',
-              description: 'In order to proceed, please accept terms',
-              required: true
+        className: 'w-full mt-2 foobar',
+        key: 'gasCertRequired',
+        type: 'radio',
+        templateOptions: {
+          label: 'Is a gas certificate required?',
+          required: true,
+          options: [
+            {
+              value: true,
+              label: 'Yes'
+            },
+            {
+              value: false,
+              label: 'No'
             }
-          },
-          {
-            className: 'w-full mt-2',
-            key: 'isLongLetInstruction',
-            type: 'checkbox',
-            templateOptions: {
-              label: 'Is long let instruction',
-              description: 'In order to proceed, please accept terms',
-              required: true
+          ]
+        }
+      },
+      {
+        className: 'w-full mt-2',
+        key: 'isManagement',
+        type: 'radio',
+        templateOptions: {
+          label: 'Will it be managed?',
+          required: true,
+          options: [
+            {
+              value: true,
+              label: 'Yes'
+            },
+            {
+              value: false,
+              label: 'No'
             }
-          },
-          {
-            className: 'w-full mt-2',
-            key: 'isManagement',
-            type: 'checkbox',
-            templateOptions: {
-              label: 'Is management',
-              description: 'In order to proceed, please accept terms',
-              required: true
+          ]
+        }
+      },
+      {
+        className: 'w-full mt-2',
+        key: 'zeroDepositAccepted',
+        type: 'radio',
+        templateOptions: {
+          label: 'Are zero deposits accepted?',
+          required: true,
+          options: [
+            {
+              value: true,
+              label: 'Yes'
+            },
+            {
+              value: false,
+              label: 'No'
             }
-          },
-          {
-            className: 'w-full mt-2',
-            key: 'zeroDepositAccepted',
-            type: 'checkbox',
-            templateOptions: {
-              label: 'Zero deposit accepted',
-              description: 'In order to proceed, please accept terms',
-              required: true
-            }
-          }
-        ]
+          ]
+        }
       }
     ]
   }

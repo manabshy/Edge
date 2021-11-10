@@ -117,7 +117,7 @@ export class ValuationFacadeService {
   // TERMS OF BUSINESS CARD
   public termsOfBusinessFileUploaded(data) {
     console.log('WIP: termsOfBusinessFileUploaded: ', data)
-    
+
     return this.saveFileTemp(data.file)
       .pipe(
         take(1),
@@ -127,19 +127,17 @@ export class ValuationFacadeService {
             const valuationData = this._valuationData.getValue()
 
             let eSignSignatureTob = {
-              toBLetting: {
-              },
-              toBSale: {
-              }
+              toBLetting: {},
+              toBSale: {},
+              ...valuationData.eSignSignatureTob
             }
-            
+
             if (valuationData.valuationType === ValuationTypeEnum.Lettings) {
               console.log('LETTINGS TOB set: ')
-              eSignSignatureTob.toBLetting = {...data.model, signatureFile: res.files[0]}
-              
+              eSignSignatureTob.toBLetting = { ...data.model, signatureFile: res.files[0] }
             } else if (valuationData.valuationType === ValuationTypeEnum.Sales) {
               console.log('SALES TOB set: ')
-              eSignSignatureTob.toBSale = {...data.model, signatureFile: res.files[0]}
+              eSignSignatureTob.toBSale = { ...data.model, signatureFile: res.files[0] }
             }
             const updatedValuationData = { ...valuationData, eSignSignatureTob }
             console.log('updatedValuationData: ', updatedValuationData)
@@ -158,35 +156,43 @@ export class ValuationFacadeService {
       )
   }
 
+  /***
+   * @description pings the send terms of business API endpoint
+   */
   public sendTermsOfBusinessReminder() {
-    
     let valuationDataClosure
-    return this.valuationData$.pipe(
-      take(1),
-      mergeMap((valuationData) => {
-        valuationDataClosure = valuationData
-        return this._apiSvc.resendToBLink(valuationData.valuationEventId)
-      }),
-      tap((res):any => {
-        // TODO tidy up model refresh once confirmed
-        const updatedToBDoc = valuationDataClosure.eSignSignatureTob ? valuationDataClosure.eSignSignatureTob : {}
-        updatedToBDoc.dateRequestSent = new Date()
-        const newValuationValue = {...valuationDataClosure, eSignSignatureTob: updatedToBDoc}
-        this._valuationData.next(newValuationValue)
+    return this.valuationData$
+      .pipe(
+        take(1),
+        mergeMap((valuationData) => {
+          valuationDataClosure = valuationData
+          return this._apiSvc.resendToBLink(valuationData.valuationEventId)
+        }),
+        tap((res): any => {
+          // TODO tidy up model refresh once confirmed
+          const updatedToBDoc = valuationDataClosure.eSignSignatureTob ? valuationDataClosure.eSignSignatureTob : {}
+          updatedToBDoc.dateRequestSent = new Date()
+          const newValuationValue = { ...valuationDataClosure, eSignSignatureTob: updatedToBDoc }
+          this._valuationData.next(newValuationValue)
+        })
+      )
+      .subscribe((res) => {
+        console.log('resend tob done.')
       })
-    )
-    .subscribe(res => {
-      console.log('resend tob done.')
-    })
   }
 
-  public updateLocalModel(data){
+  public updateLocalModel(data) {
     // console.log('updateLocalModel, pushing data update out: ', data)
     const valuationData = this._valuationData.getValue()
     const updatedValuationData = { ...valuationData, ...data }
     // console.log('updatedValuationData: ', updatedValuationData)
     this._valuationData.next(updatedValuationData)
   }
+
+  public onSubmitTermsOfBusiness(ev) {
+    console.log('onSubmitTermsOfBusiness. update local valuation with terms of business data changes ready for saving to API', ev)
+  }
+
   // LAND REGISTRY CARD
 
   // COMPLIANCE CHECKS CARD FUNCTIONS

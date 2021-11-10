@@ -845,9 +845,10 @@
                         [valuationData]="valuationData"
                         [interestList]="interestList"
                         [termsOfBusinessDocument]="valuationData?.eSignSignatureTob"
+                        [formErrors]="formErrors"
                         (onSendTermsOfBusinessReminder)="onSendTermsOfBusinessReminder($event)"
-                        (onFileUploaded)="onTermsOfBusinessFileUploaded($event)"
                         (onModelChange)="onUpdateToBForm($event)"
+                        (onSubmitTermsOfBusiness)="submitTermsOfBusiness($event)"
                       ></app-terms-of-business>
                     </ng-container>
                   </div>

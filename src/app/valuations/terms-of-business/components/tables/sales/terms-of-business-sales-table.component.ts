@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import moment from 'moment'
-import { LettingsAgencyTypeEnum } from '../../../../shared/valuation'
+import { SalesAgencyTypeEnum } from '../../../../shared/valuation'
 import { ToBDocument } from '../../../terms-of-business.component'
 
 @Component({
@@ -25,12 +25,12 @@ import { ToBDocument } from '../../../terms-of-business.component'
               <span class="cell-content">{{ data.instructionPriceDirection | currency: 'GBP':'symbol':'3.0' }}</span>
             </td>
             <td data-title="Sole or Multi">
-              <span class="cell-content" *ngIf="data.salesAgencyTypeId === LettingsAgencyTypeEnum.Sole">Sole</span>
-              <span class="cell-content" *ngIf="data.salesAgencyTypeId === LettingsAgencyTypeEnum.Multi">Multi</span>
+              <span class="cell-content" *ngIf="data.salesAgencyTypeId === SalesAgencyTypeEnum.Sole">Sole</span>
+              <span class="cell-content" *ngIf="data.salesAgencyTypeId === SalesAgencyTypeEnum.Multi">Multi</span>
             </td>
             <td data-title="Document(s)">
               <span class="cell-content">
-                <a href="{{ data.signatureFile?.fileUri }}" target="_blank" style="color: #4DA685">
+                <a href="{{ data.signatureFile?.url }}" target="_blank" style="color: #4DA685">
                   <i class="fa fa-file"></i>
                   &nbsp;
                   <span class="underline">Terms of Business</span>
@@ -43,8 +43,12 @@ import { ToBDocument } from '../../../terms-of-business.component'
     </div>
   `
 })
-export class TermsOfBusinessTableSalesComponent {
+export class TermsOfBusinessTableSalesComponent implements OnInit{
   @Input() data: any
   moment = moment
-  LettingsAgencyTypeEnum = LettingsAgencyTypeEnum
+  SalesAgencyTypeEnum = SalesAgencyTypeEnum
+
+  ngOnInit(){
+    console.log('TermsOfBusinessTableSalesComponent data: ', this.data)
+  }
 }
