@@ -39,8 +39,6 @@ import { ImpersonateMemberComponent } from './impersonate-member/impersonate-mem
 import { ConfigsLoaderService } from './configs-loader.service'
 import { GlobalErrorHandlerService } from './core/services/global-error-handler.service'
 
-import { SharedModule } from './shared/shared.module'
-
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead'
 import { NgPipesModule } from 'ngx-pipes'
@@ -64,12 +62,10 @@ import { CarouselModule } from 'ngx-bootstrap/carousel'
 // vendor
 import { OrderModule } from 'ngx-order-pipe'
 import { ToastrModule, ToastContainerModule } from 'ngx-toastr'
-// import { AgmCoreModule } from "@agm/core";
 import { CalendarModule, DateAdapter } from 'angular-calendar'
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { AngularStickyThingsModule } from '@w11k/angular-sticky-things'
-import { CalendarSharedModule } from './calendar-shared/calendar-shared.module'
 
 import { MsalModule } from '@azure/msal-angular'
 import { HeaderComponent } from './header/header.component'
@@ -120,7 +116,6 @@ const externalModulesImports = [
   BsDropdownModule.forRoot(),
   CollapseModule.forRoot(),
   TabsModule.forRoot(),
-  // BsDatepickerModule.forRoot(),
   TypeaheadModule.forRoot(),
   ModalModule.forRoot(),
   PopoverModule.forRoot(),
@@ -132,19 +127,15 @@ const externalModulesImports = [
   CarouselModule.forRoot(),
   CalendarModule.forRoot({
     provide: DateAdapter,
-    useFactory: adapterFactory
+    useFactory: adapterFactory,
   })
-  // AgmCoreModule.forRoot({
-  //   apiKey: "AIzaSyC1Hv_vNkUxvvRibyjPbfgNhrTNi30jNtQ",
-  // }),
-]
+];
 const externalModulesExports = [
   InfiniteScrollModule,
   CollapseModule,
   TabsModule,
   TypeaheadModule,
   BsDropdownModule,
-  // BsDatepickerModule,
   ModalModule,
   PopoverModule,
   NgPipesModule,
@@ -156,7 +147,6 @@ const externalModulesExports = [
   OrderModule,
   ToastrModule,
   ToastContainerModule,
-  // AgmCoreModule,
   CarouselModule,
   NgbModule,
   LoadingBarHttpClientModule,

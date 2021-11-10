@@ -4,11 +4,10 @@
  * @description service providing functions to facilitate compliance checks for personal and company owned valuations
  */
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, Observable } from 'rxjs'
-import { filter, take } from 'rxjs/operators'
+import { BehaviorSubject, Observable, of } from 'rxjs'
+import { filter, tap, take } from 'rxjs/operators'
 import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-group'
 import { ValuationFacadeService } from '../shared/valuation-facade.service'
-
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +18,27 @@ export class ComplianceChecksFacadeService {
   constructor(private _valuationFacadeSvc: ValuationFacadeService) {}
 
   public valuation$: Observable<any> = this._valuationFacadeSvc.valuationData$
+
+  // WIP
+  // figure out if there's a power of attorney as the admin contact for the valuation.
+  // if so, then fetch their docs etc from documents endpoint
+  // return stream of data for that person
+  public loadAdditionalContactsCheck(valuationData, entityToAdd) {
+    console.log('loadAdditionalContactsCheck: ', valuationData, entityToAdd)
+    if (!!valuationData.adminContact && valuationData.isPowerOfAttorney) {
+      console.log('fetch documents for ', valuationData.adminContact.contactGroupId)
+      return this._valuationFacadeSvc
+        .getPeopleDocsForValuation(valuationData.adminContact.contactGroupId, valuationData.valuationEventId)
+        .toPromise()
+          .then((data) => {
+            console.log('add this person in ', data)
+            return { valuationData, entityToAdd, adminContact: data[0] }
+          })
+          
+    } else {
+      return of({ valuationData, entityToAdd, adminContact: null })
+    }
+  }
 
   // CONTACT SEARCHES / ADDING
   public contactSearchResults$: Observable<PotentialDuplicateResult> = this._contactSearchResults.asObservable()
@@ -53,7 +73,6 @@ export class ComplianceChecksFacadeService {
   public updateCompanyAndPersonDocuments(savePayload) {
     return this._valuationFacadeSvc.updateCompanyAndPersonDocuments(savePayload)
   }
-  
 
   // Personal compliance checks documents management functions 📚
   public getAllPersonDocs(personId) {

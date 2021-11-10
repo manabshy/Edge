@@ -843,9 +843,11 @@
                     <ng-container *ngIf="valuationData$ | async as valuationData">
                       <app-terms-of-business [valuationData]="valuationData" [interestList]="interestList"
                         [termsOfBusinessDocument]="valuationData?.eSignSignatureTob"
+                        [formErrors]="formErrors"
                         (onSendTermsOfBusinessReminder)="onSendTermsOfBusinessReminder($event)"
-                        (onFileUploaded)="onTermsOfBusinessFileUploaded($event)"
-                        (onModelChange)="onUpdateToBForm($event)"></app-terms-of-business>
+                        (onModelChange)="onUpdateToBForm($event)"
+                        (onSubmitTermsOfBusiness)="submitTermsOfBusiness($event)"
+                      ></app-terms-of-business>
                     </ng-container>
                   </div>
                 </p-accordionTab>

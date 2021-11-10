@@ -8,8 +8,8 @@ import { mapDocumentsForView } from './helpers/store-documents-helpers'
  * @description Builds initial store state when the store is loaded
  * @returns Object containing properties for the compliance checks store
  */
-export const buildStoreState = (valuationData, entityToAdd) => {
-  const entitiesData = mergeEntitiesReadyForStore(entityToAdd, valuationData)
+export const buildStoreState = (valuationData, entityToAdd, adminContact) => {
+  const entitiesData = mergeEntitiesReadyForStore(valuationData, entityToAdd, adminContact)
   return {
     valuationEventId: valuationData.valuationEventId,
     contactGroupId: valuationData.propertyOwner?.contactGroupId,
@@ -73,7 +73,7 @@ export const identifyAmlOrKyc = (valuation): string => {
   }
 }
 
-const mergeEntitiesReadyForStore = (entityToAdd, valuationData) => {
+const mergeEntitiesReadyForStore = (valuationData, entityToAdd, adminContact) => {
   let entitiesData
   if (valuationData.companyDocuments) {
     entitiesData = valuationData.companyDocuments.concat(valuationData.personDocuments)
@@ -85,6 +85,9 @@ const mergeEntitiesReadyForStore = (entityToAdd, valuationData) => {
     if (!entityAlreadyExists) {
       entitiesData.push(entityToAdd)
     }
+  }
+  if (adminContact) {
+    entitiesData.push(adminContact)
   }
   return entitiesData
 }
