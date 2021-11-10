@@ -203,6 +203,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   liveInstructWarning = false
   liveInstructHeader = 'Error'
   instructionTypeMessage: string
+  baseCalendarClass: string = 'lettingsEvent'
   valueMenuItems: MenuItem[] = [
     {
       id: 'editValue',
@@ -1125,7 +1126,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       outsideSpace: [],
       parking: [],
       propertyFeature: [''],
-      approxLeaseExpiryDate: [0, [Validators.max(999), Validators.min(0)]],
+      approxLeaseExpiryDate: [null, [Validators.max(999), Validators.min(1)]],
       salesValuer: [''],
       lettingsValuer: [''],
       isInvitationSent: true,
@@ -1843,6 +1844,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } else {
       this.selectedStaffMemberId = this.isSalesOnly ? availability.salesValuerId : availability.lettingsValuerId
       this.secondStaffMemberId = null
+      this.baseCalendarClass = this.isSalesOnly ? 'salesEvent' : 'lettingsEvent'
     }
 
     this.salesValuerOpenSlots = { thisWeek: [], nextWeek: [], next2Weeks: [] }
@@ -1912,12 +1914,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     allData.forEach((x) => {
       if (x.hours) {
         x.hours.forEach((hour) => {
-          if (hour.isFirstAvailable == false && hour.isSecondAvailable == false) {
-            hour.class = 'hourColorsForBoth'
-          } else if (hour.isFirstAvailable == false) {
-            hour.class = 'hourColorsForSales'
-          } else if (hour.isSecondAvailable == false) {
+          if (hour['isFirstAvailable'] == false && hour['isSecondAvailable'] == false) {
+            if (
+              this.availabilityForm.controls['salesValuerId'].value !=
+              this.availabilityForm.controls['lettingsValuerId'].value
+            )
+              hour.class = 'hourColorsForBoth'
+            else hour.class = 'hourColorsForLettings'
+          } else if (hour['isSecondAvailable'] === false) {
             hour.class = 'hourColorsForLettings'
+          } else if (hour['isFirstAvailable'] === false) {
+            hour.class = 'hourColorsForSales'
           }
         })
       }
@@ -2102,12 +2109,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   onTenureChange(tenureId: number) {
     if (+tenureId === 3 || +tenureId === 2) {
       this.showLeaseExpiryDate = true
+      this.approxLeaseExpiryDateControl.setValidators([Validators.max(999), Validators.min(1), Validators.required])
+      this.approxLeaseExpiryDateControl.updateValueAndValidity()
     } else {
       this.showLeaseExpiryDate = false
-      // if (this.approxLeaseExpiryDateControl.errors) {
-      //   this.approxLeaseExpiryDateControl.clearValidators();
-      //   this.approxLeaseExpiryDateControl.updateValueAndValidity();
-      // }
+      this.approxLeaseExpiryDateControl.clearValidators()
+      this.approxLeaseExpiryDateControl.updateValueAndValidity()
     }
   }
 
@@ -2811,6 +2818,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   cancelBooking() {
+    this.isBothEdit = false
+    this.sideBarControlVisible = false
+    this.isLettingsOnly = false
+    this.isSalesOnly = false
     this.sharedService.resetForm(this.availabilityForm)
     this.isAppointmentVisible = false
   }
