@@ -297,7 +297,15 @@ export class StaffMemberService {
 
   getCurrentStaffMemberSignature(): Observable<string> {
     if (!this.signature$) {
-      this.signature$ = this.requestStaffMemberSignature().pipe(shareReplay(CACHE_SIZE))
+      this.signature$ = this.requestStaffMemberSignature().pipe(
+        map((x) => {
+          if (x) {
+            x = x.replaceAll(`<IMG `, `<IMG style='border-style: none' `)
+          }
+          return x
+        }),
+        shareReplay(CACHE_SIZE)
+      )
     }
     return this.signature$
   }
