@@ -143,6 +143,14 @@ This applies from 992px onwards
       }
     }
 
+    .modal--xxsmall                               {
+      .p-dialog                                { width:500px;
+          .p-dialog-content                    { flex-grow:0; min-height:100px;
+              .row                             { min-height:125px; }
+        }
+    }
+  }
+
     p-toast                                     {
         .p-toast                                { width:300px; }
     }

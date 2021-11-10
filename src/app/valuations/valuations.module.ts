@@ -1,3 +1,4 @@
+import { VendorsModule } from './../shared/vendors.module'
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 
@@ -19,6 +20,7 @@ import { ValuationDetailEditComponent } from './valuation-detail-edit/valuation-
 import { ValuationsLandRegisterComponent } from './valuation-land-register/valuation-land-register.component'
 import { CancelValuationComponent } from './cancel-valuation/cancel-valuation.component'
 import { ValuationOriginComponent } from './valuation-origin/valuation-origin.component'
+import { ComponentsModule } from '../shared/components.module'
 
 const components = [
   ValuationsComponent,
@@ -33,8 +35,10 @@ const components = [
   declarations: components,
   imports: [
     CommonModule,
+    ComponentsModule,
     SharedModule,
     ValuationsRoutingModule,
+    VendorsModule,
     CalendarSharedModule,
     ComplianceModule,
     TermsOfBusinessModule

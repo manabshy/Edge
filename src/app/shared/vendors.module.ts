@@ -17,8 +17,6 @@ import { CarouselModule } from 'ngx-bootstrap/carousel'
 
 import { FormlyModule } from '@ngx-formly/core'
 import { FormlyPrimeNGModule } from '@ngx-formly/primeng'
-import { FormlyFieldRadio } from './forms/radio/radio.type'
-// import { FormlyRadioModule } from './forms/radio/radio.module'
 
 // vendor
 import { OrderModule } from 'ngx-order-pipe'
@@ -59,13 +57,6 @@ const externalModules = [
     validationMessages: [
       { name: 'required', message: 'This field is required'}
     ],
-    types: [
-      {
-        name: 'radio',
-        component: FormlyFieldRadio,
-        wrappers: ['form-field']
-      }
-    ]
   }),
   FormlyPrimeNGModule,
   // FormlyRadioModule
