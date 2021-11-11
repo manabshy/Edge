@@ -1,14 +1,26 @@
 <div>
   <p-messages severity="warn" *ngIf="!(isValid$ | async)">
     <ng-template pTemplate>
-      <div data-cy="landRegisterInvalidMessage">Land Registry not yet completed
+      <div data-cy="landRegisterInvalidMessage" class="flex flex-row items-center">
+        <i class="fa text-xl fa-exclamation-triangle text-yellow-600"></i>
+        <div class="px-2 tracking-normal">
+          <p class="-mb-1">
+            Land Registry not yet completed
+          </p>
+        </div>
       </div>
     </ng-template>
   </p-messages>
   <p-messages severity="success" *ngIf="(isValid$ | async)">
     <ng-template pTemplate>
-      <div data-cy="landRegisterValidMessage">Land Registry completed
-      </div>
+      <div data-cy="landRegisterValidMessage" class="flex flex-row items-center">
+        <i class="fa text-xl fa-check-circle text-green-600"></i>
+        <div class="px-2 tracking-normal">
+          <p class="-mb-1">
+            Land Registry completed
+            </p>
+          </div>
+        </div>
     </ng-template>
   </p-messages>
   <div>
