@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core'
 import { Observable, BehaviorSubject, Subject, of } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
 import { AppConstants } from '../shared/app-constants'
-import { map, shareReplay, tap } from 'rxjs/operators'
+import { map, shareReplay, take, tap } from 'rxjs/operators'
 import { StaffMember, StaffMemberResult, StaffMemberListResult } from '../../shared/models/staff-member'
 import { StorageMap } from '@ngx-pwa/local-storage'
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member'
@@ -28,6 +28,8 @@ export class StaffMemberService {
   impersonatedStaffMember$ = this.impersonationSubject.asObservable()
   currentStaffMember$ = this.currentStaffMemberSubject.asObservable()
   clearSelectedStaffMember$ = this.clearSelectedSubject.asObservable()
+
+  selectedStaffMemberBs = new BehaviorSubject<StaffMember | null>(null)
 
   constructor(private http: HttpClient, private storage: StorageMap) {}
 
@@ -257,6 +259,14 @@ export class StaffMemberService {
     )
   }
 
+  getStaffMember(staffMemberId: number) {
+    this.getActiveStaffMembers()
+      .pipe(map((response) => response.result.filter((x) => x.staffMemberId === staffMemberId)))
+      .subscribe((x) => {
+        if (x && x.length > 0) this.selectedStaffMemberBs.next(x[0])
+      })
+  }
+
   getValuationAttendees(): Observable<BaseStaffMember[]> {
     return this.http.get<any>(`${AppConstants.baseUrl}/attendees`).pipe(
       map((response) => response.result),
@@ -313,6 +323,12 @@ export class StaffMemberService {
   requestStaffMemberSignature(): Observable<string> {
     return this.http.get<any>(`${AppConstants.baseUrl}/current/signature`).pipe(
       map((response) => response.result),
+      map((x) => {
+        if (x) {
+          x = x.replaceAll(`<IMG `, `<IMG style='border-style: none' `)
+        }
+        return x
+      }),
       tap((data) => {
         if (data) {
           this.storage.set('signature', data).subscribe()

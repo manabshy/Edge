@@ -34,7 +34,7 @@
           </li>
         </ng-container>
         <ng-container *ngIf="showValuationActions">
-          <li role="menuitem">
+          <li role="menuitem" *ngIf="showChangeProperty">
             <a (click)="changeProperty.emit()" class="dropdown-item">
               <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
                 <polygon
@@ -48,7 +48,7 @@
               Change Property
             </a>
           </li>
-          <li role="menuitem">
+          <li role="menuitem" *ngIf="showChangeLastOwnerChange">
             <a (click)="changeLastknownOwner.emit()" class="dropdown-item">
               <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
                 <path

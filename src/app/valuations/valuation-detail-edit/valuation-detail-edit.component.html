@@ -163,8 +163,9 @@
           (click)="controlIsCancelled($event,(isCancelled || isPropertyInfoDisabled));">
           <app-property-card class="appWrapper" [propertyDetails]="property" [isHorizontalCard]="true"
             [showPropertyDetailActions]="false" [showValuationActions]="true"
-            [showActionButtons]="valuation?.valuationStatus == 0 || valuation?.valuationStatus == 2?true:false"
-            (showPhotos)="showPhotosModal()" (showMap)="showMapModal()" (changeProperty)="changeProperty()"
+            [showChangeProperty]="valuation?.valuationStatus < 0 || valuation?.valuationStatus == 2?true:false"
+            [showChangeLastOwnerChange]="valuation?.valuationStatus < 4 ?true:false" (showPhotos)="showPhotosModal()"
+            (showMap)="showMapModal()" (changeProperty)="changeProperty()"
             (changeLastknownOwner)="sharedService.addLastOwnerBs.next(true);isLastKnownOwnerVisible = true">
           </app-property-card>
         </div>
@@ -1047,7 +1048,8 @@
       </span>
     </span>
 
-    <span class="md:mt-auto w-96" *ngIf="isSalesEdit || isBothEdit">
+    <span class="md:mt-auto w-96"
+      *ngIf="availabilityForm.controls['type'].value === 'sales' ||  availabilityForm.controls['type'].value === 'both'">
       <div class="flex pt-3 md:pt-0">
         <div class="flex-initial pr-2 badges" style="font-size: xx-large">
           <p-badge severity="info"></p-badge>
@@ -1056,7 +1058,8 @@
       </div>
     </span>
 
-    <span class="mt-auto w-96" *ngIf="isLettingsEdit || isBothEdit">
+    <span class="mt-auto w-96"
+      *ngIf="availabilityForm.controls['type'].value === 'lettings' || availabilityForm.controls['type'].value === 'both'">
       <div class="flex pt-3 md:pt-0">
         <div class="flex-initial pr-2 badges" style="font-size: xx-large">
           <p-badge severity="success"></p-badge>
