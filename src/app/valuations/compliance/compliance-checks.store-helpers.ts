@@ -1,4 +1,3 @@
-import { ValuationTypeEnum } from '../shared/valuation'
 import { mapDocumentsForView } from './helpers/store-documents-helpers'
 
 /***
@@ -8,13 +7,13 @@ import { mapDocumentsForView } from './helpers/store-documents-helpers'
  * @description Builds initial store state when the store is loaded
  * @returns Object containing properties for the compliance checks store
  */
-export const buildStoreState = (valuationData, entityToAdd, adminContact) => {
+export const buildStoreState = (contactGroupData, valuationData, entityToAdd, adminContact) => {
   const entitiesData = mergeEntitiesReadyForStore(valuationData, entityToAdd, adminContact)
   return {
     valuationEventId: valuationData.valuationEventId,
     contactGroupId: valuationData.propertyOwner?.contactGroupId,
-    companyId: valuationData.propertyOwner.companyId,
-    companyOrContact: valuationData.propertyOwner.companyId ? 'company' : 'contact',
+    companyId:  contactGroupData ? contactGroupData.companyId : null,
+    companyOrContact: contactGroupData?.companyId ? 'company' : 'contact',
     checkType: identifyAmlOrKyc(valuationData),
     isFrozen: valuationData.complianceCheck?.compliancePassedDate ? true : false,
     compliancePassedDate: valuationData.complianceCheck?.compliancePassedDate,
