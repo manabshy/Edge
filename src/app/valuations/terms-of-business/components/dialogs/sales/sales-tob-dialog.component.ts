@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core'
-import { FormGroup } from '@angular/forms'
+import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angular/core'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'app-sales-tob-dialog',
@@ -19,9 +20,32 @@ import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core'
           [isMultiple]="isMultiple"
         ></app-file-upload>
 
+        <!--
         <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="fileUploaded">
           <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
         </form>
+        -->
+        
+        
+      <form [formGroup]="form" class="my-4">
+        <fieldset class="mb-2">
+          <label>
+            Instruction price direction
+          </label>
+          <input type="tel" class="p-2" formControlName="instructionPriceDirection" required />
+        </fieldset>
+        <fieldset class="mb-3">
+          <label>Sole or Multi</label>
+          <p-dropdown
+            [options]="salesAgencyTypeOptions"
+            formControlName="salesAgencyTypeId"
+            optionLabel="value"
+            optionValue="id"
+            [filter]="false"
+            data-cy="salesAgencyTypeId"
+          ></p-dropdown>
+        </fieldset>
+      </form>
 
         <footer class="mt-10">
           <div class="flex flex-row space-x-4">
@@ -42,23 +66,53 @@ import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core'
     </p-dialog>
   `
 })
-export class SalesToBDialogComponent implements OnInit {
+export class SalesToBDialogComponent implements OnInit, OnDestroy {
   @Output() onSubmitTermsOfBusiness: EventEmitter<any> = new EventEmitter()
   @Input() showDialog: boolean = false
   @Input() data: any
 
-  form = new FormGroup({})
+  form: FormGroup
   model: any = {}
-  options: FormlyFormOptions = {}
-  fields: FormlyFieldConfig[] = this.salesTermsOfBusinessFormFields()
-
   isMultiple: boolean = false
   tmpFiles: File[]
   fileUploaded: boolean = true
+  formSub: Subscription
+  salesAgencyTypeOptions = [
+    {
+      value: 'Sole',
+      id: 1
+    },
+    {
+      value: 'Multi',
+      id: 4
+    }
+  ]
+
+  // options: FormlyFormOptions = {}
+  // fields: FormlyFieldConfig[] = this.salesTermsOfBusinessFormFields()
+
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
     console.log('data SalesToBDialogComponent: ', this.data)
-    this.model = this.data
+    this.model = {
+      instructionPriceDirection: null,
+      salesAgencyTypeId: null,
+      ...this.data
+    }
+
+    this.form = this.fb.group({
+      instructionPriceDirection: [this.model.instructionPriceDirection, Validators.required],
+      salesAgencyTypeId: [this.model.salesAgencyTypeId, Validators.required]
+    })
+
+    this.formSub = this.form.valueChanges.subscribe((data) => {
+      this.model = { ...this.model, ...data }
+    })
+  }
+
+  ngOnDestroy() {
+    this.formSub.unsubscribe()
   }
 
   public getFiles(files): void {
@@ -67,7 +121,7 @@ export class SalesToBDialogComponent implements OnInit {
   }
 
   public submit() {
-    console.log('submit: ', this)
+    // console.log('submit: ', this)
     if (!this.form.valid) return
     const payload = {
       model: this.model,
@@ -101,7 +155,7 @@ export class SalesToBDialogComponent implements OnInit {
               required: true,
               options: [
                 { value: 1, label: 'Sole' },
-                { value: 2, label: 'Multi' }
+                { value: 4, label: 'Multi' }
               ]
             }
           }

@@ -25,14 +25,23 @@ const SalesTemplate: Story<SalesToBDialogComponent> = (args: SalesToBDialogCompo
   props: args
 })
 
-export const SingleEntry = SalesTemplate.bind({})
-SingleEntry.args = {
+export const SoleSigned = SalesTemplate.bind({})
+SoleSigned.args = {
   data: {
     signedOn: new Date(),
-    isShortLetInstruction: 'Yes',
-    isLongLetInstruction: 'Yes',
-    isManagement: 'Yes',
-    zeroDepositAccepted: 'No',
+    instructionPriceDirection: 350000,
+    salesAgencyTypeId: 1, // 1 = sole, 4 = multi
+    signatureFile: {
+      fileUri: 'http://www.google.co.uk'
+    }
+  }
+}
+export const MultiSigned = SalesTemplate.bind({})
+MultiSigned.args = {
+  data: {
+    signedOn: new Date(),
+    instructionPriceDirection: 140000,
+    salesAgencyTypeId: 4, // 1 = sole, 4 = multi
     signatureFile: {
       fileUri: 'http://www.google.co.uk'
     }
