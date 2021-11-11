@@ -89,10 +89,15 @@ export class ValuationOriginComponent implements OnInit, AfterViewInit {
 
   controlValues() {
     if (this.valuation.originTypeId == 13 || this.valuation.originTypeId == 14) {
-      if (!this.valuation.bookedBy) this.bookedByErrorMessage = 'Booked by field is required'
-      else this.bookedByErrorMessage = null
+      if (!(this.valuation.bookedById && this.valuation.bookedById > 0))
+        this.bookedByErrorMessage = 'Booked by field is required'
+      else {
+        this.bookedByErrorMessage = null
+        this.staffMembersService.getStaffMember(this.valuation.bookedById)
+        this.valuation.bookedBy = this.staffMembersService.selectedStaffMemberBs.getValue()
+      }
     } else {
-      this.valuation.bookedBy = null
+      this.valuation.bookedById = null
     }
 
     if (!(this.valuation.originId > 0)) this.originIdMessage = 'Origin field is required'

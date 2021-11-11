@@ -31,6 +31,7 @@ export interface Valuation extends ValuationInfo {
   tenureId?: number
   originId?: number
   bookedBy?: StaffMember
+  bookedById?: number
   originTypeId?: number
   approxLeaseExpiryDate?: Date
   outsideSpace?: any
@@ -88,13 +89,15 @@ export interface eSignTermsOfBusinessDoc {
 }
 
 export interface ToBDocument {
-  isLongLetInstruction: boolean
-  isManagement: boolean
-  isShortLetInstruction: boolean
+  isLongLetInstruction?: boolean
+  isManagement?: boolean
+  isShortLetInstruction?: boolean
   signatureFile: EdgeFile
-  signedOn: Date
-  zeroDepositAccepted: boolean
-  instructionPriceDirection?: string
+  signedOn?: Date
+  zeroDepositAccepted?: boolean
+  instructionPriceDirection?: number
+  salesAgencyTypeId?: number
+  gasCertRequired: boolean
 }
 
 export interface ComplianceChecksStatus {

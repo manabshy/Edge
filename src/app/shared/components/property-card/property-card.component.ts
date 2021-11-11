@@ -15,6 +15,8 @@ export class PropertyCardComponent implements OnInit, OnChanges {
   @Input() showValuationActions = false
   @Input() showPropertyDetailActions = true
   @Input() showActionButtons = true
+  @Input() showChangeProperty = true
+  @Input() showChangeLastOwnerChange = true
   propertyTypes = PropertyTypes
   propertyStyles = PropertyStyles
   listInfo: DropdownListInfo
