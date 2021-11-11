@@ -151,11 +151,9 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   moment = moment
   menuItems: MenuItem[]
   message: any
-  defaultMessage: any
   showSalesToB: boolean = false
   showLettingsToB: boolean = false
   showDialog: boolean = false
-  // showLettingsDialog: boolean = false
   valuationType: number
   termsOfBusinessDocumentIsSigned: boolean = false
 
@@ -168,17 +166,7 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(private fb: FormBuilder) {}
 
-  ngOnChanges(changes) {
-    console.log('termsOfBusinessDocument changes: ', changes)
-    if (changes.valuationData && !changes.valuationData.firstChange) {
-      this.model.declarableInterest = changes.valuationData.currentValue.declarableInterest
-    }
-    if (changes.termsOfBusinessDocument && !changes.termsOfBusinessDocument.firstChange) {
-      this.termsOfBusinessDocument = changes.termsOfBusinessDocument.currentValue
-      this.termsOfBusinessDocumentIsSigned = this.isTermsOfBusinessSigned()
-    }
-  }
-
+  
   ngOnInit(): void {
     console.log('TermsOfBusinessComponent: ', this.termsOfBusinessDocument)
 
@@ -193,31 +181,24 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
       declarableInterest: [this.model.declarableInterest, Validators.required],
       section21StatusId: [this.model.section21StatusId, Validators.required]
     })
-
-    this.defaultMessage = {
-      type: 'warn',
-      text: ['Terms of business not yet signed']
-    }
-    if (this.termsOfBusinessDocument?.dateRequestSent) {
-      this.defaultMessage.text.push(
-        `Last Emailed : ${moment(this.termsOfBusinessDocument.dateRequestSent).format('Do MMM YYYY (HH:mm)')}`
-      )
-    }
-
-    this.menuItems = this.setMenuItems()
-    this.termsOfBusinessDocumentIsSigned = this.isTermsOfBusinessSigned()
-
-    // TODO initial message logic should be more readable
-    this.message =
-      this.valuationData.valuationStatus == 3 ||
-      this.valuationData.valuationStatus == 4 ||
-      this.valuationData.valuationStatus == 5
-        ? this.defaultMessage
-        : {}
-
     this.formSubscription = this.form.valueChanges.subscribe((data) => {
       this.onModelChange.emit(data)
     })
+
+    this.menuItems = this.setMenuItems()
+    this.termsOfBusinessDocumentIsSigned = this.isTermsOfBusinessSigned()
+    this.buildMessageForView()
+  }
+
+  ngOnChanges(changes) {
+    console.log('termsOfBusinessDocument changes: ', changes)
+    if (changes.valuationData && !changes.valuationData.firstChange) {
+      this.model.declarableInterest = changes.valuationData.currentValue.declarableInterest
+    }
+    if (changes.termsOfBusinessDocument && !changes.termsOfBusinessDocument.firstChange) {
+      this.termsOfBusinessDocument = changes.termsOfBusinessDocument.currentValue
+      this.termsOfBusinessDocumentIsSigned = this.isTermsOfBusinessSigned()
+    }
   }
 
   ngOnDestroy(): void {
@@ -226,13 +207,43 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
 
   isTermsOfBusinessSigned() {
     const signedOn =
-      this.termsOfBusinessDocument && this.termsOfBusinessDocument.toBLetting && this.termsOfBusinessDocument.toBLetting.signedOn
+      this.termsOfBusinessDocument &&
+      this.termsOfBusinessDocument.toBLetting &&
+      this.termsOfBusinessDocument.toBLetting.signedOn
         ? true
-        : this.termsOfBusinessDocument && this.termsOfBusinessDocument.toBSale &&  this.termsOfBusinessDocument.toBSale.signedOn
+        : this.termsOfBusinessDocument &&
+          this.termsOfBusinessDocument.toBSale &&
+          this.termsOfBusinessDocument.toBSale.signedOn
         ? true
         : false
-    console.log('isTermsOfBusinessSigned()', signedOn)
     return signedOn
+  }
+
+  buildMessageForView() {
+    // valuation statuses: 3 = Valued, 4 = Instructed, 5 = Cancelled
+    this.message =
+      (!this.termsOfBusinessDocumentIsSigned && this.valuationData.valuationStatus == 3) ||
+      this.valuationData.valuationStatus == 4 ||
+      this.valuationData.valuationStatus == 5
+        ? {
+            type: 'warn',
+            text: ['Terms of business not yet signed']
+          }
+        : {}
+
+    if (this.termsOfBusinessDocument?.dateRequestSent && this.message.text) {
+      this.message.text.push(
+        `Last Emailed : ${moment(this.termsOfBusinessDocument.dateRequestSent).format('Do MMM YYYY (HH:mm)')}`
+      )
+    }
+
+    if (this.termsOfBusinessDocumentIsSigned) {
+      const signedOn = this.termsOfBusinessDocument.toBSale
+        ? this.termsOfBusinessDocument.toBSale.signedOn
+        : this.termsOfBusinessDocument.toBLetting.signedOn
+      this.message.type = 'success'
+      this.message.text = [`Terms of business was signed on ${moment(signedOn).format('Do MMM YYYY (HH:mm)')}`]
+    }
   }
 
   isSalesToB() {
@@ -251,6 +262,8 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
 
   public submitTermsOfBusiness(ev) {
     console.log('submit terms of business: ', ev)
+    this.message.type = 'info',
+    this.message.text = ['Terms of Business uploaded, pending save.']
     this.onSubmitTermsOfBusiness.emit(ev)
   }
 
