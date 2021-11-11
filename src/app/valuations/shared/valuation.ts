@@ -31,6 +31,7 @@ export interface Valuation extends ValuationInfo {
   tenureId?: number
   originId?: number
   bookedBy?: StaffMember
+  bookedById?: number
   originTypeId?: number
   approxLeaseExpiryDate?: Date
   outsideSpace?: any

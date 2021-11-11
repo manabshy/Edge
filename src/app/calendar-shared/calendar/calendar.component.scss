@@ -1,12 +1,12 @@
-.popover                    { 
-    width:240px; 
-    background-color:#fff; 
-    border:1px solid rgba(0,0,0,.2); 
-    word-break: break-word; 
+.popover                    {
+    width:240px;
+    background-color:#fff;
+    border:1px solid rgba(0,0,0,.2);
+    word-break: break-word;
     border-radius:3px;
-    left: -20px !important; 
+    left: -20px !important;
     z-index:1001;
-    
+
     &-header                { padding:16px;
         &+*                 { margin-top:0; padding-top:0; }
     }
@@ -15,7 +15,7 @@
 
     dt                      { font-weight:bold; color:#0A1A4A; }
     // .row                    { display:flex; }
-    
+
 }
 
 :host ::ng-deep                         {
