@@ -163,7 +163,7 @@
           (click)="controlIsCancelled($event,(isCancelled || isPropertyInfoDisabled));">
           <app-property-card class="appWrapper" [propertyDetails]="property" [isHorizontalCard]="true"
             [showPropertyDetailActions]="false" [showValuationActions]="true"
-            [showChangeProperty]="valuation?.valuationStatus < 0 || valuation?.valuationStatus == 2?true:false"
+            [showChangeProperty]="valuation?.valuationStatus == 0 || valuation?.valuationStatus == 2?true:false"
             [showChangeLastOwnerChange]="valuation?.valuationStatus < 4 ?true:false" (showPhotos)="showPhotosModal()"
             (showMap)="showMapModal()" (changeProperty)="changeProperty()"
             (changeLastknownOwner)="sharedService.addLastOwnerBs.next(true);isLastKnownOwnerVisible = true">
@@ -843,12 +843,10 @@
                     (click)="controlIsCancelled($event, isCancelled || isTermsOfBusinessDisabled)">
                     <ng-container *ngIf="valuationData$ | async as valuationData">
                       <app-terms-of-business [valuationData]="valuationData" [interestList]="interestList"
-                        [termsOfBusinessDocument]="valuationData?.eSignSignatureTob"
-                        [formErrors]="formErrors"
+                        [termsOfBusinessDocument]="valuationData?.eSignSignatureTob" [formErrors]="formErrors"
                         (onSendTermsOfBusinessReminder)="onSendTermsOfBusinessReminder($event)"
                         (onModelChange)="onUpdateToBForm($event)"
-                        (onSubmitTermsOfBusiness)="submitTermsOfBusiness($event)"
-                      ></app-terms-of-business>
+                        (onSubmitTermsOfBusiness)="submitTermsOfBusiness($event)"></app-terms-of-business>
                     </ng-container>
                   </div>
                 </p-accordionTab>
