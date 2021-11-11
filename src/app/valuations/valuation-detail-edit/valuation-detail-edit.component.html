@@ -841,13 +841,12 @@
                     [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled || isTermsOfBusinessDisabled }"
                     (click)="controlIsCancelled($event, isCancelled || isTermsOfBusinessDisabled)">
                     <ng-container *ngIf="valuationData$ | async as valuationData">
-                      <app-terms-of-business
-                        [valuationData]="valuationData"
-                        [interestList]="interestList"
+                      <app-terms-of-business [valuationData]="valuationData" [interestList]="interestList"
                         [termsOfBusinessDocument]="valuationData?.eSignSignatureTob"
+                        [formErrors]="formErrors"
                         (onSendTermsOfBusinessReminder)="onSendTermsOfBusinessReminder($event)"
-                        (onFileUploaded)="onTermsOfBusinessFileUploaded($event)"
                         (onModelChange)="onUpdateToBForm($event)"
+                        (onSubmitTermsOfBusiness)="submitTermsOfBusiness($event)"
                       ></app-terms-of-business>
                     </ng-container>
                   </div>
@@ -1048,7 +1047,7 @@
       </span>
     </span>
 
-    <span class="md:mt-auto w-96" *ngIf="!isLettingsOnly && salesValuer">
+    <span class="md:mt-auto w-96" *ngIf="isSalesEdit || isBothEdit">
       <div class="flex pt-3 md:pt-0">
         <div class="flex-initial pr-2 badges" style="font-size: xx-large">
           <p-badge severity="info"></p-badge>
@@ -1057,7 +1056,7 @@
       </div>
     </span>
 
-    <span class="mt-auto w-96" *ngIf="!isSalesOnly && salesValuer?.staffMemberId != lettingsValuer?.staffMemberId">
+    <span class="mt-auto w-96" *ngIf="isLettingsEdit || isBothEdit">
       <div class="flex pt-3 md:pt-0">
         <div class="flex-initial pr-2 badges" style="font-size: xx-large">
           <p-badge severity="success"></p-badge>
@@ -1241,7 +1240,7 @@
         <p-scrollPanel [style]="{ width: '100%', height: '480px' }">
           <app-calendar [isOnlyShowPurposes]="true" [view]="'day'" [viewDate]="selectedCalendarDate"
             [selectedStaffMemberId]="selectedStaffMemberId" [secondStaffMemberId]="secondStaffMemberId"
-            [tooltipPlacement]="'left'"></app-calendar>
+            [tooltipPlacement]="'left'" [baseClass]="baseCalendarClass"></app-calendar>
         </p-scrollPanel>
       </div>
     </div>

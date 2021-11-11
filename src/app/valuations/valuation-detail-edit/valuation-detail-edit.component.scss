@@ -67,6 +67,8 @@
 
   .p-overflow-hidden{ overflow: hidden !important;position: fixed !important}
 
+  .p-sidebar-content{ min-height: 500px;}
+
   //.p-tooltip-text		{ background-color:lightblue !important; color:black !important }
 }
 
@@ -91,7 +93,7 @@
   background: linear-gradient(to right, $color--midnight-20 50%, $color--red 50%,);
 }
 
-.hourColorsForSales{
+.hourColorsForLettings{
   background: $color--red;
 }
 
@@ -101,7 +103,7 @@
  // background-color:transparent; color:#535E80; box-shadow:inset 0px 0px 0px 1px #CED1DB;
 }
 
-.hourColorsForLettings{
+.hourColorsForSales{
   background: $color--midnight-20;
 }
 

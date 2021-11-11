@@ -14,6 +14,9 @@ import { MessagesComponent } from 'src/app/shared/components/messages/messages.c
 import { MenuComponent } from 'src/app/shared/components/menu/menu.component'
 import { FileUploadComponent } from 'src/app/shared/components/file-upload/file-upload.component'
 import { MessageService } from 'primeng/api'
+import { SingleEntrySales } from './components/tables/sales/terms-of-business-sales-table.component.stories'
+import { SingleEntryLettings } from './components/tables/lettings/terms-of-business-lettings-table.component.stories'
+import { LettingsToBDialogComponent } from './components/dialogs/lettings/lettings-tob-dialog.component'
 
 export default {
   title: 'Valuations/TermsOfBusiness/TermsOfBusinessComponent',
@@ -26,6 +29,7 @@ export default {
         TermsOfBusinessComponent,
         TermsOfBusinessTableLettingsComponent,
         TermsOfBusinessTableSalesComponent,
+        LettingsToBDialogComponent,
         MessagesComponent,
         MenuComponent,
         FileUploadComponent
@@ -66,8 +70,8 @@ const SalesTemplate: Story<TermsOfBusinessComponent> = (args: TermsOfBusinessCom
 //  (onFileUploaded)="onFileUploaded($event)">
 // </app-terms-of-business>
 
-export const SalesExample = SalesTemplate.bind({})
-SalesExample.args = {
+export const LettingExample = SalesTemplate.bind({})
+LettingExample.args = {
   valuationFormData: {
     declarableInterest: '',
     section21StatusId: []
@@ -78,22 +82,36 @@ SalesExample.args = {
     { id: 4, value: 'Douglas & Gordon Business Associate' }
   ],
   formErrors: formErrorsSampleData(),
-  valuationType: 0, //ValuationTypeEnum
-  valuationStatus: 4, //number
-  dateRequestSent: new Date(), //Date
+  valuationData: {
+    valuationType: 2, // ValuationTypeEnum 2 = lettings
+    valuationStatus: 2 // ValuationStatusEnum booked
+  },
   fileType: 1, // FileTypeEnum
   termsOfBusinessDocument: {
-    isLongLetInstruction: false,
-    isManagement: false,
-    isShortLetInstruction: false,
-    signedOn: null,
-    // signedOn: '2021-04-28T20:42:04.183+01:00',
-    zeroDepositAccepted: false,
-    signatureFile: {
-      fileStoreId: 15746702,
-      fileName: 'Completed_Landlord__Property_Questionnaire_3_69_Ch…eet_SW1V_4PG_deac4b4228134092b743340f37a4d4e7.pdf',
-      updateDate: '2021-04-28T20:42:04.183+01:00',
-      fileUri: 'https://google.com'
-    },
+    toBLetting: SingleEntryLettings.args.data,
+    dateRequestSent: new Date()
+  }
+}
+
+export const SaleExample = SalesTemplate.bind({})
+SaleExample.args = {
+  valuationFormData: {
+    declarableInterest: '',
+    section21StatusId: []
+  },
+  interestList: [
+    { id: 2, value: 'Douglas & Gordon Employee' },
+    { id: 3, value: 'Related to a Douglas & Gordon Employee' },
+    { id: 4, value: 'Douglas & Gordon Business Associate' }
+  ],
+  formErrors: formErrorsSampleData(),
+  valuationData: {
+    valuationType: 1, // ValuationTypeEnum 1 = sales
+    valuationStatus: 4 // number instructed
+  },
+  fileType: 1, // FileTypeEnum
+  termsOfBusinessDocument: {
+    toBSale: SingleEntrySales.args.data,
+    dateRequestSent: new Date()
   }
 }

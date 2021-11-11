@@ -1,9 +1,9 @@
-import { moduleMetadata, componentWrapperDecorator  } from '@storybook/angular';
-import { CommonModule } from '@angular/common';
+import { moduleMetadata, componentWrapperDecorator } from '@storybook/angular'
+import { CommonModule } from '@angular/common'
 // also exported from '@storybook/angular' if you can deal with breaking changes in 6.1
-import { Story, Meta } from '@storybook/angular/types-6-0';
+import { Story, Meta } from '@storybook/angular/types-6-0'
 
-import { TermsOfBusinessTableLettingsComponent } from './terms-of-business-lettings-table.component';
+import { TermsOfBusinessTableLettingsComponent } from './terms-of-business-lettings-table.component'
 
 export default {
   title: 'Valuations/TermsOfBusiness/TermsOfBusinessTables/LettingsTable',
@@ -11,30 +11,36 @@ export default {
   decorators: [
     moduleMetadata({
       declarations: [TermsOfBusinessTableLettingsComponent],
-      imports: [CommonModule],
+      imports: [CommonModule]
     }),
-    componentWrapperDecorator((story)=> `
+    componentWrapperDecorator(
+      (story) => `
         <div style="margin: 3em">${story}</div>
       `
     )
-  ],
-  
-} as Meta;
+  ]
+} as Meta
 
-const LettingsTemplate: Story<TermsOfBusinessTableLettingsComponent> = (args: TermsOfBusinessTableLettingsComponent) => ({
-  props: args,
-});
+const LettingsTemplate: Story<TermsOfBusinessTableLettingsComponent> = (
+  args: TermsOfBusinessTableLettingsComponent
+) => ({
+  props: args
+})
 
-export const SingleEntry = LettingsTemplate.bind({});
-SingleEntry.args = {
+export const SingleEntryLettings = LettingsTemplate.bind({})
+SingleEntryLettings.args = {
   data: {
     signedOn: new Date(),
-    isShortLetInstruction: 'Yes',
-    isLongLetInstruction: 'Yes',
-    isManagement: 'Yes',
-    zeroDepositAccepted: 'No',
-    signatureFile:{
-      fileUri: 'http://www.google.co.uk'
+    // isLongLetInstruction: true,
+    // isShortLetInstruction: true,
+    gasCertRequired: true,
+    isManagement: false,
+    zeroDepositAccepted: false,
+    signatureFile: {
+      fileStoreId: 15746702,
+      fileName: 'Completed_Landlord__Property_Questionnaire_3_69_Ch…eet_SW1V_4PG_deac4b4228134092b743340f37a4d4e7.pdf',
+      updateDate: '2021-04-28T20:42:04.183+01:00',
+      url: 'https://google.com'
     }
   }
-};
+}

@@ -35,7 +35,7 @@ export class ValuationListComponent implements OnInit, OnChanges, OnDestroy {
 
   navigateTo(val: Valuation) {
     let path = ['detail', val?.valuationEventId, 'edit']
-    if (val.valuationStatus === ValuationStatusEnum.Cancelled) {
+    if (val.valuationStatus === ValuationStatusEnum.Cancelled || val.valuationStatus === ValuationStatusEnum.Closed) {
       path = ['detail', val?.valuationEventId, 'cancelled']
     }
     this.router.navigate(path, { relativeTo: this.activatedRoute })

@@ -175,7 +175,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
           .getCurrentStaffMemberSignature()
           .subscribe((res) => (this.currentStaffMemberSignature = res))
       }
-      // console.log('current user signature from storage in email....', this.currentStaffMemberSignature);
+      // console.log('current user signature from storage in email....', this.currentStaffMemberSignature)
     })
   }
 
