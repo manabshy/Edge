@@ -106,6 +106,7 @@ const redirectUri = environment.baseRedirectUri ? environment.baseRedirectUri : 
 import { defineLocale } from 'ngx-bootstrap/chronos'
 import { deLocale, frLocale, plLocale, enGbLocale } from 'ngx-bootstrap/locale'
 import { ProfileComponent } from './profile/profile.component'
+import { ComponentsModule } from './shared/components.module'
 
 defineLocale('de', deLocale)
 defineLocale('fr', frLocale)
@@ -202,6 +203,7 @@ const externalModulesExports = [
     externalModulesImports,
     AccountModule,
     CoreModule,
+    ComponentsModule,
     DashboardModule,
     LeaderboardModule,
     AppRoutingModule,
