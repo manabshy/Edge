@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs'
   selector: 'app-lettings-tob-dialog',
   template: `
     <p-dialog
-      header="Upload Terms of Business (Lettings)"
+      header="Upload Terms of Business"
       appendTo="body"
       [(visible)]="showDialog"
       [modal]="true"
@@ -20,7 +20,7 @@ import { Subscription } from 'rxjs'
           [isMultiple]="isMultiple"
         ></app-file-upload>
 
-        <form [formGroup]="form" class="my-4">
+        <form [formGroup]="form" class="my-4 ml-4">
           <fieldset class="mb-2">
             <fieldset class="row">
               <label style="width: auto; margin-top: 10px">Is a gas certificate required?</label>

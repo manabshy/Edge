@@ -2165,18 +2165,38 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
+  isTermsOfBusinessSigned(tob) {
+    const signedOn =
+    tob &&
+    tob.toBLetting &&
+    tob.toBLetting.signedOn
+        ? true
+        : tob &&
+          tob.toBSale &&
+          tob.toBSale.signedOn
+        ? true
+        : false
+    return signedOn
+  }
+
   startInstruction() {
-    // TODO
-    // if (this.valuationForm.controls['declarableInterest'].invalid) {
-    //   this.accordionIndex = 4
-    //   this.activeState[4] = true
-    //   this.messageService.add({
-    //     severity: 'warn',
-    //     summary: 'Please complete terms of business!',
-    //     closable: false
-    //   })
-    //   return
-    // }
+
+    const declarableInterst = this._valuationFacadeSvc._valuationData.getValue().declarableInterest
+    if (typeof declarableInterst === undefined){
+      console.log('Declare interest in TOB section is unanswered')
+      this.accordionIndex = 4
+      this.activeState[4] = true
+      return
+    }
+    
+    const tob = this._valuationFacadeSvc._valuationData.getValue().eSignSignatureTob
+    if (!this.isTermsOfBusinessSigned(tob)){
+      console.log('Terms of biz is not signed')
+      this.accordionIndex = 4
+      this.activeState[4] = true
+      return
+    }
+   
 
     if (!this._valuationFacadeSvc.landRegisterValid.getValue()) {
       this.accordionIndex = 5
@@ -2917,7 +2937,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   submitTermsOfBusiness(ev){
-    console.log('onSubmitTermsOfBusiness: ', ev)
     this._valuationFacadeSvc.termsOfBusinessFileUploaded(ev)
   }
 

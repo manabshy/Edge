@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs'
   selector: 'app-sales-tob-dialog',
   template: `
     <p-dialog
-      header="Upload Terms of Business (Sale)"
+      header="Upload Terms of Business"
       appendTo="body"
       [(visible)]="showDialog"
       [modal]="true"
@@ -27,7 +27,7 @@ import { Subscription } from 'rxjs'
         -->
         
         
-      <form [formGroup]="form" class="my-4">
+      <form [formGroup]="form" class="my-4 ml-4">
         <fieldset class="mb-2">
           <label>
             Instruction price direction
