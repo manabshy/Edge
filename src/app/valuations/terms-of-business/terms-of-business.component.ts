@@ -194,6 +194,8 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
     console.log('termsOfBusinessDocument changes: ', changes)
     if (changes.valuationData && !changes.valuationData.firstChange) {
       this.model.declarableInterest = changes.valuationData.currentValue.declarableInterest
+      this.valuationData = changes.valuationData.currentValue
+      this.buildMessageForView()
     }
     if (changes.termsOfBusinessDocument && !changes.termsOfBusinessDocument.firstChange) {
       this.termsOfBusinessDocument = changes.termsOfBusinessDocument.currentValue

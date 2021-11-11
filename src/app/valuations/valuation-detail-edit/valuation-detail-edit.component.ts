@@ -2179,7 +2179,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     return signedOn
   }
 
-  startInstruction() {
+  public startInstruction() {
 
     const declarableInterst = this._valuationFacadeSvc._valuationData.getValue().declarableInterest
     if (typeof declarableInterst === undefined){
@@ -2196,7 +2196,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.activeState[4] = true
       return
     }
-   
+    
+    const cc = this._valuationFacadeSvc._valuationData.getValue().complianceChecks
+    if(!cc.compliancePassedDate){
+      console.log('compliance checks havent passed yet')
+      this.accordionIndex = 9
+      this.activeState[9] = true
+      return
+    }
 
     if (!this._valuationFacadeSvc.landRegisterValid.getValue()) {
       this.accordionIndex = 5
