@@ -20,19 +20,12 @@ export class ComplianceChecksFacadeService {
   public valuation$: Observable<any> = this._valuationFacadeSvc.valuationData$
   public contactGroup$: Observable<any> = this._valuationFacadeSvc.contactGroup$
 
-  // WIP
-  // figure out if there's a power of attorney as the admin contact for the valuation.
-  // if so, then fetch their docs etc from documents endpoint
-  // return stream of data for that person
   public loadAdditionalContactsCheck(contactGroupData, valuationData, entityToAdd) {
-    // console.log('loadAdditionalContactsCheck: ', valuationData, entityToAdd)
     if (!!valuationData.adminContact && valuationData.isPowerOfAttorney) {
-      // console.log('fetch documents for ', valuationData.adminContact.contactGroupId)
       return this._valuationFacadeSvc
         .getPeopleDocsForValuation(valuationData.adminContact.contactGroupId, valuationData.valuationEventId)
         .toPromise()
           .then((data) => {
-            console.log('add this person in ', data)
             return { contactGroupData, valuationData, entityToAdd, adminContact: data[0] }
           })
           
