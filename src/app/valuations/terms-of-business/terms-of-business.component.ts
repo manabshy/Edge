@@ -5,6 +5,7 @@ import { MenuItem } from 'primeng/api/menuitem'
 import { EdgeFile } from 'src/app/shared/models/edgeFile'
 import { Valuation, ValuationTypeEnum } from '../shared/valuation'
 import { Subscription } from 'rxjs'
+import { isThisISOWeek } from 'date-fns'
 
 export interface ToBDocument {
   dateRequestSent: Date
@@ -166,7 +167,6 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(private fb: FormBuilder) {}
 
-  
   ngOnInit(): void {
     console.log('TermsOfBusinessComponent: ', this.termsOfBusinessDocument)
 
@@ -174,7 +174,7 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
     this.showSalesToB = this.isSalesToB()
     this.showLettingsToB = this.isLettingsToB()
 
-    this.model.declarableInterest = this.valuationData.declarableInterest || false
+    this.model.declarableInterest = this.valuationData.declarableInterest
     this.model.section21StatusId = this.valuationData.section21StatusId || ''
 
     this.form = this.fb.group({
@@ -185,8 +185,8 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
       this.onModelChange.emit(data)
     })
 
-    this.menuItems = this.setMenuItems()
     this.termsOfBusinessDocumentIsSigned = this.isTermsOfBusinessSigned()
+    this.menuItems = this.setMenuItems()
     this.buildMessageForView()
   }
 
@@ -229,12 +229,20 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
             type: 'warn',
             text: ['Terms of business not yet signed']
           }
-        : {}
+        : {
+            type: '',
+            text: []
+          }
 
     if (this.termsOfBusinessDocument?.dateRequestSent && this.message.text) {
       this.message.text.push(
         `Last Emailed : ${moment(this.termsOfBusinessDocument.dateRequestSent).format('Do MMM YYYY (HH:mm)')}`
       )
+    }
+    if (this.valuationData.declarableInterest === null) {
+      // if (!this.valuationData.declarableInterest) {
+      this.message.type = 'error'
+      this.message.text = ['Please answer declarable interest']
     }
 
     if (this.termsOfBusinessDocumentIsSigned) {
@@ -262,21 +270,12 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
 
   public submitTermsOfBusiness(ev) {
     console.log('submit terms of business: ', ev)
-    this.message.type = 'info',
-    this.message.text = ['Terms of Business uploaded, pending save.']
+    ;(this.message.type = 'info'), (this.message.text = ['Terms of Business uploaded, pending save.'])
     this.onSubmitTermsOfBusiness.emit(ev)
   }
 
   private setMenuItems() {
-    return [
-      {
-        id: 'uploadToB',
-        label: 'Upload ToB',
-        icon: 'pi pi-upload',
-        command: () => {
-          this.showDialog = !this.showDialog
-        }
-      },
+    const items = [
       {
         id: 'sendAReminder',
         label: 'Send a reminder',
@@ -286,5 +285,16 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
         }
       }
     ]
+    if (this.termsOfBusinessDocumentIsSigned) {
+      items.push({
+        id: 'uploadToB',
+        label: 'Upload ToB',
+        icon: 'pi pi-upload',
+        command: () => {
+          this.showDialog = !this.showDialog
+        }
+      })
+    }
+    return items
   }
 }

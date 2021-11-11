@@ -991,7 +991,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
       this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
         this.contactGroup = result
-        // console.log("----------------------------------- contactGroupBs.next");
+        console.log("----------------------------------- contactGroupBs.next", result);
         this._valuationFacadeSvc.contactGroupBs.next(this.contactGroup)
         this.getSearchedPersonSummaryInfo(this.contactGroup)
       })

@@ -260,15 +260,26 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    */
   loadStore = (): void => {
     console.log('loading compliance checks store ')
-    combineLatest([this._complianceChecksFacadeSvc.valuation$, this.newEntityStream$])
+    combineLatest([
+      this._complianceChecksFacadeSvc.contactGroup$,
+      this._complianceChecksFacadeSvc.valuation$,
+      this.newEntityStream$
+    ])
       .pipe(
+        filter(([contactGroupData, valuationData]) => !!contactGroupData && !!valuationData),
         take(1),
-        mergeMap(([valuationData, entityToAdd]: [any, any]) => {
-          return this._complianceChecksFacadeSvc.loadAdditionalContactsCheck(valuationData, entityToAdd)
+        mergeMap(([contactGroupData, valuationData, entityToAdd]: [any, any, any]) => {
+          return this._complianceChecksFacadeSvc.loadAdditionalContactsCheck(
+            contactGroupData,
+            valuationData,
+            entityToAdd
+          )
         }),
         mergeMap((data) => {
           console.log('loadStore back from load additional checks with: ', data)
-          this.patchState(buildStoreState(data.valuationData, data.entityToAdd, data.adminContact))
+          this.patchState(
+            buildStoreState(data.contactGroupData, data.valuationData, data.entityToAdd, data.adminContact)
+          )
           return this.validationMessage$
         })
       )
@@ -277,7 +288,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         (err) => console.error(err)
       )
   }
-
 
   /***
    * @function onPassComplianceChecks
