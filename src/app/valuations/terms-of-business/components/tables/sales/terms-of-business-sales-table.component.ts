@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input } from '@angular/core'
 import moment from 'moment'
 import { SalesAgencyTypeEnum } from '../../../../shared/valuation'
-import { ToBDocument } from '../../../terms-of-business.component'
 
 @Component({
   selector: 'app-terms-of-business-table-sales',
@@ -43,12 +42,9 @@ import { ToBDocument } from '../../../terms-of-business.component'
     </div>
   `
 })
-export class TermsOfBusinessTableSalesComponent implements OnInit{
+export class TermsOfBusinessTableSalesComponent {
   @Input() data: any
+
   moment = moment
   SalesAgencyTypeEnum = SalesAgencyTypeEnum
-
-  ngOnInit(){
-    console.log('TermsOfBusinessTableSalesComponent data: ', this.data)
-  }
 }

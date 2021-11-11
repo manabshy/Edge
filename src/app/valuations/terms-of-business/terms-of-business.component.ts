@@ -32,7 +32,7 @@ interface toBSale {
   signedOn?: Date
   instructionPriceDirection?: string
   instructionPriceDirectionEsignAnswerId?: number
-  salesAgencyTypeId?: string
+  salesAgencyTypeId?: number
   salesAgencyTypeIdEsignAnswerId?: number
 }
 
@@ -70,7 +70,7 @@ interface toBSale {
                 class="p-2"
                 type="radio"
                 id="declarableInterestYes"
-                value="true"
+                [value]="true"
                 name="declarableInterest"
                 formControlName="declarableInterest"
                 data-cy="declarableInterestYes"
@@ -82,7 +82,7 @@ interface toBSale {
                 class="p-2"
                 type="radio"
                 id="declarableInterestNo"
-                value="false"
+                [value]="false"
                 name="declarableInterest"
                 formControlName="declarableInterest"
                 data-cy="declarableInterestNo"
@@ -169,12 +169,14 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private fb: FormBuilder) {}
 
   ngOnChanges(changes) {
-    // console.log('termsOfBusinessDocument changes: ', changes)
-    // if (changes.termsOfBusinessDocument && !changes.termsOfBusinessDocument.firstChange) {
-    //   this.message.text.push(
-    //     `Last Emailed : ${moment(this.termsOfBusinessDocument?.dateRequestSent).format('Do MMM YYYY (HH:mm)')}`
-    //   )
-    // }
+    console.log('termsOfBusinessDocument changes: ', changes)
+    if (changes.valuationData && !changes.valuationData.firstChange) {
+      this.model.declarableInterest = changes.valuationData.currentValue.declarableInterest
+    }
+    if (changes.termsOfBusinessDocument && !changes.termsOfBusinessDocument.firstChange) {
+      this.termsOfBusinessDocument = changes.termsOfBusinessDocument.currentValue
+      this.termsOfBusinessDocumentIsSigned = this.isTermsOfBusinessSigned()
+    }
   }
 
   ngOnInit(): void {
@@ -188,8 +190,8 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
     this.model.section21StatusId = this.valuationData.section21StatusId || ''
 
     this.form = this.fb.group({
-      declarableInterest: [this.model.declarableInterest.toString(), Validators.required],
-      section21StatusId: [this.model.section21StatusId.toString(), Validators.required]
+      declarableInterest: [this.model.declarableInterest, Validators.required],
+      section21StatusId: [this.model.section21StatusId, Validators.required]
     })
 
     this.defaultMessage = {
@@ -224,10 +226,10 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
 
   isTermsOfBusinessSigned() {
     const signedOn =
-      this.termsOfBusinessDocument && this.termsOfBusinessDocument.toBLetting
-        ? !!this.termsOfBusinessDocument.toBLetting.signedOn
-        : this.termsOfBusinessDocument && this.termsOfBusinessDocument.toBSale
-        ? !!this.termsOfBusinessDocument.toBSale.signedOn
+      this.termsOfBusinessDocument && this.termsOfBusinessDocument.toBLetting && this.termsOfBusinessDocument.toBLetting.signedOn
+        ? true
+        : this.termsOfBusinessDocument && this.termsOfBusinessDocument.toBSale &&  this.termsOfBusinessDocument.toBSale.signedOn
+        ? true
         : false
     console.log('isTermsOfBusinessSigned()', signedOn)
     return signedOn
@@ -254,14 +256,6 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
 
   private setMenuItems() {
     return [
-      // {
-      //   id: 'uploadToB',
-      //   label: 'Upload ToB (L)',
-      //   icon: 'pi pi-upload',
-      //   command: () => {
-      //     this.showLettingsDialog = !this.showLettingsDialog
-      //   }
-      // },
       {
         id: 'uploadToB',
         label: 'Upload ToB',

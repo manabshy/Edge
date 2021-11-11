@@ -134,10 +134,10 @@ export class ValuationFacadeService {
 
             if (valuationData.valuationType === ValuationTypeEnum.Lettings) {
               console.log('LETTINGS TOB set: ')
-              eSignSignatureTob.toBLetting = { ...data.model, signatureFile: res.files[0] }
+              eSignSignatureTob.toBLetting = { ...data.model, signatureFile: res.files[0], signedOn: new Date() }
             } else if (valuationData.valuationType === ValuationTypeEnum.Sales) {
               console.log('SALES TOB set: ')
-              eSignSignatureTob.toBSale = { ...data.model, signatureFile: res.files[0] }
+              eSignSignatureTob.toBSale = { ...data.model, signatureFile: res.files[0], signedOn: new Date() }
             }
             const updatedValuationData = { ...valuationData, eSignSignatureTob }
             console.log('updatedValuationData: ', updatedValuationData)
