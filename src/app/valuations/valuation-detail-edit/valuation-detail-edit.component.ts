@@ -400,7 +400,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         valuationStatusDescription: 'New',
         originId: this.originId | 0,
         originTypeId: 0,
-        bookedBy: this.isClientService == true ? this.currentStaffMember : null
+        bookedBy: this.isClientService == true ? this.currentStaffMember : null,
+        bookedById: this.isClientService == true ? this.currentStaffMember.staffMemberId : null
       }
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0)
       if (this.propertyId) {
@@ -2475,7 +2476,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   checkOriginBookedBy(): boolean {
     if (
       (this.valuation.originTypeId == 13 || this.valuation.originTypeId == 14) &&
-      !(this.valuation.bookedBy && this.valuation.bookedBy.staffMemberId > 0)
+      !(this.valuation.bookedById && this.valuation.bookedById > 0)
     )
       return false
 

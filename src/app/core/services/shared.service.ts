@@ -70,9 +70,9 @@ export class SharedService {
   convertStringToNumber(stringValue: string): number {
     let numberValue = '0'
     if (stringValue) {
-      stringValue = stringValue.toString();
-      numberValue = stringValue.replace(/\D/g, '');
-      numberValue = numberValue.replace(/\D/g, '').replace(/^0+/, '');
+      stringValue = stringValue.toString()
+      numberValue = stringValue.replace(/\D/g, '')
+      numberValue = numberValue.replace(/\D/g, '').replace(/^0+/, '')
     }
     return +numberValue
   }
@@ -81,7 +81,7 @@ export class SharedService {
     let subtractionOfMonths =
       new Date().getMonth() - valuationDate.getMonth() + 12 * (new Date().getFullYear() - valuationDate.getFullYear())
     if (new Date().getDate() - valuationDate.getDate() < 0) subtractionOfMonths--
-    return subtractionOfMonths
+    return subtractionOfMonths < 0 ? 0 : subtractionOfMonths
   }
 
   setRemoveSticky(removed: boolean) {
