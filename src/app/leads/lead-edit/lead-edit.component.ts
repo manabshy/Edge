@@ -122,6 +122,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   origins: InfoDetail[]
   originListIds: string[] = ['9', '31', '83', '138', '139', '108', '112', '119', '120', '124', '134', '135']
 
+  private saveButtonClicked = new Subject<any>()
+
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl
   }
@@ -212,6 +214,21 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       }
       this.selectedLeadTypeId = +data
       this.leadEditForm.controls['originId'].updateValueAndValidity()
+    })
+
+    const buttonClickedDebounced = this.saveButtonClicked.pipe(debounceTime(2000))
+    buttonClickedDebounced.subscribe((lead) => {
+      this.leadsService.addLead(lead).subscribe(
+        (result) => {
+          if (result) {
+            this.lead = lead
+            this.onSaveComplete(result)
+          }
+        },
+        (error: WedgeError) => {
+          this.isSubmitting = false
+        }
+      )
     })
   }
 
@@ -689,17 +706,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       lead.updatedBy = this.currentStaffMember.staffMemberId
       lead.updatedDate = new Date()
 
-      this.leadsService.addLead(lead).subscribe(
-        (result) => {
-          if (result) {
-            this.lead = lead
-            this.onSaveComplete(result)
-          }
-        },
-        (error: WedgeError) => {
-          this.isSubmitting = false
-        }
-      )
+      this.saveButtonClicked.next(lead)
     } else {
       if (this.isLeadMarkedAsClosed) {
         lead.closedById = this.currentStaffMember.staffMemberId

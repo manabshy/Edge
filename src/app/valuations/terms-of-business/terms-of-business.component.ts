@@ -5,6 +5,7 @@ import { MenuItem } from 'primeng/api/menuitem'
 import { EdgeFile } from 'src/app/shared/models/edgeFile'
 import { Valuation, ValuationTypeEnum } from '../shared/valuation'
 import { Subscription } from 'rxjs'
+import { isThisISOWeek } from 'date-fns'
 
 export interface ToBDocument {
   dateRequestSent: Date
@@ -151,11 +152,9 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   moment = moment
   menuItems: MenuItem[]
   message: any
-  defaultMessage: any
   showSalesToB: boolean = false
   showLettingsToB: boolean = false
   showDialog: boolean = false
-  // showLettingsDialog: boolean = false
   valuationType: number
   termsOfBusinessDocumentIsSigned: boolean = false
 
@@ -168,6 +167,29 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(private fb: FormBuilder) {}
 
+  ngOnInit(): void {
+    console.log('TermsOfBusinessComponent: ', this.termsOfBusinessDocument)
+
+    this.valuationType = this.valuationData.valuationType
+    this.showSalesToB = this.isSalesToB()
+    this.showLettingsToB = this.isLettingsToB()
+
+    this.model.declarableInterest = this.valuationData.declarableInterest
+    this.model.section21StatusId = this.valuationData.section21StatusId || ''
+
+    this.form = this.fb.group({
+      declarableInterest: [this.model.declarableInterest, Validators.required],
+      section21StatusId: [this.model.section21StatusId, Validators.required]
+    })
+    this.formSubscription = this.form.valueChanges.subscribe((data) => {
+      this.onModelChange.emit(data)
+    })
+
+    this.termsOfBusinessDocumentIsSigned = this.isTermsOfBusinessSigned()
+    this.menuItems = this.setMenuItems()
+    this.buildMessageForView()
+  }
+
   ngOnChanges(changes) {
     console.log('termsOfBusinessDocument changes: ', changes)
     if (changes.valuationData && !changes.valuationData.firstChange) {
@@ -179,60 +201,57 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  ngOnInit(): void {
-    console.log('TermsOfBusinessComponent: ', this.termsOfBusinessDocument)
-
-    this.valuationType = this.valuationData.valuationType
-    this.showSalesToB = this.isSalesToB()
-    this.showLettingsToB = this.isLettingsToB()
-
-    this.model.declarableInterest = this.valuationData.declarableInterest || false
-    this.model.section21StatusId = this.valuationData.section21StatusId || ''
-
-    this.form = this.fb.group({
-      declarableInterest: [this.model.declarableInterest, Validators.required],
-      section21StatusId: [this.model.section21StatusId, Validators.required]
-    })
-
-    this.defaultMessage = {
-      type: 'warn',
-      text: ['Terms of business not yet signed']
-    }
-    if (this.termsOfBusinessDocument?.dateRequestSent) {
-      this.defaultMessage.text.push(
-        `Last Emailed : ${moment(this.termsOfBusinessDocument.dateRequestSent).format('Do MMM YYYY (HH:mm)')}`
-      )
-    }
-
-    this.menuItems = this.setMenuItems()
-    this.termsOfBusinessDocumentIsSigned = this.isTermsOfBusinessSigned()
-
-    // TODO initial message logic should be more readable
-    this.message =
-      this.valuationData.valuationStatus == 3 ||
-      this.valuationData.valuationStatus == 4 ||
-      this.valuationData.valuationStatus == 5
-        ? this.defaultMessage
-        : {}
-
-    this.formSubscription = this.form.valueChanges.subscribe((data) => {
-      this.onModelChange.emit(data)
-    })
-  }
-
   ngOnDestroy(): void {
     this.formSubscription.unsubscribe()
   }
 
   isTermsOfBusinessSigned() {
     const signedOn =
-      this.termsOfBusinessDocument && this.termsOfBusinessDocument.toBLetting && this.termsOfBusinessDocument.toBLetting.signedOn
+      this.termsOfBusinessDocument &&
+      this.termsOfBusinessDocument.toBLetting &&
+      this.termsOfBusinessDocument.toBLetting.signedOn
         ? true
-        : this.termsOfBusinessDocument && this.termsOfBusinessDocument.toBSale &&  this.termsOfBusinessDocument.toBSale.signedOn
+        : this.termsOfBusinessDocument &&
+          this.termsOfBusinessDocument.toBSale &&
+          this.termsOfBusinessDocument.toBSale.signedOn
         ? true
         : false
-    console.log('isTermsOfBusinessSigned()', signedOn)
     return signedOn
+  }
+
+  buildMessageForView() {
+    // valuation statuses: 3 = Valued, 4 = Instructed, 5 = Cancelled
+    this.message =
+      (!this.termsOfBusinessDocumentIsSigned && this.valuationData.valuationStatus == 3) ||
+      this.valuationData.valuationStatus == 4 ||
+      this.valuationData.valuationStatus == 5
+        ? {
+            type: 'warn',
+            text: ['Terms of business not yet signed']
+          }
+        : {
+            type: '',
+            text: []
+          }
+
+    if (this.termsOfBusinessDocument?.dateRequestSent && this.message.text) {
+      this.message.text.push(
+        `Last Emailed : ${moment(this.termsOfBusinessDocument.dateRequestSent).format('Do MMM YYYY (HH:mm)')}`
+      )
+    }
+    if (this.valuationData.declarableInterest === null) {
+      // if (!this.valuationData.declarableInterest) {
+      this.message.type = 'error'
+      this.message.text = ['Please answer declarable interest']
+    }
+
+    if (this.termsOfBusinessDocumentIsSigned) {
+      const signedOn = this.termsOfBusinessDocument.toBSale
+        ? this.termsOfBusinessDocument.toBSale.signedOn
+        : this.termsOfBusinessDocument.toBLetting.signedOn
+      this.message.type = 'success'
+      this.message.text = [`Terms of business was signed on ${moment(signedOn).format('Do MMM YYYY (HH:mm)')}`]
+    }
   }
 
   isSalesToB() {
@@ -251,19 +270,12 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
 
   public submitTermsOfBusiness(ev) {
     console.log('submit terms of business: ', ev)
+    ;(this.message.type = 'info'), (this.message.text = ['Terms of Business uploaded, pending save.'])
     this.onSubmitTermsOfBusiness.emit(ev)
   }
 
   private setMenuItems() {
-    return [
-      {
-        id: 'uploadToB',
-        label: 'Upload ToB',
-        icon: 'pi pi-upload',
-        command: () => {
-          this.showDialog = !this.showDialog
-        }
-      },
+    const items = [
       {
         id: 'sendAReminder',
         label: 'Send a reminder',
@@ -273,5 +285,16 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
         }
       }
     ]
+    if (this.termsOfBusinessDocumentIsSigned) {
+      items.push({
+        id: 'uploadToB',
+        label: 'Upload ToB',
+        icon: 'pi pi-upload',
+        command: () => {
+          this.showDialog = !this.showDialog
+        }
+      })
+    }
+    return items
   }
 }

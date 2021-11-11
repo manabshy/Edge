@@ -182,15 +182,9 @@ export class ValuationFacadeService {
   }
 
   public updateLocalModel(data) {
-    // console.log('updateLocalModel, pushing data update out: ', data)
     const valuationData = this._valuationData.getValue()
     const updatedValuationData = { ...valuationData, ...data }
-    // console.log('updatedValuationData: ', updatedValuationData)
     this._valuationData.next(updatedValuationData)
-  }
-
-  public onSubmitTermsOfBusiness(ev) {
-    console.log('onSubmitTermsOfBusiness. update local valuation with terms of business data changes ready for saving to API', ev)
   }
 
   // LAND REGISTRY CARD
@@ -358,15 +352,7 @@ export class ValuationFacadeService {
    * @returns response from API as a stream
    */
   public updateValuation(valuationData: Valuation): Observable<Valuation | any> {
-    // console.log('valuation is being saved: ', valuationData)
-    // console.log('this._valuationData.getValue(): ', this._valuationData.getValue())
     return this._apiSvc.updateValuation(valuationData)
-    // .pipe(
-    //   tap((res) => {
-    //     console.log('in response from valuation PUT: ', res)
-
-    //   })
-    // )
   }
 
   public saveValuationNote(valuationNote: valuationNote): Observable<Valuation | any> {
