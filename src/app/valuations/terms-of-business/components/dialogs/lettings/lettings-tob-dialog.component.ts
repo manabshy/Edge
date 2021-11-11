@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core'
+import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { FormlyFieldConfig } from '@ngx-formly/core'
+// import { FormlyFieldConfig } from '@ngx-formly/core'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'app-lettings-tob-dialog',
@@ -88,19 +89,18 @@ import { FormlyFieldConfig } from '@ngx-formly/core'
     </p-dialog>
   `
 })
-export class LettingsToBDialogComponent implements OnInit {
+export class LettingsToBDialogComponent implements OnInit, OnDestroy {
   @Output() onSubmitTermsOfBusiness: EventEmitter<any> = new EventEmitter()
   @Input() showDialog: boolean = false
   @Input() data: any = {}
 
   form: FormGroup
   model: any = {}
-  fields: FormlyFieldConfig[] = this.lettingsTermsOfBusinessFormFields()
-
   isMultiple: boolean = false
   tmpFiles: File[]
   fileUploaded: boolean = true
-
+  formSub: Subscription
+  
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
@@ -115,6 +115,14 @@ export class LettingsToBDialogComponent implements OnInit {
       isManagement: [this.model.isManagement, Validators.required],
       zeroDepositAccepted: [this.model.zeroDepositAccepted, Validators.required]
     })
+
+    this.formSub = this.form.valueChanges.subscribe((data) => {
+      this.model = {...this.model, ...data}
+    })
+  }
+
+  ngOnDestroy(){
+    this.formSub.unsubscribe()
   }
 
   public getFiles(files): void {
@@ -128,73 +136,76 @@ export class LettingsToBDialogComponent implements OnInit {
       model: this.model,
       file: this.tmpFiles
     }
+    console.log('submitting toB: ', payload)
     this.onSubmitTermsOfBusiness.emit(payload)
     this.showDialog = false
   }
 
+  // formly setup if can get custom radio buttons working then solution for replacing html forms.
+  // fields: FormlyFieldConfig[] = this.lettingsTermsOfBusinessFormFields()
   // <form [formGroup]="form" (ngSubmit)="submit()">
   //    <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
   // </form>
   //
-  private lettingsTermsOfBusinessFormFields(): FormlyFieldConfig[] {
-    return [
-      {
-        className: 'w-full mt-2 foobar',
-        key: 'gasCertRequired',
-        type: 'radio',
-        templateOptions: {
-          label: 'Is a gas certificate required?',
-          required: true,
-          options: [
-            {
-              value: true,
-              label: 'Yes'
-            },
-            {
-              value: false,
-              label: 'No'
-            }
-          ]
-        }
-      },
-      {
-        className: 'w-full mt-2',
-        key: 'isManagement',
-        type: 'radio',
-        templateOptions: {
-          label: 'Will it be managed?',
-          required: true,
-          options: [
-            {
-              value: true,
-              label: 'Yes'
-            },
-            {
-              value: false,
-              label: 'No'
-            }
-          ]
-        }
-      },
-      {
-        className: 'w-full mt-2',
-        key: 'zeroDepositAccepted',
-        type: 'radio',
-        templateOptions: {
-          label: 'Are zero deposits accepted?',
-          required: true,
-          options: [
-            {
-              value: true,
-              label: 'Yes'
-            },
-            {
-              value: false,
-              label: 'No'
-            }
-          ]
-        }
-      }
-    ]
-  }
+  // private lettingsTermsOfBusinessFormFields(): FormlyFieldConfig[] {
+  //   return [
+  //     {
+  //       className: 'w-full mt-2 foobar',
+  //       key: 'gasCertRequired',
+  //       type: 'radio',
+  //       templateOptions: {
+  //         label: 'Is a gas certificate required?',
+  //         required: true,
+  //         options: [
+  //           {
+  //             value: true,
+  //             label: 'Yes'
+  //           },
+  //           {
+  //             value: false,
+  //             label: 'No'
+  //           }
+  //         ]
+  //       }
+  //     },
+  //     {
+  //       className: 'w-full mt-2',
+  //       key: 'isManagement',
+  //       type: 'radio',
+  //       templateOptions: {
+  //         label: 'Will it be managed?',
+  //         required: true,
+  //         options: [
+  //           {
+  //             value: true,
+  //             label: 'Yes'
+  //           },
+  //           {
+  //             value: false,
+  //             label: 'No'
+  //           }
+  //         ]
+  //       }
+  //     },
+  //     {
+  //       className: 'w-full mt-2',
+  //       key: 'zeroDepositAccepted',
+  //       type: 'radio',
+  //       templateOptions: {
+  //         label: 'Are zero deposits accepted?',
+  //         required: true,
+  //         options: [
+  //           {
+  //             value: true,
+  //             label: 'Yes'
+  //           },
+  //           {
+  //             value: false,
+  //             label: 'No'
+  //           }
+  //         ]
+  //       }
+  //     }
+  //   ]
+  // }
 }
