@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs'
       [(visible)]="showDialog"
       [modal]="true"
       [draggable]="false"
+      (onHide)="close()"
     >
       <div class="flex flex-col" style="width: 500px">
         <app-file-upload
@@ -73,7 +74,7 @@ import { Subscription } from 'rxjs'
         <footer class="mt-10">
           <div class="flex flex-row space-x-4">
             <span class="flex-1"></span>
-            <button type="button" class="btn btn--ghost" (click)="showDialog = false">Cancel</button>
+            <button type="button" class="btn btn--ghost" (click)="close()">Cancel</button>
             <button
               type="button"
               class="btn btn--positive"
@@ -100,7 +101,7 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
   tmpFiles: File[]
   fileUploaded: boolean = true
   formSub: Subscription
-  
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
@@ -117,11 +118,11 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
     })
 
     this.formSub = this.form.valueChanges.subscribe((data) => {
-      this.model = {...this.model, ...data}
+      this.model = { ...this.model, ...data }
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.formSub.unsubscribe()
   }
 
@@ -138,6 +139,11 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
     }
     console.log('submitting toB: ', payload)
     this.onSubmitTermsOfBusiness.emit(payload)
+    this.showDialog = false
+  }
+
+  public close() {
+    this.onSubmitTermsOfBusiness.emit(false)
     this.showDialog = false
   }
 

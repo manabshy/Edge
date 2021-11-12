@@ -6,13 +6,15 @@ import { TermsOfBusinessTableSalesComponent } from './components/tables/sales/te
 import { TermsOfBusinessTableLettingsComponent } from './components/tables/lettings/terms-of-business-lettings-table.component'
 import { SalesToBDialogComponent } from './components/dialogs/sales/sales-tob-dialog.component'
 import { LettingsToBDialogComponent } from './components/dialogs/lettings/lettings-tob-dialog.component'
+import { SendReminderConfirmationDialogComponent } from './components/dialogs/reminder/send-reminder-dialog.component'
 
 const components = [
   TermsOfBusinessComponent,
   TermsOfBusinessTableSalesComponent,
   TermsOfBusinessTableLettingsComponent,
   SalesToBDialogComponent,
-  LettingsToBDialogComponent
+  LettingsToBDialogComponent,
+  SendReminderConfirmationDialogComponent
 ]
 @NgModule({
   declarations: [components],

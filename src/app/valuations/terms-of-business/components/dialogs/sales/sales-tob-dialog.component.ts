@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core'
 import { Subscription } from 'rxjs'
 
 @Component({
@@ -12,6 +11,7 @@ import { Subscription } from 'rxjs'
       [(visible)]="showDialog"
       [modal]="true"
       [draggable]="false"
+      (onHide)="close()"
     >
       <div class="flex flex-col" style="width: 500px">
         <app-file-upload
@@ -19,20 +19,14 @@ import { Subscription } from 'rxjs'
           (getFiles)="getFiles($event)"
           [isMultiple]="isMultiple"
         ></app-file-upload>
-
-        <!--
-        <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="fileUploaded">
-          <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
-        </form>
-        -->
         
-        
-      <form [formGroup]="form" class="my-4 ml-4">
-        <fieldset class="mb-2">
+      <form [formGroup]="form" class="my-4 px-2">
+        <fieldset class="mb-2" [ngClass]="{ 'invalid':  instructionPriceDirection.invalid && (instructionPriceDirection.dirty || instructionPriceDirection.touched) }">
           <label>
             Instruction price direction
           </label>
-          <input type="tel" class="p-2" formControlName="instructionPriceDirection" required />
+          <input type="tel" class="p-2"  [ngClass]="{ 'is-invalid': instructionPriceDirection.invalid && (instructionPriceDirection.dirty || instructionPriceDirection.touched) }" formControlName="instructionPriceDirection" required />
+          <p *ngIf="instructionPriceDirection.errors" class="message message--negative">Required field</p>
         </fieldset>
         <fieldset class="mb-3">
           <label>Sole or Multi</label>
@@ -42,7 +36,9 @@ import { Subscription } from 'rxjs'
             optionLabel="value"
             optionValue="id"
             [filter]="false"
+            placeholder="Select one"
             data-cy="salesAgencyTypeId"
+            class="py-2"
           ></p-dropdown>
         </fieldset>
       </form>
@@ -50,12 +46,12 @@ import { Subscription } from 'rxjs'
         <footer class="mt-10">
           <div class="flex flex-row space-x-4">
             <span class="flex-1"></span>
-            <button type="button" class="btn btn--ghost" (click)="showDialog = false">Cancel</button>
+            <button type="button" class="btn btn--ghost" (click)="close()">Cancel</button>
             <button
               type="button"
               class="btn btn--positive"
               (click)="submit()"
-              [disabled]="!fileUploaded && !form.valid"
+              [disabled]="!fileUploaded || !form.valid"
               data-cy="uploadFiles"
             >
               Submit
@@ -71,13 +67,21 @@ export class SalesToBDialogComponent implements OnInit, OnDestroy {
   @Input() showDialog: boolean = false
   @Input() data: any
 
+  get instructionPriceDirection() {
+    return this.form.get('instructionPriceDirection')
+  }
+
   form: FormGroup
   model: any = {}
   isMultiple: boolean = false
   tmpFiles: File[]
-  fileUploaded: boolean = true
+  fileUploaded: boolean = false
   formSub: Subscription
   salesAgencyTypeOptions = [
+    {
+      value: 'Select one',
+      id: null
+    },
     {
       value: 'Sole',
       id: 1
@@ -88,13 +92,9 @@ export class SalesToBDialogComponent implements OnInit, OnDestroy {
     }
   ]
 
-  // options: FormlyFormOptions = {}
-  // fields: FormlyFieldConfig[] = this.salesTermsOfBusinessFormFields()
-
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
-    console.log('data SalesToBDialogComponent: ', this.data)
     this.model = {
       instructionPriceDirection: null,
       salesAgencyTypeId: null,
@@ -121,46 +121,19 @@ export class SalesToBDialogComponent implements OnInit, OnDestroy {
   }
 
   public submit() {
-    // console.log('submit: ', this)
-    if (!this.form.valid) return
     const payload = {
       model: this.model,
       file: this.tmpFiles
     }
-    // console.log('submit: ', payload)
+    console.log('submit sales TOB. form ', this.form)
+    console.log('submit sales TOB. payload ', payload)
+    if (!this.form.valid || !this.tmpFiles.length) return
     this.onSubmitTermsOfBusiness.emit(payload)
     this.showDialog = false
   }
 
-  private salesTermsOfBusinessFormFields(): FormlyFieldConfig[] {
-    return [
-      {
-        fieldGroupClassName: 'flex flex-col',
-        fieldGroup: [
-          {
-            className: 'w-full mt-2',
-            key: 'instructionPriceDirection',
-            type: 'input',
-            templateOptions: {
-              label: 'Instruction price direction',
-              required: true
-            }
-          },
-          {
-            className: 'w-full mt-2',
-            key: 'salesAgencyTypeId',
-            type: 'select',
-            templateOptions: {
-              label: 'Sole or Multi',
-              required: true,
-              options: [
-                { value: 1, label: 'Sole' },
-                { value: 4, label: 'Multi' }
-              ]
-            }
-          }
-        ]
-      }
-    ]
+  public close() {
+    this.onSubmitTermsOfBusiness.emit(false)
+    this.showDialog = false
   }
 }
