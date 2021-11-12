@@ -391,7 +391,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.isFromProperty = (this.route.snapshot.queryParamMap.get('isFromProperty') as unknown) as boolean
     this.isNewValuation && !this.isFromProperty ? (this.showProperty = true) : (this.showProperty = false)
 
-    if (this.valuationId) {
+    if (this.valuationId > 0) {
       this.getValuation(this.valuationId)
     } else {
       this.valuation = {
@@ -482,6 +482,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       } else {
         this.setValidationForSalesMeetingOwner(false)
       }
+    })
+
+    this.valuationForm.controls['tenureId'].valueChanges.subscribe((data) => {
+      this.onTenureChange(data)
     })
 
     this.valuationForm.controls['propertyFloorId'].valueChanges.subscribe((data) => {
@@ -700,6 +704,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.statuses.find((x) => x.value == 9).isValid = true
       } else {
         this.statuses.find((x) => x.value == 9).isValid = false
+      }
+
+      if (
+        this.valuation.eSignSignatureTob &&
+        (this.valuation.eSignSignatureTob.toBLetting || this.valuation.eSignSignatureTob.toBSale)
+      ) {
+        this.statuses.find((x) => x.value == 4).isValid = true
+      } else {
+        this.statuses.find((x) => x.value == 4).isValid = false
       }
     }
   }
@@ -969,12 +982,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   setPropertyDetail(propertyDetails) {
-    
     if (propertyDetails.lastKnownOwner) this.lastKnownOwner = propertyDetails.lastKnownOwner
     else {
       this.lastKnownOwner = this.valuation?.propertyOwner
     }
-    
+
     this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner)
 
     if (this.changedLastOwner && this.changedLastOwner.contactGroupId > 0) {
@@ -990,7 +1002,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
       this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
         this.contactGroup = result
-        console.log("----------------------------------- contactGroupBs.next", result);
+        console.log('----------------------------------- contactGroupBs.next', result)
         this._valuationFacadeSvc.contactGroupBs.next(this.contactGroup)
         this.getSearchedPersonSummaryInfo(this.contactGroup)
       })
@@ -1199,9 +1211,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         }
       })
       .then((result) => {
-        this.setPropertyDetail(result) 
-        this.getValuationPropertyInfo(this.propertyId) 
-        this.getValuers(this.propertyId) 
+        this.setPropertyDetail(result)
+        this.getValuationPropertyInfo(this.propertyId)
+        this.getValuers(this.propertyId)
       })
       .then(() => {
         console.log(this.valuation.property)
@@ -1220,6 +1232,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.isEditable = false
         } else {
           this.isEditable = true
+        }
+
+        if (this.valuation.valuationStatus === ValuationStatusEnum.Instructed) {
+          this.statuses.find((x) => x.value == 8).isValid = true
+          this.isCancelled = true
         }
 
         if (
@@ -1345,42 +1362,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.sharedService.valuationType.next(valuationType)
     this.sharedService.valuationStatusChanged.next(status)
   }
-
-  // setInitialValuesByStatus(valuationStatus) {
-  //   switch (valuationStatus) {
-  //     case ValuationStatusEnum.Instructed: {
-  //       this.isEditable = false;
-  //       this.canSaveValuation = false;
-  //       break;
-  //     }
-  //     case ValuationStatusEnum.Booked: {
-  //       this.isEditable = false;
-  //       let valueIndex = this.statuses.find((x) => x.name == "values").value;
-  //       //this.setTabIndexActive(valueIndex);
-  //       break;
-  //     }
-  //     case ValuationStatusEnum.Valued: {
-  //       this.isEditable = false;
-  //       break;
-  //     }
-  //     case ValuationStatusEnum.Cancelled: {
-  //       this.isEditable = false;
-  //       this.canSaveValuation = false;
-  //       break;
-  //     }
-  //     default: {
-  //       this.isEditable = true;
-  //       this.canSaveValuation = true;
-  //     }
-  //   }
-  // }
-
-  // setTabIndexActive(index: number) {
-  //   let initState : boolean[] = [...this.activeState];
-  //   initState.forEach(x=> x =false);
-  //   initState[index]= true;
-  //   this.activeState[index] = true;
-  // }
 
   controlIsCancelled($event, control: boolean) {
     if (control) {
@@ -1623,7 +1604,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         bedrooms: info.bedrooms || 0,
         bathrooms: info.bathrooms || 0,
         receptions: info.receptions || 0,
-        //tenureId: info.tenureId || this.valuationForm.get('tenureId').value,
+        tenureId: info.tenureId || this.valuationForm.get('tenureId').value,
         //approxLeaseExpiryDate: this.changeLeaseExpiryDateToYears(info.approxLeaseExpiryDate),
         sqFt: info.sqFt || 0,
         outsideSpace: this.getInfoDetailValues(info.outsideSpace, this.outsideSpaces),
@@ -2166,41 +2147,48 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   isTermsOfBusinessSigned(tob) {
     const signedOn =
-    tob &&
-    tob.toBLetting &&
-    tob.toBLetting.signedOn
+      tob && tob.toBLetting && tob.toBLetting.signedOn
         ? true
-        : tob &&
-          tob.toBSale &&
-          tob.toBSale.signedOn
+        : tob && tob.toBSale && tob.toBSale.signedOn
         ? true
         : false
     return signedOn
   }
 
   public startInstruction() {
-
     const declarableInterst = this._valuationFacadeSvc._valuationData.getValue().declarableInterest
-    if (typeof declarableInterst === undefined){
-      console.log('Declare interest in TOB section is unanswered')
+    if (typeof declarableInterst === undefined) {
       this.accordionIndex = 4
       this.activeState[4] = true
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Declare interest in TOB section is unanswered!',
+        closable: false
+      })
       return
     }
-    
+
     const tob = this._valuationFacadeSvc._valuationData.getValue().eSignSignatureTob
-    if (!this.isTermsOfBusinessSigned(tob)){
-      console.log('Terms of biz is not signed')
+    if (!this.isTermsOfBusinessSigned(tob)) {
       this.accordionIndex = 4
       this.activeState[4] = true
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Terms of biz is not signed!',
+        closable: false
+      })
       return
     }
-    
-    const cc = this._valuationFacadeSvc._valuationData.getValue().complianceChecks
-    if(!cc.compliancePassedDate){
-      console.log('compliance checks havent passed yet')
+
+    const cc = this._valuationFacadeSvc._valuationData.getValue().complianceCheck
+    if (!cc.compliancePassedDate) {
       this.accordionIndex = 9
       this.activeState[9] = true
+      this.messageService.add({
+        severity: 'warn',
+        summary: `Compliance checks haven't passed yet!`,
+        closable: false
+      })
       return
     }
 
@@ -2209,7 +2197,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.activeState[5] = true
       this.messageService.add({
         severity: 'warn',
-        summary: 'Please complete land registration!',
+        summary: `Please complete land registration!`,
         closable: false
       })
       return
@@ -2832,7 +2820,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         summary: 'Instruction successfully saved',
         closable: false
       })
-      this.router.navigate(['/property-centre/detail', this.property.propertyId])
+      this.router
+        .navigateByUrl('/', { skipLocationChange: true })
+        .then(() => this.router.navigate(['/valuations/detail', this.valuation.valuationEventId, 'instructed']))
     }
   }
 
@@ -2942,7 +2932,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this._valuationFacadeSvc.sendTermsOfBusinessReminder()
   }
 
-  submitTermsOfBusiness(ev){
+  submitTermsOfBusiness(ev) {
     this._valuationFacadeSvc.termsOfBusinessFileUploaded(ev)
   }
 
