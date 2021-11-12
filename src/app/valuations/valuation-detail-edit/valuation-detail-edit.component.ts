@@ -1605,7 +1605,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         bathrooms: info.bathrooms || 0,
         receptions: info.receptions || 0,
         tenureId: info.tenureId || this.valuationForm.get('tenureId').value,
-        //approxLeaseExpiryDate: this.changeLeaseExpiryDateToYears(info.approxLeaseExpiryDate),
+        approxLeaseExpiryDate: this.changeLeaseExpiryDateToYears(info.approxLeaseExpiryDate),
         sqFt: info.sqFt || 0,
         outsideSpace: this.getInfoDetailValues(info.outsideSpace, this.outsideSpaces),
         parking: this.getInfoDetailValues(info.parking, this.parkings),
