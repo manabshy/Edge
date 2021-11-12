@@ -19,14 +19,14 @@ import { Subscription } from 'rxjs'
           (getFiles)="getFiles($event)"
           [isMultiple]="isMultiple"
         ></app-file-upload>
-  
+        
       <form [formGroup]="form" class="my-4 px-2">
         <fieldset class="mb-2" [ngClass]="{ 'invalid':  instructionPriceDirection.invalid && (instructionPriceDirection.dirty || instructionPriceDirection.touched) }">
           <label>
             Instruction price direction
           </label>
-          <input type="tel" class="p-2"  [ngClass]="{ 'is-invalid': instructionPriceDirection.invalid && (instructionPriceDirection.dirty || instructionPriceDirection.touched)}" formControlName="instructionPriceDirection" required />
-          <p *ngIf="instructionPriceDirection.invalid && (instructionPriceDirection.dirty || instructionPriceDirection.touched)" class="message message--negative">Required field</p>
+          <input type="tel" class="p-2"  [ngClass]="{ 'is-invalid': instructionPriceDirection.invalid && (instructionPriceDirection.dirty || instructionPriceDirection.touched) }" formControlName="instructionPriceDirection" required />
+          <p *ngIf="instructionPriceDirection.errors" class="message message--negative">Required field</p>
         </fieldset>
         <fieldset class="mb-3">
           <label>Sole or Multi</label>
@@ -51,7 +51,7 @@ import { Subscription } from 'rxjs'
               type="button"
               class="btn btn--positive"
               (click)="submit()"
-              [disabled]="!fileUploaded && !form.valid"
+              [disabled]="!fileUploaded || !form.valid"
               data-cy="uploadFiles"
             >
               Submit
@@ -75,7 +75,7 @@ export class SalesToBDialogComponent implements OnInit, OnDestroy {
   model: any = {}
   isMultiple: boolean = false
   tmpFiles: File[]
-  fileUploaded: boolean = true
+  fileUploaded: boolean = false
   formSub: Subscription
   salesAgencyTypeOptions = [
     {
@@ -121,12 +121,13 @@ export class SalesToBDialogComponent implements OnInit, OnDestroy {
   }
 
   public submit() {
-    console.log('submit sales TOB. ', this.form)
-    if (!this.form.valid) return
     const payload = {
       model: this.model,
       file: this.tmpFiles
     }
+    console.log('submit sales TOB. form ', this.form)
+    console.log('submit sales TOB. payload ', payload)
+    if (!this.form.valid || !this.tmpFiles.length) return
     this.onSubmitTermsOfBusiness.emit(payload)
     this.showDialog = false
   }

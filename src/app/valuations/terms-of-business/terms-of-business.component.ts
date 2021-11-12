@@ -201,7 +201,12 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
     if (changes.valuationData && !changes.valuationData.firstChange) {
       this.model.declarableInterest = changes.valuationData.currentValue.declarableInterest
       this.valuationData = changes.valuationData.currentValue
-      this.buildMessageForView()
+      if (changes.valuationData.currentValue.eSignSignatureTob?.dateRequestSent) {
+        if (!this.message.text) this.message.text = []
+        this.message.text.push(
+          `Last Emailed : ${moment(this.termsOfBusinessDocument.dateRequestSent).format('Do MMM YYYY (HH:mm)')}`
+        )
+      }
     }
     if (changes.termsOfBusinessDocument && !changes.termsOfBusinessDocument.firstChange) {
       this.termsOfBusinessDocument = changes.termsOfBusinessDocument.currentValue
