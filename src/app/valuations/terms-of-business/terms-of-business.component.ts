@@ -6,6 +6,7 @@ import { EdgeFile } from 'src/app/shared/models/edgeFile'
 import { Valuation, ValuationTypeEnum } from '../shared/valuation'
 import { Subscription } from 'rxjs'
 import { isThisISOWeek } from 'date-fns'
+import { MessageService } from 'primeng/api'
 
 export interface ToBDocument {
   dateRequestSent: Date
@@ -48,7 +49,9 @@ interface toBSale {
           </div>
         </ng-container>
         <span class="flex-1 mr-2"></span>
-        <app-menu [menuItems]="menuItems"></app-menu>
+        <ng-container *ngIf="menuItems.length">
+          <app-menu [menuItems]="menuItems"></app-menu>
+        </ng-container>
       </div>
 
       <form [formGroup]="form" class="my-4">
@@ -133,6 +136,11 @@ interface toBSale {
           [data]="termsOfBusinessDocument?.toBLetting"
         ></app-lettings-tob-dialog>
       </ng-container>
+
+      <app-send-reminder-confirmation-dialog
+        [showDialog]="showSendReminderConfirmationDialog"
+        (onDialogClosed)="onReminderConfirmationDialogClose($event)">
+      </app-send-reminder-confirmation-dialog>
     </div>
   `
 })
@@ -157,6 +165,7 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   showDialog: boolean = false
   valuationType: number
   termsOfBusinessDocumentIsSigned: boolean = false
+  showSendReminderConfirmationDialog: boolean = false
 
   public get valuationTypeGetter(): typeof ValuationTypeEnum {
     return ValuationTypeEnum
@@ -165,11 +174,9 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   informationMessage =
     'If property is owned by a D&G employee, employee relation or business associate e.g. Laurus Law, Prestige, Foxtons Group'
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private messageService: MessageService) {}
 
   ngOnInit(): void {
-    console.log('TermsOfBusinessComponent: ', this.termsOfBusinessDocument)
-
     this.valuationType = this.valuationData.valuationType
     this.showSalesToB = this.isSalesToB()
     this.showLettingsToB = this.isLettingsToB()
@@ -191,7 +198,6 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes) {
-    console.log('termsOfBusinessDocument changes: ', changes)
     if (changes.valuationData && !changes.valuationData.firstChange) {
       this.model.declarableInterest = changes.valuationData.currentValue.declarableInterest
       this.valuationData = changes.valuationData.currentValue
@@ -242,7 +248,6 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
       )
     }
     if (this.valuationData.declarableInterest === null) {
-      // if (!this.valuationData.declarableInterest) {
       this.message.type = 'error'
       this.message.text = ['Please answer declarable interest']
     }
@@ -260,40 +265,56 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
     const isSalesTOB =
       this.valuationType == this.valuationTypeGetter.Sales &&
       (this.valuationData.valuationStatus === 3 || this.valuationData.valuationStatus === 4)
-    console.log('isSalesToB: ', isSalesTOB)
     return isSalesTOB
   }
 
   isLettingsToB() {
     const isLettingsTOB = this.valuationType == this.valuationTypeGetter.Lettings
-    console.log('isLettingsToB: ', isLettingsTOB)
     return isLettingsTOB
   }
 
   public submitTermsOfBusiness(ev) {
-    console.log('submit terms of business: ', ev)
-    ;(this.message.type = 'info'), (this.message.text = ['Terms of Business uploaded, pending save.'])
-    this.onSubmitTermsOfBusiness.emit(ev)
+    if (!ev) {
+      console.log('user cancelled out of upload tob')
+    } else {
+      this.message.type = 'info'
+      this.message.text = ['Terms of Business uploaded, pending save.']
+      this.onSubmitTermsOfBusiness.emit(ev)
+    }
+    this.showDialog = false
+  }
+
+  public onReminderConfirmationDialogClose(ev) {
+    console.log('onReminderConfirmationDialogClose: ', ev)
+    this.showSendReminderConfirmationDialog = false
+    if (ev) {
+      this.onSendTermsOfBusinessReminder.emit()
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Reminder email sent',
+        closable: false
+      })
+    }
   }
 
   private setMenuItems() {
     const items = []
-    if (this.termsOfBusinessDocumentIsSigned) {
+
+    if (!this.termsOfBusinessDocumentIsSigned) {
       items.push({
         id: 'uploadToB',
         label: 'Upload Terms of Business',
         icon: 'pi pi-upload',
         command: () => {
-          this.showDialog = !this.showDialog
+          this.showDialog = true
         }
       })
-    } else {
       items.push({
         id: 'sendAReminder',
         label: 'Send a reminder',
         icon: 'pi pi-send',
         command: () => {
-          this.onSendTermsOfBusinessReminder.emit()
+          this.showSendReminderConfirmationDialog = true
         }
       })
     }
