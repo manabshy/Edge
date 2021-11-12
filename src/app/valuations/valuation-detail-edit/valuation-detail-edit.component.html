@@ -22,7 +22,8 @@
                     [ngClass]="{ 'opacity-75 bg-gray-500': !item.isValid, 'bg-green-600': item.isValid }">
                     <i *ngIf="item.isValid" class="ml-0.3 text-white pi pi-check"></i>
                   </div>
-                  <a (click)="toggleAccordion(item.value)">{{ item?.name | toPascalCase }}</a>
+                  <a (click)="toggleAccordion(item.value)" [ngClass]="{'font-black': item?.value == 8}">{{ item?.name |
+                    toPascalCase }}</a>
                 </div>
               </li>
             </ol>
@@ -149,7 +150,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="isCancelled && property">
+        <div *ngIf="isCancelled && property && valuation?.valuationStatus != 4">
           <p-messages severity="error">
             <ng-template pTemplate>
               <div data-cy="cancelMessage" class="p-ml-2">
@@ -347,8 +348,7 @@
                       <fieldset class="inline-child">
                         <label for="tenureId">Tenure</label>
                         <p-dropdown name="tenureId" id="tenureId" [options]="tenures" formControlName="tenureId"
-                          optionLabel="value" optionValue="id" [filter]="false" data-cy="tenureId"
-                          (onChange)="onTenureChange($event.value)"></p-dropdown>
+                          optionLabel="value" optionValue="id" [filter]="false" data-cy="tenureId"></p-dropdown>
                       </fieldset>
                       <fieldset class="inline-child" *ngIf="showLeaseExpiryDate"
                         [ngClass]="{ invalid: formErrors?.approxLeaseExpiryDate }">

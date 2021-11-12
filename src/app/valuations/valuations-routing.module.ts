@@ -32,6 +32,16 @@ const routes: Routes = [
           showMenuEditItem: false
         },
         canDeactivate: [CanDeactivateGuard]
+      },
+      {
+        path: 'instructed',
+        component: ValuationDetailEditComponent,
+        data: {
+          shouldDetach: false,
+          title: 'Valuation',
+          showMenuEditItem: false
+        },
+        canDeactivate: [CanDeactivateGuard]
       }
     ]
   }
