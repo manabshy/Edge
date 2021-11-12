@@ -304,7 +304,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   get isTermsOfBusinessVisible() {
-    // return true
     if (this.valuation) {
       return !(
         this.valuation.valuationStatus === ValuationStatusEnum.None ||
@@ -1128,9 +1127,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       propertyOwner: [''],
       originType: [0],
       originId: [0],
-      reason: ['', [Validators.required, Validators.maxLength(3000)]],
-      timeFrame: ['', [Validators.required, Validators.maxLength(3000)]],
-      generalNotes: ['', [Validators.required, Validators.maxLength(3000)]],
+      reason: ['', [Validators.required, Validators.maxLength(1000)]],
+      timeFrame: ['', [Validators.required, Validators.maxLength(1000)]],
+      generalNotes: ['', [Validators.required, Validators.maxLength(1000)]],
       bedrooms: [0, Validators.max(99)],
       bathrooms: [0, Validators.max(99)],
       receptions: [0, Validators.max(99)],
