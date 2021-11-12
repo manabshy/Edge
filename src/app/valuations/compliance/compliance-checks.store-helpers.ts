@@ -60,7 +60,7 @@ export const identifyAmlOrKyc = (valuation): string => {
   // console.log('valuation.suggestedAskingRentShortLetMonthly: ', valuation.suggestedAskingRentShortLetMonthly)
   try {
     const amlOrKyc =
-      valuation.suggestedAskingRentLongLetMonthly < 7500 || valuation.suggestedAskingRentShortLetMonthly < 7500
+      valuation.suggestedAskingRentLongLetMonthly < 7500 && valuation.suggestedAskingRentShortLetMonthly < 7500
         ? 'KYC'
         : valuation.suggestedAskingRentLongLetMonthly >= 7500 || valuation.suggestedAskingRentShortLetMonthly >= 7500
         ? 'AML'

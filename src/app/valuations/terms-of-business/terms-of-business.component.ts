@@ -277,23 +277,23 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private setMenuItems() {
-    const items = [
-      {
+    const items = []
+    if (this.termsOfBusinessDocumentIsSigned) {
+      items.push({
+        id: 'uploadToB',
+        label: 'Upload Terms of Business',
+        icon: 'pi pi-upload',
+        command: () => {
+          this.showDialog = !this.showDialog
+        }
+      })
+    } else {
+      items.push({
         id: 'sendAReminder',
         label: 'Send a reminder',
         icon: 'pi pi-send',
         command: () => {
           this.onSendTermsOfBusinessReminder.emit()
-        }
-      }
-    ]
-    if (this.termsOfBusinessDocumentIsSigned) {
-      items.push({
-        id: 'uploadToB',
-        label: 'Upload ToB',
-        icon: 'pi pi-upload',
-        command: () => {
-          this.showDialog = !this.showDialog
         }
       })
     }
