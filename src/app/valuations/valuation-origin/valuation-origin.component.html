@@ -6,7 +6,7 @@
       (ngModelChange)="originTypeIdChanged($event)" (onChange)="controlValues()">
     </p-dropdown>
   </fieldset>
-  <fieldset class="w-28" [ngClass]="{'invalid': originIdMessage}">
+  <fieldset class="w-32" [ngClass]="{'invalid': originIdMessage}">
     <label for="originId">Origin</label>
     <p-dropdown name="originId" id="originId" [options]="origins" [(ngModel)]="valuation.originId" optionLabel="value"
       optionValue="id" [filter]="false" data-cy="originId" (onChange)="controlValues()">
