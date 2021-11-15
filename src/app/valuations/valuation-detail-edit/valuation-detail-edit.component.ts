@@ -457,7 +457,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       )
       if (this.areValuesVisible && this.isThereAPrice(data) && this.setRequirementValuationNoteBs.getValue() == false) {
         this.setRequirementValuationNoteBs.next(true)
-        this.valuationForm.controls['valuationNote'].setValidators([Validators.required, Validators.maxLength(3000)])
+        this.valuationForm.controls['valuationNote'].setValidators([Validators.required, Validators.maxLength(1250)])
         this.valuationForm.controls['valuationNote'].updateValueAndValidity()
       } else {
         this.formErrors.valuationNote = null
@@ -738,7 +738,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       data.suggestedAskingRentLongLetMonthly ||
       data.suggestedAskingRentShortLetMonthly
     ) {
-      this.valuationForm.controls['valuationNote'].setValidators([Validators.required, Validators.maxLength(3000)])
+      this.valuationForm.controls['valuationNote'].setValidators([Validators.required, Validators.maxLength(1250)])
       return true
     }
     this.valuationForm.controls['valuationNote'].setValidators(null)
@@ -1127,9 +1127,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       propertyOwner: [''],
       originType: [0],
       originId: [0],
-      reason: ['', [Validators.required, Validators.maxLength(3000)]],
-      timeFrame: ['', [Validators.required, Validators.maxLength(3000)]],
-      generalNotes: ['', [Validators.required, Validators.maxLength(3000)]],
+      reason: ['', [Validators.required, Validators.maxLength(1250)]],
+      timeFrame: ['', [Validators.required, Validators.maxLength(1250)]],
+      generalNotes: ['', [Validators.required, Validators.maxLength(1250)]],
       bedrooms: [0, Validators.max(99)],
       bathrooms: [0, Validators.max(99)],
       receptions: [0, Validators.max(99)],
@@ -2189,7 +2189,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.activeState[4] = true
       this.messageService.add({
         severity: 'warn',
-        summary: 'Terms of biz is not signed!',
+        summary: 'Terms of business is not signed',
         closable: false
       })
       return
@@ -2533,6 +2533,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     //this._valuationFacadeSvc.valuationValidationSubject.next(true);
 
     // TODO DB put this logic in service
+    const declarableInterest = this._valuationFacadeSvc._valuationData.getValue().declarableInterest
+    if (declarableInterest == null) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Please complete declarable interest',
+        closable: false
+      })
+      return
+    }
     // if (this.formErrors['declarableInterest']) {
     //   this.accordionIndex = 4
     //   this.activeState[4] = true

@@ -128,9 +128,9 @@ const externalModulesImports = [
   CarouselModule.forRoot(),
   CalendarModule.forRoot({
     provide: DateAdapter,
-    useFactory: adapterFactory,
+    useFactory: adapterFactory
   })
-];
+]
 const externalModulesExports = [
   InfiniteScrollModule,
   CollapseModule,
