@@ -287,18 +287,18 @@ export const ValidationMessages = {
   },
   reason: {
     required: 'Reason is required',
-    maxlength: 'Reason must be less than 3000 characters'
+    maxlength: 'Reason must be less than 1250 characters'
   },
   timeFrame: {
     required: 'Time frame is required',
-    maxlength: 'Time frame must be less than 3000 characters'
+    maxlength: 'Time frame must be less than 1250 characters'
   },
   marketChat: {
     required: 'Market chat is required'
   },
   generalNotes: {
     required: 'Property note is required',
-    maxlength: 'Property note must be less than 3000 characters'
+    maxlength: 'Property note must be less than 1250 characters'
   },
   approxLeaseExpiryDate: {
     min: 'Approximate lease length cannot be less than 0',
@@ -424,7 +424,7 @@ export const ValidationMessages = {
   },
   valuationNote: {
     required: 'Values note is required',
-    maxlength: 'Reason must be less than 3000 characters'
+    maxlength: 'Reason must be less than 1250 characters'
   }
 }
 
