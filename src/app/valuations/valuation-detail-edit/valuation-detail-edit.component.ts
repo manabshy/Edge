@@ -157,7 +157,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   getTimeSalesValuationDate: number
   getTimeLettingsValuationDate: number
   todaysDate = new Date()
-  defaultHours = [12, 13, 16, 17, 18, 19]
+  defaultHours = ['12:45', '13', '16', '17', '18', '19']
   defaultHoursForWeekend = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
   lettingsValuer: BaseStaffMember
   salesValuer: BaseStaffMember
@@ -457,7 +457,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       )
       if (this.areValuesVisible && this.isThereAPrice(data) && this.setRequirementValuationNoteBs.getValue() == false) {
         this.setRequirementValuationNoteBs.next(true)
-        this.valuationForm.controls['valuationNote'].setValidators(Validators.required)
+        this.valuationForm.controls['valuationNote'].setValidators([Validators.required, Validators.maxLength(3000)])
         this.valuationForm.controls['valuationNote'].updateValueAndValidity()
       } else {
         this.formErrors.valuationNote = null
@@ -738,7 +738,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       data.suggestedAskingRentLongLetMonthly ||
       data.suggestedAskingRentShortLetMonthly
     ) {
-      this.valuationForm.controls['valuationNote'].setValidators(Validators.required)
+      this.valuationForm.controls['valuationNote'].setValidators([Validators.required, Validators.maxLength(3000)])
       return true
     }
     this.valuationForm.controls['valuationNote'].setValidators(null)
@@ -962,7 +962,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.propertyTypes = [{ id: 0, value: ' ' }, ...info.propertyTypes]
     this.allPropertyStyles = [{ id: 0, value: ' ' }, ...info.propertyStyles]
     this.propertyStyles = [{ id: 0, value: ' ' }, ...info.propertyStyles]
-    this.propertyFloors = info.propertyFloors
+    this.propertyFloors = [{ id: 0, value: ' ' }, ...info.propertyFloors]
   }
 
   getPropertyDetails(propertyId: number) {
@@ -1127,9 +1127,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       propertyOwner: [''],
       originType: [0],
       originId: [0],
-      reason: ['', [Validators.required, Validators.maxLength(1000)]],
-      timeFrame: ['', [Validators.required, Validators.maxLength(1000)]],
-      generalNotes: ['', [Validators.required, Validators.maxLength(1000)]],
+      reason: ['', [Validators.required, Validators.maxLength(3000)]],
+      timeFrame: ['', [Validators.required, Validators.maxLength(3000)]],
+      generalNotes: ['', [Validators.required, Validators.maxLength(3000)]],
       bedrooms: [0, Validators.max(99)],
       bathrooms: [0, Validators.max(99)],
       receptions: [0, Validators.max(99)],
@@ -1841,9 +1841,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   async getAvailableSlots(request) {
     await this._valuationFacadeSvc.getValuersCalendarAvailability(request).subscribe((x) => {
-      this.thisWeek = x[0].days
-      this.nextWeek = x[1].days
-      this.nextTwoWeek = x[2].days
+      if (x.length > 0) this.thisWeek = x[0].days
+      if (x.length > 1) this.nextWeek = x[1].days
+      if (x.length > 2) this.nextTwoWeek = x[2].days
       this.setWeeks()
       this.setFirstFreeSlot()
     })
@@ -2135,13 +2135,28 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   toggleAccordion(value: number) {
     let status = this.statuses.find((x) => x.value == value)
     if (status) {
-      if (status.value == 0) this.scrollSpecificElement('valuationNotesTab')
-      else if (status.value == 1) this.scrollSpecificElement('propertyInfoTab')
-      else if (status.value == 2) this.scrollSpecificElement('appointmentTab')
-      else if (status.value == 3) this.scrollSpecificElement('valuesTab')
-      else if (status.value == 4) this.scrollSpecificElement('termsOfBusinessTab')
-      else if (status.value == 6) this.scrollSpecificElement('landRegisterTab')
-      else if (status.value == 9) this.scrollSpecificElement('complianceChecksTab')
+      if (status.value == 0) {
+        this.activeState[0] = true
+        this.scrollSpecificElement('valuationNotesTab')
+      } else if (status.value == 1) {
+        this.activeState[1] = true
+        this.scrollSpecificElement('propertyInfoTab')
+      } else if (status.value == 2) {
+        this.activeState[2] = true
+        this.scrollSpecificElement('appointmentTab')
+      } else if (status.value == 3) {
+        this.activeState[3] = true
+        this.scrollSpecificElement('valuesTab')
+      } else if (status.value == 4) {
+        this.activeState[4] = true
+        this.scrollSpecificElement('termsOfBusinessTab')
+      } else if (status.value == 6) {
+        this.activeState[5] = true
+        this.scrollSpecificElement('landRegisterTab')
+      } else if (status.value == 9) {
+        this.activeState[6] = true
+        this.scrollSpecificElement('complianceChecksTab')
+      }
     }
   }
 
