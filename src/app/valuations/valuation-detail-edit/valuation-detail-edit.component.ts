@@ -387,8 +387,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get('lastKnownOwnerId')
     this.originId = +this.route.snapshot.queryParamMap.get('originId')
     this.leadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId')
-    this.isNewValuation = (this.route.snapshot.queryParamMap.get('isNewValuation') as unknown) as boolean
-    this.isFromProperty = (this.route.snapshot.queryParamMap.get('isFromProperty') as unknown) as boolean
+    this.isNewValuation = this.route.snapshot.queryParamMap.get('isNewValuation') as unknown as boolean
+    this.isFromProperty = this.route.snapshot.queryParamMap.get('isFromProperty') as unknown as boolean
     this.isNewValuation && !this.isFromProperty ? (this.showProperty = true) : (this.showProperty = false)
 
     if (this.valuationId > 0) {
@@ -2532,26 +2532,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     // validation of land register
     //this._valuationFacadeSvc.valuationValidationSubject.next(true);
 
-    // TODO DB put this logic in service
     const declarableInterest = this._valuationFacadeSvc._valuationData.getValue().declarableInterest
-    if (declarableInterest == null) {
+    if (declarableInterest == null || typeof declarableInterest == 'undefined') {
       this.messageService.add({
         severity: 'warn',
         summary: 'Please complete declarable interest',
         closable: false
       })
+      this.accordionIndex = 4
+      this.activeState[4] = true
       return
     }
-    // if (this.formErrors['declarableInterest']) {
-    //   this.accordionIndex = 4
-    //   this.activeState[4] = true
-    //   this.messageService.add({
-    //     severity: 'warn',
-    //     summary: 'You must complete terms of business',
-    //     closable: false
-    //   })
-    //   return
-    // }
 
     if (this.isAvailabilityRequired) {
       this.messageService.add({
@@ -2960,7 +2951,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this._valuationFacadeSvc.termsOfBusinessFileUploaded(ev)
   }
 
-  onPowerOfAttorneyChange(val){
+  onPowerOfAttorneyChange(val) {
     console.log('onPowerOfAttorneyChange: if true, push adminContact into compliance store', val)
   }
 
