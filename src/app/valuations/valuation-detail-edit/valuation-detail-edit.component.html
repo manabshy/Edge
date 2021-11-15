@@ -836,8 +836,7 @@
                   </div>
                 </p-accordionTab>
 
-                <p-accordionTab header="Terms Of Business" *ngIf="isTermsOfBusinessVisible"
-                  [(selected)]="activeState[4]" data-cy="termsOfBusiness">
+                <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
                   <div id="termsOfBusinessTab"
                     [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled || isTermsOfBusinessDisabled }"
                     (click)="controlIsCancelled($event, isCancelled || isTermsOfBusinessDisabled)">

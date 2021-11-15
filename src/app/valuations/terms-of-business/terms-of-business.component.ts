@@ -3,9 +3,8 @@ import { Component, Input, OnInit, EventEmitter, Output, OnChanges, OnDestroy } 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { MenuItem } from 'primeng/api/menuitem'
 import { EdgeFile } from 'src/app/shared/models/edgeFile'
-import { Valuation, ValuationTypeEnum } from '../shared/valuation'
+import { Valuation, ValuationStatusEnum, ValuationTypeEnum } from '../shared/valuation'
 import { Subscription } from 'rxjs'
-import { isThisISOWeek } from 'date-fns'
 import { MessageService } from 'primeng/api'
 
 export interface ToBDocument {
@@ -53,7 +52,7 @@ interface toBSale {
           <app-menu [menuItems]="menuItems"></app-menu>
         </ng-container>
       </div>
-
+      
       <form [formGroup]="form" class="my-4">
         <fieldset class="mb-2">
           <fieldset class="row">
@@ -114,7 +113,7 @@ interface toBSale {
       </form>
 
       <ng-container *ngIf="showSalesToB">
-        <ng-container *ngIf="termsOfBusinessDocumentIsSigned">
+        <ng-container *ngIf="termsOfBusinessDocumentIsSigned && !isPreVal">
           <app-terms-of-business-table-sales [data]="termsOfBusinessDocument?.toBSale"></app-terms-of-business-table-sales>
         </ng-container>
 
@@ -122,11 +121,12 @@ interface toBSale {
           (onSubmitTermsOfBusiness)="submitTermsOfBusiness($event)"
           [showDialog]="showDialog"
           [data]="termsOfBusinessDocument?.toBSale"
+          [suggestedAskingPrice]="valuationData.suggestedAskingPrice"
         ></app-sales-tob-dialog>
       </ng-container>
 
       <ng-container *ngIf="showLettingsToB">
-        <ng-container *ngIf="termsOfBusinessDocumentIsSigned">
+        <ng-container *ngIf="termsOfBusinessDocumentIsSigned && !isPreVal">
           <app-terms-of-business-table-lettings [data]="termsOfBusinessDocument?.toBLetting"></app-terms-of-business-table-lettings>
         </ng-container>
 
@@ -166,6 +166,7 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   valuationType: number
   termsOfBusinessDocumentIsSigned: boolean = false
   showSendReminderConfirmationDialog: boolean = false
+  isPreVal: boolean = true
 
   public get valuationTypeGetter(): typeof ValuationTypeEnum {
     return ValuationTypeEnum
@@ -195,6 +196,7 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
     this.termsOfBusinessDocumentIsSigned = this.isTermsOfBusinessSigned()
     this.menuItems = this.setMenuItems()
     this.buildMessageForView()
+    this.isPreVal = this.isPreValStatus()
   }
 
   ngOnChanges(changes) {
@@ -233,7 +235,7 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   buildMessageForView() {
-    // valuation statuses: 3 = Valued, 4 = Instructed, 5 = Cancelled
+    // valuation statuses: None = 0, Booked = 2, Valued = 3, Instructed = 4, Cancelled = 5, Closed = 6
     this.message =
       (!this.termsOfBusinessDocumentIsSigned && this.valuationData.valuationStatus == 3) ||
       this.valuationData.valuationStatus == 4 ||
@@ -278,10 +280,15 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
     return isLettingsTOB
   }
 
+  isPreValStatus() {
+    return (
+      this.valuationData.valuationStatus === ValuationStatusEnum.None ||
+      this.valuationData.valuationStatus === ValuationStatusEnum.Booked
+    )
+  }
+
   public submitTermsOfBusiness(ev) {
-    if (!ev) {
-      console.log('user cancelled out of upload tob')
-    } else {
+    if (ev) {
       this.message.type = 'info'
       this.message.text = ['Terms of Business uploaded, pending save.']
       this.onSubmitTermsOfBusiness.emit(ev)
@@ -290,7 +297,6 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public onReminderConfirmationDialogClose(ev) {
-    console.log('onReminderConfirmationDialogClose: ', ev)
     this.showSendReminderConfirmationDialog = false
     if (ev) {
       this.onSendTermsOfBusinessReminder.emit()
@@ -305,7 +311,10 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   private setMenuItems() {
     const items = []
 
-    if (!this.termsOfBusinessDocumentIsSigned) {
+    if (
+      !this.termsOfBusinessDocumentIsSigned &&
+      (this.valuationData.valuationStatus == ValuationStatusEnum.Valued)
+    ) {
       items.push({
         id: 'uploadToB',
         label: 'Upload Terms of Business',
@@ -323,6 +332,7 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
         }
       })
     }
+
     return items
   }
 }

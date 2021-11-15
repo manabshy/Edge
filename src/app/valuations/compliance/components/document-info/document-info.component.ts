@@ -55,6 +55,7 @@ export class DocumentInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkIdIsValid()
+    console.log('this.files: ', this.files)
   }
 
   showFilesUploadButton(): boolean {

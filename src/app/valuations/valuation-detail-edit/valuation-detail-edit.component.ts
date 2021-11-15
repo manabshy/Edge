@@ -303,14 +303,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  get isTermsOfBusinessVisible() {
-    if (this.valuation) {
-      return !(
-        this.valuation.valuationStatus === ValuationStatusEnum.None ||
-        this.valuation.valuationStatus === ValuationStatusEnum.Booked
-      )
-    }
-  }
+  // get isTermsOfBusinessVisible() {
+  //   if (this.valuation) {
+  //     return !(
+  //       this.valuation.valuationStatus === ValuationStatusEnum.None ||
+  //       this.valuation.valuationStatus === ValuationStatusEnum.Booked
+  //     )
+  //   }
+  // }
 
   get isLandRegisterVisible() {
     if (this.valuation) {

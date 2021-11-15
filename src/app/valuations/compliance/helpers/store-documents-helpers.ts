@@ -16,10 +16,10 @@ import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload,
         return {
           personId: entity.personId,
           name: entity.name,
-          address: entity.address ? entity.address : 'Unset',
+          address: entity.address ? entity.address : 'No address',
           documents: mapDocsForAPI(entity.documents),
           isMain: entity.isMain,
-          position: entity.position ? entity.position : 'Unset',
+          position: entity.position ? entity.position : '',
           personDateAmlCompleted: entity.personDateAmlCompleted ? entity.personDateAmlCompleted : null
         }
       })
@@ -48,8 +48,8 @@ import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload,
           companyDocuments.push(updatedEntity)
         } else {
           updatedEntity.personId = entity.personId
-          updatedEntity.position = entity.position ? entity.position : 'Not set'
-          updatedEntity.address = entity.address ? entity.address : 'Not set'
+          updatedEntity.position = entity.position ? entity.position : ''
+          updatedEntity.address = entity.address ? entity.address : 'No address'
           updatedEntity.personId = entity.personId
           updatedEntity.name = entity.name
           personDocuments.push(updatedEntity)
