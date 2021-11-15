@@ -55,13 +55,12 @@ export class ComplianceCardComponent implements OnInit {
     } else {
       this.pillLabel = this.entity.isMain
         ? 'Lead Contact'
-        : this.entity.isAdmin
-        ? 'Admin Contact'
         : 'Associated Contact'
     }
 
     if (this.entity.isAdmin) {
-      this.pillClass = 'pill--positive'
+      this.pillClass = 'pill--info'
+      this.pillLabel = 'Admin Contact'
     }
   }
 
