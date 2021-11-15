@@ -457,7 +457,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       )
       if (this.areValuesVisible && this.isThereAPrice(data) && this.setRequirementValuationNoteBs.getValue() == false) {
         this.setRequirementValuationNoteBs.next(true)
-        this.valuationForm.controls['valuationNote'].setValidators([Validators.required, Validators.maxLength(3000)])
+        this.valuationForm.controls['valuationNote'].setValidators([Validators.required, Validators.maxLength(1250)])
         this.valuationForm.controls['valuationNote'].updateValueAndValidity()
       } else {
         this.formErrors.valuationNote = null
@@ -738,7 +738,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       data.suggestedAskingRentLongLetMonthly ||
       data.suggestedAskingRentShortLetMonthly
     ) {
-      this.valuationForm.controls['valuationNote'].setValidators([Validators.required, Validators.maxLength(3000)])
+      this.valuationForm.controls['valuationNote'].setValidators([Validators.required, Validators.maxLength(1250)])
       return true
     }
     this.valuationForm.controls['valuationNote'].setValidators(null)
@@ -1127,9 +1127,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       propertyOwner: [''],
       originType: [0],
       originId: [0],
-      reason: ['', [Validators.required, Validators.maxLength(3000)]],
-      timeFrame: ['', [Validators.required, Validators.maxLength(3000)]],
-      generalNotes: ['', [Validators.required, Validators.maxLength(3000)]],
+      reason: ['', [Validators.required, Validators.maxLength(1250)]],
+      timeFrame: ['', [Validators.required, Validators.maxLength(1250)]],
+      generalNotes: ['', [Validators.required, Validators.maxLength(1250)]],
       bedrooms: [0, Validators.max(99)],
       bathrooms: [0, Validators.max(99)],
       receptions: [0, Validators.max(99)],
