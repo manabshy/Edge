@@ -227,7 +227,7 @@ const externalModulesExports = [
           'https://douglasandgordon.onmicrosoft.com/03d5d394-2418-42fa-a345-556b8d7ffcdb/user_impersonation',
           'https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation'
         ],
-        popUp: false,
+        popUp: !isIE,
         protectedResourceMap: protectedResourceMap
       }
     ),
