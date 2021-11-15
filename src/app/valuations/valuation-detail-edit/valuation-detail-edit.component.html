@@ -2,6 +2,7 @@
   <div class="mb-10 md:mb-0 row__item row__item--aside">
     <div class="wrapper--sticky">
       <app-contact-group-card class="appWrapper" [(adminContact)]="adminContact"
+      (onPowerOfAttorneyChange)="onPowerOfAttorneyChange($event)"
         [contactGroup]="adminContactGroup ? adminContactGroup : contactGroup" *ngIf="contactGroup">
       </app-contact-group-card>
       <div>
@@ -835,9 +836,9 @@
                   </div>
                 </p-accordionTab>
 
-                <p-accordionTab id="termsOfBusinessTab" header="Terms Of Business" *ngIf="isTermsOfBusinessVisible"
-                  [(selected)]="activeState[4]" data-cy="termsOfBusiness">
-                  <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled || isTermsOfBusinessDisabled }"
+                <p-accordionTab header="Terms of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
+                  <div id="termsOfBusinessTab"
+                    [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled || isTermsOfBusinessDisabled }"
                     (click)="controlIsCancelled($event, isCancelled || isTermsOfBusinessDisabled)">
                     <ng-container *ngIf="valuationData$ | async as valuationData">
                       <app-terms-of-business [valuationData]="valuationData" [interestList]="interestList"

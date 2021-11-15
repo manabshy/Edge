@@ -98,6 +98,9 @@
             "port": 4200
           },
           "configurations": {
+            "test": {
+              "browserTarget": "wedge:build:test"
+            },
             "production": {
               "browserTarget": "wedge:build:production"
             }
