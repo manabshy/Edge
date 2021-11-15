@@ -269,6 +269,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         filter(([contactGroupData, valuationData]) => !!contactGroupData && !!valuationData),
         take(1),
         mergeMap(([contactGroupData, valuationData, entityToAdd]: [any, any, any]) => {
+          // TODO ensure data is correct as appears to be showing previous valuation data (suggesting observable leak somewhere)
+          console.log('contactGroupData: ', contactGroupData)
+          console.log('valuationData: ', valuationData)
           return this._complianceChecksFacadeSvc.loadAdditionalContactsCheck(
             contactGroupData,
             valuationData,

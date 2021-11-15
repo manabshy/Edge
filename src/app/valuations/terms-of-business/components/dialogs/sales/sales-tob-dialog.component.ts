@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angular/core'
+import { Component, EventEmitter, Input, Output, OnInit, OnDestroy, OnChanges } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
+import { SharedService } from 'src/app/core/services/shared.service'
 
 @Component({
   selector: 'app-sales-tob-dialog',
@@ -21,11 +22,11 @@ import { Subscription } from 'rxjs'
         ></app-file-upload>
         
       <form [formGroup]="form" class="my-4 px-2">
-        <fieldset class="mb-2" [ngClass]="{ 'invalid':  instructionPriceDirection.invalid && (instructionPriceDirection.dirty || instructionPriceDirection.touched) }">
+        <fieldset class="mb-2" [ngClass]="{ 'invalid': instructionPriceDirection.invalid && (instructionPriceDirection.dirty || instructionPriceDirection.touched) }">
           <label>
             Instruction price direction
           </label>
-          <input type="tel" class="p-2"  [ngClass]="{ 'is-invalid': instructionPriceDirection.invalid && (instructionPriceDirection.dirty || instructionPriceDirection.touched) }" formControlName="instructionPriceDirection" required />
+          <input type="tel" class="p-2" [ngClass]="{ 'is-invalid': instructionPriceDirection.invalid && (instructionPriceDirection.dirty || instructionPriceDirection.touched) }" formControlName="instructionPriceDirection" required />
           <p *ngIf="instructionPriceDirection.errors" class="message message--negative">Required field</p>
         </fieldset>
         <fieldset class="mb-3">
@@ -65,7 +66,8 @@ import { Subscription } from 'rxjs'
 export class SalesToBDialogComponent implements OnInit, OnDestroy {
   @Output() onSubmitTermsOfBusiness: EventEmitter<any> = new EventEmitter()
   @Input() showDialog: boolean = false
-  @Input() data: any
+  @Input() data: any = {}
+  @Input() suggestedAskingPrice: number = 0
 
   get instructionPriceDirection() {
     return this.form.get('instructionPriceDirection')
@@ -92,7 +94,7 @@ export class SalesToBDialogComponent implements OnInit, OnDestroy {
     }
   ]
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private sharedService: SharedService) {}
 
   ngOnInit() {
     this.model = {
@@ -102,12 +104,22 @@ export class SalesToBDialogComponent implements OnInit, OnDestroy {
     }
 
     this.form = this.fb.group({
-      instructionPriceDirection: [this.model.instructionPriceDirection, Validators.required],
+      instructionPriceDirection: [
+        this.suggestedAskingPrice ? this.sharedService.transformCurrency(this.suggestedAskingPrice) : 0,
+        Validators.required
+      ],
       salesAgencyTypeId: [this.model.salesAgencyTypeId, Validators.required]
     })
 
     this.formSub = this.form.valueChanges.subscribe((data) => {
       this.model = { ...this.model, ...data }
+      
+      this.form.patchValue(
+        {
+          instructionPriceDirection: this.sharedService.transformCurrency(data.instructionPriceDirection)
+        },
+        { emitEvent: false }
+      )
     })
   }
 
@@ -125,8 +137,8 @@ export class SalesToBDialogComponent implements OnInit, OnDestroy {
       model: this.model,
       file: this.tmpFiles
     }
-    console.log('submit sales TOB. form ', this.form)
-    console.log('submit sales TOB. payload ', payload)
+    // console.log('submit sales TOB. form ', this.form)
+    // console.log('submit sales TOB. payload ', payload)
     if (!this.form.valid || !this.tmpFiles.length) return
     this.onSubmitTermsOfBusiness.emit(payload)
     this.showDialog = false

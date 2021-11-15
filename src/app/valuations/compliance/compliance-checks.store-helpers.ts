@@ -1,3 +1,4 @@
+import { ValuationTypeEnum } from '../shared/valuation'
 import { mapDocumentsForView } from './helpers/store-documents-helpers'
 
 /***
@@ -12,7 +13,7 @@ export const buildStoreState = (contactGroupData, valuationData, entityToAdd, ad
   return {
     valuationEventId: valuationData.valuationEventId,
     contactGroupId: valuationData.propertyOwner?.contactGroupId,
-    companyId:  contactGroupData ? contactGroupData.companyId : null,
+    companyId: contactGroupData ? contactGroupData.companyId : null,
     companyOrContact: contactGroupData?.companyId ? 'company' : 'contact',
     checkType: identifyAmlOrKyc(valuationData),
     isFrozen: valuationData.complianceCheck?.compliancePassedDate ? true : false,
@@ -39,6 +40,7 @@ export const buildEntitiesArray = (entitites, passedDate) => {
       position: e.position,
       name: e.name,
       isMain: e.isNew ? false : e.companyId ? e.id === e.companyId : e.isMain,
+      isAdmin: e.isAdmin,
       address: e.address, // address that shows in UI
       personDateAmlCompleted: e.personDateAmlCompleted && passedDate ? e.personDateAmlCompleted : e.amlPassed, // shows the individual compliance pass date in the UI under the entity card
       amlPassed: e.amlPassed,
@@ -54,21 +56,12 @@ export const buildEntitiesArray = (entitites, passedDate) => {
  * @description looks at valuation and figures out to display AML or KYC labels in the UI
  */
 export const identifyAmlOrKyc = (valuation): string => {
-  // console.log('identifyAmlOrKyc: ')
-  // console.log('valuation.valuationType: ', valuation.valuationType)
-  // console.log('valuation.suggestedAskingRentLongLetMonthly: ', valuation.suggestedAskingRentLongLetMonthly)
-  // console.log('valuation.suggestedAskingRentShortLetMonthly: ', valuation.suggestedAskingRentShortLetMonthly)
-  try {
-    const amlOrKyc =
-      valuation.suggestedAskingRentLongLetMonthly < 7500 && valuation.suggestedAskingRentShortLetMonthly < 7500
-        ? 'KYC'
-        : valuation.suggestedAskingRentLongLetMonthly >= 7500 || valuation.suggestedAskingRentShortLetMonthly >= 7500
-        ? 'AML'
-        : 'KYC'
-    console.log('setting compliance check type to amlOrKyc: = ', amlOrKyc)
-    return amlOrKyc
-  } catch (e) {
-    console.error('error figuring out AML || KYC ', e)
+  if (valuation.valuationType === ValuationTypeEnum.Sales) {
+    return 'AML'
+  } else if (valuation.valuationType === ValuationTypeEnum.Lettings) {
+    return valuation.suggestedAskingRentLongLetMonthly >= 7500 || valuation.suggestedAskingRentShortLetMonthly >= 7500
+      ? 'AML'
+      : 'KYC'
   }
 }
 
@@ -86,6 +79,7 @@ const mergeEntitiesReadyForStore = (valuationData, entityToAdd, adminContact) =>
     }
   }
   if (adminContact) {
+    adminContact.isAdmin = true
     entitiesData.push(adminContact)
   }
   return entitiesData

@@ -181,7 +181,7 @@
                     [isClientService]="isClientService" [(valuation)]="valuation" [leadTypeId]="leadTypeId">
                   </app-valuation-origin>
                 </div>
-                <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]" *ngIf="
+                <p-accordionTab id="valuationNotesTab" header="Valuation Notes" [(selected)]="activeState[0]" *ngIf="
                     isEditable ||
                     isNewValuation ||
                     isStillInOneMonthPeriod ||
@@ -189,8 +189,7 @@
                     (!isEditable && valuationForm.get('timeFrame').value) ||
                     (!isEditable && valuationForm.get('generalNotes').value)
                   ">
-                  <div id="valuationNotesTab" class="grid grid--9"
-                    [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
+                  <div class="grid grid--9" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)">
                     <div>
                       <fieldset class="mb-3 inline-child" [ngClass]="{ invalid: formErrors?.reason }"
@@ -226,8 +225,8 @@
                   </div>
                 </p-accordionTab>
 
-                <p-accordionTab header="Property Info" [(selected)]="activeState[1]">
-                  <div id="propertyInfoTab" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
+                <p-accordionTab id="propertyInfoTab" header="Property Info" [(selected)]="activeState[1]">
+                  <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)">
                     <div class="inline-parent inline-parent__hasLabels">
                       <fieldset class="inline-child" [ngClass]="{ invalid: formErrors?.propertyTypeId }">
@@ -383,8 +382,8 @@
                   </div>
                 </p-accordionTab>
 
-                <p-accordionTab header="Appointment" [(selected)]="activeState[2]">
-                  <div id="appointmentTab" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
+                <p-accordionTab id="appointmentTab" header="Appointment" [(selected)]="activeState[2]">
+                  <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)">
                     <fieldset *ngIf="isNewValuation && canBookAppointment">
                       <button class="btn btn--positive" type="button" (click)="isBothEdit = true; getAvailability()"
@@ -698,7 +697,7 @@
                   </div>
                 </p-accordionTab>
 
-                <p-accordionTab header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible"
+                <p-accordionTab id="valuesTab" header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible"
                   data-cy="valuationValues">
                   <div class="flex flex-row w-full">
                     <span class="flex-1"></span>
@@ -706,7 +705,7 @@
                       <app-menu [menuItems]="valueMenuItems"></app-menu>
                     </ng-container>
                   </div>
-                  <div id="valuesTab" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
+                  <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)">
                     <ol class="mb-4 cards" [ngStyle]="{ 'grid-gap': !isEditable && !isNewValuation ? '30px' : '' }">
                       <li *ngIf="
@@ -836,10 +835,9 @@
                   </div>
                 </p-accordionTab>
 
-                <p-accordionTab header="Terms Of Business" *ngIf="isTermsOfBusinessVisible"
+                <p-accordionTab id="termsOfBusinessTab" header="Terms Of Business" *ngIf="isTermsOfBusinessVisible"
                   [(selected)]="activeState[4]" data-cy="termsOfBusiness">
-                  <div id="termsOfBusinessTab"
-                    [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled || isTermsOfBusinessDisabled }"
+                  <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled || isTermsOfBusinessDisabled }"
                     (click)="controlIsCancelled($event, isCancelled || isTermsOfBusinessDisabled)">
                     <ng-container *ngIf="valuationData$ | async as valuationData">
                       <app-terms-of-business [valuationData]="valuationData" [interestList]="interestList"
@@ -851,9 +849,9 @@
                   </div>
                 </p-accordionTab>
 
-                <p-accordionTab class="landRegister" *ngIf="isLandRegisterVisible" header="Land Register"
-                  [(selected)]="activeState[5]">
-                  <div id="landRegisterTab" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
+                <p-accordionTab id="landRegisterTab" class="landRegister" *ngIf="isLandRegisterVisible"
+                  header="Land Register" [(selected)]="activeState[5]">
+                  <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)">
                     <app-valuation-land-register [showLeaseExpiryDate]="showLeaseExpiryDate" [valuation]="valuation"
                       [property]="valuation?.property" (afterFileOperation)="scrollSpecificElement('landRegisterTab')">
@@ -861,8 +859,9 @@
                   </div>
                 </p-accordionTab>
 
-                <p-accordionTab header="Compliance Checks" *ngIf="isLandRegisterVisible" [(selected)]="activeState[6]">
-                  <div id="complianceChecksTab" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
+                <p-accordionTab id="complianceChecksTab" header="Compliance Checks" *ngIf="isLandRegisterVisible"
+                  [(selected)]="activeState[6]">
+                  <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)">
                     <app-compliance-checks-shell>
                     </app-compliance-checks-shell>
