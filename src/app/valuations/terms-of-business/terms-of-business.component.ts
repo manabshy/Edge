@@ -57,7 +57,7 @@ interface toBSale {
         <fieldset class="mb-2">
           <fieldset class="row">
             <label style="width: auto; margin-top: 10px" for="haveInterest">
-              Does the Owner have a declarable interest (Section 21)
+              Does the Owner have a declarable interest
               <span class="--color-red-400">
                 <i
                   [pTooltip]="informationMessage"
@@ -209,6 +209,10 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
           `Last Emailed : ${moment(this.termsOfBusinessDocument.dateRequestSent).format('Do MMM YYYY (HH:mm)')}`
         )
       }
+      if (typeof this.model.declarableInterest != 'undefined') {
+        this.message.type = ''
+        this.message.text = []
+      }
     }
     if (changes.termsOfBusinessDocument && !changes.termsOfBusinessDocument.firstChange) {
       this.termsOfBusinessDocument = changes.termsOfBusinessDocument.currentValue
@@ -254,7 +258,10 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
         `Last Emailed : ${moment(this.termsOfBusinessDocument.dateRequestSent).format('Do MMM YYYY (HH:mm)')}`
       )
     }
-    if (this.valuationData.declarableInterest === null) {
+
+    console.log('this.valuationData.declarableInterest: ', this.valuationData.declarableInterest)
+
+    if (this.valuationData.declarableInterest === null || typeof this.valuationData.declarableInterest == 'undefined') {
       this.message.type = 'error'
       this.message.text = ['Please answer declarable interest']
     }
@@ -311,10 +318,7 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   private setMenuItems() {
     const items = []
 
-    if (
-      !this.termsOfBusinessDocumentIsSigned &&
-      (this.valuationData.valuationStatus == ValuationStatusEnum.Valued)
-    ) {
+    if (!this.termsOfBusinessDocumentIsSigned && this.valuationData.valuationStatus == ValuationStatusEnum.Valued) {
       items.push({
         id: 'uploadToB',
         label: 'Upload Terms of Business',

@@ -1,6 +1,6 @@
 {
   "name": "wedge",
-  "version": "4.0.0-15",
+  "version": "4.0.0-16",
   "scripts": {
     "ng": "nx",
     "start": "ng serve --hmr",
@@ -18,7 +18,8 @@
     "serve-storybook": "npm run ng lint && start-storybook -p 6006",
     "storybook": "npm run docs:json && start-storybook -p 6006",
     "build-storybook": "npm run docs:json && build-storybook",
-    "rmrf": "rimraf node_modules"
+    "rmrf": "rimraf node_modules",
+    "nx:affected": "nx affected --target=test"
   },
   "private": true,
   "dependencies": {

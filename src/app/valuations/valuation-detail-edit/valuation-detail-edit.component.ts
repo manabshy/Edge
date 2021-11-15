@@ -2189,7 +2189,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.activeState[4] = true
       this.messageService.add({
         severity: 'warn',
-        summary: 'Terms of biz is not signed!',
+        summary: 'Terms of business is not signed',
         closable: false
       })
       return
@@ -2533,6 +2533,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     //this._valuationFacadeSvc.valuationValidationSubject.next(true);
 
     // TODO DB put this logic in service
+    const declarableInterest = this._valuationFacadeSvc._valuationData.getValue().declarableInterest
+    if (declarableInterest == null) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Please complete declarable interest',
+        closable: false
+      })
+      return
+    }
     // if (this.formErrors['declarableInterest']) {
     //   this.accordionIndex = 4
     //   this.activeState[4] = true
