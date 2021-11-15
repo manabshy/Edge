@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angu
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 // import { FormlyFieldConfig } from '@ngx-formly/core'
 import { Subscription } from 'rxjs'
+import { FileTypeEnum } from 'src/app/core/services/file.service'
 
 @Component({
   selector: 'app-lettings-tob-dialog',
@@ -18,7 +19,8 @@ import { Subscription } from 'rxjs'
         <app-file-upload
           [uploadedFiles]="tmpFiles"
           (getFiles)="getFiles($event)"
-          [isMultiple]="isMultiple"
+          [isMultiple]="'false'"
+          [fileType]="fileType"
         ></app-file-upload>
 
         <form [formGroup]="form" class="my-4 ml-4">
@@ -97,7 +99,7 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
 
   form: FormGroup
   model: any = {}
-  isMultiple: boolean = false
+  fileType = FileTypeEnum.ImageAndDocument
   tmpFiles: File[]
   fileUploaded: boolean = true
   formSub: Subscription
@@ -111,6 +113,7 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
       zeroDepositAccepted: null,
       ...this.data
     }
+
     this.form = this.fb.group({
       gasCertRequired: [this.model.gasCertRequired, Validators.required],
       isManagement: [this.model.isManagement, Validators.required],
@@ -132,11 +135,11 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
   }
 
   public submit() {
-    if (!this.form.valid) return
     const payload = {
       model: this.model,
       file: this.tmpFiles
     }
+    if (!this.form.valid || !this.tmpFiles.length) return
     console.log('submitting toB: ', payload)
     this.onSubmitTermsOfBusiness.emit(payload)
     this.showDialog = false
@@ -146,72 +149,4 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
     this.onSubmitTermsOfBusiness.emit(false)
     this.showDialog = false
   }
-
-  // formly setup if can get custom radio buttons working then solution for replacing html forms.
-  // fields: FormlyFieldConfig[] = this.lettingsTermsOfBusinessFormFields()
-  // <form [formGroup]="form" (ngSubmit)="submit()">
-  //    <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
-  // </form>
-  //
-  // private lettingsTermsOfBusinessFormFields(): FormlyFieldConfig[] {
-  //   return [
-  //     {
-  //       className: 'w-full mt-2 foobar',
-  //       key: 'gasCertRequired',
-  //       type: 'radio',
-  //       templateOptions: {
-  //         label: 'Is a gas certificate required?',
-  //         required: true,
-  //         options: [
-  //           {
-  //             value: true,
-  //             label: 'Yes'
-  //           },
-  //           {
-  //             value: false,
-  //             label: 'No'
-  //           }
-  //         ]
-  //       }
-  //     },
-  //     {
-  //       className: 'w-full mt-2',
-  //       key: 'isManagement',
-  //       type: 'radio',
-  //       templateOptions: {
-  //         label: 'Will it be managed?',
-  //         required: true,
-  //         options: [
-  //           {
-  //             value: true,
-  //             label: 'Yes'
-  //           },
-  //           {
-  //             value: false,
-  //             label: 'No'
-  //           }
-  //         ]
-  //       }
-  //     },
-  //     {
-  //       className: 'w-full mt-2',
-  //       key: 'zeroDepositAccepted',
-  //       type: 'radio',
-  //       templateOptions: {
-  //         label: 'Are zero deposits accepted?',
-  //         required: true,
-  //         options: [
-  //           {
-  //             value: true,
-  //             label: 'Yes'
-  //           },
-  //           {
-  //             value: false,
-  //             label: 'No'
-  //           }
-  //         ]
-  //       }
-  //     }
-  //   ]
-  // }
 }

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnDestroy, OnChanges } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
+import { FileTypeEnum } from 'src/app/core/services/file.service'
 import { SharedService } from 'src/app/core/services/shared.service'
 
 @Component({
@@ -18,7 +19,8 @@ import { SharedService } from 'src/app/core/services/shared.service'
         <app-file-upload
           [uploadedFiles]="tmpFiles"
           (getFiles)="getFiles($event)"
-          [isMultiple]="isMultiple"
+          [isMultiple]="'false'"
+          [fileType]="fileType"
         ></app-file-upload>
         
       <form [formGroup]="form" class="my-4 px-2">
@@ -75,7 +77,7 @@ export class SalesToBDialogComponent implements OnInit, OnDestroy {
 
   form: FormGroup
   model: any = {}
-  isMultiple: boolean = false
+  fileType = FileTypeEnum.ImageAndDocument
   tmpFiles: File[]
   fileUploaded: boolean = false
   formSub: Subscription
@@ -113,7 +115,7 @@ export class SalesToBDialogComponent implements OnInit, OnDestroy {
 
     this.formSub = this.form.valueChanges.subscribe((data) => {
       this.model = { ...this.model, ...data }
-      
+      // console.log('data.instructionPriceDirection: ', data.instructionPriceDirection)
       this.form.patchValue(
         {
           instructionPriceDirection: this.sharedService.transformCurrency(data.instructionPriceDirection)
@@ -134,12 +136,11 @@ export class SalesToBDialogComponent implements OnInit, OnDestroy {
 
   public submit() {
     const payload = {
-      model: this.model,
+      model: { ...this.model, instructionPriceDirection: this.model.instructionPriceDirection.replace(/\D/g, '') },
       file: this.tmpFiles
     }
-    // console.log('submit sales TOB. form ', this.form)
-    // console.log('submit sales TOB. payload ', payload)
     if (!this.form.valid || !this.tmpFiles.length) return
+    console.log('payload: ', payload)
     this.onSubmitTermsOfBusiness.emit(payload)
     this.showDialog = false
   }
