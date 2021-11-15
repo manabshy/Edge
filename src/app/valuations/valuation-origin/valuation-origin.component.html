@@ -6,14 +6,14 @@
       (ngModelChange)="originTypeIdChanged($event)" (onChange)="controlValues()">
     </p-dropdown>
   </fieldset>
-  <fieldset class="w-32" [ngClass]="{'invalid': originIdMessage}">
+  <fieldset class="md:w-40" [ngClass]="{'invalid': originIdMessage}">
     <label for="originId">Origin</label>
     <p-dropdown name="originId" id="originId" [options]="origins" [(ngModel)]="valuation.originId" optionLabel="value"
       optionValue="id" [filter]="false" data-cy="originId" (onChange)="controlValues()">
     </p-dropdown>
     <p class="message message--negative"> {{originIdMessage}}</p>
   </fieldset>
-  <fieldset [ngClass]="{'invalid': bookedByErrorMessage}"
+  <fieldset class="md:w-40" [ngClass]="{'invalid': bookedByErrorMessage}"
     *ngIf="valuation.originTypeId == 13 ||valuation.originTypeId == 14">
     <label for="bookedBy">Booked By</label>
     <p-dropdown name="bookedBy" id="bookedBy" placeholder="&nbsp;" [options]=" bookByOptions$ | async"
