@@ -1,9 +1,10 @@
 {
   "name": "wedge",
-  "version": "4.0.0-14",
+  "version": "4.0.0-15",
   "scripts": {
     "ng": "nx",
     "start": "ng serve --hmr",
+    "start:test": "ng serve --hmr -c=test",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
