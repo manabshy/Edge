@@ -53,7 +53,7 @@ interface toBSale {
         </ng-container>
       </div>
       
-      <form [formGroup]="form" class="my-4">
+      <form [formGroup]="form" class="my-4 transition-spacing duration-500" [ngClass]="{'-mt-14': !message.type}">
         <fieldset class="mb-2">
           <fieldset class="row">
             <label style="width: auto; margin-top: 10px" for="haveInterest">
@@ -113,6 +113,7 @@ interface toBSale {
       </form>
 
       <ng-container *ngIf="showSalesToB">
+
         <ng-container *ngIf="termsOfBusinessDocumentIsSigned && !isPreVal">
           <app-terms-of-business-table-sales [data]="termsOfBusinessDocument?.toBSale"></app-terms-of-business-table-sales>
         </ng-container>
@@ -217,7 +218,11 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
     if (changes.termsOfBusinessDocument && !changes.termsOfBusinessDocument.firstChange) {
       this.termsOfBusinessDocument = changes.termsOfBusinessDocument.currentValue
       this.termsOfBusinessDocumentIsSigned = this.isTermsOfBusinessSigned()
+      // console.log('termsOfBusinessDocumentIsSigned: ',this.termsOfBusinessDocumentIsSigned)
+      this.message.type = 'info'
+      this.message.text = ['Terms of Business uploaded, pending save.']
     }
+    // console.log('changes: ', changes)
   }
 
   ngOnDestroy(): void {
@@ -294,18 +299,16 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
     )
   }
 
-  public submitTermsOfBusiness(ev) {
-    if (ev) {
-      this.message.type = 'info'
-      this.message.text = ['Terms of Business uploaded, pending save.']
-      this.onSubmitTermsOfBusiness.emit(ev)
+  public submitTermsOfBusiness(update) {
+    if (update) {
+      this.onSubmitTermsOfBusiness.emit(update)
     }
     this.showDialog = false
   }
 
-  public onReminderConfirmationDialogClose(ev) {
+  public onReminderConfirmationDialogClose(sendIt) {
     this.showSendReminderConfirmationDialog = false
-    if (ev) {
+    if (sendIt) {
       this.onSendTermsOfBusinessReminder.emit()
       this.messageService.add({
         severity: 'success',

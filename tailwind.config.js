@@ -8,6 +8,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      transitionProperty: {
+        'spacing': 'margin, padding',
+      },
       colors: {
         info: '#3498DB'
       },

@@ -136,8 +136,14 @@ export class ValuationFacadeService {
               console.log('LETTINGS TOB set: ')
               eSignSignatureTob.toBLetting = { ...data.model, signatureFile: res.files[0], signedOn: new Date() }
             } else if (valuationData.valuationType === ValuationTypeEnum.Sales) {
-              console.log('SALES TOB set: ')
-              eSignSignatureTob.toBSale = { ...data.model, signatureFile: res.files[0], signedOn: new Date() }
+              console.log('SALES TOB set: ', data.model)
+
+              eSignSignatureTob.toBSale = {
+                instructionPriceDirection: data.model.instructionPriceDirection,
+                salesAgencyTypeId: data.model.salesAgencyTypeId,
+                signatureFile: res.files[0],
+                signedOn: new Date()
+              }
             }
             const updatedValuationData = { ...valuationData, eSignSignatureTob }
             console.log('updatedValuationData: ', updatedValuationData)
@@ -182,6 +188,7 @@ export class ValuationFacadeService {
   }
 
   public updateLocalModel(data) {
+    console.log('updateLocalModel: ', data)
     const valuationData = this._valuationData.getValue()
     const updatedValuationData = { ...valuationData, ...data }
     this._valuationData.next(updatedValuationData)

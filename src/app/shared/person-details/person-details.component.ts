@@ -1,53 +1,53 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { Person, Referral } from '../models/person';
-import { Router } from '@angular/router';
-import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
-import { StorageMap } from '@ngx-pwa/local-storage';
-import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
-import { ResultData } from '../result-data';
-import { MessageService } from 'primeng/api';
-import { DialogService } from 'primeng/dynamicdialog';
-import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
-import { PeopleService } from 'src/app/core/services/people.service';
-import { Permission, PermissionEnum, StaffMember } from '../models/staff-member';
-import { StaffMemberService } from 'src/app/core/services/staff-member.service';
-import { SharedService } from 'src/app/core/services/shared.service';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core'
+import { Person, Referral } from '../models/person'
+import { Router } from '@angular/router'
+import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
+import { StorageMap } from '@ngx-pwa/local-storage'
+import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service'
+import { ResultData } from '../result-data'
+import { MessageService } from 'primeng/api'
+import { DialogService } from 'primeng/dynamicdialog'
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component'
+import { PeopleService } from 'src/app/core/services/people.service'
+import { Permission, PermissionEnum, StaffMember } from '../models/staff-member'
+import { StaffMemberService } from 'src/app/core/services/staff-member.service'
+import { SharedService } from 'src/app/core/services/shared.service'
 
 @Component({
   selector: 'app-person-details',
   templateUrl: './person-details.component.html',
-  styleUrls: ['./person-details.component.scss'],
+  styleUrls: ['./person-details.component.scss']
 })
 export class PersonDetailsComponent implements OnInit, OnChanges {
-  @Input() personDetails: Person;
-  @Input() isClickable = false;
-  @Input() isNewContactGroup = false;
-  @Input() showSetMainPerson = false;
-  @Input() showViewPerson = false;
-  @Input() showRemovePerson = false;
-  @Input() isPersonInfoOnly = true;
-  @Input() showEditOnly = true;
-  @Input() contactType: number;
-  @Input() referenceCount: number;
-  @Input() index = 0;
-  @Input() showEmailModal = false;
-  
-  @Output() selectedPersonId = new EventEmitter<number>();
-  @Output() removedPersonPersonId = new EventEmitter<number>();
-  @Output() mainPersonPersonId = new EventEmitter<number>();
-  
-  preferredNumber: string;
-  preferredEmail: string;
-  showRefDialog = false;
-  referralCompanies: InfoDetail[];
-  selectedCompany: Referral;
-  personReferrals: Referral[] = [];
-  canRemove = true;
-  dialogRef: any;
-  currentStaffMember: any;
-  warnings: InfoDetail[];
-  warningStatus: string;
-  preferredNumberComment: string;
+  @Input() personDetails: Person
+  @Input() isClickable = false
+  @Input() isNewContactGroup = false
+  @Input() showSetMainPerson = false
+  @Input() showViewPerson = false
+  @Input() showRemovePerson = false
+  @Input() isPersonInfoOnly = true
+  @Input() showEditOnly = true
+  @Input() contactType: number
+  @Input() referenceCount: number
+  @Input() index = 0
+  @Input() showEmailModal = false
+
+  @Output() selectedPersonId = new EventEmitter<number>()
+  @Output() removedPersonPersonId = new EventEmitter<number>()
+  @Output() mainPersonPersonId = new EventEmitter<number>()
+
+  preferredNumber: string
+  preferredEmail: string
+  showRefDialog = false
+  referralCompanies: InfoDetail[]
+  selectedCompany: Referral
+  personReferrals: Referral[] = []
+  canRemove = true
+  dialogRef: any
+  currentStaffMember: any
+  warnings: InfoDetail[]
+  warningStatus: string
+  preferredNumberComment: string
 
   constructor(
     private router: Router,
@@ -58,96 +58,107 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
     private sharedService: SharedService,
     private infoService: InfoService,
     private messageService: MessageService,
-    private dialogService: DialogService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit() {
     this.contactGroupService.noteChanges$.subscribe((note) => {
-      const notes = this.personDetails.personNotes;
-      const existingNote = notes.find((x) => x.id === note.id);
+      const notes = this.personDetails.personNotes
+      const existingNote = notes.find((x) => x.id === note.id)
       if (note && note.isImportant && !existingNote) {
-        notes.push(note);
+        notes.push(note)
       }
       if (note && !note.isImportant) {
-        const index = notes.findIndex((x) => +x.id === +note.id);
-        notes.splice(index, 1);
+        const index = notes.findIndex((x) => +x.id === +note.id)
+        notes.splice(index, 1)
       }
-    });
+    })
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes) {
     // Get referral Companies
-    this.getInfo();
-    this.getCurrentUser();
+    // TODO: implement changes
+    console.log('changes: ', changes)
+
+    this.getInfo()
+    this.getCurrentUser()
 
     if (this.personDetails?.phoneNumbers?.length) {
-      const preferredNumberItem = this.personDetails.phoneNumbers.find((x) => x.isPreferred);
-      this.preferredNumber = preferredNumberItem.number;
-      this.preferredNumberComment = preferredNumberItem.comments;
+      const preferredNumberItem = this.personDetails.phoneNumbers.find((x) => x.isPreferred)
+      this.preferredNumber = preferredNumberItem.number
+      this.preferredNumberComment = preferredNumberItem.comments
     }
 
-    if (this.personDetails?.emailAddresses?.length) {
-      this.preferredEmail = this.personDetails.emailAddresses.find((x) => x.isPreferred).email;
+    if (changes.personDetails.currentValue?.emailAddresses?.length) {
+      try {
+        console.log('this.personDetails.emailAddresses: ', this.personDetails.emailAddresses)
+        this.preferredEmail = changes.personDetails.currentValue?.emailAddresses[0]
+        // TODO where is there an isPreferred flag on email addresses?
+        // this.preferredEmail = this.personDetails.emailAddresses.find((x) => x.isPreferred).email
+      } catch (e) {
+        console.error('error: ', e)
+        this.preferredEmail = 'error@dng.co.uk'
+      }
     }
     if (this.warnings) {
-      console.log('warnings here as input', this.warnings);
+      console.log('warnings here as input', this.warnings)
     }
   }
 
   getCurrentUser() {
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
-        this.currentStaffMember = data;
+        this.currentStaffMember = data
       } else {
-        this.staffMemberService.getCurrentStaffMember().subscribe((res) => (this.currentStaffMember = res));
+        this.staffMemberService.getCurrentStaffMember().subscribe((res) => (this.currentStaffMember = res))
       }
-      this.setCanRemoveFlag(this.currentStaffMember?.permissions);
-    });
+      this.setCanRemoveFlag(this.currentStaffMember?.permissions)
+    })
   }
 
   setCanRemoveFlag(permissions: Permission[]) {
-    this.canRemove = permissions?.find((x) => x.permissionId === PermissionEnum.GdprRemoval) ? true : false;
+    this.canRemove = permissions?.find((x) => x.permissionId === PermissionEnum.GdprRemoval) ? true : false
   }
 
   getInfo() {
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
       if (data) {
-        this.referralCompanies = data.referralCompanies;
-        this.warnings = data.personWarningStatuses;
+        this.referralCompanies = data.referralCompanies
+        this.warnings = data.personWarningStatuses
       } else {
         this.infoService.getDropdownListInfo().subscribe((info: DropdownListInfo) => {
           if (info) {
-            this.referralCompanies = info.referralCompanies;
-            this.warnings = info.personWarningStatuses;
+            this.referralCompanies = info.referralCompanies
+            this.warnings = info.personWarningStatuses
           }
-        });
+        })
       }
-      this.setPersonWarning(this.personDetails, this.warnings);
-      this.setReferralCompanies();
-    });
+      this.setPersonWarning(this.personDetails, this.warnings)
+      this.setReferralCompanies()
+    })
   }
 
   setPersonWarning(person: Person, warnings: InfoDetail[]) {
-    console.log({ person }, 'person status', { warnings });
+    console.log({ person }, 'person status', { warnings })
     if (person) {
       if (person.warningStatusId !== 1) {
-        console.log('status here.....');
+        console.log('status here.....')
         this.warningStatus =
-          warnings?.find((x) => x.id === person.warningStatusId)?.value || person.warningStatusComment;
+          warnings?.find((x) => x.id === person.warningStatusId)?.value || person.warningStatusComment
       }
     }
-    console.log('status here 2.....', person);
+    console.log('status here 2.....', person)
   }
 
   private setReferralCompanies() {
-    const refs = [];
+    const refs = []
     this.referralCompanies?.forEach((x) => {
-      const ref: Referral = { referralCompanyId: x.id, referralCompany: x.value, referralDate: null };
-      refs.push(ref);
-      this.personReferrals = refs;
-    });
-    this.setPersonReferrals(this.personDetails?.referrals);
-    console.log('person refs', this.personReferrals);
+      const ref: Referral = { referralCompanyId: x.id, referralCompany: x.value, referralDate: null }
+      refs.push(ref)
+      this.personReferrals = refs
+    })
+    this.setPersonReferrals(this.personDetails?.referrals)
+    console.log('person refs', this.personReferrals)
   }
 
   setPersonReferrals(referrals: Referral[]) {
@@ -155,94 +166,94 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
       referrals.forEach((r) => {
         this.personReferrals?.forEach((p) => {
           if (r.referralCompanyId === p.referralCompanyId) {
-            p.referralDate = r.referralDate;
+            p.referralDate = r.referralDate
           }
-        });
-      });
+        })
+      })
     }
   }
 
   startReferral(company: Referral) {
-    this.showRefDialog = true;
-    this.sharedService.setRemoveSticky(this.showRefDialog);
-    this.selectedCompany = company;
+    this.showRefDialog = true
+    this.sharedService.setRemoveSticky(this.showRefDialog)
+    this.selectedCompany = company
   }
 
   sendReferral() {
     if (this.personDetails?.personId && this.selectedCompany?.referralCompanyId) {
       this.contactGroupService
         .createPersonReferral(this.personDetails, this.selectedCompany.referralCompanyId)
-        .subscribe((res: ResultData) => this.onSaveComplete(res.result));
+        .subscribe((res: ResultData) => this.onSaveComplete(res.result))
     }
   }
 
   onSaveComplete(res: Referral[]): void {
     if (res) {
-      this.setPersonReferrals(res);
+      this.setPersonReferrals(res)
       this.messageService.add({
         severity: 'success',
         summary: 'Referral successfully sent',
         closable: false,
-        key: 'referralMessage',
-      });
-      this.showRefDialog = false;
-      this.sharedService.setRemoveSticky(this.showRefDialog);
+        key: 'referralMessage'
+      })
+      this.showRefDialog = false
+      this.sharedService.setRemoveSticky(this.showRefDialog)
     }
   }
 
   cancelReferral() {
-    this.showRefDialog = false;
-    this.sharedService.setRemoveSticky(this.showRefDialog);
+    this.showRefDialog = false
+    this.sharedService.setRemoveSticky(this.showRefDialog)
   }
 
   toggleShowEmailModal(shouldSet: boolean) {
-    shouldSet ? (this.showEmailModal = true) : (this.showEmailModal = false);
-    console.log({ shouldSet });
+    shouldSet ? (this.showEmailModal = true) : (this.showEmailModal = false)
+    console.log({ shouldSet })
 
-    this.sharedService.setRemoveSticky(this.showEmailModal);
+    this.sharedService.setRemoveSticky(this.showEmailModal)
   }
 
   navigateToEdit() {
-    this.router.navigate(['/contact-centre/detail/', this.personDetails.personId, 'edit']);
+    this.router.navigate(['/contact-centre/detail/', this.personDetails.personId, 'edit'])
   }
 
   navigateToView() {
-    this.router.navigate(['/contact-centre/detail/', this.personDetails.personId]);
+    this.router.navigate(['/contact-centre/detail/', this.personDetails.personId])
   }
 
   editSelectedPerson() {
-    this.isPersonInfoOnly ? this.navigateToEdit() : this.selectedPersonId.emit(this.personDetails.personId);
+    this.isPersonInfoOnly ? this.navigateToEdit() : this.selectedPersonId.emit(this.personDetails.personId)
   }
 
   showTransactionMessage() {
     const data = {
       isSingleAction: true,
       title: `<p>${this.personDetails?.addressee} is involved in a live transaction.</p> <p><strong>Please rectify before completing this action.</strong></p>`,
-      actions: ['OK'],
-    };
+      actions: ['OK']
+    }
 
     this.dialogRef = this.dialogService.open(ConfirmModalComponent, {
       data,
       styleClass: 'dialog dialog--hasFooter',
-      header: 'GDPR Removal Warning',
-    });
-    this.dialogRef.onClose.subscribe();
+      header: 'GDPR Removal Warning'
+    })
+    this.dialogRef.onClose.subscribe()
   }
 
   performRemoval() {
     if (this.referenceCount) {
-      this.showTransactionMessage();
+      this.showTransactionMessage()
     } else {
       const data = {
         title: `<p>Are you sure you want to permanently remove ${this.personDetails?.addressee} from the EDGE database?</p> <p><strong>This is an irreversible action!</strong></p>`,
-        actions: ['Cancel', 'OK'],
-      };
+        actions: ['Cancel', 'OK']
+      }
 
       this.dialogRef = this.dialogService.open(ConfirmModalComponent, {
         data,
         styleClass: 'dialog dialog--hasFooter',
-        header: 'GDPR Removal Warning',
-      });
+        header: 'GDPR Removal Warning'
+      })
       this.dialogRef.onClose.subscribe((res) => {
         if (res) {
           this.peopleService.performGdprRemoval(this.personDetails).subscribe((result) => {
@@ -250,15 +261,15 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
               this.messageService.add({
                 severity: 'success',
                 summary: `GDPR Removal Completed`,
-                closable: false,
-              });
+                closable: false
+              })
               setTimeout(() => {
-                this.router.navigate(['/contact-centre']);
-              }, 2000);
+                this.router.navigate(['/contact-centre'])
+              }, 2000)
             }
-          });
+          })
         }
-      });
+      })
     }
   }
 }
