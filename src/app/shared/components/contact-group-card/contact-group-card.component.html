@@ -67,7 +67,7 @@
               <fieldset class="checkbox">
                 <span>
                   <input class="p-2" type="checkbox" id="isPowerOfAttorney" name="isPowerOfAttorney"
-                    data-cy="isPowerOfAttorney" [(ngModel)]="adminContact.isPowerOfAttorney">
+                    data-cy="isPowerOfAttorney" [(ngModel)]="adminContact.isPowerOfAttorney" (click)="isPowerOfAttorneyChange()">
                   <label for="isPowerOfAttorney">Power of Attorney</label>
                 </span>
               </fieldset>

@@ -2936,6 +2936,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this._valuationFacadeSvc.termsOfBusinessFileUploaded(ev)
   }
 
+  onPowerOfAttorneyChange(val){
+    console.log('onPowerOfAttorneyChange: if true, push adminContact into compliance store', val)
+  }
+
   ngOnDestroy() {
     this.property = {} as Property
     this.sharedService.removeContactGroupChanged.next(null)

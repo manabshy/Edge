@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, Output, SimpleChanges, EventEmitter} from '@angular/core';
 import { Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { MenuItem, MessageService, PrimeNGConfig } from 'primeng/api';
@@ -36,6 +36,8 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
   @Input() showEmailModal = false;
   @Input() showValuationActions = true;
   @Input() adminContact: Signer;
+  @Output() onPowerOfAttorneyChange: EventEmitter<any> = new EventEmitter()
+
   contactReferrals: Referral[] = [];
   referralCompanies: InfoDetail[];
   selectedReferralCompany: Referral;
@@ -219,5 +221,11 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
     this.importantNotes$ = this.contactGroupService
       .getPersonNotes(personId)
       .pipe(map((x) => x.filter((n) => n.isImportant)));
+  }
+
+  isPowerOfAttorneyChange(){
+    console.log('isPowerOfAttorneyChange(): ', this.adminContact.isPowerOfAttorney)
+    const powerOfA = this.adminContact.isPowerOfAttorney
+    this.onPowerOfAttorneyChange.emit(powerOfA)
   }
 }
