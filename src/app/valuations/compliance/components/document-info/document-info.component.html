@@ -21,7 +21,7 @@
     <span *ngIf="documentType == DOCUMENT_TYPE.REPORT && file.smartSearchId">ID: {{ file.smartSearchId }}</span>
   
     <!-- FILE UPLOAD DATE -->
-    <span class="flex-1 text-right" [pTooltip]="'Upload Date'" *ngIf="file.uploadDate">{{ moment(file.uploadDate).format('DD/MM/YY') }}</span>
+    <span class="flex-1 text-right" [pTooltip]="'Upload Date'" *ngIf="file.updateDate">{{ moment(file.updateDate).format('DD/MM/YY') }}</span>
   
     <!-- DELETE BTN -->
     <button
