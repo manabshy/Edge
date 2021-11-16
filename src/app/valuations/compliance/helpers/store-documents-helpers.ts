@@ -236,7 +236,7 @@ export const findAndRemoveDoc = (documents, ev) => {
         files: []
       },
       additionalDocs: {
-        label: 'Additional Documents',
+        label: 'Documents',
         documentType: DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS,
         files: []
       }
