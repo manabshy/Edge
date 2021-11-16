@@ -89,12 +89,11 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
       this.preferredNumberComment = preferredNumberItem.comments
     }
 
-    if (changes.personDetails.currentValue?.emailAddresses?.length) {
+    if (this.personDetails?.emailAddresses?.length) {
       try {
         console.log('this.personDetails.emailAddresses: ', this.personDetails.emailAddresses)
-        this.preferredEmail = changes.personDetails.currentValue?.emailAddresses[0]
         // TODO where is there an isPreferred flag on email addresses?
-        // this.preferredEmail = this.personDetails.emailAddresses.find((x) => x.isPreferred).email
+        this.preferredEmail = this.personDetails.emailAddresses.find((x) => x.isPreferred).email
       } catch (e) {
         console.error('error: ', e)
         this.preferredEmail = 'error@dng.co.uk'

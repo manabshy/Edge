@@ -135,12 +135,12 @@ export class SalesToBDialogComponent implements OnInit, OnDestroy {
   }
 
   public submit() {
+    const currencyToString = this.model.instructionPriceDirection.replace(/\D/g, '')
     const payload = {
-      model: { ...this.model, instructionPriceDirection: this.model.instructionPriceDirection.replace(/\D/g, '') },
+      model: { ...this.model, instructionPriceDirection:  +currencyToString},
       file: this.tmpFiles
     }
     if (!this.form.valid || !this.tmpFiles.length) return
-    console.log('payload: ', payload)
     this.onSubmitTermsOfBusiness.emit(payload)
     this.showDialog = false
   }
