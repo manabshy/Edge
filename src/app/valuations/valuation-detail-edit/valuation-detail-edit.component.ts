@@ -387,8 +387,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get('lastKnownOwnerId')
     this.originId = +this.route.snapshot.queryParamMap.get('originId')
     this.leadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId')
-    this.isNewValuation = this.route.snapshot.queryParamMap.get('isNewValuation') as unknown as boolean
-    this.isFromProperty = this.route.snapshot.queryParamMap.get('isFromProperty') as unknown as boolean
+    this.isNewValuation = (this.route.snapshot.queryParamMap.get('isNewValuation') as unknown) as boolean
+    this.isFromProperty = (this.route.snapshot.queryParamMap.get('isFromProperty') as unknown) as boolean
     this.isNewValuation && !this.isFromProperty ? (this.showProperty = true) : (this.showProperty = false)
 
     if (this.valuationId > 0) {
@@ -1073,18 +1073,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   setRentFigures() {
-    if (this.shortLetWeeklyControl.value) {
-      this.setMonthlyRent(this.shortLetWeeklyControl, this.shortLetMonthlyControl)
-    }
-    if (this.shortLetMonthlyControl.value) {
-      this.setWeeklyRent(this.shortLetWeeklyControl, this.shortLetMonthlyControl)
-    }
-    if (this.longLetWeeklyControl.value) {
-      this.setMonthlyRent(this.longLetWeeklyControl, this.longLetMonthlyControl)
-    }
-    if (this.longLetMonthlyControl.value) {
-      this.setWeeklyRent(this.longLetWeeklyControl, this.longLetMonthlyControl)
-    }
+    this.setMonthlyRent(this.shortLetWeeklyControl, this.shortLetMonthlyControl)
+    this.setWeeklyRent(this.shortLetWeeklyControl, this.shortLetMonthlyControl)
+    this.setMonthlyRent(this.longLetWeeklyControl, this.longLetMonthlyControl)
+    this.setWeeklyRent(this.longLetWeeklyControl, this.longLetMonthlyControl)
   }
 
   private setMonthlyRent(weeklyControl: FormControl, monthlyControl: FormControl) {

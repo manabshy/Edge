@@ -72,7 +72,7 @@ export class ValuationOriginComponent implements OnInit, AfterViewInit {
       }
     } else {
       let originType = this.allOrigins.find((x) => x.id == this.valuation.originId)
-      this.setOriginTypeId(originType.parentId)
+      if (originType) this.setOriginTypeId(originType.parentId)
       this.controlValues()
     }
   }
