@@ -81,7 +81,7 @@ export class AppComponent extends BaseComponent implements OnInit {
       .pipe(filter((e) => e instanceof RoutesRecognized))
       .pipe(
         pairwise(),
-        tap((data) => console.log('events here...', data))
+        tap((data) => console.log('events here....', data))
       )
       .subscribe((event: any[] | RoutesRecognized[]) => {
         AppUtils.prevRouteBU = AppUtils.prevRoute || ''
