@@ -52,18 +52,19 @@ export class DocumentInfoComponent implements OnInit {
     text: ['Please enter the ID for the SmartSearch']
   }
   additionalLabel: string
+  showFilesUploadButton: boolean
 
   ngOnInit(): void {
     this.checkIdIsValid()
-    // console.log('this.files: ', this.files)
+    this.showFilesUploadButton = this.showFilesUploadButtonDecider()
   }
 
-  showFilesUploadButton(): boolean {
+  showFilesUploadButtonDecider(): boolean {
     return (
       (!this.files.length && this.documentType == DOCUMENT_TYPE.ID) ||
       (!this.files.length && this.documentType == DOCUMENT_TYPE.REPORT) ||
       (!this.files.length && this.documentType == DOCUMENT_TYPE.PROOF_OF_ADDRESS) ||
-      this.documentType == DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS
+      (this.documentType == DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS && !this.isFrozen)
     )
   }
 
@@ -121,12 +122,12 @@ export class DocumentInfoComponent implements OnInit {
       emitData.smartSearchId = this.smartSearchIdForm.get('smartSearchId').value
     }
     this.onFileUploaded.emit(emitData)
-   
+
     this.closeDialog()
     this.saveFileBtnDisabled = true
   }
 
-  closeDialog(){
+  closeDialog() {
     this.showFileUploadDialog = false
   }
 

@@ -218,11 +218,9 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
     if (changes.termsOfBusinessDocument && !changes.termsOfBusinessDocument.firstChange) {
       this.termsOfBusinessDocument = changes.termsOfBusinessDocument.currentValue
       this.termsOfBusinessDocumentIsSigned = this.isTermsOfBusinessSigned()
-      // console.log('termsOfBusinessDocumentIsSigned: ',this.termsOfBusinessDocumentIsSigned)
       this.message.type = 'info'
       this.message.text = ['Terms of Business uploaded, pending save.']
     }
-    // console.log('changes: ', changes)
   }
 
   ngOnDestroy(): void {

@@ -387,8 +387,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get('lastKnownOwnerId')
     this.originId = +this.route.snapshot.queryParamMap.get('originId')
     this.leadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId')
-    this.isNewValuation = (this.route.snapshot.queryParamMap.get('isNewValuation') as unknown) as boolean
-    this.isFromProperty = (this.route.snapshot.queryParamMap.get('isFromProperty') as unknown) as boolean
+    this.isNewValuation = this.route.snapshot.queryParamMap.get('isNewValuation') as unknown as boolean
+    this.isFromProperty = this.route.snapshot.queryParamMap.get('isFromProperty') as unknown as boolean
     this.isNewValuation && !this.isFromProperty ? (this.showProperty = true) : (this.showProperty = false)
 
     if (this.valuationId > 0) {
@@ -1141,9 +1141,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       suggestedAskingRentShortLet: [],
       suggestedAskingRentLongLetMonthly: [],
       suggestedAskingRentShortLetMonthly: [],
-      // declarableInterest: [null, Validators.required],
       ageOfSuggestedAskingPrice: [],
-      // section21StatusId: [],
       salesMeetingOwner: [true],
       lettingsMeetingOwner: [true],
       salesOwnerAssociateName: [''],
@@ -1494,8 +1492,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         ageOfSuggestedAskingPrice: valuation.valuationDate
           ? this.sharedService.calculateDateToNowInMonths(new Date(valuation.valuationDate))
           : 0,
-        // declarableInterest: valuation.declarableInterest?.toString(),
-        section21StatusId: valuation.section21StatusId,
         salesMeetingOwner: this.salesMeetingOwner,
         lettingsMeetingOwner: this.lettingsMeetingOwner,
         salesOwnerAssociateName: this.salesOwnerAssociateName,
@@ -2169,7 +2165,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.activeState[4] = true
       this.messageService.add({
         severity: 'warn',
-        summary: 'Declare interest in TOB section is unanswered!',
+        summary: 'Declarable interest in Terms of Business section requires an answer',
         closable: false
       })
       return
@@ -2488,13 +2484,22 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.checkAvailabilityBooking()
     this.setValuersValidators()
 
+    const validForSave = this.validateValuationForSave()
+    if (validForSave) {
+      this.addOrUpdateValuation()
+    } else {
+      return
+    }
+  }
+
+  private validateValuationForSave() {
     if (!this.checkOriginBookedBy() || !(this.valuation.originId > 0)) {
       this.messageService.add({
         severity: 'warn',
         summary: 'You must complete origin information!',
         closable: false
       })
-      return
+      return false
     }
 
     if (!this.lastKnownOwner) {
@@ -2503,7 +2508,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         summary: 'You must add a last owner to the property!',
         closable: false
       })
-      return
+      return false
     }
 
     if (
@@ -2533,7 +2538,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       })
       this.accordionIndex = 4
       this.activeState[4] = true
-      return
+      return false
     }
 
     if (this.isAvailabilityRequired) {
@@ -2542,7 +2547,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         summary: 'You must make valuation appointments',
         closable: false
       })
-      return
+      return false
     }
 
     if (
@@ -2556,22 +2561,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         summary: 'You must select who we are meeting options',
         closable: false
       })
-      return
+      return false
     }
 
-    //this._valuationFacadeSvc.validationControlBs.getValue()
     if (this.valuationForm.valid) {
-      this.addOrUpdateValuation()
-      // if (
-      //   this.valuationForm.dirty ||
-      //   this.isOwnerChanged ||
-      //   this.isPropertyChanged ||
-      //   this.isAdminContactChanged
-      // ) {
-      //   this.addOrUpdateValuation();
-      // } else {
-      //   this.onSaveComplete();
-      // }
+      return true
     } else {
       this.errorMessage = {} as WedgeError
       this.errorMessage.displayMessage = 'Please correct validation errors'
@@ -2592,13 +2586,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   addOrUpdateValuation() {
     this.setLeaseExpiryDate()
     this.isSubmitting = true
-    let valuationValue = this.valuation
-    if (this.valuation.valuationEventId > 0) {
-      valuationValue = this._valuationFacadeSvc._valuationData.getValue() // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
-      console.log('valuationValue: ', valuationValue)
-    }
+    let valuationValue = this._valuationFacadeSvc._valuationData.getValue() // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
     const valuation = { ...valuationValue, ...this.valuationForm.value }
-    console.log('valuation after merge: ', valuation)
     valuation.propertyOwner = this.lastKnownOwner
     valuation.OfficeId = this.property.officeId
     valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate

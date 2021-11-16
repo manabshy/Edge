@@ -19,8 +19,6 @@ export const buildComplianceChecksStatusMessages = (
 
   entities.forEach((entity) => {
     const validDocs = amlOrKyc === 'AML' ? entityValidForAML(entity) : entityValidForKYC(entity)
-    // console.log('validDocs: ', validDocs)
-    // console.log('entity.personDateAmlCompleted: ', entity.personDateAmlCompleted)
     if (entity.personDateAmlCompleted && validDocs) {
       // contact has valid documents and compliance checks timestamp against them
       validContacts.push(entity)
@@ -122,7 +120,6 @@ const setOlderThanYearOldMessage = (messageObj, amlOrKyc, compliancePassedDate, 
       compliancePassedByFullName
   ]
   messageObj.valid = true
-
 }
 
 /***
