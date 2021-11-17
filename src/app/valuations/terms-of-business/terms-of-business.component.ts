@@ -262,8 +262,6 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
       )
     }
 
-    console.log('this.valuationData.declarableInterest: ', this.valuationData.declarableInterest)
-
     if (this.valuationData.declarableInterest === null || typeof this.valuationData.declarableInterest == 'undefined') {
       this.message.type = 'error'
       this.message.text = ['Please answer declarable interest']
@@ -319,14 +317,16 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   private setMenuItems() {
     const items = []
 
-    items.push({
-      id: 'uploadToB',
-      label: 'Upload Terms of Business',
-      icon: 'pi pi-upload',
-      command: () => {
-        this.showDialog = true
-      }
-    })
+    if (this.valuationData.valuationStatus == ValuationStatusEnum.Valued) {
+      items.push({
+        id: 'uploadToB',
+        label: 'Upload Terms of Business',
+        icon: 'pi pi-upload',
+        command: () => {
+          this.showDialog = true
+        }
+      })
+    }
 
     if (!this.termsOfBusinessDocumentIsSigned && this.valuationData.valuationStatus == ValuationStatusEnum.Valued) {
       items.push({

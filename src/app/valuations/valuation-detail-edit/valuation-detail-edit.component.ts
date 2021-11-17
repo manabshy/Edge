@@ -2661,7 +2661,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     valuation.outsideSpace = this.getInfoIdArray(this.valuationForm.get('outsideSpace').value)
 
     this.setValuers(valuation)
-
+    console.log('valuation about to be saved: ', valuation)
     if (this.isNewValuation) {
       this.saveValuationSubscription = this._valuationFacadeSvc.addValuation(valuation).subscribe(
         (data) => {
@@ -2778,6 +2778,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   onSaveComplete(valuation?: Valuation) {
+    console.log('onSaveComplete: ', valuation)
     this.valuationForm.markAsPristine()
     this.isSubmitting = false
     this.errorMessage = null
@@ -2932,8 +2933,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this._valuationFacadeSvc.termsOfBusinessFileUploaded(ev)
   }
 
-  onPowerOfAttorneyChange(val) {
-    console.log('onPowerOfAttorneyChange: if true, push adminContact into compliance store', val)
+  onPowerOfAttorneyChange(ev) {
+    this._valuationFacadeSvc.togglePowerOfAttorney(ev)
   }
 
   ngOnDestroy() {

@@ -57,6 +57,15 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   readonly isFrozen$: Observable<any> = this.select(({ isFrozen }) => isFrozen).pipe()
   readonly _newEntityStream: BehaviorSubject<Company | Person | null> = new BehaviorSubject(null)
   readonly newEntityStream$: Observable<Company | Person | null> = this._newEntityStream.asObservable()
+  
+  readonly isPowerOfAttorney$ = this._complianceChecksFacadeSvc.valuation$.pipe(
+    tap((data) =>  {
+      console.log('isPowerAttorneyObservable: ', data)
+    }),
+
+  ).subscribe(data => {
+    console.log('data: ', data)
+  })
 
   // Public observable streams
 
@@ -269,7 +278,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         filter(([contactGroupData, valuationData]) => !!contactGroupData && !!valuationData),
         take(1),
         mergeMap(([contactGroupData, valuationData, entityToAdd]: [any, any, any]) => {
-          // TODO ensure data is correct as appears to be showing previous valuation data (suggesting observable leak somewhere)
           console.log('contactGroupData: ', contactGroupData)
           console.log('valuationData: ', valuationData)
           return this._complianceChecksFacadeSvc.loadAdditionalContactsCheck(
@@ -283,6 +291,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           this.patchState(
             buildStoreState(data.contactGroupData, data.valuationData, data.entityToAdd, data.adminContact)
           )
+
           return this.validationMessage$
         })
       )

@@ -353,6 +353,19 @@ export class ValuationFacadeService {
     return this._apiSvc.cancelValuation(valuationToCancel)
   }
 
+  public togglePowerOfAttorney(isPowerOfAttorney) {
+    this.valuationData$
+      .pipe(
+        take(1),
+        tap((valuationData): any => {
+          const newValuationValue = { ...valuationData, isPowerOfAttorney: isPowerOfAttorney }
+          this._valuationData.next(newValuationValue)
+        })
+      )
+      .subscribe((res) => {
+        console.log('togglePowerOfAttorney done.')
+      })
+  }
   /**
    *
    * @param valuationData

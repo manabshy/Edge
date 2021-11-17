@@ -21,11 +21,17 @@
     <span *ngIf="documentType == DOCUMENT_TYPE.REPORT && file.smartSearchId">ID: {{ file.smartSearchId }}</span>
   
     <!-- FILE UPLOAD DATE -->
-    <span class="flex-1 text-right" [pTooltip]="'Upload Date'" *ngIf="file.updateDate">{{ moment(file.updateDate).format('DD/MM/YY') }}</span>
+    <span class="flex-1 text-right">
+      <ng-container  *ngIf="file.updateDate">
+        <span [pTooltip]="'Upload Date'">
+          {{ moment(file.updateDate).format('DD/MM/YY') }}
+        </span>
+      </ng-container>
+    </span>
   
     <!-- DELETE BTN -->
     <button
-      (click)="deleteFile.emit({ id: file.fileStoreId, documentType: documentType })"
+      (click)="deleteFile.emit({ id: file.fileStoreId ? file.fileStoreId : file.blobName, documentType: documentType })"
       [pTooltip]="'Delete Document'"
       *ngIf="!isFrozen"
     >
