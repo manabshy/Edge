@@ -2127,12 +2127,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.activeState[0] = true
         this.scrollSpecificElement('valuationNotesTab')
       } else if (status.value == 1) {
+        this.activeState[0] = true
         this.activeState[1] = true
         this.scrollSpecificElement('propertyInfoTab')
       } else if (status.value == 2) {
+        this.activeState[1] = true
         this.activeState[2] = true
         this.scrollSpecificElement('appointmentTab')
       } else if (status.value == 3) {
+        this.activeState[2] = true
         this.activeState[3] = true
         this.scrollSpecificElement('valuesTab')
       } else if (status.value == 4) {

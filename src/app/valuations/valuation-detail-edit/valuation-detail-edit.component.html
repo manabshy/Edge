@@ -2,7 +2,7 @@
   <div class="mb-10 md:mb-0 row__item row__item--aside">
     <div class="wrapper--sticky">
       <app-contact-group-card class="appWrapper" [(adminContact)]="adminContact"
-      (onPowerOfAttorneyChange)="onPowerOfAttorneyChange($event)"
+        (onPowerOfAttorneyChange)="onPowerOfAttorneyChange($event)"
         [contactGroup]="adminContactGroup ? adminContactGroup : contactGroup" *ngIf="contactGroup">
       </app-contact-group-card>
       <div>
@@ -176,13 +176,13 @@
           <ng-container *ngIf="property">
             <p-accordion [multiple]="true">
               <div class="mr-8 md:m-0">
-                <div class="mb-5" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
+                <div id="valuationNotesTab" class="mb-5" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                   (click)="controlIsCancelled($event, isCancelled)">
                   <app-valuation-origin [allOriginTypes]="allOriginTypes" [allOrigins]="allOrigins"
                     [isClientService]="isClientService" [(valuation)]="valuation" [leadTypeId]="leadTypeId">
                   </app-valuation-origin>
                 </div>
-                <p-accordionTab id="valuationNotesTab" header="Valuation Notes" [(selected)]="activeState[0]" *ngIf="
+                <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]" *ngIf="
                     isEditable ||
                     isNewValuation ||
                     isStillInOneMonthPeriod ||
@@ -213,7 +213,7 @@
                       </fieldset>
                     </div>
 
-                    <div>
+                    <div id="propertyInfoTab">
                       <fieldset class="mb-3 inline-child" [ngClass]="{ invalid: formErrors?.generalNotes }"
                         *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
                         <label for="generalNotes">Notes (points discussed, other property details)</label>
@@ -225,7 +225,6 @@
                     </div>
                   </div>
                 </p-accordionTab>
-
                 <p-accordionTab id="propertyInfoTab" header="Property Info" [(selected)]="activeState[1]">
                   <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)">
@@ -373,7 +372,7 @@
                       </p-multiSelect>
                     </fieldset>
 
-                    <fieldset class="pb-4 checkbox">
+                    <fieldset id="appointmentTab" class="pb-4 checkbox">
                       <span>
                         <input class="p-2" type="checkbox" id="hasDisabledAccess" name="hasDisabledAccess"
                           formControlName="hasDisabledAccess" data-cy="hasDisabledAccess">
@@ -383,8 +382,8 @@
                   </div>
                 </p-accordionTab>
 
-                <p-accordionTab id="appointmentTab" header="Appointment" [(selected)]="activeState[2]">
-                  <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
+                <p-accordionTab header="Appointment" [(selected)]="activeState[2]">
+                  <div id="valuesTab" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)">
                     <fieldset *ngIf="isNewValuation && canBookAppointment">
                       <button class="btn btn--positive" type="button" (click)="isBothEdit = true; getAvailability()"
@@ -698,7 +697,7 @@
                   </div>
                 </p-accordionTab>
 
-                <p-accordionTab id="valuesTab" header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible"
+                <p-accordionTab header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible"
                   data-cy="valuationValues">
                   <div class="flex flex-row w-full">
                     <span class="flex-1"></span>
@@ -815,7 +814,7 @@
                         </div>
                       </li>
                     </ol>
-                    <div class="w-auto md:w-8/12"
+                    <div id="termsOfBusinessTab" class="w-auto md:w-8/12"
                       *ngIf="valuation?.salesValuationBooking || valuation?.lettingsValuationBooking">
                       <fieldset class="mb-3 inline-child" [ngClass]="{ invalid: formErrors?.valuationNote }">
                         <label for="valuationNote">Valuation Meeting Notes</label>
@@ -837,8 +836,7 @@
                 </p-accordionTab>
 
                 <p-accordionTab header="Terms of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
-                  <div id="termsOfBusinessTab"
-                    [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled || isTermsOfBusinessDisabled }"
+                  <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled || isTermsOfBusinessDisabled }"
                     (click)="controlIsCancelled($event, isCancelled || isTermsOfBusinessDisabled)">
                     <ng-container *ngIf="valuationData$ | async as valuationData">
                       <app-terms-of-business [valuationData]="valuationData" [interestList]="interestList"
