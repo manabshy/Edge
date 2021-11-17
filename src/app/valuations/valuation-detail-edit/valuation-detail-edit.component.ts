@@ -935,6 +935,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.isSplitAppointment = event.checked
     this.valuation.salesValuationBooking = null
     this.valuation.lettingsValuationBooking = null
+    this._valuationFacadeSvc._valuationData.next(this.valuation)
     this.selectedSalesDate = null
     this.selectedLettingsDate = null
     this.selectedDate = null
@@ -977,6 +978,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
             this.valuation.leaseLandRegFiles = result.leaseLandRegFiles
             this.valuation.nameChangeRegFiles = result.nameChangeRegFiles
           }
+          this._valuationFacadeSvc._valuationData.next(this.valuation)
         }
       })
   }
@@ -998,6 +1000,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.property = propertyDetails // valuation object is set to property within component
     this.valuation.property = { ...this.property } // the property on the valuation gets set to the valuation ?
     this.valuation.officeId = this.property.officeId
+    this._valuationFacadeSvc._valuationData.next(this.valuation)
     // this.valuers = result.valuers;
     if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
       this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
@@ -1336,6 +1339,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.setValuationType(this.valuation)
         this.populateForm(this.valuation)
         this.setupInitialRentFigures(this.valuation)
+
+        this._valuationFacadeSvc._valuationData.next(this.valuation)
 
         this.isAllowedForValueChangesSubscription = this.staffMemberService
           .hasCurrentUserValuationCreatePermission()
@@ -2127,12 +2132,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.activeState[0] = true
         this.scrollSpecificElement('valuationNotesTab')
       } else if (status.value == 1) {
+        this.activeState[0] = true
         this.activeState[1] = true
         this.scrollSpecificElement('propertyInfoTab')
       } else if (status.value == 2) {
+        this.activeState[1] = true
         this.activeState[2] = true
         this.scrollSpecificElement('appointmentTab')
       } else if (status.value == 3) {
+        this.activeState[2] = true
         this.activeState[3] = true
         this.scrollSpecificElement('valuesTab')
       } else if (status.value == 4) {
@@ -2586,6 +2594,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   addOrUpdateValuation() {
     this.setLeaseExpiryDate()
     this.isSubmitting = true
+
     let valuationValue = this._valuationFacadeSvc._valuationData.getValue() // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
     const valuation = { ...valuationValue, ...this.valuationForm.value }
     valuation.propertyOwner = this.lastKnownOwner
@@ -2911,6 +2920,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     this.setCloseState()
 
+    this._valuationFacadeSvc._valuationData.next(this.valuation)
     this.valuationForm.markAsDirty()
   }
 
