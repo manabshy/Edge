@@ -2083,7 +2083,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   onTenureChange(tenureId: number) {
     if (+tenureId === 3 || +tenureId === 2) {
       this.showLeaseExpiryDate = true
-      this.approxLeaseExpiryDateControl.setValidators([Validators.max(999), Validators.min(1), Validators.required])
+      this.approxLeaseExpiryDateControl.setValidators([Validators.max(999), Validators.min(1)])
       this.approxLeaseExpiryDateControl.updateValueAndValidity()
     } else {
       this.showLeaseExpiryDate = false
@@ -2519,12 +2519,19 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       return false
     }
 
-    if (
-      this.areValuesVisible &&
-      this.isThereAPrice(this.valuationForm.value) &&
-      this.valuationForm.get('valuationNote').value
-    ) {
+    let isThereAPrice = this.isThereAPrice(this.valuationForm.value)
+
+    if (this.areValuesVisible && isThereAPrice && this.valuationForm.get('valuationNote').value) {
       this.valuationForm.get('valuationNote').setValidators(null)
+    }
+
+    if (isThereAPrice && this.isAllowedForValueChanges === false) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: `You don't have permissions to price valuations!`,
+        closable: false
+      })
+      return false
     }
 
     if (this.valuationForm.controls['propertyTypeId'].value === 0)
