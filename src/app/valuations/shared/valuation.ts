@@ -97,7 +97,6 @@ export interface ToBDocument {
   zeroDepositAccepted?: boolean
   instructionPriceDirection?: number
   salesAgencyTypeId?: number
-  gasCertRequired: boolean
 }
 
 export interface ComplianceChecksStatus {

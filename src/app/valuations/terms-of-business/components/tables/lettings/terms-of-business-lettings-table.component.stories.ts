@@ -33,7 +33,6 @@ SingleEntryLettings.args = {
     signedOn: new Date(),
     // isLongLetInstruction: true,
     // isShortLetInstruction: true,
-    gasCertRequired: true,
     isManagement: false,
     zeroDepositAccepted: false,
     signatureFile: {
