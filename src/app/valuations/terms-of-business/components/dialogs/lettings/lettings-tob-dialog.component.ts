@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-// import { FormlyFieldConfig } from '@ngx-formly/core'
 import { Subscription } from 'rxjs'
 import { FileTypeEnum } from 'src/app/core/services/file.service'
 
@@ -24,25 +23,10 @@ import { FileTypeEnum } from 'src/app/core/services/file.service'
         ></app-file-upload>
 
         <form [formGroup]="form" class="my-4 ml-4">
-          <fieldset class="mb-2">
-            <fieldset class="row">
-              <label style="width: auto; margin-top: 10px">Is a gas certificate required?</label>
-            </fieldset>
-            <span class="radio radio--inline">
-              <span style="margin-right: 8px">
-                <input class="p-2" id="gasCertRequiredYes" type="radio" [value]="true" formControlName="gasCertRequired" />
-                <label for="gasCertRequiredYes" class="mb-1">Yes</label>
-              </span>
-              <span style="margin-right: 8px">
-                <input class="p-2" id="gasCertRequiredNo" type="radio" [value]="false" formControlName="gasCertRequired" />
-                <label for="gasCertRequiredNo" class="mb-1">No</label>
-              </span>
-            </span>
-          </fieldset>
          
           <fieldset class="mb-2">
             <fieldset class="row">
-              <label style="width: auto; margin-top: 10px">Will it be managed?</label>
+              <label style="width: auto; margin-top: 10px">Will D&G be managing the property?</label>
             </fieldset>
             <span class="radio radio--inline">
               <span style="margin-right: 8px">
@@ -108,14 +92,12 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.model = {
-      gasCertRequired: null,
       isManagement: null,
       zeroDepositAccepted: null,
       ...this.data
     }
 
     this.form = this.fb.group({
-      gasCertRequired: [this.model.gasCertRequired, Validators.required],
       isManagement: [this.model.isManagement, Validators.required],
       zeroDepositAccepted: [this.model.zeroDepositAccepted, Validators.required]
     })
@@ -140,7 +122,6 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
       file: this.tmpFiles
     }
     if (!this.form.valid || !this.tmpFiles.length) return
-    console.log('submitting toB: ', payload)
     this.onSubmitTermsOfBusiness.emit(payload)
     this.showDialog = false
   }

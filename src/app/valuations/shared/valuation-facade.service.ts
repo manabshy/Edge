@@ -7,7 +7,7 @@
 import { Injectable, Injector } from '@angular/core'
 import { Router } from '@angular/router'
 import { BehaviorSubject, Observable, Subject } from 'rxjs'
-import { map, mergeMap, take, tap } from 'rxjs/operators'
+import { filter, map, mergeMap, take, tap } from 'rxjs/operators'
 import {
   Valuation,
   ValuationRequestOption,
@@ -28,6 +28,7 @@ import { PeopleService } from 'src/app/core/services/people.service'
 import { CompanyService } from 'src/app/company/shared/company.service'
 import { ContactGroup } from 'src/app/contact-groups/shared/contact-group'
 import { InfoService } from 'src/app/core/services/info.service'
+import { Console } from 'console'
 
 @Injectable({
   providedIn: 'root'
@@ -75,7 +76,10 @@ export class ValuationFacadeService {
   getDropDownInfo() {
     return this.infoService.getDropdownListInfo()
   }
+
   // CONTACT CARD / OWNER
+  private _isPowerOfAttorneyChanged: BehaviorSubject<any> = new BehaviorSubject({})
+  public isPowerOfAttorneyChanged$: Observable<any> = this._isPowerOfAttorneyChanged.asObservable()
 
   // VALUATION TICKET TAB
 
@@ -351,6 +355,16 @@ export class ValuationFacadeService {
 
   public cancelValuation(valuationToCancel: CancelValuation): Observable<any> {
     return this._apiSvc.cancelValuation(valuationToCancel)
+  }
+
+  public togglePowerOfAttorney(adminContact) {
+    if (!adminContact.isPowerOfAttorney) {
+      this.getAllPersonDocs(adminContact.id).subscribe((data) => {
+        this._isPowerOfAttorneyChanged.next({ action: 'add', admin: data })
+      })
+    } else {
+      this._isPowerOfAttorneyChanged.next({ action: 'remove', id: adminContact.id })
+    }
   }
 
   /**

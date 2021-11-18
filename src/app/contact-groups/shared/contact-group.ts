@@ -62,6 +62,7 @@ export interface Signer {
   emailAddress: string;
   ccOwner: boolean;
   isPowerOfAttorney: boolean;
+  id?: number
 }
 export class SignerRequest {
   searchTerm: string;

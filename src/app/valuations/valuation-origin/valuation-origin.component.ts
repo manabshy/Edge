@@ -6,6 +6,7 @@ import { Valuation } from '../shared/valuation'
 import { Observable, of, Subscription } from 'rxjs'
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member'
 import { StaffMember } from 'src/app/shared/models/staff-member'
+import { StorageMap } from '@ngx-pwa/local-storage'
 
 @Component({
   selector: 'app-valuation-origin',
@@ -18,14 +19,13 @@ export class ValuationOriginComponent implements OnInit, AfterViewInit {
   @Input() isClientService: boolean = false
   @Input() allOrigins: InfoDetail[]
   @Input() allOriginTypes: InfoDetail[]
-  bookByOptions$: Observable<StaffMember[]>
+  bookByOptions: StaffMember[] = []
+  subscriptions = new Subscription()
   origins: InfoDetail[]
   bookedByErrorMessage: string = null
   originIdMessage: string = null
 
-  constructor(private staffMembersService: StaffMemberService) {
-    this.bookByOptions$ = this.staffMembersService.getCsStaffMembers()
-  }
+  constructor(private staffMembersService: StaffMemberService, private storage: StorageMap) {}
 
   ngOnInit(): void {
     if (!(this.valuation.originId && this.valuation.originId > 0)) {
@@ -68,6 +68,7 @@ export class ValuationOriginComponent implements OnInit, AfterViewInit {
         this.setOriginTypeId(12)
         this.valuation.originId = 122
       } else {
+        this.allOrigins = this.allOrigins.filter((x) => x.isActive == true)
         this.setOriginTypeId(this.allOrigins[0].parentId)
       }
     } else {
@@ -75,6 +76,25 @@ export class ValuationOriginComponent implements OnInit, AfterViewInit {
       if (originType) this.setOriginTypeId(originType.parentId)
       this.controlValues()
     }
+
+    this.subscriptions = this.staffMembersService.getCsStaffMembers().subscribe((data) => {
+      this.bookByOptions = data
+      if (
+        this.valuation &&
+        this.valuation.bookedById > 0 &&
+        !this.bookByOptions.some((x) => x.staffMemberId == this.valuation.bookedById)
+      ) {
+        this.storage.get('allstaffmembers').subscribe((dataStaffMembers: StaffMember[]) => {
+          if (dataStaffMembers) {
+            this.bookByOptions.unshift(dataStaffMembers.find((x) => x.staffMemberId == this.valuation.bookedById))
+            this.bookByOptions = [...this.bookByOptions]
+            // let bookedById = this.valuation.bookedById
+            // this.valuation.bookedById = null
+            // this.valuation.bookedById = bookedById
+          }
+        })
+      }
+    })
   }
 
   ngAfterViewInit(): void {}
@@ -82,7 +102,16 @@ export class ValuationOriginComponent implements OnInit, AfterViewInit {
   setOriginTypeId(originTypeId: number) {
     if (originTypeId) {
       this.valuation.originTypeId = originTypeId
-      this.origins = this.allOrigins.filter((x) => x.parentId == originTypeId && x.isActive === true)
+      if (this.allOrigins.some((x) => x.parentId == originTypeId && x.isActive === true) == false) {
+        this.origins = this.allOrigins.filter((x) => x.parentId == originTypeId)
+      } else {
+        this.origins = this.allOrigins.filter((x) => x.parentId == originTypeId && x.isActive === true)
+      }
+
+      if (this.valuation.originId > 0 && this.origins.findIndex((x) => x.id == this.valuation.originId) === -1) {
+        this.origins.unshift(this.allOrigins.find((x) => x.id == this.valuation.originId))
+      }
+
       this.origins.unshift({ id: 0, value: ' ' })
     }
   }
