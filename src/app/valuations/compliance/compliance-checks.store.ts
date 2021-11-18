@@ -57,33 +57,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   readonly _newEntityStream: BehaviorSubject<Company | Person | null> = new BehaviorSubject(null)
   readonly newEntityStream$: Observable<Company | Person | null> = this._newEntityStream.asObservable()
 
-  readonly isPowerOfAttorneyChanges$ = this._complianceChecksFacadeSvc.isPowerOfAttorneyChanged$
-    .pipe(
-      filter((data) => data.action),
-      mergeMap((data): any => {
-        console.log('isPowerAttorneyObservable: ', data)
-        switch (data.action) {
-          case 'add':
-            data.admin.isAdmin = true // TODO api should have this set?
-            this.loadExistingEntity(data.admin)
-            break
-          case 'remove':
-            this.removeFromValuation(data.id)
-            break
-        }
-        return this.pushContactsToValuationServiceForSave$
-      }),
-      mergeMap(() => this.validationMessage$.pipe())
-    )
-    .subscribe(
-      (data) => {
-        console.log('isPowerOfAttorneyChanges: ', data)
-      },
-      (err) => {
-        console.error('isPowerOfAttorneyChanges err: ', err)
-      }
-    )
-
   // Public observable streams
 
   /***
@@ -146,8 +119,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    * @description takes documents out of the store, shapes them for the API and puts them in the valuation service ready for picking up when user saves valuation
    */
   private pushContactsToValuationServiceForSave$: Observable<any> = this.entitiesArrayShapedForApi$.pipe(
+    filter((data) => data),
     mergeMap((data: any): any => {
-      // console.log('pushContactsToValuationServiceForSave RUNNING 🏃🏃🏃🏃', data)
+      console.log('pushContactsToValuationServiceForSave RUNNING 🏃🏃🏃🏃', data)
       if (data.savePayload) {
         return this._complianceChecksFacadeSvc.updateCompanyAndPersonDocuments(data.savePayload)
       } else {
@@ -457,7 +431,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       .getAllPersonDocs(entity.id)
       .pipe(
         switchMap((entityDataFromApi) => {
-          console.log('onAddExistingCompany result from server: ', entityDataFromApi)
           this.loadExistingEntity(entityDataFromApi)
           return this.pushContactsToValuationServiceForSave$
         }),
@@ -558,4 +531,31 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       (err) => console.error(err)
     )
   }
+
+  readonly isPowerOfAttorneyChanges$ = this._complianceChecksFacadeSvc.isPowerOfAttorneyChanged$
+    .pipe(
+      filter((data) => data.action),
+      mergeMap((data): any => {
+        console.log('inside isPowerAttorneyObservable$: ', data)
+        switch (data.action) {
+          case 'add':
+            data.admin.isAdmin = true
+            this.loadExistingEntity(data.admin)
+            break
+          case 'remove':
+            this.removeFromValuation(data.id)
+            break
+        }
+        return this.pushContactsToValuationServiceForSave$
+      }),
+      mergeMap(() => this.validationMessage$.pipe())
+    )
+    .subscribe(
+      (data) => {
+        console.log('isPowerOfAttorneyChanges: ', data)
+      },
+      (err) => {
+        console.error('isPowerOfAttorneyChanges err: ', err)
+      }
+    )
 }
