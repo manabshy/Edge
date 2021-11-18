@@ -19,6 +19,7 @@ import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload,
           address: entity.address ? entity.address : 'No address',
           documents: mapDocsForAPI(entity.documents),
           isMain: entity.isMain,
+          isAdmin: entity.isAdmin,
           position: entity.position ? entity.position : '',
           personDateAmlCompleted: entity.personDateAmlCompleted ? entity.personDateAmlCompleted : null
         }
@@ -33,7 +34,6 @@ import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload,
       return contactComplianceChecksSavePayload
 
     case 'company':
-      // console.log('build company and contacts arrays sepearately');
       const personDocuments = []
       const companyDocuments = []
       entities.forEach((entity) => {
@@ -64,7 +64,7 @@ import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload,
         contactGroupId,
         companyOrContact
       }
-      console.log('companyComplianceChecksSavePayload: ', companyComplianceChecksSavePayload)
+      // console.log('companyComplianceChecksSavePayload: ', companyComplianceChecksSavePayload)
       return companyComplianceChecksSavePayload
   }
 }

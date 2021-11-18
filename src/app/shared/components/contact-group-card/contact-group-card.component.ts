@@ -127,7 +127,7 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log("contact groups in the card", this.contactGroup);
+    console.log("contact groups in the card", changes);
 
     this.numOfPeople = this.contactGroup?.contactPeople?.length
     this.numOfPeople > 1 ? (this.showAdditionalPeople = true) : (this.showAdditionalPeople = false)
@@ -225,8 +225,6 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
   }
 
   isPowerOfAttorneyChange() {
-    console.log('isPowerOfAttorneyChange(): ', this.adminContact.isPowerOfAttorney)
-    const powerOfA = this.adminContact.isPowerOfAttorney
-    this.onPowerOfAttorneyChange.emit(powerOfA)
+    this.onPowerOfAttorneyChange.emit(this.adminContact)
   }
 }

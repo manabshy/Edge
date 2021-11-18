@@ -820,7 +820,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.adminContact = {
         ...owner,
         ccOwner: this.valuation?.ccOwner,
-        isPowerOfAttorney: this.valuation?.isPowerOfAttorney
+        isPowerOfAttorney: this.valuation?.isPowerOfAttorney,
       }
       this.isAdminContactChanged = true
       this.getAdminContactGroup(this.adminContact?.contactGroupId)
@@ -935,7 +935,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.isSplitAppointment = event.checked
     this.valuation.salesValuationBooking = null
     this.valuation.lettingsValuationBooking = null
-    this._valuationFacadeSvc._valuationData.next(this.valuation)
+    this._valuationFacadeSvc.updateLocalModel(this.valuation)
     this.selectedSalesDate = null
     this.selectedLettingsDate = null
     this.selectedDate = null
@@ -978,7 +978,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
             this.valuation.leaseLandRegFiles = result.leaseLandRegFiles
             this.valuation.nameChangeRegFiles = result.nameChangeRegFiles
           }
-          this._valuationFacadeSvc._valuationData.next(this.valuation)
+          this._valuationFacadeSvc.updateLocalModel(this.valuation)
         }
       })
   }
@@ -1000,7 +1000,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.property = propertyDetails // valuation object is set to property within component
     this.valuation.property = { ...this.property } // the property on the valuation gets set to the valuation ?
     this.valuation.officeId = this.property.officeId
-    this._valuationFacadeSvc._valuationData.next(this.valuation)
+    this._valuationFacadeSvc.updateLocalModel(this.valuation)
     // this.valuers = result.valuers;
     if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
       this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
@@ -1037,7 +1037,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.adminContactGroup = result
         if (this.adminContactGroup.contactPeople && this.adminContactGroup.contactPeople.length > 0) {
           this.adminContactGroup.contactPeople[0].isAdminContact = true
+          this.adminContact.id = this.adminContactGroup.contactPeople[0].personId
         }
+        console.log('id is here: ', this.adminContact)
         this.adminContactGroup.contactPeople = this.adminContactGroup.contactPeople.concat(
           this.contactGroup?.contactPeople
         )
@@ -1340,7 +1342,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.populateForm(this.valuation)
         this.setupInitialRentFigures(this.valuation)
 
-        this._valuationFacadeSvc._valuationData.next(this.valuation)
+        this._valuationFacadeSvc.updateLocalModel(this.valuation)
 
         this.isAllowedForValueChangesSubscription = this.staffMemberService
           .hasCurrentUserValuationCreatePermission()
@@ -1701,7 +1703,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.property = property
       this.isPropertyChanged = true
       this.valuation.property = property
-      this._valuationFacadeSvc._valuationData.next(this.valuation)
+      this._valuationFacadeSvc.updateLocalModel(this.valuation)
       this.lastKnownOwner = property.lastKnownOwner
       if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
         this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then((result) => {
@@ -2489,13 +2491,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   saveValuation() {
+    console.log('save valuation start')
     this.checkAvailabilityBooking()
     this.setValuersValidators()
 
     const validForSave = this.validateValuationForSave()
     if (validForSave) {
+      console.log('valid for save - continuing...')
       this.addOrUpdateValuation()
     } else {
+      console.log('invalid, not saving')
       return
     }
   }
@@ -2529,7 +2534,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     if (this.valuationForm.controls['propertyTypeId'].value === 0)
       this.valuationForm.controls['propertyTypeId'].setValue(null)
-    if (this.valuationForm.controls['propertyStyleId'].value === 0)
+    
+      if (this.valuationForm.controls['propertyStyleId'].value === 0)
       this.valuationForm.controls['propertyStyleId'].setValue(null)
 
     this.sharedService.logValidationErrors(this.valuationForm, true)
@@ -2577,6 +2583,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } else {
       this.errorMessage = {} as WedgeError
       this.errorMessage.displayMessage = 'Please correct validation errors'
+      console.log('form is invalid...')
     }
   }
 
@@ -2920,7 +2927,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     this.setCloseState()
 
-    this._valuationFacadeSvc._valuationData.next(this.valuation)
+    this._valuationFacadeSvc.updateLocalModel(this.valuation)
     this.valuationForm.markAsDirty()
   }
 

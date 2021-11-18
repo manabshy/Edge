@@ -19,6 +19,7 @@ export class ComplianceChecksFacadeService {
 
   public valuation$: Observable<any> = this._valuationFacadeSvc.valuationData$
   public contactGroup$: Observable<any> = this._valuationFacadeSvc.contactGroup$
+  public isPowerOfAttorneyChanged$: Observable<any> = this._valuationFacadeSvc.isPowerOfAttorneyChanged$
 
   public loadAdditionalContactsCheck(contactGroupData, valuationData, entityToAdd) {
     if (this.adminContactNeedsFetching(valuationData)) {
@@ -36,7 +37,7 @@ export class ComplianceChecksFacadeService {
   private adminContactNeedsFetching = (valuationData) => {
     if (!!valuationData.adminContact && valuationData.isPowerOfAttorney) {
       const adminContact = valuationData.adminContact
-      console.log('adminContact: ', adminContact)
+      console.log('valuationData: ', valuationData)
       if (valuationData.personDocuments) {
         // if person is already here then return false, otherwise return true as we need to fetch them.
         console.log('valuationData.personDocuments: ', valuationData.personDocuments)
