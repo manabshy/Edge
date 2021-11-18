@@ -17,7 +17,6 @@ import {
   mergeFiles,
   removeDocFromDocumentsObject,
   addFiles,
-  addDocsShell,
   mapDocumentsForView
 } from './helpers/store-documents-helpers'
 import { ComplianceChecksState, FileUpdateEvent, FileDeletionPayload } from './compliance-checks.interfaces'
@@ -60,26 +59,30 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
 
   readonly isPowerOfAttorneyChanges$ = this._complianceChecksFacadeSvc.isPowerOfAttorneyChanged$
     .pipe(
-      filter(data => data.action),
-      mergeMap((data) => {
+      filter((data) => data.action),
+      mergeMap((data): any => {
         console.log('isPowerAttorneyObservable: ', data)
         switch (data.action) {
           case 'add':
             data.admin.isAdmin = true // TODO api should have this set?
             this.loadExistingEntity(data.admin)
             break
-
           case 'remove':
             this.removeFromValuation(data.id)
             break
         }
         return this.pushContactsToValuationServiceForSave$
       }),
-      mergeMap(() => this.validationMessage$.pipe()),
+      mergeMap(() => this.validationMessage$.pipe())
     )
-    .subscribe((data) => {
-      console.log('data: ', data)
-    })
+    .subscribe(
+      (data) => {
+        console.log('isPowerOfAttorneyChanges: ', data)
+      },
+      (err) => {
+        console.error('isPowerOfAttorneyChanges err: ', err)
+      }
+    )
 
   // Public observable streams
 
@@ -251,15 +254,17 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
 
   readonly loadExistingEntity = this.updater((state, entityToAdd: any) => ({
     ...state,
-    entities: [
-      ...state.entities,
-      {
-        ...entityToAdd,
-        associatedCompanyId: state.companyId,
-        isMain: state.companyId === entityToAdd.id,
-        documents: mapDocumentsForView(entityToAdd.documents)
-      }
-    ]
+    entities: state.entities.find((e) => e.id === entityToAdd.id)
+      ? state.entities
+      : [
+          ...state.entities,
+          {
+            ...entityToAdd,
+            associatedCompanyId: state.companyId,
+            isMain: state.companyId === entityToAdd.id,
+            documents: mapDocumentsForView(entityToAdd.documents)
+          }
+        ]
   }))
 
   readonly removeFromValuation = this.updater((state, idToRemove: number) => ({
