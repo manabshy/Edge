@@ -956,7 +956,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.outsideSpaces = info.outsideSpaces
     this.parkings = info.parkings
     this.features = info.propertyFeatures
-    this.allOrigins = info.origins.filter((x) => x.isActive)
+    this.allOrigins = info.origins
     this.allOriginTypes = info.originTypes.filter((x) => x.id == 12 || x.id == 13 || x.id == 14)
     this.interestList = info.section21Statuses
     this.associateTypes = info.associations
