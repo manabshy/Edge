@@ -21,25 +21,10 @@ export class FileUploadComponent implements OnInit, OnDestroy, AfterViewInit {
     return this._isMultiple
   }
 
-  public fileTypes: string
-
   private _fileType: FileTypeEnum
   set fileType(value: FileTypeEnum) {
     if (value) {
       this._fileType = value
-      switch (value) {
-        case FileTypeEnum.OnlyDocument:
-          this.fileTypes = 'file_extension|' + '.pdf|.doc|.docx'
-          break
-        case FileTypeEnum.OnlyImage:
-          this.fileTypes = 'file_extension|' + 'image/*|media_type'
-        case FileTypeEnum.ImageAndDocument:
-          this.fileTypes = 'file_extension|' + '.pdf|.doc|.docx|image/*|.png|.jpeg'
-        case FileTypeEnum.All:
-          this.fileTypes = 'file_extension|.pdf|.doc|.docx|image/*|media_type'
-        default:
-          this.fileTypes = 'file_extension|.pdf|.doc|.docx|image/*|media_type'
-      }
     }
   }
 
@@ -86,6 +71,48 @@ export class FileUploadComponent implements OnInit, OnDestroy, AfterViewInit {
             })
             this.fileUploadControl.setValue([])
             return
+          }
+          if (this.fileType) {
+            let message = ''
+            switch (this.fileType) {
+              case FileTypeEnum.OnlyDocument:
+                if (
+                  value.type &&
+                  !(value.type.indexOf('doc') > -1 || value.type.indexOf('docx') > -1 || value.type.indexOf('pdf') > -1)
+                ) {
+                  message = 'File type must be a document!'
+                }
+                break
+              case FileTypeEnum.OnlyImage:
+                if (value.type && !(value.type.indexOf('png') > -1 || value.type.indexOf('jpeg') > -1)) {
+                  message = 'File type must be either png or jpeg!'
+                }
+                break
+              case FileTypeEnum.ImageAndDocument:
+                if (
+                  value.type &&
+                  !(
+                    value.type.indexOf('png') > -1 ||
+                    value.type.indexOf('jpeg') > -1 ||
+                    value.type.indexOf('doc') > -1 ||
+                    value.type.indexOf('docx') > -1 ||
+                    value.type.indexOf('pdf') > -1
+                  )
+                ) {
+                  message = 'File type must be either image or document'
+                }
+                break
+            }
+
+            if (message.length > 0) {
+              this.messageService.add({
+                severity: 'error',
+                summary: message,
+                closable: false
+              })
+              this.fileUploadControl.setValue([])
+              return
+            }
           }
         })
         this.hasValidFiles = true
