@@ -19,24 +19,38 @@ export class ComplianceChecksFacadeService {
 
   public valuation$: Observable<any> = this._valuationFacadeSvc.valuationData$
   public contactGroup$: Observable<any> = this._valuationFacadeSvc.contactGroup$
+  public isPowerOfAttorneyChanged$: Observable<any> = this._valuationFacadeSvc.isPowerOfAttorneyChanged$
 
   public loadAdditionalContactsCheck(contactGroupData, valuationData, entityToAdd) {
-    if (!!valuationData.adminContact && valuationData.isPowerOfAttorney) {
+    if (this.adminContactNeedsFetching(valuationData)) {
       return this._valuationFacadeSvc
         .getPeopleDocsForValuation(valuationData.adminContact.contactGroupId, valuationData.valuationEventId)
         .toPromise()
-          .then((data) => {
-            return { contactGroupData, valuationData, entityToAdd, adminContact: data[0] }
-          })
-          
+        .then((data) => {
+          return { contactGroupData, valuationData, entityToAdd, adminContact: data[0] }
+        })
     } else {
       return of({ contactGroupData, valuationData, entityToAdd, adminContact: null })
     }
   }
 
+  private adminContactNeedsFetching = (valuationData) => {
+    if (!!valuationData.adminContact && valuationData.isPowerOfAttorney) {
+      const adminContact = valuationData.adminContact
+      console.log('valuationData: ', valuationData)
+      if (valuationData.personDocuments) {
+        // if person is already here then return false, otherwise return true as we need to fetch them.
+        console.log('valuationData.personDocuments: ', valuationData.personDocuments)
+      }
+      return true
+    } else {
+      return false
+    }
+  }
+
   // CONTACT SEARCHES / ADDING
   public contactSearchResults$: Observable<PotentialDuplicateResult> = this._contactSearchResults.asObservable()
-  
+
   public getContactGroupById = (contactGroupId) => {
     return this._valuationFacadeSvc.getContactGroupById(contactGroupId)
   }

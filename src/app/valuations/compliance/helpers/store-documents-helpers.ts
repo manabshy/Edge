@@ -19,6 +19,7 @@ import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload,
           address: entity.address ? entity.address : 'No address',
           documents: mapDocsForAPI(entity.documents),
           isMain: entity.isMain,
+          isAdmin: entity.isAdmin,
           position: entity.position ? entity.position : '',
           personDateAmlCompleted: entity.personDateAmlCompleted ? entity.personDateAmlCompleted : null
         }
@@ -33,7 +34,6 @@ import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload,
       return contactComplianceChecksSavePayload
 
     case 'company':
-      // console.log('build company and contacts arrays sepearately');
       const personDocuments = []
       const companyDocuments = []
       entities.forEach((entity) => {
@@ -64,7 +64,7 @@ import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload,
         contactGroupId,
         companyOrContact
       }
-      console.log('companyComplianceChecksSavePayload: ', companyComplianceChecksSavePayload)
+      // console.log('companyComplianceChecksSavePayload: ', companyComplianceChecksSavePayload)
       return companyComplianceChecksSavePayload
   }
 }
@@ -93,26 +93,30 @@ import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload,
     }
   }
 
-  
 export const findAndRemoveDoc = (documents, ev) => {
     switch (ev.documentType) {
       case DOCUMENT_TYPE.ID:
-        documents.idDoc.files = documents.idDoc.files.filter((doc) => doc.fileStoreId !== ev.id)
+        documents.idDoc.files = documents.idDoc.files.filter((doc) => removeDocumentFilter(doc, ev.id))
         break
   
       case DOCUMENT_TYPE.PROOF_OF_ADDRESS:
-        documents.proofOfAddressDoc.files = documents.proofOfAddressDoc.files.filter((doc) => doc.fileStoreId !== ev.id)
+        documents.proofOfAddressDoc.files = documents.proofOfAddressDoc.files.filter((doc) =>  removeDocumentFilter(doc, ev.id))
         break
   
       case DOCUMENT_TYPE.REPORT:
-        documents.reportDocs.files = documents.reportDocs.files.filter((doc) => doc.fileStoreId !== ev.id)
+        documents.reportDocs.files = documents.reportDocs.files.filter((doc) =>  removeDocumentFilter(doc, ev.id))
         break
   
       case DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS:
-        documents.additionalDocs.files = documents.additionalDocs.files.filter((doc) => doc.fileStoreId !== ev.id)
+        documents.additionalDocs.files = documents.additionalDocs.files.filter((doc) =>  removeDocumentFilter(doc, ev.id))
         break
     }
     return documents
+  }
+
+  const removeDocumentFilter = (document, identifier) => {
+    const documentIdentifier = document.fileStoreId ? document.fileStoreId : document.blobName
+    return documentIdentifier !== identifier
   }
   
   export const addTmpFilesToFiles = (ev, files, entity): ComplianceDocTypes => {

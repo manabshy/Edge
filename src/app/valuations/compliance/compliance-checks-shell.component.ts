@@ -1,11 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Observable } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { ComplianceChecksStore } from './compliance-checks.store'
 import { ComplianceChecksState } from './compliance-checks.interfaces'
 import { ComplianceChecksFacadeService } from './compliance-checks.facade.service'
 import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-group'
-import { Valuation } from '../shared/valuation'
 
 /***
  * @description The outermost component for Company & Contact compliance checks inside the valuation edit page. Uses compliance checks store for all server/service/biz logic interactions

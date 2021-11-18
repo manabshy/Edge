@@ -10,11 +10,6 @@ import { ToBDocument } from '../../../terms-of-business.component'
         <thead>
           <tr>
             <th>Signed On</th>
-            <!--
-              <th>Short Lets Instruction</th>
-              <th>Long Lets Instruction</th>
-            -->
-            <th>Gas cert required</th>
             <th>Management</th>
             <th>Zero Deposit</th>
             <th>Document(s)</th>
@@ -24,17 +19,6 @@ import { ToBDocument } from '../../../terms-of-business.component'
           <tr data-cy="valuation">
             <td data-title="Signed On">
               <span class="cell-content">{{ moment(data?.signedOn).format('Do MMM YYYY (HH:mm)') || '-' }}</span>
-            </td>
-            <!--
-            <td data-title="Short Lets Instruction">
-              <span class="cell-content">{{ data?.isShortLetInstruction ? 'Yes' : 'No' }}</span>
-            </td>
-            <td data-title="Long Lets Instruction">
-              <span class="cell-content">{{ data?.isLongLetInstruction ? 'Yes' : 'No' }}</span>
-            </td>
-            -->
-            <td data-title="Gas cert required">
-              <span class="cell-content">{{ data?.gasCertRequired ? 'Yes' : 'No' }}</span>
             </td>
             <td data-title="Management">
               <span class="cell-content">{{ data?.isManagement ? 'Yes' : 'No' }}</span>

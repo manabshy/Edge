@@ -58,6 +58,29 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   readonly _newEntityStream: BehaviorSubject<Company | Person | null> = new BehaviorSubject(null)
   readonly newEntityStream$: Observable<Company | Person | null> = this._newEntityStream.asObservable()
 
+  readonly isPowerOfAttorneyChanges$ = this._complianceChecksFacadeSvc.isPowerOfAttorneyChanged$
+    .pipe(
+      filter(data => data.action),
+      mergeMap((data) => {
+        console.log('isPowerAttorneyObservable: ', data)
+        switch (data.action) {
+          case 'add':
+            data.admin.isAdmin = true // TODO api should have this set?
+            this.loadExistingEntity(data.admin)
+            break
+
+          case 'remove':
+            this.removeFromValuation(data.id)
+            break
+        }
+        return this.pushContactsToValuationServiceForSave$
+      }),
+      mergeMap(() => this.validationMessage$.pipe()),
+    )
+    .subscribe((data) => {
+      console.log('data: ', data)
+    })
+
   // Public observable streams
 
   /***
@@ -239,11 +262,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     ]
   }))
 
-  readonly addEntityToValuation = this.updater((state, entityToAdd: any) => ({
-    ...state,
-    entities: [...state.entities, { ...entityToAdd, documents: addDocsShell() }]
-  }))
-
   readonly removeFromValuation = this.updater((state, idToRemove: number) => ({
     ...state,
     entities: state.entities.filter((p) => p.id != idToRemove)
@@ -269,20 +287,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         filter(([contactGroupData, valuationData]) => !!contactGroupData && !!valuationData),
         take(1),
         mergeMap(([contactGroupData, valuationData, entityToAdd]: [any, any, any]) => {
-          // TODO ensure data is correct as appears to be showing previous valuation data (suggesting observable leak somewhere)
-          console.log('contactGroupData: ', contactGroupData)
-          console.log('valuationData: ', valuationData)
-          return this._complianceChecksFacadeSvc.loadAdditionalContactsCheck(
-            contactGroupData,
-            valuationData,
-            entityToAdd
-          )
-        }),
-        mergeMap((data) => {
-          console.log('loadStore back from load additional checks with: ', data)
-          this.patchState(
-            buildStoreState(data.contactGroupData, data.valuationData, data.entityToAdd, data.adminContact)
-          )
+          this.patchState(buildStoreState(contactGroupData, valuationData, entityToAdd))
           return this.validationMessage$
         })
       )
