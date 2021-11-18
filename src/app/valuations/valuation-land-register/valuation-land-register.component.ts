@@ -95,6 +95,8 @@ export class ValuationsLandRegisterComponent implements OnInit, AfterViewInit, O
       if (this.property) {
         this.property.userEnteredOwner = data.userEnteredOwner;
         this.valuation.ownerConfirmed = data.ownerConfirmed;
+        const ownerConfirmed = parseInt(data.ownerConfirmed)
+        this._valuationService.updateLocalModel({ ownerConfirmed })
         this.property.leaseExpiryDate = data.leaseExpiryDate ? new Date(data.leaseExpiryDate) : null;
       }
       this.getValidationResult();
