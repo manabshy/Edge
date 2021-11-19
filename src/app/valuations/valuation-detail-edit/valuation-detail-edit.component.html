@@ -183,12 +183,12 @@
                   </app-valuation-origin>
                 </div>
                 <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]" *ngIf="
-                    isEditable ||
+                    (isEditable ||
                     isNewValuation ||
                     isStillInOneMonthPeriod ||
                     (!isEditable && valuationForm.get('reason').value) ||
                     (!isEditable && valuationForm.get('timeFrame').value) ||
-                    (!isEditable && valuationForm.get('generalNotes').value)
+                    (!isEditable && valuationForm.get('generalNotes').value) && isValuationNotesVisible)
                   ">
                   <div class="grid grid--9" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)">
@@ -815,7 +815,7 @@
                       </li>
                     </ol>
                     <div id="termsOfBusinessTab" class="w-auto md:w-8/12"
-                      *ngIf="valuation?.salesValuationBooking || valuation?.lettingsValuationBooking">
+                      *ngIf="(valuation?.salesValuationBooking || valuation?.lettingsValuationBooking) && isValuationMeetingNotesVisible">
                       <fieldset class="mb-3 inline-child" [ngClass]="{ invalid: formErrors?.valuationNote }">
                         <label for="valuationNote">Valuation Meeting Notes</label>
                         <textarea [attr.disabled]="
