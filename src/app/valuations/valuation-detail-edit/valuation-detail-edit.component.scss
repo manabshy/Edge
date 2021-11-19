@@ -56,7 +56,7 @@
   }
   .p-badge-success{
     margin-left: 4px;
-    background-color: $color--red !important;
+    background-color: $color--blue-70 !important;
   }
   .p-dialog-title{
     width: -webkit-fill-available;
@@ -90,11 +90,11 @@
 }
 
 .hourColorsForBoth{
-  background: linear-gradient(to right, $color--midnight-20 50%, $color--red 50%,);
+  background: linear-gradient(to right, $color--midnight-20 50%, $color--blue-70 50%,);
 }
 
 .hourColorsForLettings{
-  background: $color--red;
+  background: $color--blue-70;
 }
 
 .hourColorsForSelected{
