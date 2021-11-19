@@ -5,7 +5,7 @@
       <ng-template #labelFromRoute>
         {{ navTitle }}
         <span class="flex-1"></span>
-        <ng-container *ngIf="showMenuEditItem">
+        <ng-container *ngIf="showMenuEditItem && filteredItems">
           <app-menu [menuItems]="filteredItems"></app-menu>
         </ng-container>
       </ng-template>
