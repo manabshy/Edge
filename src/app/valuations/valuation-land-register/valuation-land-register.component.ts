@@ -166,10 +166,13 @@ export class ValuationsLandRegisterComponent implements OnInit, AfterViewInit, O
     if (fileObj) {
       if (fileObj.type == 'L') {
         this.valuation.leaseLandRegFiles = [...fileObj.file];
+        this._valuationService.updateLocalModel({ leaseLandRegFiles: [...fileObj.file] })
       } else if (fileObj.type == 'D') {
         this.valuation.deedLandRegFiles = [...fileObj.file];
+        this._valuationService.updateLocalModel({ deedLandRegFiles: [...fileObj.file] })
       } else if (fileObj.type == 'P') {
         this.valuation.nameChangeRegFiles = [...fileObj.file];
+        this._valuationService.updateLocalModel({ nameChangeRegFiles: [...fileObj.file] })
       }
     }
     this.controlFiles();
