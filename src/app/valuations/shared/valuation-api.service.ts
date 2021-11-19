@@ -141,7 +141,7 @@ export class ValuationApiService {
       .get<any>(url, { params: options })
       .pipe(
         map((response) => response.result),
-        tap((data) => console.log('availability', JSON.stringify(data)))
+        // tap((data) => console.log('availability', JSON.stringify(data)))
       )
   }
 
@@ -152,7 +152,7 @@ export class ValuationApiService {
       .get<any>(url, { params: options })
       .pipe(
         map((response) => response.result),
-        tap((data) => console.log('calendar-availability', JSON.stringify(data)))
+        // tap((data) => console.log('calendar-availability', JSON.stringify(data)))
       )
   }
 
