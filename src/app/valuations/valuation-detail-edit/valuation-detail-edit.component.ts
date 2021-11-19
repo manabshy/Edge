@@ -820,7 +820,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.adminContact = {
         ...owner,
         ccOwner: this.valuation?.ccOwner,
-        isPowerOfAttorney: this.valuation?.isPowerOfAttorney,
+        isPowerOfAttorney: this.valuation?.isPowerOfAttorney
       }
       this.isAdminContactChanged = true
       this.getAdminContactGroup(this.adminContact?.contactGroupId)
@@ -2530,7 +2530,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuationForm.get('valuationNote').setValidators(null)
     }
 
-    if (isThereAPrice && this.isAllowedForValueChanges === false) {
+    if (
+      (this.valuation.valuationStatus == ValuationStatusEnum.Booked ||
+        (this.valuation.valuationStatus == ValuationStatusEnum.Valued && this.isEditValueActive)) &&
+      isThereAPrice &&
+      this.isAllowedForValueChanges === false
+    ) {
       this.messageService.add({
         severity: 'warn',
         summary: `You don't have permissions to price valuations!`,
@@ -2541,8 +2546,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     if (this.valuationForm.controls['propertyTypeId'].value === 0)
       this.valuationForm.controls['propertyTypeId'].setValue(null)
-    
-      if (this.valuationForm.controls['propertyStyleId'].value === 0)
+
+    if (this.valuationForm.controls['propertyStyleId'].value === 0)
       this.valuationForm.controls['propertyStyleId'].setValue(null)
 
     this.sharedService.logValidationErrors(this.valuationForm, true)
