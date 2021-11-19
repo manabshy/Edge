@@ -13,15 +13,12 @@ import {
   ContactNote
 } from '../shared/contact-group'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { distinctUntilChanged, switchMap, catchError, tap, takeUntil, take } from 'rxjs/operators'
+import { takeUntil } from 'rxjs/operators'
 import { Subject, Observable, EMPTY } from 'rxjs'
-import { BsModalService } from 'ngx-bootstrap/modal/'
 import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component'
-import { Location } from '@angular/common'
 import { WedgeError, SharedService } from 'src/app/core/services/shared.service'
 import { FormErrors } from 'src/app/core/shared/app-constants'
 import { AppUtils } from 'src/app/core/shared/utils'
-import { ToastrService } from 'ngx-toastr'
 import * as _ from 'lodash'
 import { StorageMap } from '@ngx-pwa/local-storage'
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
@@ -154,24 +151,23 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     { name: 'notes', isCurrent: false }
   ]
   dialogRef: DynamicDialogRef
+
   constructor(
     private contactGroupService: ContactGroupsService,
     private companyService: CompanyService,
     private fb: FormBuilder,
     private _router: Router,
     private route: ActivatedRoute,
-    private modalService: BsModalService,
     private dialogService: DialogService,
-    private _location: Location,
     private sharedService: SharedService,
     private storage: StorageMap,
-    private toastr: ToastrService,
     private messageService: MessageService,
     private renderer: Renderer2,
     private headerService: HeaderService
   ) {}
 
   ngOnInit() {
+    console.log('contactGroupDetails: ', this.contactGroupDetails)
     this.contactGroupTypes = ContactGroupsTypes
     this.route.params.subscribe((params) => {
       this.contactGroupId = +params['contactGroupId'] || 0
@@ -394,6 +390,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   getContactGroupById(contactGroupId: number) {
     const contactPeople = this.getContactPeopleFromStorage()
     this.contactGroupService.getContactGroupById(contactGroupId, true).subscribe((data) => {
+      console.log('contactGroupDetails: ', data)
       this.contactGroupDetails = data
       if (contactPeople?.length) {
         this.pendingChanges = true
@@ -470,6 +467,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       this.companyFinderForm.get('selectedCompany').setValue(contactGroup.companyName)
       this.getCompanyDetails(contactGroup.companyId)
     }
+    console.log('contactGroup: ', contactGroup)
     this.contactGroupDetails = contactGroup
     this.contactGroupDetailsForm.patchValue({
       salutation: contactGroup.salutation,
@@ -641,7 +639,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   selectCompany(company: Company) {
-    console.log({ company })
+    console.log('selectCompany', { company })
 
     this.foundCompanies = null
     this.companyDetails = company
@@ -694,25 +692,27 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   getSelectedPerson(person: Person) {
-    console.log('getSelectedPerson: ', person)
-    if (person) {
-      if (this.removedPersonIds.indexOf(person.personId) >= 0) {
-        this.removedPersonIds.splice(this.removedPersonIds.indexOf(person.personId), 1)
+    this.contactGroupService.getPerson(person.personId).subscribe((data) => {
+      if (data) {
+          if (this.removedPersonIds.indexOf(data.personId) >= 0) {
+            this.removedPersonIds.splice(this.removedPersonIds.indexOf(data.personId), 1)
+          }
+          if (
+            data &&
+            data.personId !== 0 &&
+            !this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, data.personId)
+          ) {
+            this.selectedPersonId = data.personId
+            this.collectSelectedPeople(data)
+          }
+          this.showDuplicateChecker = false
+          this.renderer.removeClass(document.body, 'no-scroll')
+          window.scrollTo(0, 0)
+          this.selectedPersonId = 0
+          this.contactGroupDetailsForm.markAsDirty()
       }
-      if (
-        person &&
-        person.personId !== 0 &&
-        !this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, person.personId)
-      ) {
-        this.selectedPersonId = person.personId
-        this.collectSelectedPeople(person)
-      }
-      this.showDuplicateChecker = false
-      this.renderer.removeClass(document.body, 'no-scroll')
-      window.scrollTo(0, 0)
-      this.selectedPersonId = 0
-      this.contactGroupDetailsForm.markAsDirty()
-    }
+    })
+  
   }
 
   collectSelectedPeople(person: Person) {
@@ -998,10 +998,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     console.log('queryForDuplicatePeople: ', person)
     if (person?.fullName) {
       this.contactGroupService.getPotentialDuplicatePeople(person).subscribe((data) => {
-        console.log('getPotentialDuplicatePeople: ', data)
-
         this.potentialDuplicatePeople = data
-
         this.newPerson = { ...data }
       })
     }
