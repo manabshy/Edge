@@ -194,18 +194,12 @@ export class ContactGroupsComponent implements OnInit {
   }
 
   navigateToNewGroup(contactType: string) {
-    if (contactType === 'new') {
-      // TODO db remove before Nov release
+    if (contactType === 'personal') {
       this.router.navigate(['detail', 0, 'people', 0], {
-        queryParams: { showDuplicateChecker: true, emailPhoneRequired: true },
+        queryParams: { showDuplicateChecker: true, emailPhoneRequired: true, isNewPersonalContact: true },
         relativeTo: this.route
       })
-    } else if (contactType === 'personal') {
-      this.router.navigate(['detail', 0, 'people', 0], {
-        queryParams: { isNewPersonalContact: true },
-        relativeTo: this.route
-      })
-    } else {
+    } else if (contactType === 'company'){
       this.router.navigate(['detail', 0, 'people', 0], {
         queryParams: { isNewCompanyContact: true },
         relativeTo: this.route
