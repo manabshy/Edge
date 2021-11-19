@@ -30,7 +30,7 @@ export class CompanyService {
    * @param {object} company - TODO
    * @description TODO
    */
-  public companyChanged(company: Company) {
+  public companyChanged(company) {
     this.newCompanySubject.next(company)
   }
 

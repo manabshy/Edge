@@ -72,6 +72,8 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   warningStatus: number
   emailPhoneRequired: boolean = true
   private subs = new SubSink()
+  addNewEntityToComplianceChecks: boolean = false
+
   // get showPostCode(): boolean {
   //   return this.address.get('countryId').value === this.defaultCountryCode;
   // }
@@ -141,6 +143,7 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
         this.basicPerson = JSON.parse(newPerson) as BasicPerson
       }
       this.emailPhoneRequired = JSON.parse(params['emailPhoneRequired'])
+      this.addNewEntityToComplianceChecks = params['addNewEntityToComplianceChecks'] === 'true' ? true : false
     })
     this.setupEditForm()
     const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId
@@ -155,7 +158,6 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
       this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false })
       this.logValidationErrors(this.personForm, false)
     })
-
     this.subs.sink = this.warningStatusIdControl.valueChanges.subscribe(() => this.togglePersonWarnings())
   }
 
@@ -634,7 +636,10 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
       })
     }
     if (this.newPersonId) {
-      this.contactGroupService.getAddedPerson(person)
+      const payload: any = { ...person }
+      payload.addNewEntityToComplianceChecks = this.addNewEntityToComplianceChecks
+      console.log('add new contact payload: ', payload)
+      this.contactGroupService.getAddedPerson(payload)
       this.addNewPerson(this.newPersonId)
       const personEmitter = {
         person: person,

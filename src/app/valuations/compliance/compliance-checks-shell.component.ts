@@ -34,6 +34,7 @@ import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-
         (onRefreshDocuments)="store.onRefreshDocuments()"
         (onQueryDuplicates)="facadeSvc.onQueryDuplicates($event)"
         (onCreateNewPerson)="facadeSvc.onCreateNewPerson($event)"
+        (onCreateNewCompany)="facadeSvc.onCreateNewCompany($event)"
       ></app-pure-compliance-checks-shell>
     </div>
   `,

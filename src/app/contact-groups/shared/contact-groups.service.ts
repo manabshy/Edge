@@ -439,7 +439,7 @@ export class ContactGroupsService {
     }
   }
 
-  getAddedPerson(person: Person) {
+  getAddedPerson(person) {
     this.newPersonSubject.next(person)
   }
 }

@@ -103,6 +103,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   addedCompany: Company
   destroy = new Subject()
   showAddNewBtn: boolean
+ 
   get dataNote() {
     if (this.contactGroupDetails?.contactGroupId) {
       return {
@@ -230,6 +231,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       this.existingCompanyId = params['existingCompanyId'] || 0
       this.signer = params['signer'] || ''
       this.searchTerm = params['searchTerm'] || ''
+      this.backToOrigin = params['backToOrigin'] || false
       this.backToOrigin = params['backToOrigin'] || false
 
       if (this.isExistingCompany || this.isNewPersonalContact || params['showDuplicateChecker']) {

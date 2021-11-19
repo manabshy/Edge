@@ -27,6 +27,7 @@ export class PureComplianceChecksShellComponent implements OnInit, OnChanges {
   @Output() onRefreshDocuments: EventEmitter<any> = new EventEmitter()
   @Output() onQueryDuplicates: EventEmitter<any> = new EventEmitter()
   @Output() onCreateNewPerson: EventEmitter<any> = new EventEmitter()
+  @Output() onCreateNewCompany: EventEmitter<any> = new EventEmitter()
 
   smartSearchAddedDate = new Date() // TODO
   searchTerm: string = ''

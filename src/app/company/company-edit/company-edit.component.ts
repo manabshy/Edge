@@ -41,6 +41,7 @@ export class CompanyEditComponent implements OnInit {
   isManualEntry = false
   isSignerVisible = false
   backToOrigin = false
+  addNewEntityToComplianceChecks: boolean = false
 
   constructor(
     private contactGroupService: ContactGroupsService,
@@ -78,6 +79,7 @@ export class CompanyEditComponent implements OnInit {
       }
       this.isManualEntry = params['isManualEntry'] === 'true'
       if (this.isManualEntry) this.showCompanyFinder = false
+      this.addNewEntityToComplianceChecks = params['addNewEntityToComplianceChecks'] === 'true' ? true : false
     })
     this.setupCompanyForm(this.companyName)
     const id = this.isNewCompany ? 0 : this.companyId
@@ -239,9 +241,13 @@ export class CompanyEditComponent implements OnInit {
     this.companyForm.markAsDirty()
   }
 
-  setManualEntryFlag() {
+  setManualEntryFlag(ev) {
     this.showCompanyFinder = false
     this.isManualEntry = true
+    console.log('navigating... is this correct?')
+    this._router.navigate(['/company-centre/detail/0/edit'], {
+      queryParams: ev
+    })
   }
 
   navigateToCompany(company: Company) {
@@ -289,6 +295,7 @@ export class CompanyEditComponent implements OnInit {
     this.isSubmitting = true
     if (this.isNewCompany) {
       console.log('add company', company)
+
       this.companyService.addCompany(company).subscribe(
         (res) => this.onSaveComplete(res.result),
         (error: WedgeError) => {
@@ -308,20 +315,21 @@ export class CompanyEditComponent implements OnInit {
   onSaveComplete(company?: Company) {
     this.companyForm.markAsPristine()
     this.isSubmitting = false
-    // this.toastr.success('Company successfully saved');
     this.messageService.add({ severity: 'success', summary: 'Company successfully saved', closable: false })
     if (this.backToOrigin) {
-      this.companyService.companyChanged(company)
+      const payload: any = { ...company }
+      payload.addNewEntityToComplianceChecks = this.addNewEntityToComplianceChecks
+      this.companyService.companyChanged(payload)
       this.sharedService.back()
+      return
     }
     if (this.isEditingSelectedCompany && company) {
       AppUtils.holdingSelectedCompany = company
       console.log(AppUtils.holdingSelectedCompany)
       this.sharedService.back()
+      return
     }
-
     this._router.navigate(['company-centre/detail', company.companyId])
-    console.log('complete')
   }
 
   canDeactivate(): boolean {
