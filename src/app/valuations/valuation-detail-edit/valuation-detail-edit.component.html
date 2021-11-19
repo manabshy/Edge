@@ -932,7 +932,8 @@
   <footer class="footer--modal">
     <div class="btn--container">
       <button type="button" class="btn btn--ghost" (click)="hasLiveInstruct = false">Cancel</button>
-      <button type="button" class="btn btn--positive" (click)="goInstruction()" data-cy="startInstruction">
+      <button *ngIf="liveInstructWarning" type="button" class="btn btn--positive" (click)="goInstruction()"
+        data-cy="startInstruction">
         Instruct
       </button>
     </div>

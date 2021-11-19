@@ -2246,6 +2246,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           if (data.findIndex((x) => x.type == 'Sales' || x.type == 'sales') > -1) {
             this.instructionTypeMessage = 'sales instruction'
           } else {
+            this.instructionTypeMessage = 'lettings instruction'
             if (data.filter((x) => x.status == 'UO' || x.status == 'EXCH' || x.status == 'LET').length == data.length) {
               this.liveInstructWarning = true
               this.liveInstructHeader = 'Warning'
