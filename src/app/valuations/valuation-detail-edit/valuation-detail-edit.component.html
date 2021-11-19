@@ -701,7 +701,7 @@
                   data-cy="valuationValues">
                   <div class="flex flex-row w-full">
                     <span class="flex-1"></span>
-                    <ng-container *ngIf="isAllowedForValueChanges">
+                    <ng-container *ngIf="isAllowedForValueChanges && !isCancelled">
                       <app-menu [menuItems]="valueMenuItems"></app-menu>
                     </ng-container>
                   </div>
