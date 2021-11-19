@@ -44,7 +44,7 @@ import { CompanyComplianceChecksSavePayload, ContactComplianceChecksSavePayload,
         }
         if (entity.companyId) {
           updatedEntity.companyId = entity.companyId
-          updatedEntity.associatedCompanyId = entity.associatedCompanyId
+          updatedEntity.associatedCompanyId = entity.associatedCompanyId || companyId
           companyDocuments.push(updatedEntity)
         } else {
           updatedEntity.personId = entity.personId

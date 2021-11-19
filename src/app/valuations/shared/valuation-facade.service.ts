@@ -7,7 +7,7 @@
 import { Injectable, Injector } from '@angular/core'
 import { Router } from '@angular/router'
 import { BehaviorSubject, Observable, Subject } from 'rxjs'
-import { filter, map, mergeMap, take, tap } from 'rxjs/operators'
+import { map, mergeMap, take, tap } from 'rxjs/operators'
 import {
   Valuation,
   ValuationRequestOption,
@@ -28,7 +28,6 @@ import { PeopleService } from 'src/app/core/services/people.service'
 import { CompanyService } from 'src/app/company/shared/company.service'
 import { ContactGroup } from 'src/app/contact-groups/shared/contact-group'
 import { InfoService } from 'src/app/core/services/info.service'
-import { Console } from 'console'
 
 @Injectable({
   providedIn: 'root'
@@ -209,7 +208,19 @@ export class ValuationFacadeService {
         backToOrigin: true,
         isNewPersonalContact: true,
         newPerson: JSON.stringify(newPerson),
-        emailPhoneRequired: false
+        emailPhoneRequired: false,
+        addNewEntityToComplianceChecks: true
+      }
+    })
+  }
+
+  public navigateToNewCompanyScreen(newCompany) {
+    this._router.navigate(['/company-centre/detail/0/edit'], {
+      queryParams: {
+        isNewCompany: true,
+        companyName: newCompany.companyName,
+        backToOrigin: true,
+        addNewEntityToComplianceChecks: true
       }
     })
   }
@@ -228,7 +239,6 @@ export class ValuationFacadeService {
       })
     )
   }
-  public newPerson$ = this._contactGroupsSvc.newPerson$
 
   /**
    * @function passComplianceChecksForValution

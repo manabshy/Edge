@@ -268,7 +268,8 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         mergeMap(([contactGroupData, valuationData, entityToAdd]: [any, any, any]) => {
           this.patchState(buildStoreState(contactGroupData, valuationData, entityToAdd))
           return this.validationMessage$
-        })
+        }),
+        mergeMap(() => this.pushContactsToValuationServiceForSave$)
       )
       .subscribe(
         (res) => console.log(res),
@@ -407,7 +408,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    * @description adds a NEW contact to the valuation. Since this is called before the valuation loads it's set as a BehaviorSubject so the load function can grab it on demand
    */
   public onAddNewContact = (entity: any): void => {
-    // console.log('onAddNewContact.next(', data)
+    console.log('onAddNewContact', entity)
     this._newEntityStream.next({
       ...entity,
       isNew: true,
@@ -419,6 +420,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           ? `${entity.address.addressLines}, ${entity.address.postCode}`
           : ''
     })
+  
   }
 
   /***
@@ -449,7 +451,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    * @description adds a NEW company to the valuation. Since this is called before the valuation loads it's set as a BehaviorSubject so the load function can grab it on demand
    */
   public onAddNewCompany = (entity: any): void => {
-    // console.log('onAddNewCompany.next(', entity)
+    console.log('onAddNewCompany.next(', entity)
     this._newEntityStream.next({
       ...entity,
       isNew: true,
@@ -461,6 +463,10 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           ? `${entity.companyAddress.addressLines}, ${entity.companyAddress.postCode}`
           : ''
     })
+    // this.pushContactsToValuationServiceForSave$.pipe(take(1)).subscribe(
+    //   (res) => console.log(res),
+    //   (err) => console.error(err)
+    // )
   }
 
   /***

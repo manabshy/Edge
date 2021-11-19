@@ -93,8 +93,6 @@ export class PureCompanyFinderShellComponent implements OnInit {
   }
 
   enterDetailsManually(isNewCompany?: boolean) {
-    console.log({ isNewCompany })
-    console.log(this.companyNameControl.value)
     this.onManualEntry.emit({ isNewCompany, companyName: this.companyNameControl.value })
   }
 

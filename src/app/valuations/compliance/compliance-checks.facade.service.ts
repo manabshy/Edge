@@ -28,12 +28,14 @@ export class ComplianceChecksFacadeService {
     return this._valuationFacadeSvc.getContactGroupById(contactGroupId)
   }
   public newCompanyAdded$: Observable<any> = this._valuationFacadeSvc.newCompanyChanges$.pipe(
-    filter((company) => !!company),
-    take(1)
+    filter((company) => !!company && company.addNewEntityToComplianceChecks),
+    take(1),
+    tap((data) => console.log('adding new company to compliance checks: ', data))
   )
-  public newPersonAdded$: Observable<any> = this._valuationFacadeSvc.newPerson$.pipe(
-    filter((contact) => !!contact),
-    take(1)
+  public newPersonAdded$: Observable<any> = this._valuationFacadeSvc.newPersonAdded$.pipe(
+    filter((person) => !!person && person.addNewEntityToComplianceChecks),
+    take(1),
+    tap((data) => console.log('adding new person to compliance checks: ', data))
   )
   public onQueryDuplicates(person) {
     this._valuationFacadeSvc.getPotentialDuplicatePeople(person).subscribe((data) => {
@@ -42,6 +44,9 @@ export class ComplianceChecksFacadeService {
   }
   public onCreateNewPerson(newPerson) {
     this._valuationFacadeSvc.navigateToNewPersonScreen(newPerson)
+  }
+  public onCreateNewCompany(newCompany) {
+    this._valuationFacadeSvc.navigateToNewCompanyScreen(newCompany)
   }
 
   // Company compliance checks documents management functions 📚

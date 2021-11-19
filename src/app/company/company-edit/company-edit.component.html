@@ -320,7 +320,7 @@
     [companyNameError]="formErrors.companyName"
     (companyName)="getCompanyName($event)"
     (selectedCompanyDetails)="navigateToCompany($event)"
-    (onManualEntry)="setManualEntryFlag()"
+    (onManualEntry)="setManualEntryFlag($event)"
   ></app-company-finder>
 </p-dialog>
 
