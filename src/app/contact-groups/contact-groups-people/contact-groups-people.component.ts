@@ -102,6 +102,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   backToOrigin = false
   addedCompany: Company
   destroy = new Subject()
+  showAddNewBtn: boolean
   get dataNote() {
     if (this.contactGroupDetails?.contactGroupId) {
       return {
@@ -303,6 +304,14 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       AppUtils.holdingContactType = null
       this.addSelectedPeople()
     }
+    this.shouldNewBtnShow()
+  }
+
+  shouldNewBtnShow() {
+    this.showAddNewBtn =
+      this.contactGroupDetails?.contactPeople.length < 8 &&
+      !this.contactGroupDetails?.referenceCount &&
+      !this.isMaxPeople
   }
 
   setDropdownLists() {
@@ -694,25 +703,24 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   getSelectedPerson(person: Person) {
     this.contactGroupService.getPerson(person.personId).subscribe((data) => {
       if (data) {
-          if (this.removedPersonIds.indexOf(data.personId) >= 0) {
-            this.removedPersonIds.splice(this.removedPersonIds.indexOf(data.personId), 1)
-          }
-          if (
-            data &&
-            data.personId !== 0 &&
-            !this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, data.personId)
-          ) {
-            this.selectedPersonId = data.personId
-            this.collectSelectedPeople(data)
-          }
-          this.showDuplicateChecker = false
-          this.renderer.removeClass(document.body, 'no-scroll')
-          window.scrollTo(0, 0)
-          this.selectedPersonId = 0
-          this.contactGroupDetailsForm.markAsDirty()
+        if (this.removedPersonIds.indexOf(data.personId) >= 0) {
+          this.removedPersonIds.splice(this.removedPersonIds.indexOf(data.personId), 1)
+        }
+        if (
+          data &&
+          data.personId !== 0 &&
+          !this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, data.personId)
+        ) {
+          this.selectedPersonId = data.personId
+          this.collectSelectedPeople(data)
+        }
+        this.showDuplicateChecker = false
+        this.renderer.removeClass(document.body, 'no-scroll')
+        window.scrollTo(0, 0)
+        this.selectedPersonId = 0
+        this.contactGroupDetailsForm.markAsDirty()
       }
     })
-  
   }
 
   collectSelectedPeople(person: Person) {
