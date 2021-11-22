@@ -2274,11 +2274,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     let val: Valuation
     val = { ...this.valuation, ...this.valuationForm.value }
 
+    const tob = this._valuationFacadeSvc._valuationData.getValue().eSignSignatureTob
+
     const instruction = {
       valuationEventId: val.valuationEventId,
       salesAgencyType: '',
       lettingsAgencyType: '',
-      askingPrice: val.suggestedAskingPrice,
+      askingPrice: tob?.toBSale?.instructionPriceDirection,
       askingRentShortLet: val.suggestedAskingRentShortLet,
       askingRentLongLet: val.suggestedAskingRentLongLet,
       askingRentShortLetMonthly: val.suggestedAskingRentShortLetMonthly,
