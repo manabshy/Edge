@@ -79,12 +79,10 @@ export class ContactGroupsService {
       }
     })
     const url = `${AppConstants.baseContactGroupUrl}/search`
-    return this.http
-      .get<ContactGroupAutoCompleteData>(url, { params: options })
-      .pipe(
-        map((response) => response.result),
-        tap((data) => console.log(JSON.stringify(data)))
-      )
+    return this.http.get<ContactGroupAutoCompleteData>(url, { params: options }).pipe(
+      map((response) => response.result),
+      tap((data) => console.log(JSON.stringify(data)))
+    )
   }
 
   getCompanySuggestions(searchTerm: string): Observable<any[]> {
@@ -146,21 +144,19 @@ export class ContactGroupsService {
       }
     })
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}`
-    return this.http
-      .get<ContactGroupData>(url, { params: options })
-      .pipe(
-        map((response) => {
-          return {
-            ...response.result,
-            addressee:  
-              response.result?.contactType == ContactType.CompanyContact
-                ? response.result?.companyName + '(' + response.result?.addressee + ')'
-                : response.result?.addressee
-          }
-        }),
-        tap((data) => (this.contactGroupNotes = data.contactNotes)),
-        // tap(data => console.log('contact group details here...', JSON.stringify(data)))
-      )
+    return this.http.get<ContactGroupData>(url, { params: options }).pipe(
+      map((response) => {
+        return {
+          ...response.result,
+          addressee:
+            response.result?.contactType == ContactType.CompanyContact
+              ? response.result?.companyName + '(' + response.result?.addressee + ')'
+              : response.result?.addressee
+        }
+      }),
+      tap((data) => (this.contactGroupNotes = data.contactNotes))
+      // tap(data => console.log('contact group details here...', JSON.stringify(data)))
+    )
   }
 
   getContactPerson(contactGroupId: number, personId: number): Observable<Person> {
@@ -180,13 +176,11 @@ export class ContactGroupsService {
       }
     })
     const url = `${AppConstants.basePersonUrl}/${personId}`
-    return this.http
-      .get<PersonContactData>(url, { params: options })
-      .pipe(
-        map((response) => response.result),
-        tap((data) => (this.personNotes = data.personNotes)),
-        tap((data) => console.log('person details here...', JSON.stringify(data)))
-      )
+    return this.http.get<PersonContactData>(url, { params: options }).pipe(
+      map((response) => response.result),
+      tap((data) => (this.personNotes = data.personNotes)),
+      tap((data) => console.log('person details here...', JSON.stringify(data)))
+    )
   }
 
   getPersonContactGroups(personId: number): Observable<BasicContactGroup[]> {
@@ -205,12 +199,10 @@ export class ContactGroupsService {
       .set('phoneNumber', person.phoneNumber || '')
       .set('emailAddress', person.emailAddress || '')
     const url = `${AppConstants.basePersonUrl}/duplicates`
-    return this.http
-      .get<PeopleAutoCompleteData2>(url, { params: options })
-      .pipe(
-        map((response) => buildMatchedPeople(person, response.result)),
-        tap((data) => console.log('results for duplicates', data))
-      )
+    return this.http.get<PeopleAutoCompleteData2>(url, { params: options }).pipe(
+      map((response) => buildMatchedPeople(person, response.result)),
+      tap((data) => console.log('results for duplicates', data))
+    )
   }
 
   addPerson(person: Person): Observable<Person | any> {
@@ -272,12 +264,10 @@ export class ContactGroupsService {
       }
     })
     const url = `${AppConstants.baseCompanyUrl}/search`
-    return this.http
-      .get<CompanyAutoCompleteData>(url, { params: options })
-      .pipe(
-        map((response) => response.result),
-        // tap((data) => console.log('company list here here...', JSON.stringify(data)))
-      )
+    return this.http.get<CompanyAutoCompleteData>(url, { params: options }).pipe(
+      map((response) => response.result)
+      // tap((data) => console.log('company list here here...', JSON.stringify(data)))
+    )
   }
 
   getCompany(companyId: number, includeCompanyContacts?: boolean): Observable<Company | any> {
@@ -291,12 +281,10 @@ export class ContactGroupsService {
       }
     })
     const url = `${AppConstants.baseCompanyUrl}/${companyId}`
-    return this.http
-      .get<CompanyData>(url, { params: options })
-      .pipe(
-        map((response) => response.result),
-        tap((data) => console.log('company details here...', JSON.stringify(data)))
-      )
+    return this.http.get<CompanyData>(url, { params: options }).pipe(
+      map((response) => response.result),
+      tap((data) => console.log('company details here...', JSON.stringify(data)))
+    )
   }
 
   addCompanyContactGroup(contactGroup: ContactGroup): Observable<any> {
@@ -319,18 +307,18 @@ export class ContactGroupsService {
       fromObject: {
         pageSize: pageSize.toString(),
         page: page.toString(),
-        myNotesOnly: myNotesOnly.toString()
+        myNotesOnly: myNotesOnly.toString(),
+        roles: '1,2,3,0', // public enum JobTypeEnum { Other = 0, ClientServices = 1, Manager = 2, Negotiator = 3 }
+        types: '1,2,3,4,0' // Note = 0, Email = 1, Sms = 2, Property = 3, ContactGroup = 4
       }
     })
     const url = `${AppConstants.basePersonUrl}/${personId}/notes`
-    return this.http
-      .get<ContactNoteData>(url, { params: options })
-      .pipe(
-        map((response) => response.result),
-        tap((data) => (this.personNotes = data))
-        // tap(data => console.log('person notes here...', this.personNotes )),
-        // tap(data => console.log('notes here...', JSON.stringify(data)))
-      )
+    return this.http.get<ContactNoteData>(url, { params: options }).pipe(
+      map((response) => response.result),
+      tap((data) => (this.personNotes = data))
+      // tap(data => console.log('person notes here...', this.personNotes )),
+      // tap(data => console.log('notes here...', JSON.stringify(data)))
+    )
   }
 
   getContactGroupNotes(
@@ -354,13 +342,11 @@ export class ContactGroupsService {
       }
     })
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}/notes`
-    return this.http
-      .get<ContactNoteData>(url, { params: options })
-      .pipe(
-        map((response) => response.result),
-        tap((data) => (this.contactGroupNotes = data))
-        // tap(data => console.log('group notes here...', JSON.stringify(data)))
-      )
+    return this.http.get<ContactNoteData>(url, { params: options }).pipe(
+      map((response) => response.result),
+      tap((data) => (this.contactGroupNotes = data))
+      // tap(data => console.log('group notes here...', JSON.stringify(data)))
+    )
   }
 
   addPersonNote(personNote: ContactNote): Observable<ContactNote | any> {

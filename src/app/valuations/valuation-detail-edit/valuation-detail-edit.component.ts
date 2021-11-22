@@ -377,6 +377,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           currentStaffMember.activeDepartments[0].departmentId === enumDepartments.BDD
         ) {
           this.isClientService = true
+          if (this.valuation && !(this.valuation.bookedById == 0 || !this.valuation.bookedById)) {
+            this.valuation.bookedBy = this.isClientService == true ? this.currentStaffMember : null
+            this.valuation.bookedById = this.isClientService == true ? this.currentStaffMember.staffMemberId : null
+            this.valuation.originTypeId = 13
+          }
         } else {
           this.isClientService = false
         }
@@ -400,9 +405,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         valuationStatus: ValuationStatusEnum.None,
         valuationStatusDescription: 'New',
         originId: this.originId | 0,
-        originTypeId: 0,
-        bookedBy: this.isClientService == true ? this.currentStaffMember : null,
-        bookedById: this.isClientService == true ? this.currentStaffMember.staffMemberId : null
+        originTypeId: 0
       }
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0)
       if (this.propertyId) {
