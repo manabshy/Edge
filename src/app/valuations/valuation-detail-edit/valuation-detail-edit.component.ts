@@ -368,6 +368,21 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.primengConfig.ripple = true
     this.setupForm()
 
+    this.storage.get('info').subscribe((info: DropdownListInfo) => {
+      if (info) {
+        this.setupListInfo(info)
+      } else {
+        this._valuationFacadeSvc
+          .getDropDownInfo()
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe((data: ResultData | any) => {
+            if (data) {
+              this.setupListInfo(data.result)
+            }
+          })
+      }
+    })
+
     // todo checking client service
     this.storage.get('currentUser').subscribe((currentStaffMember: StaffMember) => {
       if (currentStaffMember) {
@@ -377,10 +392,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           currentStaffMember.activeDepartments[0].departmentId === enumDepartments.BDD
         ) {
           this.isClientService = true
-          if (this.valuation && !(this.valuation.bookedById == 0 || !this.valuation.bookedById)) {
-            this.valuation.bookedBy = this.isClientService == true ? this.currentStaffMember : null
-            this.valuation.bookedById = this.isClientService == true ? this.currentStaffMember.staffMemberId : null
-            this.valuation.originTypeId = 13
+          if (this.valuation && !(this.valuation.bookedById && this.valuation.bookedById > 0)) {
+            this.valuation.bookedBy = this.currentStaffMember
+            this.valuation.bookedById = this.currentStaffMember.staffMemberId
+            if (this.leadTypeId == 0) this.valuation.originTypeId = 13
           }
         } else {
           this.isClientService = false
@@ -413,21 +428,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.getPropertyInformation(this.propertyId)
       }
     }
-
-    this.storage.get('info').subscribe((info: DropdownListInfo) => {
-      if (info) {
-        this.setupListInfo(info)
-      } else {
-        this._valuationFacadeSvc
-          .getDropDownInfo()
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe((data: ResultData | any) => {
-            if (data) {
-              this.setupListInfo(data.result)
-            }
-          })
-      }
-    })
 
     this.getAddedProperty()
 
@@ -964,13 +964,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   private setupListInfo(info: DropdownListInfo) {
     this.tenures = [{ id: 0, value: 'Not Known' }, ...info.tenures]
-    this.outsideSpaces = info.outsideSpaces
-    this.parkings = info.parkings
-    this.features = info.propertyFeatures
-    this.allOrigins = info.origins
+    this.outsideSpaces = [...info.outsideSpaces]
+    this.parkings = [...info.parkings]
+    this.features = [...info.propertyFeatures]
+    this.allOrigins = [...info.origins]
     this.allOriginTypes = info.originTypes.filter((x) => x.id == 12 || x.id == 13 || x.id == 14)
-    this.interestList = info.section21Statuses
-    this.associateTypes = info.associations
+    this.interestList = [...info.section21Statuses]
+    this.associateTypes = [...info.associations]
     this.propertyTypes = [{ id: 0, value: ' ' }, ...info.propertyTypes]
     this.allPropertyStyles = [{ id: 0, value: ' ' }, ...info.propertyStyles]
     this.propertyStyles = [{ id: 0, value: ' ' }, ...info.propertyStyles]
@@ -1744,6 +1744,19 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.getValuers(property.propertyId)
       this.getValuationPropertyInfo(property.propertyId)
       this.getPropertyDetails(property.propertyId)
+
+      if (this.valuation.originId == 0) {
+        this.propertyService
+          .getPropertyInstructions(this.propertyId, true)
+          .toPromise()
+          .then((data) => {
+            if (data && data.length > 0 && data.findIndex((x) => x.type.toLocaleLowerCase() == 'lettings') > -1) {
+              this.valuation.originTypeId = 12
+              this.valuation.originId = 58
+            }
+          })
+      }
+
       this.valuationForm.markAsDirty()
     }
   }
@@ -1784,11 +1797,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   private getAddedProperty() {
     this.propertyService.newPropertyAdded$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((newProperty) => {
-      if (newProperty) {
+      if (newProperty && newProperty.propertyId != this.property?.propertyId) {
+        this.getPropertyInformation(newProperty.propertyId)
         this.property = newProperty
         this.showProperty = false
         this.valuationForm.get('property').setValue(this.property)
-        this.getValuers(this.property.propertyId)
         // this.getContactGroup(newProperty.lastKnownOwner?.contactGroupId);
         this.getSelectedOwner(newProperty.lastKnownOwner)
       }
