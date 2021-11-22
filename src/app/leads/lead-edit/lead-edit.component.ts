@@ -1000,11 +1000,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   }
 
   ngOnDestroy() {
-    const contactGroups: SideNavItem = {
-      name: 'contactGroups',
-      isCurrent: false
-    }
-    this.sideNavItems.splice(1, 0, contactGroups)
+    // const contactGroups: SideNavItem = {
+    //   name: 'contactGroups',
+    //   isCurrent: false
+    // }
+    // this.sideNavItems.splice(1, 0, contactGroups)
     this.sidenavService.resetCurrentFlag()
     this.destroy.next(true)
   }

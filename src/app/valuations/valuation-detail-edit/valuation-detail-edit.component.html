@@ -704,7 +704,7 @@
                   data-cy="valuationValues">
                   <div class="flex flex-row w-full">
                     <span class="flex-1"></span>
-                    <ng-container *ngIf="isAllowedForValueChanges && !isCancelled">
+                    <ng-container *ngIf="isStillInOneMonthPeriod && !isCancelled">
                       <app-menu [menuItems]="valueMenuItems"></app-menu>
                     </ng-container>
                   </div>
@@ -930,7 +930,7 @@
   </p-header>
   <p data-cy="activeInstructionMessage">
     This Property already has a live {{instructionTypeMessage}} ticket. Please complete or withdraw the existing
-    instruction ticket before you crete a new one.
+    instruction ticket before you create a new one.
   </p>
   <footer class="footer--modal">
     <div class="btn--container">
