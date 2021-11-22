@@ -121,7 +121,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   private pushContactsToValuationServiceForSave$: Observable<any> = this.entitiesArrayShapedForApi$.pipe(
     filter((data) => data),
     mergeMap((data: any): any => {
-      console.log('pushContactsToValuationServiceForSave RUNNING 🏃🏃🏃🏃', data)
+      // console.log('pushContactsToValuationServiceForSave RUNNING 🏃🏃🏃🏃', data)
       if (data.savePayload) {
         return this._complianceChecksFacadeSvc.updateCompanyAndPersonDocuments(data.savePayload)
       } else {

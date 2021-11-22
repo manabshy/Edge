@@ -269,6 +269,14 @@ export class ValuationFacadeService {
           customPassedDate: new Date(),
           isPassed: true
         })
+      }),
+      tap((res) => {
+        this.updateLocalModel({
+          complianceCheck: {
+            compliancePassedBy: res.compliancePassedByFullName,
+            compliancePassedDate: res.compliancePassedDate
+          }
+        })
       })
     )
   }

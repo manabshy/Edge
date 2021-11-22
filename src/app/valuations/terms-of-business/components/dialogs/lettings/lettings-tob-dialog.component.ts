@@ -123,7 +123,6 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
 
     this.formSub = this.form.valueChanges.subscribe((data) => {
       this.model = { ...this.model, ...data }
-      console.log('model : ', this.model)
     })
   }
 
@@ -143,7 +142,6 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
     }
     if (!this.form.valid || !this.tmpFiles.length) return
     payload.model.managedByTypeId = this.model.isManaged ? 1 : this.model.isLandlordManaged ? 2 : 0
-    console.log('payload: ', payload)
     this.onSubmitTermsOfBusiness.emit(payload)
     this.showDialog = false
   }
