@@ -1362,7 +1362,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.isAllowedForValueChangesSubscription = this.staffMemberService
           .hasCurrentUserValuationCreatePermission()
           .subscribe((userHasPermission: boolean) => {
-            if (this.isStillInOneMonthPeriod) this.isAllowedForValueChanges = userHasPermission
+            this.isAllowedForValueChanges = userHasPermission
           })
 
         if (
@@ -2564,6 +2564,20 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     if (this.areValuesVisible && isThereAPrice && this.valuationForm.get('valuationNote').value) {
       this.valuationForm.get('valuationNote').setValidators(null)
+    }
+
+    if (
+      (this.valuation.valuationStatus == ValuationStatusEnum.Booked ||
+        (this.valuation.valuationStatus == ValuationStatusEnum.Valued && this.isEditValueActive)) &&
+      isThereAPrice &&
+      this.isStillInOneMonthPeriod === false
+    ) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: `You can't price a valuation after 1 month!`,
+        closable: false
+      })
+      return false
     }
 
     if (
