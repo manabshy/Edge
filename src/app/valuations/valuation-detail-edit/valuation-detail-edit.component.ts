@@ -1,4 +1,4 @@
-import { ValuationCancellationReasons } from './../shared/valuation'
+import { ValuationCancellationReasons, ValuationTypeEnum } from './../shared/valuation'
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -197,6 +197,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   changedLastOwner: Signer
   isAllowedForValueChanges: boolean = false
   isStillInOneMonthPeriod: boolean = false
+  isValuationMeetingNotesVisible = true
   isAllowedForValueChangesSubscription = new Subscription()
   isEditValueActive = false
   hasLiveInstruct = false
@@ -204,6 +205,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   liveInstructHeader = 'Error'
   instructionTypeMessage: string
   baseCalendarClass: string = 'lettingsEvent'
+  isValuationNotesVisible = true
   valueMenuItems: MenuItem[] = [
     {
       id: 'editValue',
@@ -468,6 +470,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.controlStatus(data)
     })
 
+    this.setRequirementValuationNoteBs.subscribe((data) => {
+      if (data === true) {
+        this.valuationForm.controls['valuationNote'].setValidators(null)
+        this.valuationForm.controls['valuationNote'].updateValueAndValidity()
+        this.formErrors.valuationNote = null
+      }
+    })
+
     this.valuationForm.controls['lettingsMeetingOwner'].valueChanges.subscribe((data) => {
       if (data == false) {
         this.setValidationForLettingsMeetingOwner(true)
@@ -664,14 +674,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           (data.propertyTypeId != 2 || (data.propertyTypeId == 2 && data.propertyFloorId > 0)) &&
           (data.propertyTypeId != 2 ||
             data.propertyFloorId != '10' ||
-            (data.propertyTypeId == 2 && data.propertyFloorId == '10' && data.floorOther)) &&
-          (!this.showLeaseExpiryDate || (this.showLeaseExpiryDate == true && data.approxLeaseExpiryDate))
+            (data.propertyTypeId == 2 && data.propertyFloorId == '10' && data.floorOther))
         ) {
           this.statuses.find((x) => x.value == 1).isValid = true
         } else {
           this.statuses.find((x) => x.value == 1).isValid = false
         }
-        if (data.salesValuer || data.lettingsValuer) {
+        if (
+          (data.salesValuer || data.lettingsValuer) &&
+          (data.salesMeetingOwner != null || data.lettingsMeetingOwner != null)
+        ) {
           this.statuses.find((x) => x.value == 2).isValid = true
         } else {
           this.statuses.find((x) => x.value == 2).isValid = false
@@ -683,7 +695,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.statuses.find((x) => x.value == 2).isValid = true
       }
 
-      if (this.isThereAPrice(data) && data.valuationNote) {
+      if (this.isThereAPrice(data) && (this.setRequirementValuationNoteBs.getValue() === true || data.valuationNote)) {
         this.statuses.find((x) => x.value == 3).isValid = true
       } else {
         this.statuses.find((x) => x.value == 3).isValid = false
@@ -856,29 +868,25 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   setValidationForLettingsMeetingOwner(setValidation: boolean) {
-    this.valuationForm.controls['lettingsOwnerAssociateEmail'].setValidators(setValidation ? Validators.required : [])
-    this.valuationForm.controls['lettingsOwnerAssociateEmail'].updateValueAndValidity()
-
-    this.valuationForm.controls['lettingsOwnerAssociateName'].setValidators(setValidation ? Validators.required : [])
-    this.valuationForm.controls['lettingsOwnerAssociateName'].updateValueAndValidity()
-
-    this.valuationForm.controls['lettingsOwnerAssociateContactNumber'].setValidators(
-      setValidation ? Validators.required : []
-    )
-    this.valuationForm.controls['lettingsOwnerAssociateContactNumber'].updateValueAndValidity()
+    // this.valuationForm.controls['lettingsOwnerAssociateEmail'].setValidators(setValidation ? Validators.required : [])
+    // this.valuationForm.controls['lettingsOwnerAssociateEmail'].updateValueAndValidity()
+    // this.valuationForm.controls['lettingsOwnerAssociateName'].setValidators(setValidation ? Validators.required : [])
+    // this.valuationForm.controls['lettingsOwnerAssociateName'].updateValueAndValidity()
+    // this.valuationForm.controls['lettingsOwnerAssociateContactNumber'].setValidators(
+    //   setValidation ? Validators.required : []
+    // )
+    // this.valuationForm.controls['lettingsOwnerAssociateContactNumber'].updateValueAndValidity()
   }
 
   setValidationForSalesMeetingOwner(setValidation: boolean) {
-    this.valuationForm.controls['salesOwnerAssociateEmail'].setValidators(setValidation ? Validators.required : [])
-    this.valuationForm.controls['salesOwnerAssociateEmail'].updateValueAndValidity()
-
-    this.valuationForm.controls['salesOwnerAssociateName'].setValidators(setValidation ? Validators.required : [])
-    this.valuationForm.controls['salesOwnerAssociateName'].updateValueAndValidity()
-
-    this.valuationForm.controls['salesOwnerAssociateContactNumber'].setValidators(
-      setValidation ? Validators.required : []
-    )
-    this.valuationForm.controls['salesOwnerAssociateContactNumber'].updateValueAndValidity()
+    // this.valuationForm.controls['salesOwnerAssociateEmail'].setValidators(setValidation ? Validators.required : [])
+    // this.valuationForm.controls['salesOwnerAssociateEmail'].updateValueAndValidity()
+    // this.valuationForm.controls['salesOwnerAssociateName'].setValidators(setValidation ? Validators.required : [])
+    // this.valuationForm.controls['salesOwnerAssociateName'].updateValueAndValidity()
+    // this.valuationForm.controls['salesOwnerAssociateContactNumber'].setValidators(
+    //   setValidation ? Validators.required : []
+    // )
+    // this.valuationForm.controls['salesOwnerAssociateContactNumber'].updateValueAndValidity()
   }
 
   setValidationForPropertyFloorOther(isRequired: boolean) {
@@ -1252,6 +1260,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.canSaveValuation = true
         }
 
+        if (this.valuation.valuationStatus >= ValuationStatusEnum.Valued && !this.valuation.reason) {
+          this.isValuationNotesVisible = false
+        }
+
         if (
           this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
           this.valuation.valuationStatus === ValuationStatusEnum.Closed
@@ -1349,6 +1361,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           .subscribe((userHasPermission: boolean) => {
             if (this.isStillInOneMonthPeriod) this.isAllowedForValueChanges = userHasPermission
           })
+
+        if (
+          this.valuation.valuationStatus >= ValuationStatusEnum.Valued &&
+          !this.isStillInOneMonthPeriod &&
+          (!this.valuation.valuationContactNote || !this.valuation.valuationContactNote.text)
+        ) {
+          this.isValuationMeetingNotesVisible = false
+          this.setRequirementValuationNoteBs.next(true)
+        }
       })
       .catch((err) => {
         console.log('err: ', err)
@@ -1414,7 +1435,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  setValuationInformations(valuationBooking: ValuationBooking, type: string) {
+  setValuationInformation(valuationBooking: ValuationBooking, type: string) {
     if (type == 'both' || type == 'sales') {
       this.salesMeetingOwner = valuationBooking.meetingOwner
       this.salesOwnerAssociateName = valuationBooking.name
@@ -1444,13 +1465,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
       this.studioLabelCheck(valuation.bedrooms)
       if (valuation.combinedValuationBooking || valuation.salesValuationBooking) {
-        this.setValuationInformations(
+        this.setValuationInformation(
           valuation.combinedValuationBooking ? valuation.combinedValuationBooking : valuation.salesValuationBooking,
           'both'
         )
       }
       if (valuation.lettingsValuationBooking) {
-        this.setValuationInformations(valuation.lettingsValuationBooking, 'lettings')
+        this.setValuationInformation(valuation.lettingsValuationBooking, 'lettings')
       }
 
       this.salesValuer = { ...this.valuation.salesValuer }
@@ -2221,16 +2242,26 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       .toPromise()
       .then((data) => {
         if (data && data.length > 0) {
-          this.hasLiveInstruct = true
-          if (data.findIndex((x) => x.type == 'Sales' || x.type == 'sales') > -1) {
+          if (
+            this.valuation.valuationType === ValuationTypeEnum.Sales &&
+            data.findIndex((x) => x.type.toLocaleLowerCase() == 'sales') > -1
+          ) {
+            this.hasLiveInstruct = true
             this.instructionTypeMessage = 'sales instruction'
-          } else {
+          } else if (
+            this.valuation.valuationType === ValuationTypeEnum.Lettings &&
+            data.findIndex((x) => x.type.toLocaleLowerCase() == 'lettings') > -1
+          ) {
+            this.instructionTypeMessage = 'lettings instruction'
+            this.hasLiveInstruct = true
             if (data.filter((x) => x.status == 'UO' || x.status == 'EXCH' || x.status == 'LET').length == data.length) {
               this.liveInstructWarning = true
               this.liveInstructHeader = 'Warning'
             } else {
               this.liveInstructWarning = false
             }
+          } else {
+            this.openInstructionForm()
           }
         } else {
           this.openInstructionForm()
