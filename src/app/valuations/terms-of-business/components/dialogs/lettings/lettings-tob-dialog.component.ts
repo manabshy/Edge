@@ -204,6 +204,7 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
       file: this.tmpFiles
     }
     payload.model.managedByTypeId = this.model.isManaged ? 1 : this.model.isLandlordManaged ? 2 : 0
+    return payload
   }
 
   private clearDialog() {
