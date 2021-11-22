@@ -183,6 +183,7 @@
                     [isClientService]="isClientService" [(valuation)]="valuation" [leadTypeId]="leadTypeId">
                   </app-valuation-origin>
                 </div>
+                <!-- NOTES TAB -->
                 <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]" *ngIf="
                     (isEditable ||
                     isNewValuation ||
@@ -226,6 +227,7 @@
                     </div>
                   </div>
                 </p-accordionTab>
+                <!-- PROPERTY INFO TAB -->
                 <p-accordionTab id="propertyInfoTab" header="Property Info" [(selected)]="activeState[1]">
                   <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)">
@@ -382,7 +384,7 @@
                     </fieldset>
                   </div>
                 </p-accordionTab>
-
+                <!-- APPOINTMENT TAB -->
                 <p-accordionTab header="Appointment" [(selected)]="activeState[2]">
                   <div id="valuesTab" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)">
@@ -697,7 +699,7 @@
                     </div>
                   </div>
                 </p-accordionTab>
-
+                <!-- VALUES TAB -->
                 <p-accordionTab header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible"
                   data-cy="valuationValues">
                   <div class="flex flex-row w-full">
@@ -835,7 +837,7 @@
                     </div>
                   </div>
                 </p-accordionTab>
-
+                <!-- TERMS OF BUSINESS TAB -->
                 <p-accordionTab header="Terms of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
                   <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled || isTermsOfBusinessDisabled }"
                     (click)="controlIsCancelled($event, isCancelled || isTermsOfBusinessDisabled)">
@@ -848,7 +850,7 @@
                     </ng-container>
                   </div>
                 </p-accordionTab>
-
+                <!-- LAND REGISTER TAB -->
                 <p-accordionTab id="landRegisterTab" class="landRegister" *ngIf="isLandRegisterVisible"
                   header="Land Register" [(selected)]="activeState[5]">
                   <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
@@ -858,7 +860,7 @@
                     </app-valuation-land-register>
                   </div>
                 </p-accordionTab>
-
+                <!-- COMPLIANCE CHECKS TAB -->
                 <p-accordionTab id="complianceChecksTab" header="Compliance Checks" *ngIf="isLandRegisterVisible"
                   [(selected)]="activeState[6]">
                   <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
