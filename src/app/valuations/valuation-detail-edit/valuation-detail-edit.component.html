@@ -23,7 +23,8 @@
                     [ngClass]="{ 'opacity-75 bg-gray-500': !item.isValid, 'bg-green-600': item.isValid }">
                     <i *ngIf="item.isValid" class="ml-0.3 text-white pi pi-check"></i>
                   </div>
-                  <a (click)="toggleAccordion(item.value)" [ngClass]="{'font-black': item?.value == 8}">{{ item?.name |
+                  <a (click)="toggleAccordion(item.value)" [ngClass]="{'font-black': item?.value == 8}">{{
+                    item?.name |
                     toPascalCase }}</a>
                 </div>
               </li>

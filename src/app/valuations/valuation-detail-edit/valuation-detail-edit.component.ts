@@ -1,4 +1,4 @@
-import { ValuationCancellationReasons } from './../shared/valuation'
+import { ValuationCancellationReasons, ValuationTypeEnum } from './../shared/valuation'
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -2242,17 +2242,26 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       .toPromise()
       .then((data) => {
         if (data && data.length > 0) {
-          this.hasLiveInstruct = true
-          if (data.findIndex((x) => x.type == 'Sales' || x.type == 'sales') > -1) {
+          if (
+            this.valuation.valuationType === ValuationTypeEnum.Sales &&
+            data.findIndex((x) => x.type.toLocaleLowerCase() == 'sales') > -1
+          ) {
+            this.hasLiveInstruct = true
             this.instructionTypeMessage = 'sales instruction'
-          } else {
+          } else if (
+            this.valuation.valuationType === ValuationTypeEnum.Lettings &&
+            data.findIndex((x) => x.type.toLocaleLowerCase() == 'lettings') > -1
+          ) {
             this.instructionTypeMessage = 'lettings instruction'
+            this.hasLiveInstruct = true
             if (data.filter((x) => x.status == 'UO' || x.status == 'EXCH' || x.status == 'LET').length == data.length) {
               this.liveInstructWarning = true
               this.liveInstructHeader = 'Warning'
             } else {
               this.liveInstructWarning = false
             }
+          } else {
+            this.openInstructionForm()
           }
         } else {
           this.openInstructionForm()
