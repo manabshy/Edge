@@ -368,6 +368,21 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.primengConfig.ripple = true
     this.setupForm()
 
+    this.storage.get('info').subscribe((info: DropdownListInfo) => {
+      if (info) {
+        this.setupListInfo(info)
+      } else {
+        this._valuationFacadeSvc
+          .getDropDownInfo()
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe((data: ResultData | any) => {
+            if (data) {
+              this.setupListInfo(data.result)
+            }
+          })
+      }
+    })
+
     // todo checking client service
     this.storage.get('currentUser').subscribe((currentStaffMember: StaffMember) => {
       if (currentStaffMember) {
@@ -413,21 +428,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.getPropertyInformation(this.propertyId)
       }
     }
-
-    this.storage.get('info').subscribe((info: DropdownListInfo) => {
-      if (info) {
-        this.setupListInfo(info)
-      } else {
-        this._valuationFacadeSvc
-          .getDropDownInfo()
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe((data: ResultData | any) => {
-            if (data) {
-              this.setupListInfo(data.result)
-            }
-          })
-      }
-    })
 
     this.getAddedProperty()
 
@@ -964,13 +964,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   private setupListInfo(info: DropdownListInfo) {
     this.tenures = [{ id: 0, value: 'Not Known' }, ...info.tenures]
-    this.outsideSpaces = info.outsideSpaces
-    this.parkings = info.parkings
-    this.features = info.propertyFeatures
-    this.allOrigins = info.origins
+    this.outsideSpaces = [...info.outsideSpaces]
+    this.parkings = [...info.parkings]
+    this.features = [...info.propertyFeatures]
+    this.allOrigins = [...info.origins]
     this.allOriginTypes = info.originTypes.filter((x) => x.id == 12 || x.id == 13 || x.id == 14)
-    this.interestList = info.section21Statuses
-    this.associateTypes = info.associations
+    this.interestList = [...info.section21Statuses]
+    this.associateTypes = [...info.associations]
     this.propertyTypes = [{ id: 0, value: ' ' }, ...info.propertyTypes]
     this.allPropertyStyles = [{ id: 0, value: ' ' }, ...info.propertyStyles]
     this.propertyStyles = [{ id: 0, value: ' ' }, ...info.propertyStyles]
@@ -1797,11 +1797,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   private getAddedProperty() {
     this.propertyService.newPropertyAdded$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((newProperty) => {
-      if (newProperty) {
+      if (newProperty && newProperty.propertyId != this.property?.propertyId) {
+        this.getPropertyInformation(newProperty.propertyId)
         this.property = newProperty
         this.showProperty = false
         this.valuationForm.get('property').setValue(this.property)
-        this.getValuers(this.property.propertyId)
         // this.getContactGroup(newProperty.lastKnownOwner?.contactGroupId);
         this.getSelectedOwner(newProperty.lastKnownOwner)
       }
