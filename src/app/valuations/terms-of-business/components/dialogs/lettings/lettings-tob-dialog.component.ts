@@ -40,6 +40,22 @@ import { FileTypeEnum } from 'src/app/core/services/file.service'
             </span>
           </fieldset>
          
+          <fieldset class="mb-2 animated fadeIn" *ngIf="model.isManagement === false">
+            <fieldset class="row">
+              <label style="width: auto; margin-top: 10px">Will the Landlord be managing the property?</label>
+            </fieldset>
+            <span class="radio radio--inline">
+              <span style="margin-right: 8px">
+                <input class="p-2" type="radio" id="isLandlordManagedYes" [value]="true" formControlName="isLandlordManaged" />
+                <label for="isLandlordManagedYes" class="mb-1">Yes</label>
+              </span>
+              <span style="margin-right: 8px">
+                <input class="p-2" type="radio" id="isLandlordManagedNo" [value]="false" formControlName="isLandlordManaged" />
+                <label for="isLandlordManagedNo" class="mb-1">No</label>
+              </span>
+            </span>
+          </fieldset>
+
           <fieldset class="mb-2">
             <fieldset class="row">
               <label style="width: auto; margin-top: 10px">Are zero deposits accepted?</label>
@@ -93,17 +109,21 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.model = {
       isManagement: null,
+      isLandlordManaged: null,
       zeroDepositAccepted: null,
+      managedByTypeId: null,
       ...this.data
     }
 
     this.form = this.fb.group({
       isManagement: [this.model.isManagement, Validators.required],
+      isLandlordManaged: [this.model.isLandlordManaged],
       zeroDepositAccepted: [this.model.zeroDepositAccepted, Validators.required]
     })
 
     this.formSub = this.form.valueChanges.subscribe((data) => {
       this.model = { ...this.model, ...data }
+      console.log('model : ', this.model)
     })
   }
 
@@ -122,6 +142,8 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
       file: this.tmpFiles
     }
     if (!this.form.valid || !this.tmpFiles.length) return
+    payload.model.managedByTypeId = this.model.isManaged ? 1 : this.model.isLandlordManaged ? 2 : 0
+    console.log('payload: ', payload)
     this.onSubmitTermsOfBusiness.emit(payload)
     this.showDialog = false
   }

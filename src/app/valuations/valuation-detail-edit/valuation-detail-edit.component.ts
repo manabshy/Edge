@@ -2666,7 +2666,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       valuation.suggestedAskingRentShortLetMonthly
     )
 
-    valuation.property = this.valuation.property
+    valuation.property = this.valuation.property || {} // error when creating new property as valuation.property is undefined.
 
     if (!this.valuationForm.get('propertyTypeId').value) return
 

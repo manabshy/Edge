@@ -52,8 +52,8 @@ interface toBSale {
           <app-menu [menuItems]="menuItems"></app-menu>
         </ng-container>
       </div>
-      
-      <form [formGroup]="form" class="my-4 transition-spacing duration-500" [ngClass]="{'-mt-14': !message.type}">
+
+      <form [formGroup]="form" class="my-4 transition-spacing duration-500" [ngClass]="{ '-mt-14': !message.type }">
         <fieldset class="mb-2">
           <fieldset class="row">
             <label style="width: auto; margin-top: 10px" for="haveInterest">
@@ -113,9 +113,10 @@ interface toBSale {
       </form>
 
       <ng-container *ngIf="showSalesToB">
-
         <ng-container *ngIf="termsOfBusinessDocumentIsSigned && !isPreVal">
-          <app-terms-of-business-table-sales [data]="termsOfBusinessDocument?.toBSale"></app-terms-of-business-table-sales>
+          <app-terms-of-business-table-sales
+            [data]="termsOfBusinessDocument?.toBSale"
+          ></app-terms-of-business-table-sales>
         </ng-container>
 
         <app-sales-tob-dialog
@@ -128,7 +129,9 @@ interface toBSale {
 
       <ng-container *ngIf="showLettingsToB">
         <ng-container *ngIf="termsOfBusinessDocumentIsSigned && !isPreVal">
-          <app-terms-of-business-table-lettings [data]="termsOfBusinessDocument?.toBLetting"></app-terms-of-business-table-lettings>
+          <app-terms-of-business-table-lettings
+            [data]="termsOfBusinessDocument?.toBLetting"
+          ></app-terms-of-business-table-lettings>
         </ng-container>
 
         <app-lettings-tob-dialog
@@ -140,8 +143,8 @@ interface toBSale {
 
       <app-send-reminder-confirmation-dialog
         [showDialog]="showSendReminderConfirmationDialog"
-        (onDialogClosed)="onReminderConfirmationDialogClose($event)">
-      </app-send-reminder-confirmation-dialog>
+        (onDialogClosed)="onReminderConfirmationDialogClose($event)"
+      ></app-send-reminder-confirmation-dialog>
     </div>
   `
 })
@@ -210,9 +213,20 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
           `Last Emailed : ${moment(this.termsOfBusinessDocument.dateRequestSent).format('Do MMM YYYY (HH:mm)')}`
         )
       }
-      if (typeof this.model.declarableInterest != 'undefined') {
-        this.message.type = ''
-        this.message.text = []
+      if (
+        (this.model.declarableInterest === true || this.model.declarableInterest === false) &&
+        this.message.type === 'error'
+      ) {
+        // clears error message about filling out terms of biz if declarableInterest is now answered and the existing message was an error (else it clears the ToB not signed warning message)
+        this.message = this.warnUserOfUnsignedToB()
+          ? {
+              type: 'warn',
+              text: ['Terms of business not yet signed']
+            }
+          : {
+              type: '',
+              text: []
+            }
       }
     }
     if (changes.termsOfBusinessDocument && !changes.termsOfBusinessDocument.firstChange) {
@@ -241,20 +255,25 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
     return signedOn
   }
 
-  buildMessageForView() {
-    // valuation statuses: None = 0, Booked = 2, Valued = 3, Instructed = 4, Cancelled = 5, Closed = 6
-    this.message =
+  warnUserOfUnsignedToB() {
+    return (
       (!this.termsOfBusinessDocumentIsSigned && this.valuationData.valuationStatus == 3) ||
       this.valuationData.valuationStatus == 4 ||
       this.valuationData.valuationStatus == 5
-        ? {
-            type: 'warn',
-            text: ['Terms of business not yet signed']
-          }
-        : {
-            type: '',
-            text: []
-          }
+    )
+  }
+
+  buildMessageForView() {
+    // valuation statuses: None = 0, Booked = 2, Valued = 3, Instructed = 4, Cancelled = 5, Closed = 6
+    this.message = this.warnUserOfUnsignedToB()
+      ? {
+          type: 'warn',
+          text: ['Terms of business not yet signed']
+        }
+      : {
+          type: '',
+          text: []
+        }
 
     if (this.termsOfBusinessDocument?.dateRequestSent && this.message.text) {
       this.message.text.push(
