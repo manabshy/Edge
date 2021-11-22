@@ -80,7 +80,7 @@ export class ValuationOriginComponent implements OnInit, AfterViewInit {
         this.valuation.originId = 58
       } else {
         this.allOrigins = this.allOrigins.filter((x) => x.isActive == true)
-        this.setOriginTypeId(this.allOrigins[0].parentId)
+        if (this.allOrigins && this.allOrigins.length > 0) this.setOriginTypeId(this.allOrigins[0].parentId)
       }
     } else {
       if (this.valuation.originTypeId > 0) this.setOriginTypeId(this.valuation.originTypeId)

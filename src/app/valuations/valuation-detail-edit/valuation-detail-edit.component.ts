@@ -368,6 +368,21 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.primengConfig.ripple = true
     this.setupForm()
 
+    this.storage.get('info').subscribe((info: DropdownListInfo) => {
+      if (info) {
+        this.setupListInfo(info)
+      } else {
+        this._valuationFacadeSvc
+          .getDropDownInfo()
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe((data: ResultData | any) => {
+            if (data) {
+              this.setupListInfo(data.result)
+            }
+          })
+      }
+    })
+
     // todo checking client service
     this.storage.get('currentUser').subscribe((currentStaffMember: StaffMember) => {
       if (currentStaffMember) {
@@ -413,21 +428,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.getPropertyInformation(this.propertyId)
       }
     }
-
-    this.storage.get('info').subscribe((info: DropdownListInfo) => {
-      if (info) {
-        this.setupListInfo(info)
-      } else {
-        this._valuationFacadeSvc
-          .getDropDownInfo()
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe((data: ResultData | any) => {
-            if (data) {
-              this.setupListInfo(data.result)
-            }
-          })
-      }
-    })
 
     this.getAddedProperty()
 
