@@ -118,6 +118,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   destroy = new Subject()
   isOwner = true
   selectedOriginId: number
+  searchedPersonContactGroups: BasicContactGroup[]
   leadNoteFormValidty: boolean
   origins: InfoDetail[]
   originListIds: string[] = ['9', '31', '83', '138', '139', '108', '112', '119', '120', '124', '134', '135']
@@ -191,11 +192,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     this.setValidationFor(this.nextChaseDateControl, 'chaseDate')
     this.setValidationFor(this.leadTypeControl, 'leadType')
 
-    // Remove contact groups from side nav items
-    this.sideNavItems.splice(
-      this.sideNavItems.findIndex((x) => x.name === 'contactGroups'),
-      1
-    )
+    // // Remove contact groups from side nav items
+    // this.sideNavItems.splice(
+    //   this.sideNavItems.findIndex((x) => x.name === 'contactGroups'),
+    //   1
+    // )
     // Set notes as current item
     const noteIndex = this.sideNavItems.findIndex((x) => x.name === 'notes')
     this.sideNavItems[noteIndex].isCurrent = true
@@ -262,10 +263,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
 
   private setupQueryParams(params) {
     this.personId = +params.get('personId') || 0
-    this.isNewLead = ((params.get('isNewLead') as unknown) as boolean) || false
+    this.isNewLead = (params.get('isNewLead') as unknown as boolean) || false
     this.selectedLeadTypeId = +params.get('leadTypeId')
     this.infoParam = params.get('leadSearchInfo')
-    this.showSaveAndNext = ((params.get('showSaveAndNext') as unknown) as boolean) || false
+    this.showSaveAndNext = (params.get('showSaveAndNext') as unknown as boolean) || false
     this.showNotes = params.get('showNotes') === 'true'
     this.backToOrigin = JSON.parse(params.get('backToOrigin'))
     this.exitOnSave = JSON.parse(params.get('exitOnSave'))
@@ -273,6 +274,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     // this.isMyLead =  params['isMyLead'];
     this.isMyLead = JSON.parse(params.get('isMyLead'))
     console.log('use existing ids', this.useExistingIds)
+
+    if (this.personId) {
+      this.searchedPersonContactGroups = null
+    }
 
     if (this.infoParam) {
       this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo
@@ -359,6 +364,16 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
         this.page = 0
       }
       this.getNextPersonNotesPage(this.page)
+    })
+  }
+
+  getSearchedPersonContactGroups(personId: number) {
+    this.contactGroupService.getPersonContactGroups(personId).subscribe((data) => {
+      if (data) {
+        this.searchedPersonContactGroups = data
+        console.log('contact groups for person here', data)
+        this.contactGroupService.contactInfoChanged(data)
+      }
     })
   }
 
@@ -521,6 +536,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
         element.params.push(this.person.personId)
       })
     })
+
+    this.getSearchedPersonContactGroups(this.personId)
   }
 
   getSearchedPersonSummaryInfo(personId: number) {
