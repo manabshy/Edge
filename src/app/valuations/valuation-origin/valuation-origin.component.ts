@@ -28,52 +28,68 @@ export class ValuationOriginComponent implements OnInit, AfterViewInit {
   constructor(private staffMembersService: StaffMemberService, private storage: StorageMap) {}
 
   ngOnInit(): void {
-    if (!(this.valuation.originId && this.valuation.originId > 0)) {
-      if (this.leadTypeId == 1) {
+    if (
+      !(this.valuation.originId && this.valuation.originId > 0) &&
+      !(this.valuation.originTypeId && this.valuation.originTypeId > 0)
+    ) {
+      if (this.leadTypeId == 18) {
+        this.setOriginTypeId(14)
+        this.valuation.originId = 137
+      } else if (this.leadTypeId == 1) {
         this.setOriginTypeId(14)
         this.valuation.originId = 125
       } else if (this.leadTypeId == 17) {
         this.setOriginTypeId(14)
         this.valuation.originId = 146
-      } else if (this.leadTypeId == 3 || this.leadTypeId == 4 || this.leadTypeId == 6) {
-        this.setOriginTypeId(14)
+      } else if (this.leadTypeId == 3) {
         if (this.isClientService) {
+          this.setOriginTypeId(14)
           this.valuation.originId = 145
         } else {
-          this.valuation.originId = 126
+          this.setOriginTypeId(12)
+          this.valuation.originId = 5
         }
-      } else if (this.leadTypeId == 9) {
-        this.setOriginTypeId(14)
-        this.valuation.originId = 127
       } else if (
         this.leadTypeId == 5 ||
         this.leadTypeId == 2 ||
         this.leadTypeId == 15 ||
         this.leadTypeId == 14 ||
-        this.leadTypeId == 8 ||
-        this.leadTypeId == 10 ||
-        this.leadTypeId == 11 ||
         this.leadTypeId == 12 ||
         this.leadTypeId == 13 ||
-        this.leadTypeId == 16
+        this.leadTypeId == 4 ||
+        this.leadTypeId == 6 ||
+        this.leadTypeId == 8
       ) {
         if (this.isClientService) {
-          this.setOriginTypeId(12)
-          this.valuation.originId = 126
-        } else {
           this.setOriginTypeId(14)
           this.valuation.originId = 126
+        } else {
+          this.setOriginTypeId(12)
+          this.valuation.originId = 5
+        }
+      } else if (this.leadTypeId == 10 || this.leadTypeId == 11) {
+        if (this.isClientService) {
+          this.setOriginTypeId(14)
+          this.valuation.originId = 129
+        } else {
+          this.setOriginTypeId(12)
+          this.valuation.originId = 5
         }
       } else if (this.leadTypeId == 7) {
         this.setOriginTypeId(12)
-        this.valuation.originId = 122
+        this.valuation.originId = 58
       } else {
         this.allOrigins = this.allOrigins.filter((x) => x.isActive == true)
         this.setOriginTypeId(this.allOrigins[0].parentId)
       }
     } else {
-      let originType = this.allOrigins.find((x) => x.id == this.valuation.originId)
-      if (originType) this.setOriginTypeId(originType.parentId)
+      if (this.valuation.originTypeId > 0) this.setOriginTypeId(this.valuation.originTypeId)
+      else {
+        let originType = this.allOrigins.find((x) => x.id == this.valuation.originId)
+        if (originType) this.setOriginTypeId(originType.parentId)
+        else this.setOriginTypeId(12)
+      }
+
       this.controlValues()
     }
 

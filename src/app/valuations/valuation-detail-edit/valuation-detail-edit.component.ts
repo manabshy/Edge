@@ -377,10 +377,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           currentStaffMember.activeDepartments[0].departmentId === enumDepartments.BDD
         ) {
           this.isClientService = true
-          if (this.valuation && !(this.valuation.bookedById == 0 || !this.valuation.bookedById)) {
-            this.valuation.bookedBy = this.isClientService == true ? this.currentStaffMember : null
-            this.valuation.bookedById = this.isClientService == true ? this.currentStaffMember.staffMemberId : null
-            this.valuation.originTypeId = 13
+          if (this.valuation && !(this.valuation.bookedById && this.valuation.bookedById > 0)) {
+            this.valuation.bookedBy = this.currentStaffMember
+            this.valuation.bookedById = this.currentStaffMember.staffMemberId
+            if (this.leadTypeId == 0) this.valuation.originTypeId = 13
           }
         } else {
           this.isClientService = false
@@ -1744,6 +1744,19 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.getValuers(property.propertyId)
       this.getValuationPropertyInfo(property.propertyId)
       this.getPropertyDetails(property.propertyId)
+
+      if (this.valuation.originId == 0) {
+        this.propertyService
+          .getPropertyInstructions(this.propertyId, true)
+          .toPromise()
+          .then((data) => {
+            if (data && data.length > 0 && data.findIndex((x) => x.type.toLocaleLowerCase() == 'lettings') > -1) {
+              this.valuation.originTypeId = 12
+              this.valuation.originId = 58
+            }
+          })
+      }
+
       this.valuationForm.markAsDirty()
     }
   }
