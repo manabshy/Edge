@@ -180,7 +180,8 @@
                 <div id="valuationNotesTab" class="mb-5" [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                   (click)="controlIsCancelled($event, isCancelled)">
                   <app-valuation-origin [allOriginTypes]="allOriginTypes" [allOrigins]="allOrigins"
-                    [isClientService]="isClientService" [(valuation)]="valuation" [leadTypeId]="leadTypeId">
+                    [isClientService]="isClientService" [isRelet]="isRelet" [(valuation)]="valuation"
+                    [leadTypeId]="leadTypeId">
                   </app-valuation-origin>
                 </div>
                 <!-- NOTES TAB -->
