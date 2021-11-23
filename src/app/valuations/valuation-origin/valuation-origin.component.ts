@@ -19,6 +19,21 @@ export class ValuationOriginComponent implements OnInit, AfterViewInit {
   @Input() isClientService: boolean = false
   @Input() allOrigins: InfoDetail[]
   @Input() allOriginTypes: InfoDetail[]
+
+  private _isRelet = false
+  public set isRelet(v: boolean) {
+    if (v != this._isRelet && v == true) {
+      this.valuation.originId = 58
+      this.setOriginTypeId(12)
+      this.controlValues()
+    }
+    this._isRelet = v
+  }
+  @Input()
+  public get isRelet(): boolean {
+    return this._isRelet
+  }
+
   bookByOptions: StaffMember[] = []
   subscriptions = new Subscription()
   origins: InfoDetail[]
