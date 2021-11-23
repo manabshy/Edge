@@ -25,7 +25,7 @@ import {
   ContactNoteData,
   ContactType
 } from './contact-group'
-import { map, tap } from 'rxjs/operators'
+import { map, switchMap, tap } from 'rxjs/operators'
 import { Person, BasicPerson } from 'src/app/shared/models/person'
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper'
 import { buildMatchedPeople } from './contact-groups.service-helpers'
@@ -295,30 +295,76 @@ export class ContactGroupsService {
     )
   }
 
-  getPersonNotes(personId: number, pageSize?: number, page?: number, myNotesOnly = false): Observable<ContactNote[]> {
+  getPersonNotes(
+    personId: number,
+    pageSize?: number,
+    page?: number,
+    myNotesOnly = false,
+    filterOptions?: any[]
+  ): Observable<ContactNote[]> {
     if (!page || +page === 0) {
       page = 1
     }
     if (pageSize == null) {
       pageSize = 10
     }
+
+    console.log(filterOptions)
+
+    let roles: string[] = []
+    let types: string[] = []
+    if (filterOptions && filterOptions.length > 0) {
+      filterOptions.forEach((x) => {
+        if (+x <= 4) {
+          types.push(x)
+        } else {
+          roles.push(this.findRoleEnumValue(x))
+        }
+      })
+    }
+
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper(),
       fromObject: {
         pageSize: pageSize.toString(),
         page: page.toString(),
         myNotesOnly: myNotesOnly.toString(),
-        roles: '1,2,3,0', // public enum JobTypeEnum { Other = 0, ClientServices = 1, Manager = 2, Negotiator = 3 }
-        types: '1,2,3,4,0' // Note = 0, Email = 1, Sms = 2, Property = 3, ContactGroup = 4
+        roles: roles.join(','), // public enum JobTypeEnum { Other = 0, ClientServices = 1, Manager = 2, Negotiator = 3 }
+        types: types.join(',') // Note = 0, Email = 1, Sms = 2, Property = 3, ContactGroup = 4
       }
     })
     const url = `${AppConstants.basePersonUrl}/${personId}/notes`
     return this.http.get<ContactNoteData>(url, { params: options }).pipe(
       map((response) => response.result),
       tap((data) => (this.personNotes = data))
-      // tap(data => console.log('person notes here...', this.personNotes )),
-      // tap(data => console.log('notes here...', JSON.stringify(data)))
     )
+  }
+
+  findRoleEnumValue(value: string): string {
+    // public enum JobTypeEnum { Other = 0, ClientServices = 1, Manager = 2, Negotiator = 3 }
+    let filterEnum = [
+      { id: '0', value: 'Person' },
+      { id: '1', value: 'Email' },
+      { id: '2', value: 'SMS' },
+      { id: '3', value: 'Property' },
+      { id: '4', value: 'Contact Groups' },
+      { id: '5', value: 'Negotiator' },
+      { id: '6', value: 'Manager/Broker' },
+      { id: '7', value: 'ClientServices' },
+      { id: '8', value: 'Other' }
+    ]
+    switch (value) {
+      case '8':
+        return '0'
+      case '7':
+        return '1'
+      case '6':
+        return '2'
+      case '5':
+        return '3'
+      default:
+        return ''
+    }
   }
 
   getContactGroupNotes(

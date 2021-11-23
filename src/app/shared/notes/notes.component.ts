@@ -9,6 +9,7 @@ import { StaffMember } from '../models/staff-member'
 import { StorageMap } from '@ngx-pwa/local-storage'
 import { Router } from '@angular/router'
 import { EmailService } from 'src/app/core/services/email.service'
+import { SelectItemGroup } from 'primeng/api'
 
 @Component({
   selector: 'app-notes',
@@ -28,8 +29,11 @@ export class NotesComponent implements OnInit, OnChanges, OnDestroy {
   @Input() propertyNotes: PropertyNote[]
   @Input() showNoteInput = true
   @Input() showNoteFilter = false
+  selectedOptions: any[]
+  filterOptions: SelectItemGroup[]
 
   @Output() showMyNotes = new EventEmitter<boolean>()
+  @Output() filterNotes = new EventEmitter<any[]>()
 
   notes = []
   tests: any
@@ -59,7 +63,30 @@ export class NotesComponent implements OnInit, OnChanges, OnDestroy {
     private router: Router,
     private propertyService: PropertyService,
     private emailService: EmailService
-  ) {}
+  ) {
+    this.filterOptions = [
+      {
+        label: 'Type',
+        value: 'type',
+        items: [
+          { label: 'Person', value: '0' },
+          { label: 'Contact Groups', value: '4' },
+          { label: 'Property', value: '3' },
+          { label: 'Email', value: '1' }
+        ]
+      },
+      {
+        label: 'Role',
+        value: 'role',
+        items: [
+          { label: 'Negotiator', value: '5' },
+          { label: 'Manager/Broker', value: '6' },
+          { label: 'Client Services', value: '7' },
+          { label: 'Other', value: '8' }
+        ]
+      }
+    ]
+  }
 
   ngOnInit() {
     this.storage.get('currentUser').subscribe((staffMember: StaffMember) => {
@@ -67,10 +94,22 @@ export class NotesComponent implements OnInit, OnChanges, OnDestroy {
         this.currentStaffMember = staffMember
       }
     })
+
+    this.storage.get('selectedFilterNotes').subscribe((selectedFilterNotes: any[]) => {
+      if (selectedFilterNotes) {
+        this.selectedOptions = selectedFilterNotes
+        this.filterNotes.emit(this.selectedOptions)
+      }
+    })
   }
 
   ngOnChanges() {
     this.init()
+  }
+
+  selectFilterItem(value) {
+    this.storage.set('selectedFilterNotes', value).subscribe()
+    this.filterNotes.emit(value)
   }
 
   init() {

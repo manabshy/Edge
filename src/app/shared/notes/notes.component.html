@@ -1,5 +1,17 @@
 <div class="title">
   <h2>Notes</h2>
+  <fieldset class="w-64" *ngIf="showNoteFilter">
+    <div>
+      <p-multiSelect [options]="filterOptions" name="selectedOptions" [group]="true" [(ngModel)]="selectedOptions"
+        defaultLabel="Filter Options" scrollHeight="250px" display="chip" (onChange)="selectFilterItem($event.value)">
+        <ng-template let-group pTemplate="group">
+          <div class="p-d-flex p-ai-center">
+            <span>{{group.label}}</span>
+          </div>
+        </ng-template>
+      </p-multiSelect>
+    </div>
+  </fieldset>
   <form action="">
     <div class="inline-parent">
       <fieldset class="inline-child">
@@ -14,7 +26,7 @@
   </form>
 </div>
 
-<div class="list-group-item text-center text-danger" *ngIf="!notes || !notes?.length && !isUpdating">
+<div class="text-center list-group-item text-danger" *ngIf="!notes || !notes?.length && !isUpdating">
   <i class="far fa-sad-tear"></i> No notes
 </div>
 
@@ -81,7 +93,7 @@
               <p class="txt--title">{{note?.createdBy}}
                 <span class="pill pill--rounded pill--onRight" [ngClass]="getClassName(note?.jobType)"
                   [pTooltip]="note?.jobTypeName"></span>
-                <span *ngIf="note?.addressee" class="pill  pill--onRight"
+                <span *ngIf="note?.addressee" class="pill pill--onRight"
                   [ngClass]="note?.noteType===3 ? 'pill--positive-light': 'pill--warning-light'">{{note?.addressee}}</span>
                 <span *ngIf="note?.createdBy === currentStaffMember?.fullName;"
                   class="pill pill--positive pill--onRight">You</span>
