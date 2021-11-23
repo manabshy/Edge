@@ -1,5 +1,5 @@
-import { ValuationTypeEnum } from '../shared/valuation'
-import { mapDocumentsForView } from './helpers/store-documents-helpers'
+import { ValuationTypeEnum } from '../../shared/valuation'
+import { mapDocumentsForView } from './store-documents-helpers'
 
 /***
  * @function buildStoreState

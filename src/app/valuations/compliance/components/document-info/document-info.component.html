@@ -22,9 +22,9 @@
   
     <!-- FILE UPLOAD DATE -->
     <span class="flex-1 text-right">
-      <ng-container  *ngIf="file.replaceDate">
+      <ng-container  *ngIf="file.dateReplaced">
         <span [pTooltip]="'Upload Date'">
-          {{ moment(file.replaceDate).format('DD/MM/YY') }}
+          {{ moment(file.dateReplaced).format('DD/MM/YY') }}
         </span>
       </ng-container>
     </span>
