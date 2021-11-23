@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core'
 import { ComponentStore } from '@ngrx/component-store'
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs'
 import { mergeMap, tap, filter, switchMap, take, map } from 'rxjs/operators'
-import { buildStoreState, buildEntitiesArray } from './compliance-checks.store-helpers'
+import { buildStoreState, buildEntitiesArray } from './helpers/compliance-checks.store-helpers'
 import { ComplianceChecksFacadeService } from './compliance-checks.facade.service'
 import { buildComplianceChecksStatusMessages, checkAllEntitiesHaveValidDocs } from './helpers/store-validation-helpers'
 import {
