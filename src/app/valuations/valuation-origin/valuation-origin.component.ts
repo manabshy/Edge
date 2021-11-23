@@ -20,11 +20,16 @@ export class ValuationOriginComponent implements OnInit, AfterViewInit {
   @Input() allOrigins: InfoDetail[]
   @Input() allOriginTypes: InfoDetail[]
 
-  private _isRelet = false
+  private _isRelet
   public set isRelet(v: boolean) {
     if (v != this._isRelet && v == true) {
-      this.valuation.originId = 58
-      this.setOriginTypeId(12)
+      if (this.isClientService) {
+        this.valuation.originId = 122
+        this.setOriginTypeId(14)
+      } else {
+        this.valuation.originId = 58
+        this.setOriginTypeId(12)
+      }
       this.controlValues()
     }
     this._isRelet = v
