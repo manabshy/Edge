@@ -13,7 +13,7 @@ import {
   ContactNote
 } from '../shared/contact-group'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { takeUntil } from 'rxjs/operators'
+import { take, takeUntil } from 'rxjs/operators'
 import { Subject, Observable, EMPTY } from 'rxjs'
 import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component'
 import { WedgeError, SharedService } from 'src/app/core/services/shared.service'
@@ -103,7 +103,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   addedCompany: Company
   destroy = new Subject()
   showAddNewBtn: boolean
- 
+
   get dataNote() {
     if (this.contactGroupDetails?.contactGroupId) {
       return {
@@ -169,7 +169,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    console.log('contactGroupDetails: ', this.contactGroupDetails)
+    console.log('!!!!!!!!!!!!! contactGroupDetails: ', this.contactGroupDetails)
     this.contactGroupTypes = ContactGroupsTypes
     this.route.params.subscribe((params) => {
       this.contactGroupId = +params['contactGroupId'] || 0
@@ -364,19 +364,20 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   getNewlyAddedPerson() {
-    this.contactGroupService.newPerson$.subscribe((person) => {
+    this.contactGroupService.newPerson$.pipe(takeUntil(this.destroy)).subscribe((person) => {
       if (person) {
         person.isNewPerson = true
         this.showDuplicateChecker = false
-        if ((this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) || this.isExistingCompany) {
+        // I have no idea why this condition exists! doesn't work with it, works without it. ¯\_(ツ)_/¯
+        // if ((this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) || this.isExistingCompany) {
           this.contactGroupDetails?.contactPeople?.push(person)
-          this.storeContactPeople(this.contactGroupDetails.contactPeople)
-        } else {
-          const people: Person[] = []
-          people.push(person)
-          console.log({ person }, 'new herer', { people })
-          this.storeContactPeople(people)
-        }
+        //   this.storeContactPeople(this.contactGroupDetails.contactPeople)
+        // } else {
+        //   const people: Person[] = []
+        //   people.push(person)
+        //   console.log({ person }, 'new herer', { people })
+        //   this.storeContactPeople(people)
+        // }
       }
     })
   }
@@ -388,6 +389,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   storeContactPeople(contactPeople: Person[]) {
+    console.log('adding person to local storage')
     localStorage.setItem('contactPeople', JSON.stringify(contactPeople))
   }
 
@@ -782,7 +784,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     this.contactGroupDetailsForm.markAsDirty()
   }
 
-  saveContactGroup() {
+    saveContactGroup() {
     console.log('contact details', this.contactGroupDetailsForm.dirty)
     const validForm = this.contactGroupDetailsForm.valid
 
@@ -872,6 +874,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   onSaveComplete(contactGroup: ContactGroup): void {
+    console.log('onSaveComplete: contactGroup ', contactGroup)
     localStorage.removeItem('contactPeople')
     localStorage.removeItem('newCompany')
     this.pendingChanges = false
@@ -1005,7 +1008,6 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   queryForDuplicatePeople(person) {
-    console.log('queryForDuplicatePeople: ', person)
     if (person?.fullName) {
       this.contactGroupService.getPotentialDuplicatePeople(person).subscribe((data) => {
         this.potentialDuplicatePeople = data
