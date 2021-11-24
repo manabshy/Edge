@@ -421,7 +421,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         valuationStatus: ValuationStatusEnum.None,
         valuationStatusDescription: 'New',
         originId: this.originId | 0,
-        originTypeId: 0
+        originTypeId: 0,
+        declarableInterest: null
       }
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0)
       if (this.propertyId) {
@@ -2683,6 +2684,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate
     valuation.originId = this.valuation.originId
     valuation.bookedBy = this.valuation.bookedBy
+    valuation.bookedById = this.valuation.bookedBy?.staffMemberId
 
     valuation.isPowerOfAttorney =
       this.adminContact && this.adminContact.contactGroupId > 0 ? this.adminContact?.isPowerOfAttorney : false
