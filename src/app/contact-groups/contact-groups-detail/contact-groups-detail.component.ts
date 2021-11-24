@@ -198,18 +198,29 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   }
 
   private getNextPersonNotesPage(page: number) {
-    this.contactGroupService
-      .getPersonNotes(this.personId, this.pageSize, page, this.showOnlyMyNotes, this.noteFilters)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((data) => {
-        if (data && data.length) {
-          this.personNotes = _.concat(this.personNotes, data)
-        } else if (!data.length || data.length < this.pageSize) {
-          this.bottomReached = true
-          console.log('data', data)
-          console.log('bottom reached for id', this.personId, 'condition', this.bottomReached)
-        }
-      })
+    if (this.personId) {
+      this.contactGroupService
+        .getPersonNotes(this.personId, this.pageSize, page, this.showOnlyMyNotes, this.noteFilters)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe((data) => {
+          if (data) {
+            if (page === 1) {
+              this.personNotes = data
+            } else {
+              this.personNotes = _.concat(this.personNotes, data)
+            }
+          }
+          this.setBottomReachedFlag(data)
+        })
+    }
+  }
+
+  private setBottomReachedFlag(result: any) {
+    if (result && (!result.length || result.length < +this.pageSize)) {
+      this.bottomReached = true
+    } else {
+      this.bottomReached = false
+    }
   }
 
   addNote() {
