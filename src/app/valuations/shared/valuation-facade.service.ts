@@ -64,19 +64,23 @@ export class ValuationFacadeService {
     }),
     mergeMap((contactGroup) => {
       // call documents endpoint
-      // every time contactGroupId changes, get the compliance docs for the people in that contact group
+      // every time contactGroupId changes, get the compliance docs for the people in that contact group, 
       console.log('onLastKnownOwnerChanged: contactGroup', contactGroup)
       return this.getPeopleDocsForValuation(
         contactGroup.contactGroupId,
-        this._valuationData.getValue().valuationEventId
+        0
       )
     }),
-    mergeMap((personDocuments) => {
-      console.log('person documents are about to be updated in local model: ', personDocuments)
-      return of(this.updateLocalValuation({ personDocuments }))
+    mergeMap((complianceDocuments) => {
+      console.log('person documents are about to be updated in local model: ', complianceDocuments)
+      const personDocuments = complianceDocuments.filter((doc) => doc.personId)
+      const companyDocuments = complianceDocuments.filter((doc) => doc.companyId)
+      console.log('update companyDocuments to ', companyDocuments)
+      console.log('update personDocuments to ', personDocuments)
+      return of(this.updateLocalValuation({ personDocuments, companyDocuments }))
     }),
     mergeMap((data) => {
-      console.log('data: ', data)
+      console.log('valuationData after last known owner change: ', data)
       return of({
         contactGroupData: this._contactGroupBs.getValue(),
         valuationData:data
