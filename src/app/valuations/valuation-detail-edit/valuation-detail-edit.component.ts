@@ -123,6 +123,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isInstructVisible = false
   accordionIndex: number
   propertySubscription = new Subscription()
+  isRelet = false
 
   salesMeetingOwner
   lettingsMeetingOwner
@@ -1700,8 +1701,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (property) {
       this.controlPreviousValuations(property.propertyId)
 
-      this.showProperty = false
-
       this.valuers = []
       this.property = property
       this.isPropertyChanged = true
@@ -1723,16 +1722,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
       if (this.valuation.originId == 0) {
         this.propertyService
-          .getPropertyInstructions(this.propertyId, true)
+          .getPropertyInstructions(property.propertyId, true)
           .toPromise()
           .then((data) => {
             if (data && data.length > 0 && data.findIndex((x) => x.type.toLocaleLowerCase() == 'lettings') > -1) {
-              this.valuation.originTypeId = 12
-              this.valuation.originId = 58
+              this.isRelet = true
             }
           })
       }
 
+      this.showProperty = false
       this.valuationForm.markAsDirty()
     }
   }

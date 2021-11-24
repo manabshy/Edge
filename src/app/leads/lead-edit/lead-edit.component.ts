@@ -123,6 +123,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   origins: InfoDetail[]
   originListIds: string[] = ['9', '31', '83', '138', '139', '108', '112', '119', '120', '124', '134', '135']
 
+  noteFilters: any[]
+
   private saveButtonClicked = new Subject<any>()
 
   get nextChaseDateControl() {
@@ -861,7 +863,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   private getNextPersonNotesPage(page: number) {
     if (this.personId) {
       this.contactGroupService
-        .getPersonNotes(this.personId, this.pageSize, page, this.showOnlyMyNotes)
+        .getPersonNotes(this.personId, this.pageSize, page, this.showOnlyMyNotes, this.noteFilters)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe((data) => {
           if (data) {
@@ -985,6 +987,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
         leadTypeId: this.leadEditForm.controls['leadTypeId'].value
       }
     })
+  }
+
+  filterNotes(event) {
+    this.noteFilters = event
+    this.getPersonNotes()
   }
 
   getSelectedItem(item: any) {
