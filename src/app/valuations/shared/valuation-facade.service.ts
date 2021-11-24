@@ -6,7 +6,7 @@
 
 import { Injectable, Injector } from '@angular/core'
 import { Router } from '@angular/router'
-import { BehaviorSubject, Observable, Subject, of } from 'rxjs'
+import { BehaviorSubject, Observable, Subject, of, combineLatest } from 'rxjs'
 import { filter, mergeMap, take, tap } from 'rxjs/operators'
 import {
   Valuation,
@@ -65,31 +65,38 @@ export class ValuationFacadeService {
     mergeMap((contactGroup) => {
       // call documents endpoint
       // every time contactGroupId changes, get the compliance docs for the people in that contact group,
-      console.log('onLastKnownOwnerChanged: contactGroup', contactGroup)
-      return this.getPeopleDocsForValuation(contactGroup.contactGroupId, 0)
-    }),
-    mergeMap((complianceDocuments) => {
-      console.log('person documents are about to be updated in local model: ', complianceDocuments)
-      const personDocuments = complianceDocuments.filter((doc) => doc.personId)
-      const companyDocuments = complianceDocuments.filter((doc) => doc.companyId)
-      personDocuments.forEach((doc) => {
-        doc.position = doc.position ? doc.position : ''
-      })
-      companyDocuments.forEach((doc) => {
-        doc.position = doc.position ? doc.position : ''
-      })
-      console.log('update companyDocuments to ', companyDocuments)
-      console.log('update personDocuments to ', personDocuments)
-      return of(this.updateLocalValuation({ personDocuments, companyDocuments }))
+      return this.loadContactGroupComplianceDocumentsIntoStore$(contactGroup.contactGroupId)
     }),
     mergeMap((data) => {
       console.log('valuationData after last known owner change: ', data)
       return of({
         contactGroupData: this._contactGroupBs.getValue(),
-        valuationData: data
+        valuationData: this._valuationData.getValue()
       })
     })
   )
+
+  // grabs the default compliance documents for all entities in a contactGroup and updates the local valuation model
+  private loadContactGroupComplianceDocumentsIntoStore$(contactGroupId): Observable<any> {
+    // console.log('loadContactGroupComplianceDocumentsIntoStore: contactGroup', contactGroupId)
+    return this.getPeopleDocsForValuation(contactGroupId, 0).pipe(
+      mergeMap((complianceDocuments) => {
+        // console.log('person documents are about to be updated in local model: ', complianceDocuments)
+        const personDocuments = complianceDocuments.filter((doc) => doc.personId)
+        const companyDocuments = complianceDocuments.filter((doc) => doc.companyId)
+        personDocuments.forEach((doc) => {
+          doc.position = doc.position ? doc.position : ''
+        })
+        companyDocuments.forEach((doc) => {
+          doc.position = doc.position ? doc.position : ''
+        })
+        // console.log('update companyDocuments to ', companyDocuments)
+        // console.log('update personDocuments to ', personDocuments)
+        this.updateLocalValuation({ personDocuments, companyDocuments })
+        return of({ personDocuments, companyDocuments })
+      })
+    )
+  }
 
   private _infoService: InfoService
   public get infoService(): InfoService {
@@ -384,10 +391,44 @@ export class ValuationFacadeService {
   }
 
   public togglePowerOfAttorney(adminContact) {
+    console.log('togglePowerOfAttorney: ', adminContact)
     if (!adminContact.isPowerOfAttorney) {
-      this.getAllPersonDocs(adminContact.id).subscribe((data) => {
-        this._isPowerOfAttorneyChanged.next({ action: 'add', admin: data })
-      })
+      let adminDocumentsClosure
+      combineLatest([this.valuationData$, this.getAllPersonDocs(adminContact.id)])
+        .pipe(
+          take(1),
+          mergeMap(([valuationData, adminContact]) => {
+            console.log('valuationData: ', valuationData)
+            console.log('adminContact: ', adminContact)
+            adminDocumentsClosure = adminContact
+            if (valuationData.complianceCheck?.compliancePassedDate) {
+              console.log(
+                'valuation is frozen, fetch default docs for contact group to load into compliace checks card'
+              )
+              return this.loadContactGroupComplianceDocumentsIntoStore$(this._contactGroupBs.getValue().contactGroupId) // needs to be value, not observable
+            } else {
+              console.log('valuation isnt frozen, only return admin contact documents to add to the store')
+              return of({
+                adminContact,
+                isFrozen: false
+              })
+            }
+          })
+        )
+        .subscribe((data) => {
+          console.log('back with all people docs for this contact group ', data)
+          if (data.personDocuments) {
+            data.documents = data.personDocuments.concat(data.companyDocuments)
+            data.adminContact = adminDocumentsClosure
+            data.isFrozen = true
+          }
+          this._isPowerOfAttorneyChanged.next({
+            action: 'add',
+            admin: data.adminContact,
+            allDocuments: data.documents,
+            isFrozen: data.isFrozen
+          })
+        })
     } else {
       this._isPowerOfAttorneyChanged.next({ action: 'remove', id: adminContact.id })
     }

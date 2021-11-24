@@ -23,13 +23,19 @@ export const buildStoreState = (contactGroupData, valuationData, entityToAdd) =>
   }
 }
 
+export const patchEntities = (entitiesData) => {
+  return {
+    entities: buildEntitiesArray(entitiesData)
+  }
+}
+
 /***
  * @function buildEntitiesArray
  * @param {Object[]} entitites - array of company | person objects for the store
  * @param {string} passedDate - date the valuation was passed. Temporarirly using this since individual compliance passed dates are not being set to null when docs are refreshed. Fixes Bug 2973
  * @description Builds entities array for store mapping from API shape to Store shape. Any API props for entities that need changing look here first
  */
-export const buildEntitiesArray = (entitites, passedDate) => {
+export const buildEntitiesArray = (entitites, passedDate?) => {
   return entitites.map((e) => {
     return {
       id: e.id, // the object id. used for generic handling of entities in the store
