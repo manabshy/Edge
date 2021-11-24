@@ -286,7 +286,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         mergeMap(([contactGroupData, valuationData, entityToAdd]: [any, any, any]) => {
           valuationData.isFrozen = valuationData.complianceCheck?.compliancePassedDate ? true : false
           this.patchState(buildStoreState(contactGroupData, valuationData, entityToAdd))
-          console.log('✔️ compliance checks state built for contactGroupId', contactGroupData.contactGroupId)
+          // console.log('✔️ compliance checks state built for contactGroupId', contactGroupData.contactGroupId)
           return this.validationMessage$
         }),
         tap(() => this.pushContactsToValuationServiceForSave$),
