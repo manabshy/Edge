@@ -284,6 +284,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         }),
         take(1),
         mergeMap(([contactGroupData, valuationData, entityToAdd]: [any, any, any]) => {
+          valuationData.isFrozen = valuationData.complianceCheck?.compliancePassedDate ? true : false
           this.patchState(buildStoreState(contactGroupData, valuationData, entityToAdd))
           console.log('✔️ compliance checks state built for contactGroupId', contactGroupData.contactGroupId)
           return this.validationMessage$
@@ -302,8 +303,13 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    */
   private lastKnownOwnerChanged$: Observable<any> = this._complianceChecksFacadeSvc.onLastKnownOwnerChanged$.pipe(
     mergeMap((data) => {
-      console.log('✔️ lastKnownOwnerChanged, compliance checks state built for contactGroupId', data.contactGroupData)
+      data.valuationData.isFrozen = false
+      data.valuationData.complianceCheck = {
+        compliancePassedDate: null,
+        compliancePassedBy: null
+      }
       this.patchState(buildStoreState(data.contactGroupData, data.valuationData, null))
+      console.log('✔️ lastKnownOwnerChanged, compliance checks state built for contactGroupId', data)
       return this.validationMessage$
     }),
     tap(() => this.pushContactsToValuationServiceForSave$)
@@ -395,12 +401,12 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     this._complianceChecksFacadeSvc
       .saveFileTemp(data.ev.tmpFiles)
       .pipe(
-        mergeMap((tmpFiles) => {
+        tap((tmpFiles) => {
           console.log('files after temp save: ', tmpFiles)
           this.addFilesToEntity({ tmpFiles, data }) // adds files to store
           return this.pushContactsToValuationServiceForSave$
         }),
-        mergeMap(() => this.validationMessage$.pipe()),
+        tap(() => this.validationMessage$.pipe()),
         take(1)
       )
       .subscribe(
@@ -425,7 +431,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
             // compliancePassedBy: null,
           })
         }),
-        mergeMap(() => this.validationMessage$.pipe()),
+        tap(() => this.validationMessage$.pipe()),
         take(1)
       )
       .subscribe(

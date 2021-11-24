@@ -638,9 +638,8 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
     if (this.newPersonId) {
       const payload: any = { ...person }
       payload.addNewEntityToComplianceChecks = this.addNewEntityToComplianceChecks
-      console.log('add new contact payload: ', payload)
       this.contactGroupService.getAddedPerson(payload)
-      this.addNewPerson(this.newPersonId)
+      this.addedPersonId.emit(this.newPersonId)
       const personEmitter = {
         person: person,
         otherPersonToAdd: otherPersonToAdd
@@ -654,10 +653,6 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
     } else {
       this.sharedService.back()
     }
-  }
-
-  addNewPerson(id: number) {
-    this.addedPersonId.emit(id)
   }
 
   makeCanvasInvisible(close: boolean) {

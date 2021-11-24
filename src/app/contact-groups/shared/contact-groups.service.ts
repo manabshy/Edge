@@ -81,7 +81,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseContactGroupUrl}/search`
     return this.http.get<ContactGroupAutoCompleteData>(url, { params: options }).pipe(
       map((response) => response.result),
-      tap((data) => console.log(JSON.stringify(data)))
+      // tap((data) => console.log(JSON.stringify(data)))
     )
   }
 
@@ -93,7 +93,7 @@ export class ContactGroupsService {
       })
       .pipe(
         map((response) => response.result),
-        tap((data) => console.log(JSON.stringify(data)))
+        // tap((data) => console.log(JSON.stringify(data)))
       )
   }
 
@@ -108,7 +108,7 @@ export class ContactGroupsService {
         }
         return response.result
       }),
-      tap((data) => console.log(JSON.stringify(data)))
+      // tap((data) => console.log(JSON.stringify(data)))
     )
   }
 
@@ -116,7 +116,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseApplicantUrl}/search?SearchTerm=${searchTerm}`
     return this.http.get<any>(url).pipe(
       map((response) => response.result),
-      tap((data) => console.log(JSON.stringify(data)))
+      // tap((data) => console.log(JSON.stringify(data)))
     )
   }
 
@@ -124,7 +124,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseApplicantUrl}/suggestions?SearchTerm=${searchTerm}&sales=${sales}`
     return this.http.get<any>(url).pipe(
       map((response) => response.result),
-      tap((data) => console.log(JSON.stringify(data)))
+      // tap((data) => console.log(JSON.stringify(data)))
     )
   }
 
@@ -426,6 +426,7 @@ export class ContactGroupsService {
   }
 
   getAddedPerson(person) {
+    console.log('******************** >> getAddedPerson: ', person)
     this.newPersonSubject.next(person)
   }
 }

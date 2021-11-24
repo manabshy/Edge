@@ -81,8 +81,7 @@ const entityValidForKYC = (entity): boolean => {
   } else {
     return (
       idIsValid(entity.documents.idDoc.files) &&
-      entity.documents.proofOfAddressDoc.files.length &&
-      entity.documents.reportDocs.files.length // added back in as per Bug 2990 https://dev.azure.com/Douglas-and-Gordon/Edge/_workitems/edit/2990/
+      entity.documents.proofOfAddressDoc.files.length
     )
   }
 }

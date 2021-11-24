@@ -1,8 +1,6 @@
 import { Address } from "src/app/shared/models/address";
 import {
-  Person,
-  BasicPerson,
-  PersonWarning,
+  Person
 } from "src/app/shared/models/person";
 import { ResultData } from "src/app/shared/result-data";
 import { SubNavItem, SubNav } from "src/app/shared/subnav";

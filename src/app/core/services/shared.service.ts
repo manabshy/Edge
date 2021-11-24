@@ -47,19 +47,12 @@ export class SharedService {
     private _location: Location,
     private _router: Router,
     private titleService: Title,
-    private storage: StorageMap,
     private dialogService: DialogService,
     private modalService: BsModalService,
     private currencyPipe: CurrencyPipe
   ) {}
 
   transformCurrency(value: any): any {
-    // if (
-    //   value &&
-    //   value.toString().length > 0 &&
-    //   value.toString().indexOf("£") > -1
-    // )
-    //   return value;
     if (value) {
       let numberValue = this.convertStringToNumber(value.toString())
       return this.currencyPipe.transform(numberValue, 'GBP', 'symbol', '1.0-0')

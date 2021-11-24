@@ -9,7 +9,6 @@ import { mapDocumentsForView } from './store-documents-helpers'
  * @returns Object containing properties for the compliance checks store
  */
 export const buildStoreState = (contactGroupData, valuationData, entityToAdd) => {
-  console.log('contactGroupData: ', contactGroupData.contactPeople)
   const entitiesData = mergeEntitiesReadyForStore(valuationData, entityToAdd)
   return {
     valuationEventId: valuationData.valuationEventId,
@@ -17,7 +16,7 @@ export const buildStoreState = (contactGroupData, valuationData, entityToAdd) =>
     companyId: contactGroupData ? contactGroupData.companyId : null,
     companyOrContact: contactGroupData?.companyId ? 'company' : 'contact',
     checkType: identifyAmlOrKyc(valuationData),
-    isFrozen: valuationData.complianceCheck?.compliancePassedDate ? true : false,
+    isFrozen: valuationData.isFrozen,
     compliancePassedDate: valuationData.complianceCheck?.compliancePassedDate,
     compliancePassedBy: valuationData.complianceCheck?.compliancePassedByFullName,
     entities: buildEntitiesArray(entitiesData, valuationData.complianceCheck.compliancePassedDate)

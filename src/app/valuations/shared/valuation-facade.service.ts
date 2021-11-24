@@ -54,10 +54,13 @@ export class ValuationFacadeService {
 
   public readonly onLastKnownOwnerChanged$ = this.contactGroup$.pipe(
     filter((contactGroup) => {
-      console.log('contactGroup has changed. inside filter function ', contactGroup)
-      const valuationData =  this._valuationData.getValue()
-      console.log('valuationData: ', valuationData)
-      return !!contactGroup && contactGroup.contactGroupId && valuationData
+      // console.log('contactGroup has changed. inside filter function ', contactGroup)
+      const valuationData = this._valuationData.getValue()
+      // console.log('valuationData: ', valuationData)
+      if (!!contactGroup && contactGroup.contactGroupId && valuationData) {
+        return contactGroup.contactGroupId !== valuationData.propertyOwner.contactGroupId
+      }
+      return false
     }),
     mergeMap((contactGroup) => {
       // call documents endpoint
@@ -70,10 +73,13 @@ export class ValuationFacadeService {
     }),
     mergeMap((personDocuments) => {
       console.log('person documents are about to be updated in local model: ', personDocuments)
-      this.updateLocalValuation({ personDocuments })
+      return of(this.updateLocalValuation({ personDocuments }))
+    }),
+    mergeMap((data) => {
+      console.log('data: ', data)
       return of({
         contactGroupData: this._contactGroupBs.getValue(),
-        valuationData: this._valuationData.getValue()
+        valuationData:data
       })
     })
   )
@@ -108,6 +114,7 @@ export class ValuationFacadeService {
     const valuationData = this._valuationData.getValue()
     const updatedValuationData = { ...valuationData, ...data }
     this._valuationData.next(updatedValuationData)
+    return updatedValuationData
   }
 
   public updateLocalContactGroup(data) {
@@ -228,7 +235,6 @@ export class ValuationFacadeService {
       })
   }
 
-  
   // LAND REGISTRY CARD
 
   // COMPLIANCE CHECKS CARD FUNCTIONS
