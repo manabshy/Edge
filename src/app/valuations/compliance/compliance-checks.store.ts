@@ -289,8 +289,8 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           // console.log('✔️ compliance checks state built for contactGroupId', contactGroupData.contactGroupId)
           return this.validationMessage$
         }),
-        map(() => this.pushContactsToValuationServiceForSave$),
-        take(1)
+        // map(() => this.pushContactsToValuationServiceForSave$),
+        // take(1)
       )
       .subscribe(
         (res) => console.log('compliance checks store loaded: ', res),
@@ -312,7 +312,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       console.log('✔️ lastKnownOwnerChanged, compliance checks state built for contactGroupId', data)
       return this.validationMessage$
     }),
-    mergeMap(() => this.pushContactsToValuationServiceForSave$)
+    map(() => this.pushContactsToValuationServiceForSave$)
   )
 
   /***
@@ -406,7 +406,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           this.addFilesToEntity({ tmpFiles, data }) // adds files to store
           return this.pushContactsToValuationServiceForSave$
         }),
-        map(() => this.validationMessage$.pipe()),
+        mergeMap(() => this.validationMessage$.pipe()),
         take(1)
       )
       .subscribe(
@@ -431,7 +431,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
             // compliancePassedBy: null,
           })
         }),
-        map(() => this.validationMessage$.pipe()),
+        mergeMap(() => this.validationMessage$.pipe()),
         take(1)
       )
       .subscribe(
@@ -591,7 +591,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         }
         return of(this.pushContactsToValuationServiceForSave$)
       }),
-      tap(() => this.validationMessage$.pipe())
+      mergeMap(() => this.validationMessage$.pipe())
     )
     
 }
