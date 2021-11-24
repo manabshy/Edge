@@ -46,8 +46,6 @@ export class ComplianceCardComponent implements OnInit {
   }
 
   private buildPills() {
-    console.log('this.entity.isAdmin: ', this.entity.isAdmin)
-
     this.pillClass = this.entity.isMain ? 'pill--positive' : 'bg-gray-400'
 
     if (this.entity.companyId) {

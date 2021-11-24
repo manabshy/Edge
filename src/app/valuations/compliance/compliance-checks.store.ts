@@ -116,7 +116,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
 
   /***
    * @function pushContactsToValuationServiceForSave$
-   * @description takes documents out of the store, shapes them for the API and puts them in the valuation service ready for picking up when user saves valuation
+   * @description takes documents out of the store, shapes them for the API and puts them in the valuation service model. this is the clientside object that persists to the db
    */
   private pushContactsToValuationServiceForSave$: Observable<any> = this.entitiesArrayShapedForApi$.pipe(
     filter((data) => data),
@@ -248,7 +248,23 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
 
   constructor(private _complianceChecksFacadeSvc: ComplianceChecksFacadeService) {
     super(defaultState)
-    // this.loadStore()
+    this.lastKnownOwnerChanged$.pipe().subscribe(
+      (res) => {
+        console.log('lastKnownOwnerChanged', res)
+      },
+      (err) => {
+        console.error('err lastKnownOwnerChanged: ', err)
+      }
+    )
+
+    this.isPowerOfAttorneyChanges$.pipe().subscribe(
+      (data) => {
+        console.log('isPowerOfAttorneyChanges: ', data)
+      },
+      (err) => {
+        console.error('isPowerOfAttorneyChanges err: ', err)
+      }
+    )
   }
 
   /***
@@ -256,26 +272,48 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    * @description builds compliance checks store state for the valuation in view
    */
   loadStore = (): void => {
-    console.log('loading compliance checks store ')
     combineLatest([
       this._complianceChecksFacadeSvc.contactGroup$,
       this._complianceChecksFacadeSvc.valuation$,
       this.newEntityStream$
     ])
       .pipe(
-        filter(([contactGroupData, valuationData]) => !!contactGroupData && !!valuationData),
+        filter(([contactGroupData, valuationData]) => {
+          // console.log('loadStore filter: ', contactGroupData, valuationData)
+          return !!contactGroupData && !!valuationData
+        }),
         take(1),
         mergeMap(([contactGroupData, valuationData, entityToAdd]: [any, any, any]) => {
+          valuationData.isFrozen = valuationData.complianceCheck?.compliancePassedDate ? true : false
           this.patchState(buildStoreState(contactGroupData, valuationData, entityToAdd))
+          // console.log('✔️ compliance checks state built for contactGroupId', contactGroupData.contactGroupId)
           return this.validationMessage$
         }),
-        mergeMap(() => this.pushContactsToValuationServiceForSave$)
+        // map(() => this.pushContactsToValuationServiceForSave$),
+        // take(1)
       )
       .subscribe(
-        (res) => console.log(res),
-        (err) => console.error(err)
+        (res) => console.log('compliance checks store loaded: ', res),
+        (err) => console.error('error loading compliance checks store: ', err)
       )
   }
+
+  /***
+   * lastKnownOwnerChanged$
+   */
+  private lastKnownOwnerChanged$: Observable<any> = this._complianceChecksFacadeSvc.onLastKnownOwnerChanged$.pipe(
+    mergeMap((data) => {
+      data.valuationData.isFrozen = false
+      data.valuationData.complianceCheck = {
+        compliancePassedDate: null,
+        compliancePassedBy: null
+      }
+      this.patchState(buildStoreState(data.contactGroupData, data.valuationData, null))
+      console.log('✔️ lastKnownOwnerChanged, compliance checks state built for contactGroupId', data)
+      return this.validationMessage$
+    }),
+    map(() => this.pushContactsToValuationServiceForSave$)
+  )
 
   /***
    * @function onPassComplianceChecks
@@ -420,7 +458,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           ? `${entity.address.addressLines}, ${entity.address.postCode}`
           : ''
     })
-  
   }
 
   /***
@@ -552,16 +589,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
             this.removeFromValuation(data.id)
             break
         }
-        return this.pushContactsToValuationServiceForSave$
+        return of(this.pushContactsToValuationServiceForSave$)
       }),
       mergeMap(() => this.validationMessage$.pipe())
     )
-    .subscribe(
-      (data) => {
-        console.log('isPowerOfAttorneyChanges: ', data)
-      },
-      (err) => {
-        console.error('isPowerOfAttorneyChanges err: ', err)
-      }
-    )
+    
 }

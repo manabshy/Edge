@@ -6,8 +6,8 @@
 
 import { Injectable, Injector } from '@angular/core'
 import { Router } from '@angular/router'
-import { BehaviorSubject, Observable, Subject } from 'rxjs'
-import { map, mergeMap, take, tap } from 'rxjs/operators'
+import { BehaviorSubject, Observable, Subject, of } from 'rxjs'
+import { filter, mergeMap, take, tap } from 'rxjs/operators'
 import {
   Valuation,
   ValuationRequestOption,
@@ -36,8 +36,8 @@ export class ValuationFacadeService {
   private valuationPageNumberSubject = new Subject<number>()
   valuationPageNumberChanges$ = this.valuationPageNumberSubject.asObservable()
 
-  contactGroupBs = new BehaviorSubject(null)
-  public readonly contactGroup$: Observable<ContactGroup> = this.contactGroupBs.asObservable()
+  _contactGroupBs = new BehaviorSubject(null)
+  public readonly contactGroup$: Observable<ContactGroup> = this._contactGroupBs.asObservable()
 
   valuationValidationSubject = new Subject<boolean>()
   valuationValidation$ = this.valuationValidationSubject.asObservable()
@@ -51,6 +51,45 @@ export class ValuationFacadeService {
 
   private readonly _valuationPricingInfo: BehaviorSubject<ValuationPricingInfo> = new BehaviorSubject({})
   public readonly valuationPricingInfo$ = this._valuationPricingInfo.asObservable()
+
+  public readonly onLastKnownOwnerChanged$ = this.contactGroup$.pipe(
+    filter((contactGroup) => {
+      // console.log('contactGroup has changed. inside filter function ', contactGroup)
+      const valuationData = this._valuationData.getValue()
+      // console.log('valuationData: ', valuationData)
+      if (!!contactGroup && contactGroup.contactGroupId && valuationData) {
+        return contactGroup.contactGroupId !== valuationData.propertyOwner.contactGroupId
+      }
+      return false
+    }),
+    mergeMap((contactGroup) => {
+      // call documents endpoint
+      // every time contactGroupId changes, get the compliance docs for the people in that contact group,
+      console.log('onLastKnownOwnerChanged: contactGroup', contactGroup)
+      return this.getPeopleDocsForValuation(contactGroup.contactGroupId, 0)
+    }),
+    mergeMap((complianceDocuments) => {
+      console.log('person documents are about to be updated in local model: ', complianceDocuments)
+      const personDocuments = complianceDocuments.filter((doc) => doc.personId)
+      const companyDocuments = complianceDocuments.filter((doc) => doc.companyId)
+      personDocuments.forEach((doc) => {
+        doc.position = doc.position ? doc.position : ''
+      })
+      companyDocuments.forEach((doc) => {
+        doc.position = doc.position ? doc.position : ''
+      })
+      console.log('update companyDocuments to ', companyDocuments)
+      console.log('update personDocuments to ', personDocuments)
+      return of(this.updateLocalValuation({ personDocuments, companyDocuments }))
+    }),
+    mergeMap((data) => {
+      console.log('valuationData after last known owner change: ', data)
+      return of({
+        contactGroupData: this._contactGroupBs.getValue(),
+        valuationData: data
+      })
+    })
+  )
 
   private _infoService: InfoService
   public get infoService(): InfoService {
@@ -70,6 +109,23 @@ export class ValuationFacadeService {
     private injector: Injector
   ) {
     // console.log(' FACADE SERVICE INSTANTIATING =========== ')
+  }
+
+  /**
+   * updateLocalValuation
+   * @description merges incoming data object into service level model and emits updated valuation object to subscribers
+   * @param data {} - containing the properties to update
+   */
+  public updateLocalValuation(data) {
+    // console.log('updateLocalValuation: ', data)
+    const valuationData = this._valuationData.getValue()
+    const updatedValuationData = { ...valuationData, ...data }
+    this._valuationData.next(updatedValuationData)
+    return updatedValuationData
+  }
+
+  public updateLocalContactGroup(data) {
+    this._contactGroupBs.next(data)
   }
 
   getDropDownInfo() {
@@ -119,14 +175,14 @@ export class ValuationFacadeService {
 
   // TERMS OF BUSINESS CARD
   public termsOfBusinessFileUploaded(data) {
-    console.log('WIP: termsOfBusinessFileUploaded: ', data)
+    // console.log('WIP: termsOfBusinessFileUploaded: ', data)
 
     return this.saveFileTemp(data.file)
       .pipe(
         take(1),
         tap((res) => {
           try {
-            console.log('upload ToB file res: ', res)
+            // console.log('upload ToB file res: ', res)
             const valuationData = this._valuationData.getValue()
 
             let eSignSignatureTob = {
@@ -148,9 +204,7 @@ export class ValuationFacadeService {
                 signedOn: new Date()
               }
             }
-            const updatedValuationData = { ...valuationData, eSignSignatureTob }
-            console.log('updatedValuationData: ', updatedValuationData)
-            this._valuationData.next(updatedValuationData)
+            this.updateLocalValuation({ eSignSignatureTob })
             return 'that worked'
           } catch (e) {
             console.log('tap error: ', e)
@@ -178,23 +232,14 @@ export class ValuationFacadeService {
           return this._apiSvc.resendToBLink(valuationData.valuationEventId)
         }),
         tap((res): any => {
-          // TODO tidy up model refresh once confirmed
           const updatedToBDoc = valuationDataClosure.eSignSignatureTob ? valuationDataClosure.eSignSignatureTob : {}
           updatedToBDoc.dateRequestSent = new Date()
-          const newValuationValue = { ...valuationDataClosure, eSignSignatureTob: updatedToBDoc }
-          this._valuationData.next(newValuationValue)
+          this.updateLocalValuation({ eSignSignatureTob: updatedToBDoc })
         })
       )
       .subscribe((res) => {
         console.log('resend tob done.')
       })
-  }
-
-  public updateLocalModel(data) {
-    console.log('updateLocalModel: ', data)
-    const valuationData = this._valuationData.getValue()
-    const updatedValuationData = { ...valuationData, ...data }
-    this._valuationData.next(updatedValuationData)
   }
 
   // LAND REGISTRY CARD
@@ -235,7 +280,7 @@ export class ValuationFacadeService {
   public getContactGroupById(contactGroupId) {
     return this._contactGroupsSvc.getContactGroupById(contactGroupId).pipe(
       tap((contactGroupData) => {
-        this.contactGroupBs.next(contactGroupData)
+        this.updateLocalContactGroup(contactGroupData)
       })
     )
   }
@@ -271,7 +316,7 @@ export class ValuationFacadeService {
         })
       }),
       tap((res) => {
-        this.updateLocalModel({
+        this.updateLocalValuation({
           complianceCheck: {
             compliancePassedBy: res.compliancePassedByFullName,
             compliancePassedDate: res.compliancePassedDate
@@ -290,43 +335,6 @@ export class ValuationFacadeService {
 
   public getPeopleDocsForValuation(contactGroupId: number, valuationEventId: number) {
     return this._peopleSvc.getPeopleDocsForValuation(contactGroupId, valuationEventId)
-  }
-
-  /***
-   * @function updatePersonDocuments
-   * @param personDocuments {object[]} - array of entities and their docs ready to save to API
-   * @description emits and updated value for the valuationData in the store having updated the personDocuments array in the valuationData
-   **/
-  public updatePersonDocuments(personDocuments) {
-    // console.log('🏃🏃🏃🏃 updatePersonDocuments running', personDocuments)
-    return this.valuationData$.pipe(
-      take(1),
-      map((valuationData) => {
-        console.log('🏆 updatePersonDocuments: this._valuationData.next ', valuationData)
-        this._valuationData.next({ ...valuationData, personDocuments })
-      })
-    )
-  }
-
-  /***
-   * updateCompanyAndPersonDocuments
-   * @description updates the company and person documents for the current valuationData in the service and pushes out a new valuationData value to subscribers
-   */
-  public updateCompanyAndPersonDocuments(savePayload) {
-    // console.log('🏃🏃🏃🏃 updateCompanyDocuments running', savePayload)
-    return this.valuationData$.pipe(
-      take(1),
-      map((valuationData) => {
-        // console.log('🏆 updateCompanyDocuments: this._valuationData.next ', valuationData)
-        const updatedValuationData = {
-          ...valuationData,
-          companyDocuments: savePayload.companyDocuments,
-          personDocuments: savePayload.personDocuments
-        }
-        // console.log('setting valuation data to : ', updatedValuationData)
-        this._valuationData.next(updatedValuationData)
-      })
-    )
   }
 
   public unfreezePeopleDocsForValuation = (contactGroupId: number, valuationEventId: number) => {

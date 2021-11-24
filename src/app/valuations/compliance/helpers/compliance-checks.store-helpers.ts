@@ -12,11 +12,11 @@ export const buildStoreState = (contactGroupData, valuationData, entityToAdd) =>
   const entitiesData = mergeEntitiesReadyForStore(valuationData, entityToAdd)
   return {
     valuationEventId: valuationData.valuationEventId,
-    contactGroupId: valuationData.propertyOwner?.contactGroupId,
+    contactGroupId: contactGroupData.contactGroupId,
     companyId: contactGroupData ? contactGroupData.companyId : null,
     companyOrContact: contactGroupData?.companyId ? 'company' : 'contact',
     checkType: identifyAmlOrKyc(valuationData),
-    isFrozen: valuationData.complianceCheck?.compliancePassedDate ? true : false,
+    isFrozen: valuationData.isFrozen,
     compliancePassedDate: valuationData.complianceCheck?.compliancePassedDate,
     compliancePassedBy: valuationData.complianceCheck?.compliancePassedByFullName,
     entities: buildEntitiesArray(entitiesData, valuationData.complianceCheck.compliancePassedDate)

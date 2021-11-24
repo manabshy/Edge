@@ -4,8 +4,8 @@
  * @description service providing functions to facilitate compliance checks for personal and company owned valuations
  */
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, Observable, of } from 'rxjs'
-import { filter, tap, take } from 'rxjs/operators'
+import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs'
+import { filter, tap, take, mergeMap } from 'rxjs/operators'
 import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-group'
 import { ValuationFacadeService } from '../shared/valuation-facade.service'
 
@@ -15,11 +15,12 @@ import { ValuationFacadeService } from '../shared/valuation-facade.service'
 export class ComplianceChecksFacadeService {
   private _contactSearchResults: BehaviorSubject<PotentialDuplicateResult> = new BehaviorSubject(null)
 
-  constructor(private _valuationFacadeSvc: ValuationFacadeService) {}
+  constructor(private _valuationFacadeSvc: ValuationFacadeService) {  }
 
-  public valuation$: Observable<any> = this._valuationFacadeSvc.valuationData$
-  public contactGroup$: Observable<any> = this._valuationFacadeSvc.contactGroup$
+  public valuation$: Observable<any> = this._valuationFacadeSvc.valuationData$.pipe()
+  public contactGroup$: Observable<any> = this._valuationFacadeSvc.contactGroup$.pipe()
   public isPowerOfAttorneyChanged$: Observable<any> = this._valuationFacadeSvc.isPowerOfAttorneyChanged$
+  public onLastKnownOwnerChanged$: Observable<any> = this._valuationFacadeSvc.onLastKnownOwnerChanged$
 
   // CONTACT SEARCHES / ADDING
   public contactSearchResults$: Observable<PotentialDuplicateResult> = this._contactSearchResults.asObservable()
@@ -57,7 +58,10 @@ export class ComplianceChecksFacadeService {
     return this._valuationFacadeSvc.getCompanyDocsForValuation(contactGroupId, valuationEventId)
   }
   public updateCompanyAndPersonDocuments(savePayload) {
-    return this._valuationFacadeSvc.updateCompanyAndPersonDocuments(savePayload)
+    return this._valuationFacadeSvc.updateLocalValuation({
+      companyDocuments: savePayload.companyDocuments,
+      personDocuments: savePayload.personDocuments
+    })
   }
 
   // Personal compliance checks documents management functions 📚
@@ -68,7 +72,12 @@ export class ComplianceChecksFacadeService {
     return this._valuationFacadeSvc.getPeopleDocsForValuation(contactGroupId, valuationEventId)
   }
   public updatePersonDocuments(personDocuments) {
-    return this._valuationFacadeSvc.updatePersonDocuments(personDocuments)
+    return this._valuationFacadeSvc.updateLocalValuation({personDocuments})
+  }
+
+  public getAllPersonDocsForContactGroup(contactPeople: any[]) {
+    console.log('loop ', contactPeople, ' and fetch their compliance documents')
+    return this.getAllPersonDocs(contactPeople[0].personId)
   }
 
   // Passing compliance tests ✔️
