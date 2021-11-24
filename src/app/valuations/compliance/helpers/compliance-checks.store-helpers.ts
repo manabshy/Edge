@@ -9,10 +9,11 @@ import { mapDocumentsForView } from './store-documents-helpers'
  * @returns Object containing properties for the compliance checks store
  */
 export const buildStoreState = (contactGroupData, valuationData, entityToAdd) => {
+  console.log('contactGroupData: ', contactGroupData.contactPeople)
   const entitiesData = mergeEntitiesReadyForStore(valuationData, entityToAdd)
   return {
     valuationEventId: valuationData.valuationEventId,
-    contactGroupId: valuationData.propertyOwner?.contactGroupId,
+    contactGroupId: contactGroupData.contactGroupId,
     companyId: contactGroupData ? contactGroupData.companyId : null,
     companyOrContact: contactGroupData?.companyId ? 'company' : 'contact',
     checkType: identifyAmlOrKyc(valuationData),

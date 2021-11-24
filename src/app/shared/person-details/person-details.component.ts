@@ -138,15 +138,15 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   }
 
   setPersonWarning(person: Person, warnings: InfoDetail[]) {
-    console.log({ person }, 'person status', { warnings })
+    // console.log({ person }, 'person status', { warnings })
     if (person) {
       if (person.warningStatusId !== 1) {
-        console.log('status here.....')
+        // console.log('status here.....')
         this.warningStatus =
           warnings?.find((x) => x.id === person.warningStatusId)?.value || person.warningStatusComment
       }
     }
-    console.log('status here 2.....', person)
+    // console.log('status here 2.....', person)
   }
 
   private setReferralCompanies() {
@@ -157,7 +157,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
       this.personReferrals = refs
     })
     this.setPersonReferrals(this.personDetails?.referrals)
-    console.log('person refs', this.personReferrals)
+    // console.log('person refs', this.personReferrals)
   }
 
   setPersonReferrals(referrals: Referral[]) {

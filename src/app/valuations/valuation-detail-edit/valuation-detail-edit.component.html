@@ -169,7 +169,7 @@
             [showChangeProperty]="valuation?.valuationStatus == 0 || valuation?.valuationStatus == 2?true:false"
             [showChangeLastOwnerChange]="valuation?.valuationStatus < 4 ?true:false" (showPhotos)="showPhotosModal()"
             (showMap)="showMapModal()" (changeProperty)="changeProperty()"
-            (changeLastknownOwner)="sharedService.addLastOwnerBs.next(true);isLastKnownOwnerVisible = true">
+            (changeLastKnownOwner)="onChangeLastKnownOwner($event)">
           </app-property-card>
         </div>
 
@@ -917,6 +917,7 @@
 </app-property-detail-map>
 
 <!-- Contactgroup Finder Modal -->
+<!-- dialog for selecting new last known owner -->
 <p-dialog header="Last known owner" [(visible)]="isLastKnownOwnerVisible" [modal]="true" [draggable]="false"
   class="modal--medium modal--hasFooter">
   <app-contact-group-finder (selectedContactGroup)="getSelectedOwner($event)" [showCreateNewCompanyContact]="true"

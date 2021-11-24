@@ -96,7 +96,7 @@ export class ValuationsLandRegisterComponent implements OnInit, AfterViewInit, O
         this.property.userEnteredOwner = data.userEnteredOwner;
         this.valuation.ownerConfirmed = data.ownerConfirmed;
         const ownerConfirmed = parseInt(data.ownerConfirmed)
-        this._valuationService.updateLocalModel({ ownerConfirmed })
+        this._valuationService.updateLocalValuation({ ownerConfirmed })
         this.property.leaseExpiryDate = data.leaseExpiryDate ? new Date(data.leaseExpiryDate) : null;
       }
       this.getValidationResult();
@@ -110,7 +110,7 @@ export class ValuationsLandRegisterComponent implements OnInit, AfterViewInit, O
       }
     });
 
-    this._valuationService.contactGroupBs.subscribe((data) => {
+    this._valuationService.contactGroup$.subscribe((data) => {
       let contactGroup = data;
       if (contactGroup) {
         this.contactNamesQuestion = 'Are';
@@ -166,13 +166,13 @@ export class ValuationsLandRegisterComponent implements OnInit, AfterViewInit, O
     if (fileObj) {
       if (fileObj.type == 'L') {
         this.valuation.leaseLandRegFiles = [...fileObj.file];
-        this._valuationService.updateLocalModel({ leaseLandRegFiles: [...fileObj.file] })
+        this._valuationService.updateLocalValuation({ leaseLandRegFiles: [...fileObj.file] })
       } else if (fileObj.type == 'D') {
         this.valuation.deedLandRegFiles = [...fileObj.file];
-        this._valuationService.updateLocalModel({ deedLandRegFiles: [...fileObj.file] })
+        this._valuationService.updateLocalValuation({ deedLandRegFiles: [...fileObj.file] })
       } else if (fileObj.type == 'P') {
         this.valuation.nameChangeRegFiles = [...fileObj.file];
-        this._valuationService.updateLocalModel({ nameChangeRegFiles: [...fileObj.file] })
+        this._valuationService.updateLocalValuation({ nameChangeRegFiles: [...fileObj.file] })
       }
     }
     this.controlFiles();
