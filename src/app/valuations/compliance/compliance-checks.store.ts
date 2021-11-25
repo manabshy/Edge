@@ -609,21 +609,23 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           }
 
           this.voidUserComplianceTimestamps()
-          console.log('✔️ lastKnownOwnerChanged, compliance checks state built for contactGroupId', data)
-
+          console.log('✔️ add POA', data)
+          
           break
-        case 'remove':
-          this.removeFromValuation(data.id)
-          if (data.isFrozen) {
-            this.patchState({
-              compliancePassedBy: null,
-              compliancePassedDate: null,
-              isFrozen: false,
-              checksAreValid: false
-            })
+          case 'remove':
+            this.removeFromValuation(data.id)
+            if (data.isFrozen) {
+              this.patchState({
+                compliancePassedBy: null,
+                compliancePassedDate: null,
+                isFrozen: false,
+                checksAreValid: false
+              })
+              this.voidUserComplianceTimestamps()
+            }
+            console.log('❌ remove POA', data)
+            break
           }
-          break
-      }
       return of(this.pushContactsToValuationServiceForSave$)
     }),
     mergeMap(() => this.validationMessage$.pipe())

@@ -430,7 +430,9 @@ export class ValuationFacadeService {
           })
         })
     } else {
-      this._isPowerOfAttorneyChanged.next({ action: 'remove', id: adminContact.id })
+      const valuation = this._valuationData.getValue()
+      const isFrozen = valuation.complianceCheck?.compliancePassedDate
+      this._isPowerOfAttorneyChanged.next({ action: 'remove', id: adminContact.id, isFrozen: !!isFrozen })
     }
   }
 
