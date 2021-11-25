@@ -225,7 +225,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((params) => {
       this.isNewContactGroup = (!AppUtils.holdingSelectedPeople && params['isNewContactGroup']) || false
       this.isNewPersonalContact = params['isNewPersonalContact'] || false
-      this.isNewCompanyContact = !!params['isNewCompanyContact'] || false
+      this.isNewCompanyContact = params['isNewCompanyContact'] === 'true'
       this.isSigner = params['isSigner'] || false
       this.isExistingCompany = params['isExistingCompany'] || false
       this.existingCompanyId = params['existingCompanyId'] || 0

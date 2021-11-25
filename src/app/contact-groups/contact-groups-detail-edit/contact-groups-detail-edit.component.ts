@@ -26,8 +26,8 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   @Output() addedPersonId = new EventEmitter<number>()
   @Output() hideCanvas = new EventEmitter<boolean>()
   @Output() backToFinder = new EventEmitter<boolean>()
-  // @Input() basicPerson: BasicPerson;
   @Input() isCompanyContactGroup = false
+
   basicPerson: BasicPerson
   prefToggleStatus = false
   countries: InfoDetail[] = []
@@ -36,7 +36,6 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   telephoneTypes: Record<number, string>
   listInfo: DropdownListInfo
   titleSelected = 1
-  // defaultCountryCode = 232;
   telephoneTypeSelected = 1
   todaysDate = new Date()
   retrievedAddresses: AddressAutoCompleteData
@@ -123,14 +122,14 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
       if (data) {
         this.currentStaffMember = data
       }
-      // console.log("current user info here....", data);
+      // console.log("current user info here....", data)
     })
 
     this.subs.sink = this.storage.get('info').subscribe((data: DropdownListInfo) => {
       if (data) {
         this.listInfo = data
         this.setDropdownLists()
-        // console.log("app info in contact edit ....", data);
+        // console.log("app info in contact edit ....", data)
       }
     })
 
