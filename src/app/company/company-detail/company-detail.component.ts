@@ -26,7 +26,7 @@ export class CompanyDetailComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit() {
-    console.log('im  here 1', this.companyId);
+    console.log('CompanyDetailComponent here 1', this.companyId);
     this.route.params.subscribe(params => this.companyId = this.companyId || +params['id'] || 0);
     this.route.queryParams.subscribe(params => {
       this.isNewCompany = this.companyId ? false : params['isNewCompany'];
