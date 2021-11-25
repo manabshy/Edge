@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core'
 import { ComponentStore } from '@ngrx/component-store'
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs'
 import { mergeMap, tap, filter, switchMap, take, map } from 'rxjs/operators'
-import { buildStoreState, buildEntitiesArray } from './helpers/compliance-checks.store-helpers'
+import { buildStoreState, buildEntitiesArray, patchEntities } from './helpers/compliance-checks.store-helpers'
 import { ComplianceChecksFacadeService } from './compliance-checks.facade.service'
 import { buildComplianceChecksStatusMessages, checkAllEntitiesHaveValidDocs } from './helpers/store-validation-helpers'
 import {
@@ -217,6 +217,13 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     })
   }))
 
+  readonly voidUserComplianceTimestamps = this.updater((state) => ({
+    ...state,
+    entities: state.entities.map((entity) => {
+      return { ...entity, personDateAmlCompleted: null }
+    })
+  }))
+
   readonly addFilesToEntity = this.updater((state, params: any) => ({
     ...state,
     entities: state.entities.map((entity) =>
@@ -288,8 +295,8 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           this.patchState(buildStoreState(contactGroupData, valuationData, entityToAdd))
           // console.log('✔️ compliance checks state built for contactGroupId', contactGroupData.contactGroupId)
           return this.validationMessage$
-        }),
-        // map(() => this.pushContactsToValuationServiceForSave$),
+        })
+        // map(() => this.pushContactsToValuationServiceForSave$), // required?
         // take(1)
       )
       .subscribe(
@@ -575,23 +582,52 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     )
   }
 
-  readonly isPowerOfAttorneyChanges$ = this._complianceChecksFacadeSvc.isPowerOfAttorneyChanged$
-    .pipe(
-      filter((data) => data.action),
-      mergeMap((data): any => {
-        console.log('inside isPowerAttorneyObservable$: ', data)
-        switch (data.action) {
-          case 'add':
-            data.admin.isAdmin = true
+  readonly isPowerOfAttorneyChanges$ = this._complianceChecksFacadeSvc.isPowerOfAttorneyChanged$.pipe(
+    filter((data) => data.action),
+    mergeMap((data): any => {
+      console.log('inside isPowerAttorneyObservable$: ', data)
+      console.log('inside isFrozen: ', data.isFrozen)
+      switch (data.action) {
+        case 'add':
+          data.admin.isAdmin = true
+          this.patchState({
+            compliancePassedBy: null,
+            compliancePassedDate: null,
+            isFrozen: false,
+            checksAreValid: false
+          })
+          if (data.isFrozen) {
+            console.log('frozen', data.allDocuments, data.admin)
+            const entityAlreadyExists = data.allDocuments.find((e) => e.id === data.admin.id)
+            if (!entityAlreadyExists) {
+              data.allDocuments.push(data.admin)
+            }
+            this.patchState(patchEntities(data.allDocuments))
+          } else {
+            console.log('!frozen')
             this.loadExistingEntity(data.admin)
-            break
+          }
+
+          this.voidUserComplianceTimestamps()
+          console.log('✔️ add POA', data)
+          
+          break
           case 'remove':
             this.removeFromValuation(data.id)
+            if (data.isFrozen) {
+              this.patchState({
+                compliancePassedBy: null,
+                compliancePassedDate: null,
+                isFrozen: false,
+                checksAreValid: false
+              })
+              this.voidUserComplianceTimestamps()
+            }
+            console.log('❌ remove POA', data)
             break
-        }
-        return of(this.pushContactsToValuationServiceForSave$)
-      }),
-      mergeMap(() => this.validationMessage$.pipe())
-    )
-    
+          }
+      return of(this.pushContactsToValuationServiceForSave$)
+    }),
+    mergeMap(() => this.validationMessage$.pipe())
+  )
 }

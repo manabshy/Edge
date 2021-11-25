@@ -11,7 +11,7 @@
       <p class="mt-0 font-medium tracking-normal text-gray-500 text-md" *ngIf="entity.position">
         {{ entity.position }}
       </p>
-      <p class="w-full mt-1 text-gray-500 txt--small" >
+      <p class="w-full mt-1 text-gray-500 txt--small">
         <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
           <path
             d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z"
@@ -23,12 +23,12 @@
     </div>
     <!-- <ng-template #menuTrigger></ng-template> -->
     <span class="flex-1"></span>
-    <ng-container  *ngIf="hasMenuBtn && !isFrozen" >
+    <ng-container *ngIf="hasMenuBtn && !isFrozen">
       <app-menu [menuItems]="menuItems"></app-menu>
-    </ng-container >
+    </ng-container>
   </div>
 
-  <p class="mt-3 mb-2 font-medium">Documents</p>
+  <p class="mt-3 mb-1 font-medium">Documents</p>
   <div class="flex flex-col md:flex-row gap-x-2 gap-y-2 w-100" *ngIf="!entity.companyId">
     <div class="w-100 md:w-1/2">
       <app-document-info
@@ -68,16 +68,23 @@
         (deleteFile)="onFileDeleted.emit({ entity: entity, ev: $event })"
       ></app-document-info>
     </div>
-    <div class="w-100" [ngClass]=" entity.companyId ? 'flex-1':'md:w-1/2' ">
-      <app-document-info
-        [label]="entity.documents.additionalDocs.label"
-        [documentType]="entity.documents.additionalDocs.documentType"
-        [files]="entity.documents.additionalDocs.files"
-        [name]="entity.name"
-        [isFrozen]="isFrozen"
-        (onFileUploaded)="onFileUploaded.emit({ entity: entity, ev: $event })"
-        (deleteFile)="onFileDeleted.emit({ entity: entity, ev: $event })"
-      ></app-document-info>
+    <div class="w-100" [ngClass]="entity.companyId ? 'flex-1' : 'md:w-1/2'">
+      <ng-container
+        *ngIf="
+          (entity.documents.additionalDocs.files.length && isFrozen) ||
+          (!entity.documents.additionalDocs.files.length && !isFrozen)
+        "
+      >
+        <app-document-info
+          [label]="entity.documents.additionalDocs.label"
+          [documentType]="entity.documents.additionalDocs.documentType"
+          [files]="entity.documents.additionalDocs.files"
+          [name]="entity.name"
+          [isFrozen]="isFrozen"
+          (onFileUploaded)="onFileUploaded.emit({ entity: entity, ev: $event })"
+          (deleteFile)="onFileDeleted.emit({ entity: entity, ev: $event })"
+        ></app-document-info>
+      </ng-container>
     </div>
   </div>
   <div class="p-2" *ngIf="entity.personDateAmlCompleted">
@@ -88,11 +95,11 @@
   </div>
 
   <p-dialog
-    header="{{editEntityHeader}}"
+    header="{{ editEntityHeader }}"
     [(visible)]="dialogs.showEditDialog"
     [modal]="true"
     [draggable]="false"
-    class="modal--small "
+    class="modal--small"
   >
     <form [formGroup]="contactForm">
       <fieldset class="p-2 form-control">

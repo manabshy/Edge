@@ -1,6 +1,6 @@
 <!-- FILE LIST WITH DELETE & UPLOAD BUTTONS -->
 <div
-  class="w-full p-2 py-2 border rounded-sm cursor-pointer border-grey-100"
+  class="w-full p-2 border rounded-sm cursor-pointer border-grey-100"
   [ngClass]="idHasExpired ? 'border-red-500 bg-red-100' : ''"
 >
   <div *ngFor="let file of files" class="flex flex-row content-center my-1">
@@ -22,7 +22,7 @@
   
     <!-- FILE UPLOAD DATE -->
     <span class="flex-1 text-right">
-      <ng-container  *ngIf="file.dateReplaced">
+      <ng-container *ngIf="file.dateReplaced">
         <span [pTooltip]="'Upload Date'">
           {{ moment(file.dateReplaced).format('DD/MM/YY') }}
         </span>
@@ -44,7 +44,7 @@
   </div>
 
   <!-- OPEN UPLOAD FILE DIALOG BTN -->
-  <button *ngIf="showFilesUploadButton" [disabled]="isFrozen" (click)="openUploadDialog()" class="py-2">
+  <button *ngIf="showFilesUploadButton" [disabled]="isFrozen" (click)="openUploadDialog()" class="py-1">
     <span *ngIf="!isFrozen; else unFrozenLabel">
       <i class="fa fa-upload" aria-hidden="true"></i>
       <span class="ml-2 underline">Upload {{ label }}</span>
