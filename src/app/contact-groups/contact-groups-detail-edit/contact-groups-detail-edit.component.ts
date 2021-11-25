@@ -42,7 +42,7 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   personDetails: Person
   personForm: FormGroup
   personId: number
-  newPersonId: number
+  newPersonId: number = null
   id: number
   groupPersonId: number
   isNewContactGroup = false
@@ -571,6 +571,7 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   }
 
   savePerson(otherPersonToAdd) {
+    
     this.errorMessage = null
     this.removeOthers()
     this.logValidationErrors(this.personForm, true, true)
@@ -588,7 +589,11 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
         }
         if (!this.basicPerson) {
           this.subs.sink = this.contactGroupService.updatePerson(person).subscribe(
-            (res) => this.onSaveComplete(res.result, otherPersonToAdd),
+            (res) =>{
+              console.log('!basicPerson setting newPersonId to ', res.result.personId)
+              this.newPersonId = res.result.personId
+              this.onSaveComplete(res.result, otherPersonToAdd)
+              },
             (error: WedgeError) => {
               this.isSubmitting = false
               this.isSubmittingAndAdd = false
@@ -638,6 +643,7 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
       const payload: any = { ...person }
       payload.addNewEntityToComplianceChecks = this.addNewEntityToComplianceChecks
       this.contactGroupService.getAddedPerson(payload)
+      console.log('addedPersonId: ', this.newPersonId)
       this.addedPersonId.emit(this.newPersonId)
       const personEmitter = {
         person: person,
