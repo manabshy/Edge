@@ -69,8 +69,10 @@ export class ContactSearchComponent implements OnInit {
 
   addNewPerson() {
     let newPerson = this.personFinderForm.value
-    newPerson.firstName = newPerson.fullName.trim().split(' ')[0]
-    newPerson.lastName = newPerson.fullName.trim().split(' ')[1]
+    let newPersonNameArr = newPerson.fullName.trim().split(' ')
+    newPerson.firstName = newPersonNameArr.length > 0 ? newPersonNameArr[0] : ''
+    newPerson.middleName = newPersonNameArr.length > 1 ? newPersonNameArr[1] : ''
+    newPerson.lastName = newPersonNameArr.length > 2 ? newPersonNameArr[2] : ''
     this.onCreateNewPerson.emit(newPerson)
   }
 

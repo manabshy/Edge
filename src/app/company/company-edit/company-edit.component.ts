@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, NgZone, OnInit } from '@angular/core'
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service'
@@ -52,7 +52,8 @@ export class CompanyEditComponent implements OnInit {
     private _location: Location,
     private route: ActivatedRoute,
     private _router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private zone: NgZone
   ) {}
 
   ngOnInit() {

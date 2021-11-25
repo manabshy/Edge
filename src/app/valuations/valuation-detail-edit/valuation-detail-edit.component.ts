@@ -343,7 +343,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     private router: Router,
     private fb: FormBuilder,
     private primengConfig: PrimeNGConfig,
-    private sidenavService: SidenavService,
+    private sidenavService: SidenavService
   ) {
     super()
   }
@@ -2773,6 +2773,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         totalHours: 1
       }
       valuation.combinedValuationBooking.meetingOwner = valuation.salesMeetingOwner == false ? false : true
+      valuation.lettingsValuationBooking = null
+      valuation.salesValuationBooking = null
     } else {
       valuation.combinedValuationBooking = null
       if (valuation.salesValuationBooking) {
@@ -3006,7 +3008,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this._valuationFacadeSvc.togglePowerOfAttorney(ev)
   }
 
-  onChangeLastKnownOwner(ev){
+  onChangeLastKnownOwner(ev) {
     console.log('owner has changed, refresh documents in compliance checks', ev)
     this.sharedService.addLastOwnerBs.next(true)
     this.isLastKnownOwnerVisible = true
