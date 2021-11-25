@@ -13,6 +13,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe'
 // Directives
 import { AutocompleteOffDirective } from './directives/autocomplete-off.directive'
 import { NoDoubleTapDirective } from './directives/no-double-tap.directive'
+import { OnlyNumbersDirective } from './directives/only-numbers.directive'
 // Components
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component'
 import { NoteModalComponent } from './note-modal/note-modal.component'
@@ -142,7 +143,7 @@ const pipes = [
   ToPascalCasePipe,
   SafeHtmlPipe
 ]
-const directives = [AutocompleteOffDirective, NoDoubleTapDirective]
+const directives = [AutocompleteOffDirective, NoDoubleTapDirective, OnlyNumbersDirective]
 
 @NgModule({
   declarations: [components, pipes, directives],
