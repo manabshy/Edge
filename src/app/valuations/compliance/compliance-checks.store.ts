@@ -610,24 +610,41 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
 
           this.voidUserComplianceTimestamps()
           console.log('✔️ add POA', data)
-          
+
           break
-          case 'remove':
-            this.removeFromValuation(data.id)
-            if (data.isFrozen) {
-              this.patchState({
-                compliancePassedBy: null,
-                compliancePassedDate: null,
-                isFrozen: false,
-                checksAreValid: false
-              })
-              this.voidUserComplianceTimestamps()
-            }
-            console.log('❌ remove POA', data)
-            break
-          }
+        case 'remove':
+          this.removePoAandRefreshDocuments(data)
+
+          console.log('❌ remove POA', data)
+          break
+      }
       return of(this.pushContactsToValuationServiceForSave$)
     }),
     mergeMap(() => this.validationMessage$.pipe())
   )
+
+  private removePoAandRefreshDocuments(data) {
+    this.removeFromValuation(data.id)
+    if (data.isFrozen) {
+      this.patchState({
+        compliancePassedBy: null,
+        compliancePassedDate: null,
+        isFrozen: false,
+        checksAreValid: false
+      })
+      this.voidUserComplianceTimestamps()
+      // call refresh docs endpoints
+      if (data.companyOrContact === 'company') {
+        this._complianceChecksFacadeSvc
+          .unfreezeCompanyDocsForValuation(data.contactGroupId, data.valuationEventId)
+          .pipe(take(1))
+          .subscribe((data) => console.log('datadatadata ', data))
+      } else {
+        this._complianceChecksFacadeSvc
+          .unfreezePeopleDocsForValuation(data.contactGroupId, data.valuationEventId)
+          .pipe(take(1))
+          .subscribe((data) => console.log('datadatadata ', data))
+      }
+    }
+  }
 }

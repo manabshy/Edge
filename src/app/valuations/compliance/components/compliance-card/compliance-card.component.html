@@ -72,7 +72,7 @@
       <ng-container
         *ngIf="
           (entity.documents.additionalDocs.files.length && isFrozen) ||
-          (!entity.documents.additionalDocs.files.length && !isFrozen)
+          (!isFrozen)
         "
       >
         <app-document-info

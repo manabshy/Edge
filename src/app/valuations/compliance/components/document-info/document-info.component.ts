@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core'
 import { FileTypeEnum } from '../../../../core/services/file.service'
 import moment from 'moment'
-import { FormControl, FormGroup } from '@angular/forms'
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { DOCUMENT_TYPE } from '../../compliance-checks.interfaces'
 
 export interface EmitDocument {
@@ -28,6 +28,8 @@ export class DocumentInfoComponent implements OnInit {
   @Output() deleteFile: EventEmitter<any> = new EventEmitter()
   @Output() onFileUploaded: EventEmitter<any> = new EventEmitter()
 
+  constructor(private fb: FormBuilder) {}
+
   DOCUMENT_TYPE = DOCUMENT_TYPE
   idHasExpired: boolean = false
   showFileUploadDialog: boolean = false
@@ -35,21 +37,17 @@ export class DocumentInfoComponent implements OnInit {
   tmpFiles: File[]
   uploadDialogHeaderText: string
   moment = moment
-  idExpiryForm = new FormGroup({
-    idExpiryDate: new FormControl()
+  idExpiryForm = this.fb.group({
+    idExpiryDate: ['']
   })
-  smartSearchIdForm = new FormGroup({
-    smartSearchId: new FormControl()
+  smartSearchIdForm = this.fb.group({
+    smartSearchId: ['', [Validators.pattern('^[0-9]*$')]]
   })
   showExpiryDatePicker = false
   showAdditionalInput = false
-  expiryDateMessage = {
+  message = {
     type: 'info',
-    text: ['Please enter the ID expiry date']
-  }
-  additionalInputMessage = {
-    type: 'info',
-    text: ['Please enter the ID for the SmartSearch']
+    text: ['Select a file to upload']
   }
   additionalLabel: string
   showFilesUploadButton: boolean
@@ -57,6 +55,8 @@ export class DocumentInfoComponent implements OnInit {
   ngOnInit(): void {
     this.checkIdIsValid()
     this.showFilesUploadButton = this.showFilesUploadButtonDecider()
+    this.buildMessage()
+    this.setFormValidation()
   }
 
   showFilesUploadButtonDecider(): boolean {
@@ -103,12 +103,44 @@ export class DocumentInfoComponent implements OnInit {
     this.validate()
   }
 
+  buildMessage() {
+    if (this.documentType === DOCUMENT_TYPE.ID) {
+      this.showExpiryDatePicker = true
+      this.message.text = ['Select a file to upload and enter ID expiry date below']
+    } else if (this.documentType === DOCUMENT_TYPE.REPORT) {
+      this.message.text = ['Select a file to upload and enter SmartSearch report ID below']
+      this.showAdditionalInput = true
+    } else {
+      this.saveFileBtnDisabled = false
+    }
+  }
+
+  setFormValidation() {
+    if (this.documentType === DOCUMENT_TYPE.ID) {
+      this.idExpiryForm.controls['idExpiryDate'].setValidators([Validators.required])
+    } else if (this.documentType === DOCUMENT_TYPE.REPORT) {
+      this.message.text = ['Select a file to upload and enter SmartSearch report ID below']
+      this.showAdditionalInput = true
+      this.smartSearchIdForm.controls['smartSearchId'].setValidators([Validators.required])
+    } else {
+      this.saveFileBtnDisabled = false
+    }
+  }
+
   validate(): void {
     if (this.documentType === DOCUMENT_TYPE.ID) {
-      this.showExpiryDatePicker = !!this.tmpFiles.length
+      this.message.text = this.tmpFiles.length ? ['Enter expiry date below'] : this.message.text
+      const formValid = this.idExpiryForm.controls['idExpiryDate'].valid
+      this.message.type = formValid ? 'success' : 'info'
+      this.message.text = formValid ? ['Valid for upload'] : ['Please enter the expiry date']
     } else if (this.documentType === DOCUMENT_TYPE.REPORT) {
-      this.showAdditionalInput = !!this.tmpFiles.length
+      this.message.text = this.tmpFiles.length ? ['Enter SmartSearch ID below'] : this.message.text
+      const formValid = this.smartSearchIdForm.controls['smartSearchId'].valid
+      this.message.type = formValid ? 'success' : 'info'
+      this.message.text = formValid ? ['Valid for upload'] : ['Please enter SmartSearch report ID below']
     } else {
+      this.message.type = this.tmpFiles.length ? 'success' :'info'
+      this.message.text = this.tmpFiles.length ? ['Ready to upload'] : ['Please attach a file']
       this.saveFileBtnDisabled = false
     }
   }
@@ -119,7 +151,9 @@ export class DocumentInfoComponent implements OnInit {
     if (this.documentType == DOCUMENT_TYPE.ID && !this.idHasExpired) {
       emitData.idValidationDateExpiry = this.idExpiryForm.get('idExpiryDate').value
     } else if (this.documentType === DOCUMENT_TYPE.REPORT) {
-      emitData.smartSearchId = this.smartSearchIdForm.get('smartSearchId').value
+      const smartSearchId = this.smartSearchIdForm.get('smartSearchId').value
+      emitData.smartSearchId = smartSearchId.trim()
+      console.log('emitData.smartSearchId: ', emitData.smartSearchId)
     }
     this.onFileUploaded.emit(emitData)
 
@@ -136,10 +170,20 @@ export class DocumentInfoComponent implements OnInit {
       this.idHasExpired = new Date(expiryDate) <= new Date()
       this.saveFileBtnDisabled = this.idHasExpired
       if (!this.idHasExpired && this.files.length === 1) this.files[0].idValidationDateExpiry = new Date(expiryDate)
+      if (this.idHasExpired) {
+        this.message.type = 'error'
+        this.message.text = ['The ID has expired']
+      } else {
+        this.message.type = this.tmpFiles.length ? 'success' : 'warn'
+        this.message.text = this.tmpFiles.length ? ['Ready to upload'] : ['Please upload an ID']
+      }
     }
   }
 
   onSmartSearchIdChange(id: string): void {
     this.saveFileBtnDisabled = !id
+    this.validate()
   }
+
+  
 }

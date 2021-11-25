@@ -393,6 +393,7 @@ export class ValuationFacadeService {
   public togglePowerOfAttorney(adminContact) {
     console.log('togglePowerOfAttorney: ', adminContact)
     if (!adminContact.isPowerOfAttorney) {
+      // ON ADD POWER OF ATTORNEY
       let adminDocumentsClosure
       combineLatest([this.valuationData$, this.getAllPersonDocs(adminContact.id)])
         .pipe(
@@ -405,7 +406,7 @@ export class ValuationFacadeService {
               console.log(
                 'valuation is frozen, fetch default docs for contact group to load into compliace checks card'
               )
-              return this.loadContactGroupComplianceDocumentsIntoStore$(this._contactGroupBs.getValue().contactGroupId) // needs to be value, not observable
+              return this.loadContactGroupComplianceDocumentsIntoStore$(this._contactGroupBs.getValue().contactGroupId)
             } else {
               console.log('valuation isnt frozen, only return admin contact documents to add to the store')
               return of({
@@ -430,9 +431,18 @@ export class ValuationFacadeService {
           })
         })
     } else {
+      // ON REMOVE POWER OF ATTORNEY
       const valuation = this._valuationData.getValue()
       const isFrozen = valuation.complianceCheck?.compliancePassedDate
-      this._isPowerOfAttorneyChanged.next({ action: 'remove', id: adminContact.id, isFrozen: !!isFrozen })
+      this._isPowerOfAttorneyChanged.next({
+        action: 'remove',
+        id: adminContact.id,
+        isFrozen: !!isFrozen,
+        valuationEventId: valuation.valuationEventId,
+        contactGroupId: this._contactGroupBs.getValue().contactGroupId,
+        companyOrContact: this._contactGroupBs.getValue().companyId ? 'company' : 'contact',
+
+      })
     }
   }
 
