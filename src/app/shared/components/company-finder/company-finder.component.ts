@@ -41,6 +41,7 @@ export class CompanyFinderComponent implements OnInit {
   constructor(private contactGroupService: ContactGroupsService) {}
 
   ngOnInit() {
+    console.log('TODO add debounce here')
     this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
         distinctUntilChanged(),

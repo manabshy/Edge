@@ -71,6 +71,7 @@ export class CompanyEditComponent implements OnInit {
 
     this.route.params.subscribe((params) => (this.companyId = this.companyId || +params['id'] || 0))
     this.route.queryParams.subscribe((params) => {
+      console.log('subscribed to params: ', params)
       this.isNewCompany = this.companyId ? false : params['isNewCompany']
       this.isEditingSelectedCompany = params['isEditingSelectedCompany'] || false
       this.backToOrigin = params['backToOrigin'] || false
@@ -87,9 +88,7 @@ export class CompanyEditComponent implements OnInit {
     if (id) {
       this.getCompanyDetails(id)
     }
-    // if (AppUtils.newSignerId) {
-    //   this.getSignerDetails(AppUtils.newSignerId);
-    // }
+
     this.getSignerDetails()
     this.companyForm.valueChanges
       .pipe(debounceTime(400))
@@ -122,13 +121,11 @@ export class CompanyEditComponent implements OnInit {
       if (data) {
         this.signer = data
         this.isCreatingNewSigner = false
-        console.log({ data }, 'new signer shoud be here')
       }
     })
   }
 
   displayCompanyDetails(company: Company) {
-    console.log('aml completed date', this.sharedService.ISOToDate(company.amlCompletedDate))
     if (this.companyForm) {
       this.companyForm.reset()
     }
@@ -149,6 +146,7 @@ export class CompanyEditComponent implements OnInit {
     })
     this.existingSigner = company.signer
   }
+  
   populateNewCompanyDetails() {
     if (this.companyForm) {
       this.companyForm.reset()
@@ -245,22 +243,15 @@ export class CompanyEditComponent implements OnInit {
   setManualEntryFlag(ev) {
     this.showCompanyFinder = false
     this.isManualEntry = true
-    console.log('navigating... is this correct?')
-    let queryString = `isNewCompany=true&companyName=${ev.companyName}&backToOrigin=${ev.backToOrigin}`
-    this._location.replaceState('/company-centre/detail/0/edit', queryString)
-    // this.init()
-    window.location.reload()
-    localStorage.removeItem('currentUrl')
+    this.getCompanyName(ev.companyName)
   }
 
   navigateToCompany(company: Company) {
     this.companyDetails = null
     let url = this._router.url
-
     if (url.indexOf('?') >= 0) {
       url = url.substring(0, url.indexOf('?'))
     }
-
     url = url.replace('detail/0', 'detail/' + this.companyId)
     url = url.replace('detail/' + this.companyId, 'detail/' + company.companyId)
     this._location.replaceState(url)
@@ -297,8 +288,7 @@ export class CompanyEditComponent implements OnInit {
     }
     this.isSubmitting = true
     if (this.isNewCompany) {
-      console.log('add company', company)
-
+      console.log('adding new company', company)
       this.companyService.addCompany(company).subscribe(
         (res) => this.onSaveComplete(res.result),
         (error: WedgeError) => {
@@ -332,6 +322,7 @@ export class CompanyEditComponent implements OnInit {
       this.sharedService.back()
       return
     }
+    console.log('navigating to new company detail page: ', company.companyId)
     this._router.navigate(['company-centre/detail', company.companyId])
   }
 
