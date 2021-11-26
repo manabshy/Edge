@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { Company, CompanyAutoCompleteResult } from 'src/app/contact-groups/shared/contact-group'
-import { distinctUntilChanged, switchMap, tap, catchError } from 'rxjs/operators'
+import { distinctUntilChanged, switchMap, tap, catchError, debounceTime } from 'rxjs/operators'
 import { Observable, EMPTY } from 'rxjs'
 
 @Component({
@@ -41,9 +41,9 @@ export class CompanyFinderComponent implements OnInit {
   constructor(private contactGroupService: ContactGroupsService) {}
 
   ngOnInit() {
-    console.log('TODO add debounce here')
     this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
+        debounceTime(100), 
         distinctUntilChanged(),
         switchMap((term) =>
           this.contactGroupService.getCompanySuggestions(term).pipe(

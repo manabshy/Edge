@@ -37,7 +37,9 @@ export class ValuationFacadeService {
   valuationPageNumberChanges$ = this.valuationPageNumberSubject.asObservable()
 
   _contactGroupBs = new BehaviorSubject(null)
-  public readonly contactGroup$: Observable<ContactGroup> = this._contactGroupBs.asObservable()
+  public readonly contactGroup$: Observable<ContactGroup> = this._contactGroupBs
+    .asObservable()
+    // .pipe(tap((data) => console.log('contact group data is changing to ', data)))
 
   valuationValidationSubject = new Subject<boolean>()
   valuationValidation$ = this.valuationValidationSubject.asObservable()
@@ -52,36 +54,25 @@ export class ValuationFacadeService {
   private readonly _valuationPricingInfo: BehaviorSubject<ValuationPricingInfo> = new BehaviorSubject({})
   public readonly valuationPricingInfo$ = this._valuationPricingInfo.asObservable()
 
-  public readonly onLastKnownOwnerChanged$ = this.contactGroup$.pipe(
-    filter((contactGroup) => {
-      // console.log('contactGroup has changed. inside filter function ', contactGroup)
-      const valuationData = this._valuationData.getValue()
-      // console.log('valuationData: ', valuationData)
-      if (!!contactGroup && contactGroup.contactGroupId && valuationData) {
-        return contactGroup.contactGroupId !== valuationData.propertyOwner.contactGroupId
-      }
-      return false
-    }),
-    mergeMap((contactGroup) => {
-      // call documents endpoint
-      // every time contactGroupId changes, get the compliance docs for the people in that contact group,
-      return this.loadContactGroupComplianceDocumentsIntoStore$(contactGroup.contactGroupId)
-    }),
-    mergeMap((data) => {
-      console.log('valuationData after last known owner change: ', data)
-      return of({
-        contactGroupData: this._contactGroupBs.getValue(),
-        valuationData: this._valuationData.getValue()
+  private _lastKnownOwnerChanged: BehaviorSubject<any> = new BehaviorSubject(null)
+  public lastKnownOwnerChanged$: Observable<any> = this._lastKnownOwnerChanged.asObservable()
+
+  changeLastKnownOwner(contactGroupId):void {
+    this.loadContactGroupComplianceDocumentsIntoStore$(contactGroupId)
+      .pipe(take(1))
+      .subscribe(()=>{},()=>{},() => {
+        console.log('🧍🧍🧍 lastKnownOwnerChanged, default documents for the contact group have been loaded to valuationData$ model: ')
+        this._lastKnownOwnerChanged.next({
+          valuationData: this._valuationData.getValue(),
+          contactGroupData: this._contactGroupBs.getValue()
+        })
       })
-    })
-  )
+  }
 
   // grabs the default compliance documents for all entities in a contactGroup and updates the local valuation model
   private loadContactGroupComplianceDocumentsIntoStore$(contactGroupId): Observable<any> {
-    // console.log('loadContactGroupComplianceDocumentsIntoStore: contactGroup', contactGroupId)
     return this.getPeopleDocsForValuation(contactGroupId, 0).pipe(
       mergeMap((complianceDocuments) => {
-        // console.log('person documents are about to be updated in local model: ', complianceDocuments)
         const personDocuments = complianceDocuments.filter((doc) => doc.personId)
         const companyDocuments = complianceDocuments.filter((doc) => doc.companyId)
         personDocuments.forEach((doc) => {
@@ -90,8 +81,6 @@ export class ValuationFacadeService {
         companyDocuments.forEach((doc) => {
           doc.position = doc.position ? doc.position : ''
         })
-        // console.log('update companyDocuments to ', companyDocuments)
-        // console.log('update personDocuments to ', personDocuments)
         this.updateLocalValuation({ personDocuments, companyDocuments })
         return of({ personDocuments, companyDocuments })
       })
@@ -131,8 +120,9 @@ export class ValuationFacadeService {
     return updatedValuationData
   }
 
-  public updateLocalContactGroup(data) {
-    this._contactGroupBs.next(data)
+  public updateLocalContactGroup(contactGroupData) {
+    // console.log('updateLocalContactGroup: contactGroupData', contactGroupData)
+    this._contactGroupBs.next(contactGroupData)
   }
 
   getDropDownInfo() {
@@ -391,7 +381,7 @@ export class ValuationFacadeService {
   }
 
   public togglePowerOfAttorney(adminContact) {
-    console.log('togglePowerOfAttorney: ', adminContact)
+    // console.log('togglePowerOfAttorney: ', adminContact)
     if (!adminContact.isPowerOfAttorney) {
       // ON ADD POWER OF ATTORNEY
       let adminDocumentsClosure
@@ -399,16 +389,16 @@ export class ValuationFacadeService {
         .pipe(
           take(1),
           mergeMap(([valuationData, adminContact]) => {
-            console.log('valuationData: ', valuationData)
-            console.log('adminContact: ', adminContact)
+            // console.log('valuationData: ', valuationData)
+            // console.log('adminContact: ', adminContact)
             adminDocumentsClosure = adminContact
             if (valuationData.complianceCheck?.compliancePassedDate) {
-              console.log(
-                'valuation is frozen, fetch default docs for contact group to load into compliace checks card'
-              )
+              // console.log(
+              //   'valuation is frozen, fetch default docs for contact group to load into compliace checks card'
+              // )
               return this.loadContactGroupComplianceDocumentsIntoStore$(this._contactGroupBs.getValue().contactGroupId)
             } else {
-              console.log('valuation isnt frozen, only return admin contact documents to add to the store')
+              // console.log('valuation isnt frozen, only return admin contact documents to add to the store')
               return of({
                 adminContact,
                 isFrozen: false
@@ -440,8 +430,7 @@ export class ValuationFacadeService {
         isFrozen: !!isFrozen,
         valuationEventId: valuation.valuationEventId,
         contactGroupId: this._contactGroupBs.getValue().contactGroupId,
-        companyOrContact: this._contactGroupBs.getValue().companyId ? 'company' : 'contact',
-
+        companyOrContact: this._contactGroupBs.getValue().companyId ? 'company' : 'contact'
       })
     }
   }

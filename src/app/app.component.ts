@@ -81,7 +81,7 @@ export class AppComponent extends BaseComponent implements OnInit {
       .pipe(filter((e) => e instanceof RoutesRecognized))
       .pipe(
         pairwise(),
-        tap((data) => console.log('events here....', data))
+        // tap((data) => console.log('events here....', data))
       )
       .subscribe((event: any[] | RoutesRecognized[]) => {
         AppUtils.prevRouteBU = AppUtils.prevRoute || ''
@@ -107,7 +107,7 @@ export class AppComponent extends BaseComponent implements OnInit {
       const homes = ['/', '/contact-centre', '/leads', '/company-centre', '/property-centre', '/valuations']
       const pathEqual = (elem) => elem === current
       if (homes.some(pathEqual) && this.serviceWorker.getIsupdateAvailable()) {
-        console.log('App relaod because of update')
+        // console.log('App relaod because of update')
         window.location.reload()
       }
     })
@@ -117,7 +117,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.toastr.overlayContainer = this.toastContainer
     this.setManifestName()
     this.setImpersonatedAsCurrentUser()
-    this.storage.delete('calendarStaffMembers').subscribe(() => console.log('calendar staff members deleted')) // Remove from localstorage
+    this.storage.delete('calendarStaffMembers').subscribe() // Remove from localstorage
 
     this.route.queryParams.subscribe((params) => {
       if (params['docTitle']) {

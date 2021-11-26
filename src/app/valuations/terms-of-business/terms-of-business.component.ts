@@ -6,6 +6,7 @@ import { EdgeFile } from 'src/app/shared/models/edgeFile'
 import { Valuation, ValuationStatusEnum, ValuationTypeEnum } from '../shared/valuation'
 import { Subscription } from 'rxjs'
 import { MessageService } from 'primeng/api'
+import { ThisReceiver } from '@angular/compiler'
 
 export interface ToBDocument {
   dateRequestSent: Date
@@ -193,7 +194,9 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
       declarableInterest: [this.model.declarableInterest, Validators.required],
       section21StatusId: [this.model.section21StatusId, Validators.required]
     })
+
     this.formSubscription = this.form.valueChanges.subscribe((data) => {
+      this.updateMessage(data)
       this.onModelChange.emit(data)
     })
 
@@ -201,6 +204,26 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
     this.menuItems = this.setMenuItems()
     this.buildMessageForView()
     this.isPreVal = this.isPreValStatus()
+  }
+
+  updateMessage(formData) {
+    if (formData.declarableInterest === true || formData.declarableInterest === false) {
+      
+      if(!this.warnUserOfUnsignedToB()){
+        if(this.message.type === 'error'){
+          this.message.type = 'info'
+          this.message.text = 'Ready to save Terms of Business'
+         } else if(this.message.type === 'warn'){
+          this.message.type = 'info'
+          this.message.text = ['Terms of Business uploaded, pending save.']    
+         }
+      } else {
+        if(this.message.type === 'error'){
+          this.message.type = 'warn'
+          this.message.text = ['Waiting on Terms of Business']
+         }
+      }
+    }
   }
 
   ngOnChanges(changes) {
@@ -234,6 +257,13 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
       this.termsOfBusinessDocumentIsSigned = this.isTermsOfBusinessSigned()
       this.message.type = 'info'
       this.message.text = ['Terms of Business uploaded, pending save.']
+      if (
+        this.valuationData.declarableInterest === null ||
+        typeof this.valuationData.declarableInterest == 'undefined'
+      ) {
+        this.message.type = 'warn'
+        this.message.text.push(['Please answer declarable interest'])
+      }
     }
   }
 

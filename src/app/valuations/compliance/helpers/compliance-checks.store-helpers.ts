@@ -3,23 +3,24 @@ import { mapDocumentsForView } from './store-documents-helpers'
 
 /***
  * @function buildStoreState
- * @param {Valuation} valuationData - the current valuation loaded into _valuationFacadeSvc
- * @param {Person|Company} entityToAdd? - optional parameter of newly created company | contact that needs to be loaded into the store when it builds
+ * @param {ContactGroup} storeState.contactGroupData - the current contact group loaded into _valuationFacadeSvc
+ * @param {Valuation} storeState.valuationData - the current valuation loaded into _valuationFacadeSvc
+ * @param {Person|Company} storeState.entityToAdd? - optional parameter of newly created company | contact that needs to be loaded into the store when it builds
  * @description Builds initial store state when the store is loaded
  * @returns Object containing properties for the compliance checks store
  */
-export const buildStoreState = (contactGroupData, valuationData, entityToAdd) => {
-  const entitiesData = mergeEntitiesReadyForStore(valuationData, entityToAdd)
+export const buildStoreState = (storeState) => {
+  const entitiesData = mergeEntitiesReadyForStore(storeState.valuationData, storeState.entityToAdd)
   return {
-    valuationEventId: valuationData.valuationEventId,
-    contactGroupId: contactGroupData.contactGroupId,
-    companyId: contactGroupData ? contactGroupData.companyId : null,
-    companyOrContact: contactGroupData?.companyId ? 'company' : 'contact',
-    checkType: identifyAmlOrKyc(valuationData),
-    isFrozen: valuationData.isFrozen,
-    compliancePassedDate: valuationData.complianceCheck?.compliancePassedDate,
-    compliancePassedBy: valuationData.complianceCheck?.compliancePassedByFullName,
-    entities: buildEntitiesArray(entitiesData, valuationData.complianceCheck.compliancePassedDate)
+    valuationEventId: storeState.valuationData.valuationEventId,
+    contactGroupId: storeState.contactGroupData.contactGroupId,
+    companyId: storeState.contactGroupData ? storeState.contactGroupData.companyId : null,
+    companyOrContact: storeState.contactGroupData?.companyId ? 'company' : 'contact',
+    checkType: identifyAmlOrKyc(storeState.valuationData),
+    isFrozen: storeState.valuationData.isFrozen,
+    compliancePassedDate: storeState.valuationData.complianceCheck?.compliancePassedDate,
+    compliancePassedBy: storeState.valuationData.complianceCheck?.compliancePassedByFullName,
+    entities: buildEntitiesArray(entitiesData, storeState.valuationData.complianceCheck.compliancePassedDate)
   }
 }
 

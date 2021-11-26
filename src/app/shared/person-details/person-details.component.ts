@@ -62,6 +62,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit() {
+    // console.log('🚧 PersonDetailsComponent init WIP 🚧')
     this.contactGroupService.noteChanges$.subscribe((note) => {
       const notes = this.personDetails.personNotes
       const existingNote = notes.find((x) => x.id === note.id)
@@ -91,16 +92,15 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
 
     if (this.personDetails?.emailAddresses?.length) {
       try {
-        console.log('this.personDetails.emailAddresses: ', this.personDetails.emailAddresses)
-        // TODO where is there an isPreferred flag on email addresses?
+        // console.log('this.personDetails.emailAddresses: ', this.personDetails.emailAddresses)
         this.preferredEmail = this.personDetails.emailAddresses.find((x) => x.isPreferred).email
       } catch (e) {
-        console.error('error: ', e)
+        // console.error('error: ', e)
         this.preferredEmail = 'error@dng.co.uk'
       }
     }
     if (this.warnings) {
-      console.log('warnings here as input', this.warnings)
+      // console.log('warnings here as input', this.warnings)
     }
   }
 
@@ -207,7 +207,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
 
   toggleShowEmailModal(shouldSet: boolean) {
     shouldSet ? (this.showEmailModal = true) : (this.showEmailModal = false)
-    console.log({ shouldSet })
+    // console.log({ shouldSet })
 
     this.sharedService.setRemoveSticky(this.showEmailModal)
   }
