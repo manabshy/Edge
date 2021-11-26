@@ -6,7 +6,6 @@ import { EdgeFile } from 'src/app/shared/models/edgeFile'
 import { Valuation, ValuationStatusEnum, ValuationTypeEnum } from '../shared/valuation'
 import { Subscription } from 'rxjs'
 import { MessageService } from 'primeng/api'
-import { ThisReceiver } from '@angular/compiler'
 
 export interface ToBDocument {
   dateRequestSent: Date
@@ -208,25 +207,25 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
 
   updateMessage(formData) {
     if (formData.declarableInterest === true || formData.declarableInterest === false) {
-      
-      if(!this.warnUserOfUnsignedToB()){
-        if(this.message.type === 'error'){
+      if (!this.warnUserOfUnsignedToB()) {
+        if (this.message.type === 'error') {
           this.message.type = 'info'
-          this.message.text = 'Ready to save Terms of Business'
-         } else if(this.message.type === 'warn'){
+          this.message.text = ['Ready to save Terms of Business']
+        } else if (this.message.type === 'warn') {
           this.message.type = 'info'
-          this.message.text = ['Terms of Business uploaded, pending save.']    
-         }
+          this.message.text = ['Terms of Business uploaded, pending save.']
+        }
       } else {
-        if(this.message.type === 'error'){
+        if (this.message.type === 'error') {
           this.message.type = 'warn'
           this.message.text = ['Waiting on Terms of Business']
-         }
+        }
       }
     }
   }
 
   ngOnChanges(changes) {
+    console.log('ngOnChanges: ', changes)
     if (changes.valuationData && !changes.valuationData.firstChange) {
       this.model.declarableInterest = changes.valuationData.currentValue.declarableInterest
       this.valuationData = changes.valuationData.currentValue
@@ -262,12 +261,17 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
         typeof this.valuationData.declarableInterest == 'undefined'
       ) {
         this.message.type = 'warn'
-        this.message.text.push(['Please answer declarable interest'])
+        this.message.text.push('Please answer declarable interest')
       }
     }
   }
 
   ngOnDestroy(): void {
+    console.log('💣 terms of business component on destroy running')
+    this.message = {
+      type: '',
+      text: []
+    }
     this.formSubscription.unsubscribe()
   }
 
