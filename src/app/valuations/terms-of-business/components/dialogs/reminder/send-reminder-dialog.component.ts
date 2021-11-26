@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, Output } from '@angular/core'
 
 @Component({
   selector: 'app-send-reminder-confirmation-dialog',
@@ -17,7 +17,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
     </p-dialog>
   `
 })
-export class SendReminderConfirmationDialogComponent implements OnInit {
+export class SendReminderConfirmationDialogComponent {
   @Output() onDialogClosed: EventEmitter<any> = new EventEmitter()
   @Input() showDialog: boolean = false
 
@@ -26,9 +26,4 @@ export class SendReminderConfirmationDialogComponent implements OnInit {
     this.onDialogClosed.emit(send)
   }
 
-  ngOnInit(){
-    console.log('send reminder dialog initting: ', this.showDialog)
-  }
-
 }
-

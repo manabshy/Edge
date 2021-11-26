@@ -4,8 +4,8 @@
  * @description service providing functions to facilitate compliance checks for personal and company owned valuations
  */
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs'
-import { filter, tap, take, mergeMap } from 'rxjs/operators'
+import { BehaviorSubject, Observable } from 'rxjs'
+import { filter, tap, take } from 'rxjs/operators'
 import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-group'
 import { ValuationFacadeService } from '../shared/valuation-facade.service'
 
@@ -20,7 +20,7 @@ export class ComplianceChecksFacadeService {
   public valuation$: Observable<any> = this._valuationFacadeSvc.valuationData$.pipe()
   public contactGroup$: Observable<any> = this._valuationFacadeSvc.contactGroup$.pipe()
   public isPowerOfAttorneyChanged$: Observable<any> = this._valuationFacadeSvc.isPowerOfAttorneyChanged$
-  public onLastKnownOwnerChanged$: Observable<any> = this._valuationFacadeSvc.onLastKnownOwnerChanged$
+  public lastKnownOwnerChanged$: Observable<any> = this._valuationFacadeSvc.lastKnownOwnerChanged$
 
   // CONTACT SEARCHES / ADDING
   public contactSearchResults$: Observable<PotentialDuplicateResult> = this._contactSearchResults.asObservable()

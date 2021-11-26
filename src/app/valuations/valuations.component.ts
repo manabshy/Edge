@@ -118,7 +118,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this._valuationFacadeSvc
       .getValuations(request)
       .pipe(
-        tap((res) => console.log("res", res)),
+        // tap((res) => console.log("res", res)),
         distinctUntilChanged()
       )
       .subscribe(
@@ -186,7 +186,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       .subscribe((newPageNumber) => {
         this.page = newPageNumber;
         this.getNextValuationsPage(this.page);
-        console.log("%c HEYYYY", "color: blue", this.page);
+        // console.log("%c HEYYYY", "color: blue", this.page);
       });
   }
 

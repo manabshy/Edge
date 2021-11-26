@@ -25,7 +25,7 @@ export class ValuationListComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges() {
     if (this.valuations) {
-      console.log('valuations', this.valuations)
+      // console.log('valuations', this.valuations)
       this.valuations.forEach((x) => {
         x.valuationStatusLabel = ValuationStatusEnum[x.valuationStatus]
       })
@@ -45,7 +45,7 @@ export class ValuationListComponent implements OnInit, OnChanges, OnDestroy {
 
   onScrollDown() {
     this.onWindowScroll()
-    console.log('scrolled')
+    // console.log('scrolled')
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -58,12 +58,12 @@ export class ValuationListComponent implements OnInit, OnChanges, OnDestroy {
 
     if (isValuationsRegister) {
       if (totalHeight >= scrollHeight && !this.bottomReached) {
-        console.log('%c first request NOOOOO', 'color:green', this.page)
+        // console.log('%c first request NOOOOO', 'color:green', this.page)
         if (this.valuations && this.valuations.length) {
           this.page++
-          console.log('%c Not first request', 'color:purple', this.page)
+          // console.log('%c Not first request', 'color:purple', this.page)
           this._valuationFacadeSvc.valuationPageNumberChanged(this.page)
-          console.log('valuations page number', this.page)
+          // console.log('valuations page number', this.page)
         }
       }
     }
@@ -86,6 +86,6 @@ export class ValuationListComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     this._valuationFacadeSvc.valuationPageNumberChanged(0)
-    console.log('%c on destroy ', 'color:blue', this.page)
+    // console.log('%c on destroy ', 'color:blue', this.page)
   }
 }

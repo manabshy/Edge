@@ -114,7 +114,7 @@ export class StaffMemberService {
       map((response) => response),
       tap((data) => {
         if (data) {
-          console.log('active staff members in service:', data)
+          // console.log('active staff members in service:', data)
           this.storage.set('activeStaffmembers', data.result).subscribe()
           this.storage.set('cacheStatus', data.cacheStatus).subscribe()
         }
@@ -134,7 +134,7 @@ export class StaffMemberService {
       map((response) => response),
       tap((data) => {
         if (data) {
-          console.log('all staff members in servuce:', data)
+          // console.log('all staff members in servuce:', data)
           this.storage.set('allstaffmembers', data.result).subscribe()
           this.storage.set('cacheStatus', data.cacheStatus).subscribe()
         }
@@ -279,18 +279,18 @@ export class StaffMemberService {
   }
 
   getStaffMemberSuggestions(searchTerm): Observable<any> {
-    console.log('search Term:', searchTerm)
+    // console.log('search Term:', searchTerm)
     return this.http
       .get<StaffMemberResult>(`${AppConstants.baseUrl}/suggestions?SearchTerm=${searchTerm}`, {
         headers: { ignoreLoadingBar: '' }
       })
       .pipe(
         map((response) => response.result),
-        tap((data) => {
-          if (data) {
-            console.log('suggestions:', data)
-          }
-        })
+        // tap((data) => {
+        //   if (data) {
+        //     console.log('suggestions:', data)
+        //   }
+        // })
       )
   }
 

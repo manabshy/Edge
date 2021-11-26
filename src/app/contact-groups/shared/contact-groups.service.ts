@@ -179,7 +179,7 @@ export class ContactGroupsService {
     return this.http.get<PersonContactData>(url, { params: options }).pipe(
       map((response) => response.result),
       tap((data) => (this.personNotes = data.personNotes)),
-      tap((data) => console.log('person details here...', JSON.stringify(data)))
+      // tap((data) => console.log('person details here...', JSON.stringify(data)))
     )
   }
 
@@ -201,7 +201,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}/duplicates`
     return this.http.get<PeopleAutoCompleteData2>(url, { params: options }).pipe(
       map((response) => buildMatchedPeople(person, response.result)),
-      tap((data) => console.log('results for duplicates', data))
+      // tap((data) => console.log('results for duplicates', data))
     )
   }
 
@@ -209,7 +209,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}`
     return this.http.post<PersonContactData>(url, person).pipe(
       map((response) => response.result),
-      tap((data) => console.log('added person details here...', JSON.stringify(data)))
+      // tap((data) => console.log('added person details here...', JSON.stringify(data)))
     )
   }
 
@@ -217,14 +217,14 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}/${person.personId}`
     return this.http.put(url, person).pipe(
       map((response) => response),
-      tap((data) => console.log('updated person details here...', JSON.stringify(data)))
+      // tap((data) => console.log('updated person details here...', JSON.stringify(data)))
     )
   }
   createPersonReferral(person: Person, referralCompanyId: number): Observable<any> {
     const url = encodeURI(`${AppConstants.basePersonUrl}/${person?.personId}/referralCompany/${referralCompanyId}`)
     return this.http.put(url, person).pipe(
       map((response) => response),
-      tap((data) => console.log('referral created', JSON.stringify(data)))
+      // tap((data) => console.log('referral created', JSON.stringify(data)))
     )
   }
 
@@ -233,7 +233,7 @@ export class ContactGroupsService {
     return this.http.post(url, contactGroup).pipe(
       map((response) => response),
       tap((data) => {
-        console.log('updated contact details here...', JSON.stringify(data))
+        // console.log('updated contact details here...', JSON.stringify(data))
       })
     )
   }
@@ -243,7 +243,7 @@ export class ContactGroupsService {
     return this.http.put(url, contactGroup).pipe(
       map((response) => response),
       tap((data) => {
-        console.log('updated contact details here...', JSON.stringify(data))
+        // console.log('updated contact details here...', JSON.stringify(data))
       })
     )
   }
@@ -283,7 +283,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseCompanyUrl}/${companyId}`
     return this.http.get<CompanyData>(url, { params: options }).pipe(
       map((response) => response.result),
-      tap((data) => console.log('company details here...', JSON.stringify(data)))
+      // tap((data) => console.log('company details here...', JSON.stringify(data)))
     )
   }
 
@@ -291,7 +291,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseCompanyUrl}`
     return this.http.post(url, contactGroup).pipe(
       map((response) => response),
-      tap((data) => console.log('added company contact details here...', JSON.stringify(data)))
+      // tap((data) => console.log('added company contact details here...', JSON.stringify(data)))
     )
   }
 
@@ -308,8 +308,6 @@ export class ContactGroupsService {
     if (pageSize == null) {
       pageSize = 10
     }
-
-    console.log(filterOptions)
 
     let roles: string[] = []
     let types: string[] = []
@@ -404,11 +402,11 @@ export class ContactGroupsService {
         personNote.isPinned = false
       }
     }
-    console.log('person note in service', personNote)
+    // console.log('person note in service', personNote)
     const url = `${AppConstants.basePersonUrl}/${personNote.personId}/notes`
     return this.http.post<ContactNoteData>(url, personNote).pipe(
       map((response) => response.result),
-      tap((data) => console.log('added  person note here...', JSON.stringify(data)))
+      // tap((data) => console.log('added  person note here...', JSON.stringify(data)))
     )
   }
 
@@ -416,7 +414,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupNote.contactGroupId}/notes`
     return this.http.post<ContactNoteData>(url, contactGroupNote).pipe(
       map((response) => response.result),
-      tap((data) => console.log('added  contact-group note here...', JSON.stringify(data)))
+      // tap((data) => console.log('added  contact-group note here...', JSON.stringify(data)))
     )
   }
 
@@ -424,7 +422,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}/${personNote.personId}/notes/${personNote.id}`
     return this.http.put<ContactNoteData>(url, personNote).pipe(
       map((response) => response.result),
-      tap((data) => console.log('updated note  person note here...', JSON.stringify(data)))
+      // tap((data) => console.log('updated note  person note here...', JSON.stringify(data)))
     )
   }
 
@@ -432,7 +430,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupNote.contactGroupId}/notes/${contactGroupNote.id}`
     return this.http.put<ContactNoteData>(url, contactGroupNote).pipe(
       map((response) => response.result),
-      tap((data) => console.log('updated contact-group note here...', JSON.stringify(data)))
+      // tap((data) => console.log('updated contact-group note here...', JSON.stringify(data)))
     )
   }
 
@@ -472,7 +470,7 @@ export class ContactGroupsService {
   }
 
   getAddedPerson(person) {
-    console.log('******************** >> getAddedPerson: ', person)
+    // console.log('******************** >> getAddedPerson: ', person)
     this.newPersonSubject.next(person)
   }
 }

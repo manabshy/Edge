@@ -69,6 +69,7 @@ export class ComplianceChecksShellComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('compliance checks loading store....')
     this.store.loadStore()
   }
 }

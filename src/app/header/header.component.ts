@@ -54,7 +54,7 @@ export class HeaderComponent extends BaseComponent implements OnInit, OnDestroy,
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
       const childRoute = this.getChildRoute(this.route);
       childRoute.data.subscribe((route) => {
-        console.log('title and route', route);
+        // console.log('title and route', route);
         this.navTitle = route?.title;
         this.showMenuEditItem = route?.showMenuEditItem;
 

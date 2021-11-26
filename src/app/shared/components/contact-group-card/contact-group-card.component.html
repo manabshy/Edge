@@ -1,5 +1,10 @@
 <div class="card">
   <div class="card__body">
+    <ng-template #loadingInfo>
+      Loading...
+      <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
+    </ng-template>
+    <ng-container *ngIf="!loading; else loadingInfo">
     <ol class="list">
       <li class="title">
         <span>
@@ -143,6 +148,7 @@
         </details>
       </li>
     </ol>
+  </ng-container>
   </div>
 </div>
 

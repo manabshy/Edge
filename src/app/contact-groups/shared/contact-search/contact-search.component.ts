@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
-import { PotentialDuplicateResult, ContactGroup, ContactType } from '../contact-group'
+import { PotentialDuplicateResult, ContactGroup } from '../contact-group'
 import { BasicPerson, Person } from 'src/app/shared/models/person'
 import { debounceTime } from 'rxjs/operators'
 
@@ -71,8 +71,8 @@ export class ContactSearchComponent implements OnInit {
     let newPerson = this.personFinderForm.value
     let newPersonNameArr = newPerson.fullName.trim().split(' ')
     newPerson.firstName = newPersonNameArr.length > 0 ? newPersonNameArr[0] : ''
-    newPerson.middleName = newPersonNameArr.length > 1 ? newPersonNameArr[1] : ''
-    newPerson.lastName = newPersonNameArr.length > 2 ? newPersonNameArr[2] : ''
+    newPerson.middleName = newPersonNameArr.length === 3 ? newPersonNameArr[1] : ''
+    newPerson.lastName = newPersonNameArr.length === 3 ? newPersonNameArr[2] : newPersonNameArr[1]
     this.onCreateNewPerson.emit(newPerson)
   }
 

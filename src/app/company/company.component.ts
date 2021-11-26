@@ -1,10 +1,10 @@
-import { Component, OnInit, ɵConsole } from '@angular/core';
-import { FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { ContactGroupsService } from '../contact-groups/shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { CompanyAutoCompleteResult } from '../contact-groups/shared/contact-group';
 import { AppUtils } from '../core/shared/utils';
-import { debounceTime, distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 import { SharedService } from '../core/services/shared.service';
 import { Observable, EMPTY } from 'rxjs';
 import * as _ from 'lodash';
@@ -58,6 +58,7 @@ export class CompanyComponent implements OnInit {
     this.suggestions = (text$: Observable<string>) =>
       text$
         .pipe(
+          debounceTime(100), 
           distinctUntilChanged(),
           switchMap(term => this.contactGroupService.getCompanySuggestions(term).pipe(catchError(() => {
             return EMPTY;

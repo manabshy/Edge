@@ -131,7 +131,7 @@ export class StaffMemberFinderComponent
       });
     }
     if (this.staffMemberIdList && this.staffMemberIdList.length) {
-      console.log("staff ids", this.staffMemberIdList);
+      // console.log("staff ids", this.staffMemberIdList);
       this.isClearable = false;
       this.staffMemberFinderForm.patchValue({
         staffMemberId: this.staffMemberIdList,
@@ -204,11 +204,11 @@ export class StaffMemberFinderComponent
             this.addStaffMemberId(res.result).then(
               (result) => (this.staffMembers = result)
             );
-            console.log(
-              "%cmembers from shared replay",
-              "color:green",
-              res.result
-            );
+            // console.log(
+            //   "%cmembers from shared replay",
+            //   "color:green",
+            //   res.result
+            // );
           });
       }
     });
@@ -261,10 +261,10 @@ export class StaffMemberFinderComponent
     if (data && data.length > 0) {
       this.dashboardMembers = data;
       const grouped = this.sharedService.groupBy(data, "roleName");
-      console.log(grouped);
+      // console.log(grouped);
 
       const roles = Object.keys(grouped);
-      console.log(roles);
+      // console.log(roles);
 
       for (var role of roles) {
         if (role == "CEO") continue;
@@ -282,7 +282,7 @@ export class StaffMemberFinderComponent
           label: role,
           items: values,
         };
-        console.log(groupMembers);
+        // console.log(groupMembers);
         this.groupedByRolesMembers.push(item);
       }
     }

@@ -37,6 +37,7 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
   @Input() showEmailModal = false
   @Input() showValuationActions = true
   @Input() adminContact: Signer
+  @Input() loading: boolean
   @Output() onPowerOfAttorneyChange: EventEmitter<any> = new EventEmitter()
 
   contactReferrals: Referral[] = []

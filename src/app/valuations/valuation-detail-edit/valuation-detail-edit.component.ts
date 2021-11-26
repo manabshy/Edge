@@ -124,7 +124,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   accordionIndex: number
   propertySubscription = new Subscription()
   isRelet = false
-
   salesMeetingOwner
   lettingsMeetingOwner
   salesOwnerAssociateName
@@ -214,6 +213,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     }
   ]
+  contactGroupLoading:boolean = true
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -349,6 +349,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   ngOnInit() {
+    this.contactGroupLoading = true
     this._valuationFacadeSvc.landRegisterValid.next(false)
     this.primengConfig.ripple = true
     this.setupForm()
@@ -854,6 +855,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
+  setNewLastKnownOwner(owner: Signer){
+    console.log(' 🧍 setNewLastKnownOwner: ', owner)
+    this.getSelectedOwner(owner)
+    this._valuationFacadeSvc.changeLastKnownOwner(owner.contactGroupId)
+  }
+
   setValidationForLettingsMeetingOwner(setValidation: boolean) {
     // this.valuationForm.controls['lettingsOwnerAssociateEmail'].setValidators(setValidation ? Validators.required : [])
     // this.valuationForm.controls['lettingsOwnerAssociateEmail'].updateValueAndValidity()
@@ -998,6 +1005,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this._valuationFacadeSvc.updateLocalValuation(this.valuation)
     // this.valuers = result.valuers;
     if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
+      console.log('valuation has a last known owner, off to fetch their contact group')
       this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
         this.contactGroup = result
         this._valuationFacadeSvc.updateLocalContactGroup(this.contactGroup)
@@ -1025,6 +1033,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   getAdminContactGroup(contactGroupId: number) {
+    console.log('getting admin contact group...')
     this.contactGroupSubscription = this.contactGroupService
       .getContactGroupById(contactGroupId, true)
       .subscribe((result) => {
@@ -1324,12 +1333,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner)
 
           if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
+            console.log('valuation has last know owner, off to fetch their contact group')
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
               this.contactGroup = result
               this._valuationFacadeSvc.updateLocalContactGroup(this.contactGroup)
               this.getSearchedPersonSummaryInfo(this.contactGroup)
-
               this.setAdminContact()
+              this.contactGroupLoading = false
             }) // get contact group for last know owner
           }
         }

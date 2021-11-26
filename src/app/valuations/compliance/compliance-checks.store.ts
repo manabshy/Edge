@@ -121,7 +121,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   private pushContactsToValuationServiceForSave$: Observable<any> = this.entitiesArrayShapedForApi$.pipe(
     filter((data) => data),
     mergeMap((data: any): any => {
-      // console.log('pushContactsToValuationServiceForSave RUNNING 🏃🏃🏃🏃', data)
+      console.log('pushContactsToValuationServiceForSave RUNNING 🏃🏃🏃🏃', data)
       if (data.savePayload) {
         return this._complianceChecksFacadeSvc.updateCompanyAndPersonDocuments(data.savePayload)
       } else {
@@ -257,7 +257,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     super(defaultState)
     this.lastKnownOwnerChanged$.pipe().subscribe(
       (res) => {
-        console.log('lastKnownOwnerChanged', res)
+        // console.log('lastKnownOwnerChanged', res)
       },
       (err) => {
         console.error('err lastKnownOwnerChanged: ', err)
@@ -266,7 +266,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
 
     this.isPowerOfAttorneyChanges$.pipe().subscribe(
       (data) => {
-        console.log('isPowerOfAttorneyChanges: ', data)
+        // console.log('isPowerOfAttorneyChanges: ', data)
       },
       (err) => {
         console.error('isPowerOfAttorneyChanges err: ', err)
@@ -292,8 +292,13 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         take(1),
         mergeMap(([contactGroupData, valuationData, entityToAdd]: [any, any, any]) => {
           valuationData.isFrozen = valuationData.complianceCheck?.compliancePassedDate ? true : false
-          this.patchState(buildStoreState(contactGroupData, valuationData, entityToAdd))
-          // console.log('✔️ compliance checks state built for contactGroupId', contactGroupData.contactGroupId)
+          const storeState = {
+            contactGroupData,
+            valuationData,
+            entityToAdd
+          }
+          this.patchState(buildStoreState(storeState))
+          console.log('✔️ compliance checks state built for contactGroupId', contactGroupData.contactGroupId)
           return this.validationMessage$
         })
         // map(() => this.pushContactsToValuationServiceForSave$), // required?
@@ -308,18 +313,27 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   /***
    * lastKnownOwnerChanged$
    */
-  private lastKnownOwnerChanged$: Observable<any> = this._complianceChecksFacadeSvc.onLastKnownOwnerChanged$.pipe(
+  private lastKnownOwnerChanged$: Observable<any> = this._complianceChecksFacadeSvc.lastKnownOwnerChanged$.pipe(
+    filter((data) => {
+      console.log('filter for lastknown owner change: ', data)
+      return !!data
+    }),
     mergeMap((data) => {
-      data.valuationData.isFrozen = false
-      data.valuationData.complianceCheck = {
-        compliancePassedDate: null,
-        compliancePassedBy: null
+      console.log('🧍 lastKnownOwnerChanged$: updating store with ', data)
+      data.valuationData = {
+        ...data.valuationData,
+        isFrozen: false,
+        complianceCheck: {
+          compliancePassedDate: null,
+          compliancePassedBy: null
+        }
       }
-      this.patchState(buildStoreState(data.contactGroupData, data.valuationData, null))
-      console.log('✔️ lastKnownOwnerChanged, compliance checks state built for contactGroupId', data)
+
+      this.patchState(buildStoreState(data))
+      // console.log('✔️ lastKnownOwnerChanged, compliance checks state built for contactGroupId', contactGroupData.contactGroupId)
       return this.validationMessage$
     }),
-    map(() => this.pushContactsToValuationServiceForSave$)
+    mergeMap(() => this.pushContactsToValuationServiceForSave$)
   )
 
   /***
@@ -495,7 +509,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    * @description adds a NEW company to the valuation. Since this is called before the valuation loads it's set as a BehaviorSubject so the load function can grab it on demand
    */
   public onAddNewCompany = (entity: any): void => {
-    console.log('onAddNewCompany.next(', entity)
     this._newEntityStream.next({
       ...entity,
       isNew: true,
@@ -507,10 +520,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           ? `${entity.companyAddress.addressLines}, ${entity.companyAddress.postCode}`
           : ''
     })
-    // this.pushContactsToValuationServiceForSave$.pipe(take(1)).subscribe(
-    //   (res) => console.log(res),
-    //   (err) => console.error(err)
-    // )
   }
 
   /***
