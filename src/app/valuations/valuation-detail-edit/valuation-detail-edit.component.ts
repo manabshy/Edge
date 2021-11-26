@@ -213,7 +213,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     }
   ]
-  contactGroupLoading:boolean = true
+  contactGroupLoading:boolean = false
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -407,8 +407,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         valuationStatusDescription: 'New',
         originId: this.originId | 0,
         originTypeId: 0,
-        declarableInterest: null
+        declarableInterest: null,
+        eSignSignatureTob: {
+          dateRequestSent: null
+        }
       }
+      this._valuationFacadeSvc._valuationData.next(this.valuation)
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0)
       if (this.propertyId) {
         this.controlPreviousValuations(this.propertyId)
@@ -1005,7 +1009,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this._valuationFacadeSvc.updateLocalValuation(this.valuation)
     // this.valuers = result.valuers;
     if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
-      console.log('valuation has a last known owner, off to fetch their contact group')
+      // console.log('valuation has a last known owner, off to fetch their contact group')
       this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
         this.contactGroup = result
         this._valuationFacadeSvc.updateLocalContactGroup(this.contactGroup)
@@ -1333,7 +1337,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner)
 
           if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
-            console.log('valuation has last know owner, off to fetch their contact group')
+            // console.log('valuation has last know owner, off to fetch their contact group')
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
               this.contactGroup = result
               this._valuationFacadeSvc.updateLocalContactGroup(this.contactGroup)
@@ -1723,6 +1727,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.contactGroup = result
           this._valuationFacadeSvc.updateLocalContactGroup(this.contactGroup)
           this.getSearchedPersonSummaryInfo(this.contactGroup)
+          this.contactGroupLoading = false
         })
       }
       this.valuationForm.get('property').setValue(property)
@@ -3025,6 +3030,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   ngOnDestroy() {
+    console.log('destroying valuation detail edit component 💣')
+    this._valuationFacadeSvc._valuationData.next({})
     this.property = {} as Property
     this.sharedService.removeContactGroupChanged.next(null)
     this.sharedService.openContactGroupChanged.next(null)
