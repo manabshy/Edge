@@ -200,7 +200,7 @@
                     (click)="controlIsCancelled($event, isCancelled)">
                     <div>
                       <fieldset class="mb-3 inline-child" [ngClass]="{ invalid: formErrors?.reason }"
-                        *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
+                        *ngIf="isEditable || isNewValuation ||isStillInOneMonthPeriod || (!isEditable && valuationForm.get('reason').value)">
                         <label for="reason">What’s the current situation?</label>
                         <textarea class="p-2" name="reason" id="reason" cols="30" rows="3" formControlName="reason"
                           data-cy="reason" [ngClass]="{ 'is-invalid': formErrors?.reason }"></textarea>
@@ -210,7 +210,7 @@
 
                     <div>
                       <fieldset class="mb-3 inline-child" [ngClass]="{ invalid: formErrors?.timeFrame }"
-                        *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
+                        *ngIf="isEditable || isNewValuation || isStillInOneMonthPeriod || (!isEditable && valuationForm.get('timeFrame').value)">
                         <label for="timeFrame">When are you looking to market?</label>
                         <textarea class="p-2" name="timeFrame" id="timeFrame" cols="30" rows="3"
                           formControlName="timeFrame" data-cy="timeFrame"
@@ -221,7 +221,7 @@
 
                     <div id="propertyInfoTab">
                       <fieldset class="mb-3 inline-child" [ngClass]="{ invalid: formErrors?.generalNotes }"
-                        *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
+                        *ngIf="isEditable || isNewValuation  ||isStillInOneMonthPeriod || (!isEditable && valuationForm.get('generalNotes').value)">
                         <label for="generalNotes">Notes (points discussed, other property details)</label>
                         <textarea class="p-2" name="generalNotes" id="generalNotes" cols="30" rows="3"
                           formControlName="generalNotes" data-cy="generalNotes"
@@ -718,7 +718,7 @@
                       <li *ngIf="
                           (valuation?.salesValuationBooking && isEditable) ||
                           isNewValuation ||
-                          (!isEditable && valuationForm.get('suggestedAskingPrice').value)
+                          (!isEditable && valuation.suggestedAskingPrice)
                         ">
                         <h5 class="txt--title">Sales</h5>
                         <div class="flex flex-row">
@@ -743,7 +743,7 @@
                       <li *ngIf="
                           (valuation?.lettingsValuationBooking && isEditable) ||
                           isNewValuation ||
-                          (!isEditable && valuationForm.get('suggestedAskingRentLongLet').value)
+                          (!isEditable && valuation.suggestedAskingRentLongLet)
                         ">
                         <h5 class="txt--title">Long Let</h5>
                         <div class="flex flex-row">
@@ -786,7 +786,7 @@
                       <li *ngIf="
                           (valuation?.lettingsValuationBooking && isEditable) ||
                           isNewValuation ||
-                          (!isEditable && valuationForm.get('suggestedAskingRentShortLet').value)
+                          (!isEditable && valuation.suggestedAskingRentShortLet)
                         ">
                         <h5 class="txt--title">Short Let</h5>
                         <div class="flex flex-row">
