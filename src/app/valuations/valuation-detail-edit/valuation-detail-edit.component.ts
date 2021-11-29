@@ -203,6 +203,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   instructionTypeMessage: string
   baseCalendarClass: string = 'lettingsEvent'
   isValuationNotesVisible = true
+  isDisabledInstructButton = false
   valueMenuItems: MenuItem[] = [
     {
       id: 'editValue',
@@ -213,7 +214,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     }
   ]
-  contactGroupLoading:boolean = false
+  contactGroupLoading: boolean = false
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -315,14 +316,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   activeState: boolean[] = [true, true, true, true, true, true, true]
 
   statuses = [
-    { name: 'valuationNotes', value: 0, isValid: false },
-    { name: 'propertyInfo', value: 1, isValid: false },
-    { name: 'appointment', value: 2, isValid: false },
-    { name: 'values', value: 3, isValid: false },
-    { name: 'termsOfBusiness', value: 4, isValid: false },
-    { name: 'landRegistry', value: 6, isValid: false },
-    { name: 'complianceChecks', value: 9, isValid: false },
-    { name: 'instruct', value: 8, isValid: false }
+    { name: 'valuationNotes', value: 0, isValid: false, isNext: false },
+    { name: 'propertyInfo', value: 1, isValid: false, isNext: false },
+    { name: 'appointment', value: 2, isValid: false, isNext: false },
+    { name: 'values', value: 3, isValid: false, isNext: false },
+    { name: 'termsOfBusiness', value: 4, isValid: false, isNext: false },
+    { name: 'landRegistry', value: 6, isValid: false, isNext: false },
+    { name: 'complianceChecks', value: 9, isValid: false, isNext: false }
   ]
 
   setRequirementValuationNoteBs = new BehaviorSubject(false)
@@ -657,8 +657,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       ) {
         if (data.timeFrame && data.generalNotes && data.reason) {
           this.statuses.find((x) => x.value == 0).isValid = true
+          this.statuses.find((x) => x.value == 0).isNext = false
         } else {
           this.statuses.find((x) => x.value == 0).isValid = false
+          this.statuses.find((x) => x.value == 0).isNext = true
         }
         if (
           data.bathrooms != null &&
@@ -671,34 +673,61 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
             (data.propertyTypeId == 2 && data.propertyFloorId == '10' && data.floorOther))
         ) {
           this.statuses.find((x) => x.value == 1).isValid = true
+          this.statuses.find((x) => x.value == 1).isNext = false
         } else {
           this.statuses.find((x) => x.value == 1).isValid = false
+          if (this.statuses.findIndex((x) => x.isNext === true) == -1)
+            this.statuses.find((x) => x.value == 1).isNext = true
         }
         if (
           (data.salesValuer || data.lettingsValuer) &&
           (data.salesMeetingOwner != null || data.lettingsMeetingOwner != null)
         ) {
           this.statuses.find((x) => x.value == 2).isValid = true
+          this.statuses.find((x) => x.value == 2).isNext = false
         } else {
           this.statuses.find((x) => x.value == 2).isValid = false
+          if (this.statuses.findIndex((x) => x.isNext === true) == -1)
+            this.statuses.find((x) => x.value == 2).isNext = true
         }
       } else {
         // if it is already in valued status that means before status will be done
         this.statuses.find((x) => x.value == 0).isValid = true
         this.statuses.find((x) => x.value == 1).isValid = true
         this.statuses.find((x) => x.value == 2).isValid = true
+        this.statuses.find((x) => x.value == 0).isNext = false
+        this.statuses.find((x) => x.value == 1).isNext = false
+        this.statuses.find((x) => x.value == 2).isNext = false
       }
 
       if (this.isThereAPrice(data) && (this.setRequirementValuationNoteBs.getValue() === true || data.valuationNote)) {
         this.statuses.find((x) => x.value == 3).isValid = true
+        this.statuses.find((x) => x.value == 3).isNext = false
       } else {
         this.statuses.find((x) => x.value == 3).isValid = false
+        if (this.statuses.findIndex((x) => x.isNext === true) == -1)
+          this.statuses.find((x) => x.value == 3).isNext = true
+      }
+
+      if (
+        this.valuation.eSignSignatureTob &&
+        (this.valuation.eSignSignatureTob.toBLetting || this.valuation.eSignSignatureTob.toBSale)
+      ) {
+        this.statuses.find((x) => x.value == 4).isValid = true
+        this.statuses.find((x) => x.value == 4).isNext = false
+      } else {
+        this.statuses.find((x) => x.value == 4).isValid = false
+        if (this.statuses.findIndex((x) => x.isNext === true) == -1)
+          this.statuses.find((x) => x.value == 4).isNext = true
       }
 
       if (this._valuationFacadeSvc.landRegisterValid.getValue()) {
         this.statuses.find((x) => x.value == 6).isValid = true
+        this.statuses.find((x) => x.value == 6).isNext = false
       } else {
         this.statuses.find((x) => x.value == 6).isValid = false
+        if (this.statuses.findIndex((x) => x.isNext === true) == -1)
+          this.statuses.find((x) => x.value == 6).isNext = true
       }
 
       if (
@@ -708,19 +737,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.complianceCheck.compliancePassedByFullName.length > 0
       ) {
         this.statuses.find((x) => x.value == 9).isValid = true
+        this.statuses.find((x) => x.value == 9).isNext = false
       } else {
         this.statuses.find((x) => x.value == 9).isValid = false
-      }
-
-      if (
-        this.valuation.eSignSignatureTob &&
-        (this.valuation.eSignSignatureTob.toBLetting || this.valuation.eSignSignatureTob.toBSale)
-      ) {
-        this.statuses.find((x) => x.value == 4).isValid = true
-      } else {
-        this.statuses.find((x) => x.value == 4).isValid = false
+        if (this.statuses.findIndex((x) => x.isNext === true) == -1)
+          this.statuses.find((x) => x.value == 9).isNext = true
       }
     }
+    if (this.statuses.findIndex((x) => x.isValid == false) === -1) {
+      this.isDisabledInstructButton = false
+    } else this.isDisabledInstructButton = true
   }
 
   setScrollInformation() {
@@ -859,7 +885,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  setNewLastKnownOwner(owner: Signer){
+  setNewLastKnownOwner(owner: Signer) {
     console.log(' 🧍 setNewLastKnownOwner: ', owner)
     this.getSelectedOwner(owner)
     this._valuationFacadeSvc.changeLastKnownOwner(owner.contactGroupId)
@@ -1236,7 +1262,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         }
 
         if (this.valuation.valuationStatus === ValuationStatusEnum.Instructed) {
-          this.statuses.find((x) => x.value == 8).isValid = true
           this.isCancelled = true
         }
 
@@ -1457,7 +1482,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   populateForm(valuation: Valuation) {
     if (valuation) {
-      if (new Date(this.valuation.lockDate) > new Date()) {
+      if (!this.valuation.lockDate || new Date(this.valuation.lockDate) > new Date()) {
         this.isStillInOneMonthPeriod = true
       }
 
