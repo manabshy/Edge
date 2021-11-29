@@ -3,7 +3,7 @@
     <div class="wrapper--sticky">
       <app-contact-group-card class="appWrapper" [(adminContact)]="adminContact"
         (onPowerOfAttorneyChange)="onPowerOfAttorneyChange($event)"
-        [contactGroup]="adminContactGroup ? adminContactGroup : contactGroup" [loading]="contactGroupLoading" >
+        [contactGroup]="adminContactGroup ? adminContactGroup : contactGroup" [loading]="contactGroupLoading">
       </app-contact-group-card>
       <div>
         <app-sidenav-item class="appWrapper" [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals"
@@ -20,15 +20,18 @@
               <li *ngFor="let item of statuses">
                 <div class="flex flex-row">
                   <div class="flex items-center w-4 h-4 mr-2 text-center rounded-full"
-                    [ngClass]="{ 'opacity-75 bg-gray-500': !item.isValid, 'bg-green-600': item.isValid }">
+                    [ngClass]="{ 'opacity-75 bg-gray-500': !item.isValid, 'bg-yellow-600':item.isNext,'bg-green-600': item.isValid }">
                     <i *ngIf="item.isValid" class="ml-0.3 text-white pi pi-check"></i>
                   </div>
-                  <a (click)="toggleAccordion(item.value)" [ngClass]="{'font-black': item?.value == 8}">{{
+                  <a (click)="toggleAccordion(item.value)">{{
                     item?.name |
                     toPascalCase }}</a>
                 </div>
               </li>
             </ol>
+            <div>
+              <span class="text-base font-black">Instruct</span>
+            </div>
           </div>
         </div>
       </div>
@@ -891,8 +894,8 @@
                 </svg>
                 Save Valuation
               </button>
-              <button *ngIf="canInstruct" type="button" class="btn btn--positive" (click)="startInstruction()"
-                data-cy="startInstruction">
+              <button *ngIf="canInstruct" [disabled]="isDisabledInstructButton === true ? true:null " type="button"
+                class="btn btn--positive" (click)="startInstruction()" data-cy="startInstruction">
                 Instruct
               </button>
             </footer>
