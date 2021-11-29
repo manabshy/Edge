@@ -745,8 +745,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     }
     if (this.statuses.findIndex((x) => x.isValid == false) === -1) {
-      this.isDisabledInstructButton = false
-    } else this.isDisabledInstructButton = true
+      if (this.canDeactivate() === true) this.isDisabledInstructButton = false
+      else this.isDisabledInstructButton = true
+    } else {
+      this.isDisabledInstructButton = true
+    }
   }
 
   setScrollInformation() {
