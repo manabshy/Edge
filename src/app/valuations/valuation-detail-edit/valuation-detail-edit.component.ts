@@ -2297,7 +2297,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           ) {
             this.instructionTypeMessage = 'lettings instruction'
             this.hasLiveInstruct = true
-            if (data.filter((x) => x.status == 'UO' || x.status == 'EXCH' || x.status == 'LET').length == data.length) {
+            if (
+              data.filter((x) => x.status == 'UO' || x.status == 'EXCH' || x.status == 'LET').length ==
+              data.filter((x) => x.type.toLocaleLowerCase() == 'lettings').length
+            ) {
               this.liveInstructWarning = true
               this.liveInstructHeader = 'Warning'
             } else {
@@ -2711,7 +2714,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate
     valuation.originId = this.valuation.originId
     valuation.bookedBy = this.valuation.bookedBy
-    valuation.bookedById = this.valuation.bookedBy?.staffMemberId
+    valuation.bookedById = this.valuation.bookedBy ? this.valuation.bookedBy.staffMemberId : this.valuation.bookedById
 
     valuation.isPowerOfAttorney =
       this.adminContact && this.adminContact.contactGroupId > 0 ? this.adminContact?.isPowerOfAttorney : false
