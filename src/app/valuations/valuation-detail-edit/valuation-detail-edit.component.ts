@@ -214,7 +214,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     }
   ]
-  contactGroupLoading: boolean = false
+  contactGroupLoading: boolean = true
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -349,7 +349,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   ngOnInit() {
-    this.contactGroupLoading = true
     this._valuationFacadeSvc.landRegisterValid.next(false)
     this.primengConfig.ripple = true
     this.setupForm()
@@ -596,7 +595,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     this.contactGroupSubscription = this._valuationFacadeSvc.contactGroup$.subscribe((result: ContactGroup) => {
       if (result?.contactGroupId && this.contactId != result?.contactGroupId) {
-        if (!this.contactGroup) this.contactGroup = result
+        if (!this.contactGroup) {
+          this.contactGroup = result
+          console.log(this.contactGroup)
+        }
         this.contactId = result.contactGroupId
         this.getContactNotes()
       }
@@ -649,6 +651,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   controlStatus(data) {
+    this.contactGroupLoading = false
     if (data) {
       if (
         this.valuation &&
@@ -874,6 +877,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.isLastKnownOwnerVisible = false
       this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
         this.contactGroup = result
+        console.log(this.contactGroup)
         this._valuationFacadeSvc.updateLocalContactGroup(this.contactGroup)
         this.getSearchedPersonSummaryInfo(this.contactGroup)
         this.isAdminContactChanged = false
@@ -1041,6 +1045,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       // console.log('valuation has a last known owner, off to fetch their contact group')
       this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
         this.contactGroup = result
+        console.log(this.contactGroup)
         this._valuationFacadeSvc.updateLocalContactGroup(this.contactGroup)
         this.getSearchedPersonSummaryInfo(this.contactGroup)
       })
@@ -1368,6 +1373,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
             // console.log('valuation has last know owner, off to fetch their contact group')
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
               this.contactGroup = result
+              console.log(this.contactGroup)
               this._valuationFacadeSvc.updateLocalContactGroup(this.contactGroup)
               this.getSearchedPersonSummaryInfo(this.contactGroup)
               this.setAdminContact()
@@ -1753,6 +1759,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
         this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then((result) => {
           this.contactGroup = result
+          console.log(this.contactGroup)
           this._valuationFacadeSvc.updateLocalContactGroup(this.contactGroup)
           this.getSearchedPersonSummaryInfo(this.contactGroup)
           this.contactGroupLoading = false
@@ -1817,10 +1824,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   private getAddedProperty() {
     this.propertyService.newPropertyAdded$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((newProperty) => {
       if (newProperty && newProperty.propertyId != this.property?.propertyId) {
-        this.getPropertyInformation(newProperty.propertyId)
         this.property = newProperty
         this.showProperty = false
         this.valuationForm.get('property').setValue(this.property)
+        this.getPropertyInformation(newProperty.propertyId)
         // this.getContactGroup(newProperty.lastKnownOwner?.contactGroupId);
         this.getSelectedOwner(newProperty.lastKnownOwner)
       }
@@ -2056,7 +2063,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   onPropertyType(value) {
-    this.propertyStyles = this.allPropertyStyles.filter((x) => x.id == 0 || x.parentId == value)
+    if (this.allPropertyStyles)
+      this.propertyStyles = this.allPropertyStyles.filter((x) => x.id == 0 || x.parentId == value)
 
     if (value == PropertyType.House) {
       this.valuationForm.controls['propertyFloorId'].setValue(null)
