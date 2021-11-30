@@ -169,7 +169,6 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    console.log('!!!!!!!!!!!!! contactGroupDetails: ', this.contactGroupDetails)
     this.contactGroupTypes = ContactGroupsTypes
     this.route.params.subscribe((params) => {
       this.contactGroupId = +params['contactGroupId'] || 0
@@ -179,6 +178,13 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
         this.getContactGroupFirstPerson(this.personId, false)
       } // Delete isCompanyContactGroup() on confirmation
     })
+
+    // Get newly added person
+    this.getNewlyAddedPerson()
+
+    // Get newly added company
+    this.getNewlyAddedCompany()
+
     this.init()
     this.getPagedContactNotes()
     this.contactGroupService.noteChanges$.subscribe((data) => {
@@ -197,11 +203,6 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       this.getNextContactNotesPage(this.page)
     })
 
-    // Get newly added person
-    this.getNewlyAddedPerson()
-
-    // Get newly added company
-    this.getNewlyAddedCompany()
   }
 
   private getContactNotes() {
@@ -216,7 +217,6 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       if (data) {
         this.listInfo = data
         this.setDropdownLists()
-        console.log('list info in contact people....', this.listInfo)
       }
     })
     this.removedPersonIds = []
@@ -330,13 +330,13 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     if (isPersonal || this.isNewPersonalContact) {
       label = 'Personal Contact Group'
       this.groupType = 'personal'
-      console.log('personal here...,', this.groupType)
+      // console.log('personal here...,', this.groupType)
     }
 
     if (isCompany || this.isNewCompanyContact) {
       label = 'Company Contact Group'
       this.groupType = 'company'
-      console.log('company here...,', this.groupType)
+      // console.log('company here...,', this.groupType)
     }
 
     if (clearLabel) {
@@ -365,31 +365,32 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
 
   getNewlyAddedPerson() {
     this.contactGroupService.newPerson$.pipe(takeUntil(this.destroy)).subscribe((person) => {
+      console.log('getNewlyAddedPerson: ', person)
       if (person) {
         person.isNewPerson = true
         this.showDuplicateChecker = false
-        // I have no idea why this condition exists! doesn't work with it, works without it. ¯\_(ツ)_/¯
-        // if ((this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) || this.isExistingCompany) {
+
+        if ((this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) || this.isExistingCompany) {
           this.contactGroupDetails?.contactPeople?.push(person)
-        //   this.storeContactPeople(this.contactGroupDetails.contactPeople)
-        // } else {
-        //   const people: Person[] = []
-        //   people.push(person)
-        //   console.log({ person }, 'new herer', { people })
-        //   this.storeContactPeople(people)
-        // }
+          this.storeContactPeople(this.contactGroupDetails.contactPeople)
+        } else {
+          const people: Person[] = []
+          people.push(person)
+          this.storeContactPeople(people)
+        }
       }
     })
   }
 
   getNewlyAddedCompany() {
-    this.companyService.newCompanyChanges$.subscribe((company) =>
+    this.companyService.newCompanyChanges$.subscribe((company) => {
+      console.log('setting newCompany in local storage: ', company)
       localStorage.setItem('newCompany', JSON.stringify(company))
-    )
+    })
   }
 
   storeContactPeople(contactPeople: Person[]) {
-    console.log('adding person to local storage')
+    console.log('setting contactPeople to local storage: ', contactPeople)
     localStorage.setItem('contactPeople', JSON.stringify(contactPeople))
   }
 
@@ -397,6 +398,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     const data = localStorage.getItem('contactPeople')
     let people = []
     people = JSON.parse(data) as Person[]
+    console.log('getContactPeopleFromStorage: ', people)
     return people
   }
 
@@ -784,7 +786,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     this.contactGroupDetailsForm.markAsDirty()
   }
 
-    saveContactGroup() {
+  saveContactGroup() {
     console.log('contact details', this.contactGroupDetailsForm.dirty)
     const validForm = this.contactGroupDetailsForm.valid
 
