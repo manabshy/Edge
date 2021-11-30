@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core'
 import { FileTypeEnum } from '../../../../core/services/file.service'
 import moment from 'moment'
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
+import { FormBuilder, Validators } from '@angular/forms'
 import { DOCUMENT_TYPE } from '../../compliance-checks.interfaces'
 
 export interface EmitDocument {
@@ -34,7 +34,7 @@ export class DocumentInfoComponent implements OnInit {
   idHasExpired: boolean = false
   showFileUploadDialog: boolean = false
   saveFileBtnDisabled: boolean = true
-  tmpFiles: File[]
+  tmpFiles: File[] = []
   uploadDialogHeaderText: string
   moment = moment
   idExpiryForm = this.fb.group({
@@ -136,8 +136,8 @@ export class DocumentInfoComponent implements OnInit {
     } else if (this.documentType === DOCUMENT_TYPE.REPORT) {
       this.message.text = this.tmpFiles.length ? ['Enter SmartSearch ID below'] : this.message.text
       const formValid = this.smartSearchIdForm.controls['smartSearchId'].valid
-      this.message.type = formValid ? 'success' : 'info'
-      this.message.text = formValid ? ['Valid for upload'] : ['Please enter SmartSearch report ID below']
+      this.message.type = formValid && this.tmpFiles.length ? 'success' : 'info'
+      this.message.text = formValid && this.tmpFiles.length ? ['Valid for upload'] : ['Please enter SmartSearch report ID below']
     } else {
       this.message.type = this.tmpFiles.length ? 'success' :'info'
       this.message.text = this.tmpFiles.length ? ['Ready to upload'] : ['Please attach a file']

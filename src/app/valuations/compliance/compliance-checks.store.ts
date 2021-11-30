@@ -81,8 +81,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     this.compliancePassedBy$
   ]).pipe(
     filter(([entities]) => !!entities.length),
+    take(1),
     tap(([entities, checkType, compliancePassedDate, compliancePassedBy]) => {
-      // console.log('validationMessageData: ', compliancePassedDate, compliancePassedBy)
+      console.log('validationMessageData: ', compliancePassedDate, compliancePassedBy)
       const validationMessageData = buildComplianceChecksStatusMessages(
         entities,
         checkType,
@@ -255,9 +256,10 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
 
   constructor(private _complianceChecksFacadeSvc: ComplianceChecksFacadeService) {
     super(defaultState)
+
     this.lastKnownOwnerChanged$.pipe().subscribe(
       (res) => {
-        // console.log('lastKnownOwnerChanged', res)
+        console.log('lastKnownOwnerChanged', res)
       },
       (err) => {
         console.error('err lastKnownOwnerChanged: ', err)
@@ -266,7 +268,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
 
     this.isPowerOfAttorneyChanges$.pipe().subscribe(
       (data) => {
-        // console.log('isPowerOfAttorneyChanges: ', data)
+        console.log('isPowerOfAttorneyChanges: ', data)
       },
       (err) => {
         console.error('isPowerOfAttorneyChanges err: ', err)
@@ -300,9 +302,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           this.patchState(buildStoreState(storeState))
           console.log('✔️ compliance checks state built for contactGroupId', contactGroupData.contactGroupId)
           return this.validationMessage$
-        })
-        // map(() => this.pushContactsToValuationServiceForSave$), // required?
-        // take(1)
+        }),
+        map(() => this.pushContactsToValuationServiceForSave$),
+        take(1)
       )
       .subscribe(
         (res) => console.log('compliance checks store loaded: ', res),
@@ -331,9 +333,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
 
       this.patchState(buildStoreState(data))
       // console.log('✔️ lastKnownOwnerChanged, compliance checks state built for contactGroupId', contactGroupData.contactGroupId)
-      return this.validationMessage$
+      return of(this.pushContactsToValuationServiceForSave$)
     }),
-    mergeMap(() => this.pushContactsToValuationServiceForSave$)
+    mergeMap(() => this.validationMessage$.pipe())
   )
 
   /***
@@ -427,7 +429,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           this.addFilesToEntity({ tmpFiles, data }) // adds files to store
           return this.pushContactsToValuationServiceForSave$
         }),
-        mergeMap(() => this.validationMessage$.pipe()),
+        mergeMap(() => this.validationMessage$),
         take(1)
       )
       .subscribe(
