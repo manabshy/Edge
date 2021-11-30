@@ -905,7 +905,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.isLastKnownOwnerVisible = false
       this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
         this.contactGroup = result
-        console.log(this.contactGroup)
+        this.adminContactGroup = null
         this._valuationFacadeSvc.updateLocalContactGroup(this.contactGroup)
         this.getSearchedPersonSummaryInfo(this.contactGroup)
         this.isAdminContactChanged = false
