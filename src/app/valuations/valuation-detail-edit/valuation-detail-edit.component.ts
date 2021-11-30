@@ -653,6 +653,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   controlStatus(data) {
     this.contactGroupLoading = false
     if (data) {
+      if (this.valuation && this.valuation.valuationStatus === ValuationStatusEnum.None) {
+        this.statuses.find((x) => x.value == 0).isNext = true
+        this.statuses.find((x) => x.value == 1).isNext = true
+        this.statuses.find((x) => x.value == 2).isNext = true
+      }
       if (
         this.valuation &&
         (this.valuation.valuationStatus === ValuationStatusEnum.None ||
@@ -708,8 +713,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.statuses.find((x) => x.value == 3).isNext = false
       } else {
         this.statuses.find((x) => x.value == 3).isValid = false
-        if (this.statuses.findIndex((x) => x.isNext === true) == -1)
-          this.statuses.find((x) => x.value == 3).isNext = true
+        if (this.statuses.findIndex((x) => x.isNext === true) == -1) {
+          if (!(this.valuation.valuationStatus === ValuationStatusEnum.None))
+            this.statuses.find((x) => x.value == 3).isNext = true
+        }
       }
 
       if (
@@ -720,8 +727,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.statuses.find((x) => x.value == 4).isNext = false
       } else {
         this.statuses.find((x) => x.value == 4).isValid = false
-        if (this.statuses.findIndex((x) => x.isNext === true) == -1)
-          this.statuses.find((x) => x.value == 4).isNext = true
+        if (this.statuses.findIndex((x) => x.isNext === true) == -1) {
+          if (
+            !(
+              this.valuation.valuationStatus === ValuationStatusEnum.Booked ||
+              this.valuation.valuationStatus === ValuationStatusEnum.None
+            )
+          )
+            this.statuses.find((x) => x.value == 4).isNext = true
+        }
       }
 
       if (this._valuationFacadeSvc.landRegisterValid.getValue()) {
@@ -729,8 +743,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.statuses.find((x) => x.value == 6).isNext = false
       } else {
         this.statuses.find((x) => x.value == 6).isValid = false
-        if (this.statuses.findIndex((x) => x.isNext === true) == -1)
-          this.statuses.find((x) => x.value == 6).isNext = true
+        if (this.statuses.findIndex((x) => x.isNext === true) == -1) {
+          if (
+            !(
+              this.valuation.valuationStatus === ValuationStatusEnum.Booked ||
+              this.valuation.valuationStatus === ValuationStatusEnum.None
+            )
+          )
+            this.statuses.find((x) => x.value == 6).isNext = true
+        }
       }
 
       if (
@@ -743,8 +764,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.statuses.find((x) => x.value == 9).isNext = false
       } else {
         this.statuses.find((x) => x.value == 9).isValid = false
-        if (this.statuses.findIndex((x) => x.isNext === true) == -1)
-          this.statuses.find((x) => x.value == 9).isNext = true
+        if (this.statuses.findIndex((x) => x.isNext === true) == -1) {
+          if (
+            !(
+              this.valuation.valuationStatus === ValuationStatusEnum.Booked ||
+              this.valuation.valuationStatus === ValuationStatusEnum.None
+            )
+          )
+            this.statuses.find((x) => x.value == 9).isNext = true
+        }
       }
     }
     if (this.statuses.findIndex((x) => x.isValid == false) === -1) {
