@@ -118,6 +118,7 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    console.log('ContactGroupsDetailEditComponent init')
     this.subs.sink = this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data
@@ -672,6 +673,8 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    console.log('destroy ContactGroupsDetailEditComponent component now')
+
     this.subs.unsubscribe()
   }
 }

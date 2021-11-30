@@ -68,6 +68,7 @@ export class CompanyDetailComponent implements OnInit {
 
   createNewCompanyOrContact(event?: string) {
     if (event === 'newContact') {
+      localStorage.removeItem('contactPeople')
       this.router.navigate(['/contact-centre/detail/0/people/0'], {
         queryParams: {
           isNewCompanyContact: false,

@@ -194,6 +194,8 @@ export class ContactGroupsComponent implements OnInit {
   }
 
   navigateToNewGroup(contactType: string) {
+    localStorage.removeItem('contactPeople')
+    localStorage.removeItem('newCompany')
     if (contactType === 'personal') {
       this.router.navigate(['detail', 0, 'people', 0], {
         queryParams: { showDuplicateChecker: true, emailPhoneRequired: true, isNewPersonalContact: true },
