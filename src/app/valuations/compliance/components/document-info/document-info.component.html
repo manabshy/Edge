@@ -3,10 +3,12 @@
   class="w-full p-2 border rounded-sm cursor-pointer border-grey-100"
   [ngClass]="idHasExpired ? 'border-red-500 bg-red-100' : ''"
 >
-  <div *ngFor="let file of files" class="flex flex-row content-center my-1">
+  <div *ngFor="let file of files" class="flex flex-row content-center my-1 w-full">
     <i class="mt-1 mr-1 tracking-normal text-gray-400 fa fa-file"></i>
-    <a class="mr-2 tracking-tight truncate" href="{{ file.url }}" target="_blank">
-      {{ file.label || label }}
+    <a class="mr-2 tracking-tight w-9/12" href="{{ file.url }}" target="_blank">
+      <p class="overflow-hidden truncate">
+        {{ file.label || label }}
+      </p>
     </a>
   
     <!-- ID EXPIRY LABEL -->
@@ -25,6 +27,11 @@
       <ng-container *ngIf="file.dateReplaced">
         <span [pTooltip]="'Upload Date'">
           {{ moment(file.dateReplaced).format('DD/MM/YY') }}
+        </span>
+      </ng-container>
+      <ng-container *ngIf="file.updateDate">
+        <span [pTooltip]="'Upload Date'">
+          {{ moment(file.updateDate).format('DD/MM/YY') }}
         </span>
       </ng-container>
     </span>
