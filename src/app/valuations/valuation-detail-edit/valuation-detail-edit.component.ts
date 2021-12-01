@@ -653,6 +653,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   controlStatus(data) {
     this.contactGroupLoading = false
     if (data) {
+      if (
+        this.valuation &&
+        (this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Closed ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Instructed)
+      ) {
+        return
+      }
       if (this.valuation && this.valuation.valuationStatus === ValuationStatusEnum.None) {
         this.statuses.find((x) => x.value == 0).isNext = true
         this.statuses.find((x) => x.value == 1).isNext = true
