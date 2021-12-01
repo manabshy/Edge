@@ -57,7 +57,7 @@ interface toBSale {
         <fieldset class="mb-2">
           <fieldset class="row">
             <label style="width: auto; margin-top: 10px" for="haveInterest">
-              Does the Owner have a declarable interest
+              Does the owner have a declarable interest?
               <span class="--color-red-400">
                 <i
                   [pTooltip]="informationMessage"
