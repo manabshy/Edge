@@ -443,7 +443,7 @@
                             <div *ngIf="getTimeSalesValuationDate !== getTimeLettingsValuationDate">
                               <fieldset
                                 [attr.disabled]="(valuation?.valuationStatus == 0 || valuation?.valuationStatus == 2) == false?true:null">
-                                <label>Are we meeting the Owner ?</label>
+                                <label>Are we meeting the owner?</label>
                                 <span class="radio radio--inline">
                                   <span>
                                     <input class="p-2" type="radio" id="salesMeetingOwnerYes" [value]="true"
@@ -555,7 +555,7 @@
                             <div *ngIf="getTimeSalesValuationDate != getTimeLettingsValuationDate">
                               <fieldset
                                 [attr.disabled]="(valuation?.valuationStatus == 0 || valuation?.valuationStatus == 2) == false?true:null">
-                                <label>Are we meeting the Owner ?</label>
+                                <label>Are we meeting the owner?</label>
                                 <span class="radio radio--inline">
                                   <span>
                                     <input class="p-2" type="radio" id="lettingsMeetingOwnerYes" [value]="true"
@@ -638,7 +638,7 @@
                         <div class="grid justify-center">
                           <fieldset
                             [attr.disabled]="(valuation?.valuationStatus == 0 || valuation?.valuationStatus == 2) == false?true:null">
-                            <label>Are we meeting the Owner ?</label>
+                            <label>Are we meeting the owner?</label>
                             <span class="radio radio--inline">
                               <span>
                                 <input class="p-2" type="radio" id="salesMeetingOwnerYes" [value]="true"
@@ -856,7 +856,7 @@
                 </p-accordionTab>
                 <!-- LAND REGISTER TAB -->
                 <p-accordionTab id="landRegisterTab" class="landRegister" *ngIf="isLandRegisterVisible"
-                  header="Land Register" [(selected)]="activeState[5]">
+                  header="Land Registry" [(selected)]="activeState[5]">
                   <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)">
                     <app-valuation-land-register [showLeaseExpiryDate]="showLeaseExpiryDate" [valuation]="valuation"
