@@ -3106,6 +3106,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   onRefreshDocuments() {
     console.log('refresh documents')
+    this.isDisabledInstructButton = true
   }
 
   ngOnDestroy() {
