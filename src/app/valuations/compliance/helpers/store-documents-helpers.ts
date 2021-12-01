@@ -49,7 +49,7 @@ export const workOutDataShapeForApi = (entities, companyOrContact, companyId, co
         }
         if (entity.companyId) {
           updatedEntity.companyId = companyId
-          updatedEntity.associatedCompanyId = entity.companyId
+          updatedEntity.associatedCompanyId = entity.associatedCompanyId
           companyDocuments.push(updatedEntity)
         } else {
           updatedEntity.personId = entity.personId
