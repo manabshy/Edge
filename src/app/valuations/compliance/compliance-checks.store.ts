@@ -124,9 +124,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     mergeMap((data: any): any => {
       console.log('pushContactsToValuationServiceForSave RUNNING 🏃🏃🏃🏃', data)
       if (data.savePayload) {
-        return this._complianceChecksFacadeSvc.updateCompanyAndPersonDocuments(data.savePayload)
+        return of(this._complianceChecksFacadeSvc.updateCompanyAndPersonDocuments(data.savePayload))
       } else {
-        return this._complianceChecksFacadeSvc.updatePersonDocuments(data.entitiesToSave) // pops personDocuments array into valuation service to get picked up if/when valuation is saved
+        return of(this._complianceChecksFacadeSvc.updatePersonDocuments(data.entitiesToSave)) // pops personDocuments array into valuation service to get picked up if/when valuation is saved
       }
     })
   )
@@ -242,7 +242,8 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           ...state.entities,
           {
             ...entityToAdd,
-            associatedCompanyId: state.companyId,
+            companyId: state.companyId,
+            associatedCompanyId:  entityToAdd.id,
             isMain: state.companyId === entityToAdd.id,
             documents: mapDocumentsForView(entityToAdd.documents)
           }
@@ -429,7 +430,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           this.addFilesToEntity({ tmpFiles, data }) // adds files to store
           return this.pushContactsToValuationServiceForSave$
         }),
-        mergeMap(() => this.validationMessage$),
+        mergeMap(() => {
+          return  this.validationMessage$.pipe()
+        }),
         take(1)
       )
       .subscribe(
@@ -484,28 +487,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   }
 
   /***
-   * @function onAddExistingContact
-   * @param {Object} entity - the contact to add to the store
-   * @description adds an EXISTING contact to the valuation. grabs their docs & data from API and puts in the store
-   */
-  public onAddExistingContact = (entity: any): void => {
-    this._complianceChecksFacadeSvc
-      .getAllPersonDocs(entity.id)
-      .pipe(
-        switchMap((entityDataFromApi) => {
-          this.loadExistingEntity(entityDataFromApi)
-          return this.pushContactsToValuationServiceForSave$
-        }),
-        mergeMap(() => this.validationMessage$.pipe()),
-        take(1)
-      )
-      .subscribe(
-        (res) => console.log(res),
-        (err) => console.error(err)
-      )
-  }
-
-  /***
    * @function onAddNewCompany
    * @param {Object} entity - the NEW company to add to the store
    * @description adds a NEW company to the valuation. Since this is called before the valuation loads it's set as a BehaviorSubject so the load function can grab it on demand
@@ -522,6 +503,29 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           ? `${entity.companyAddress.addressLines}, ${entity.companyAddress.postCode}`
           : ''
     })
+  }
+  
+  /***
+   * @function onAddExistingContact
+   * @param {Object} entity - the contact to add to the store
+   * @description adds an EXISTING contact to the valuation. grabs their docs & data from API and puts in the store
+   */
+   public onAddExistingContact = (entity: any): void => {
+    this._complianceChecksFacadeSvc
+      .getAllPersonDocs(entity.id)
+      .pipe(
+        switchMap((entityDataFromApi) => {
+          // console.log('onAddExistingContact result from server: ', entityDataFromApi)
+           this.loadExistingEntity(entityDataFromApi)
+           return this.pushContactsToValuationServiceForSave$
+        }),
+        mergeMap(() => this.validationMessage$.pipe()),
+        take(1)
+      )
+      .subscribe(
+        (res) => console.log(res),
+        (err) => console.error(err)
+      )
   }
 
   /***

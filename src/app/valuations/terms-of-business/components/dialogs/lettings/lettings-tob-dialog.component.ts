@@ -203,7 +203,8 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
       model: this.model,
       file: this.tmpFiles
     }
-    payload.model.managedByTypeId = this.model.isManaged ? 1 : this.model.isLandlordManaged ? 2 : 0
+    payload.model.managedByTypeId = this.model.isManagement ? 1 : this.model.isLandlordManaged ? 0 : 2
+    if (payload.model.isManagement) payload.model.isLandlordManaged = null
     return payload
   }
 

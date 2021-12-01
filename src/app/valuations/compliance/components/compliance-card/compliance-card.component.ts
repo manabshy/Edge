@@ -82,8 +82,6 @@ export class ComplianceCardComponent implements OnInit {
         }
       })
     }
-    if (this.entity.companyId) {
-      // only businesses can have UBO status
       menuItems.push({
         label: this.entity.isUBO ? 'Remove as UBO' : 'Make UBO',
         icon: this.entity.isUBO ? 'fa fa-toggle-off' : 'fa fa-toggle-on',
@@ -92,7 +90,7 @@ export class ComplianceCardComponent implements OnInit {
           this.onToggleIsUBO.emit(this.entity)
         }
       })
-    }
+
     this.menuItems = menuItems
   }
 
