@@ -1,4 +1,4 @@
-<div>
+<div class="p-2 border border-gray-300">
   <div *ngIf="files && files.length > 0,else uploadFile">
     <div *ngFor="let file of files" class="flex flex-row content-center mb-1" [pTooltip]="file.fileLongName"
       tooltipPosition="bottom">
