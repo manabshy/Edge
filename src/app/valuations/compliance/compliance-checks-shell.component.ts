@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { Observable } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { ComplianceChecksStore } from './compliance-checks.store'
@@ -31,7 +31,7 @@ import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-
         (onUpdateEntity)="store.onUpdateEntity($event)"
         (onAddExistingContact)="store.onAddExistingContact($event)"
         (onAddExistingCompany)="store.onAddExistingCompany($event)"
-        (onRefreshDocuments)="store.onRefreshDocuments()"
+        (onRefreshDocuments)="onRefreshDocuments()"
         (onQueryDuplicates)="facadeSvc.onQueryDuplicates($event)"
         (onCreateNewPerson)="facadeSvc.onCreateNewPerson($event)"
         (onCreateNewCompany)="facadeSvc.onCreateNewCompany($event)"
@@ -42,6 +42,7 @@ import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-
 })
 export class ComplianceChecksShellComponent implements OnInit {
   
+  @Output() refreshDocumentsEmitter: EventEmitter<any> = new EventEmitter()
   vm$: Observable<ComplianceChecksState>
   contactSearchResults$: Observable<PotentialDuplicateResult>
 
@@ -71,5 +72,10 @@ export class ComplianceChecksShellComponent implements OnInit {
   ngOnInit() {
     console.log('compliance checks loading store....')
     this.store.loadStore()
+  }
+
+  onRefreshDocuments(){
+    this.store.onRefreshDocuments()
+    this.refreshDocumentsEmitter.emit()
   }
 }
