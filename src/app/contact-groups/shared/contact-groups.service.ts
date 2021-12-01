@@ -474,4 +474,8 @@ export class ContactGroupsService {
     // console.log('******************** >> getAddedPerson: ', person)
     this.newPersonSubject.next(person)
   }
+
+  removeAddedPerson() {
+    this.newPersonSubject.next(null)
+  }
 }

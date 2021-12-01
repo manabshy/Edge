@@ -202,7 +202,6 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       this.page = newPageNumber
       this.getNextContactNotesPage(this.page)
     })
-
   }
 
   private getContactNotes() {
@@ -237,7 +236,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       if (this.isExistingCompany || this.isNewPersonalContact || params['showDuplicateChecker']) {
         this.showDuplicateChecker = true
       }
-      if (this.isNewCompanyContact === true) {
+      if (this.isNewCompanyContact === true && !(this.addedCompany && this.addedCompany.companyId > 0)) {
         this.showCompanyFinder = true
       }
     })
@@ -263,6 +262,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     if (AppUtils.holdingSelectedPeople || AppUtils.holdingSelectedCompany) {
       this.selectedPeople = AppUtils.holdingSelectedPeople
       this.companyDetails = AppUtils.holdingSelectedCompany
+      this.companyService.companyChanged(this.companyDetails)
       this.selectCompany(this.companyDetails)
       this.removedPersonIds = AppUtils.holdingRemovedPeople
       this.isCloned = AppUtils.holdingCloned
@@ -384,6 +384,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
 
   getNewlyAddedCompany() {
     this.companyService.newCompanyChanges$.subscribe((company) => {
+      this.addedCompany = company
       console.log('setting newCompany in local storage: ', company)
       localStorage.setItem('newCompany', JSON.stringify(company))
     })
@@ -409,7 +410,11 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       this.contactGroupDetails = data
       if (contactPeople?.length) {
         this.pendingChanges = true
-        this.contactGroupDetails.contactPeople = [...contactPeople]
+        if (this.contactGroupDetails.contactPeople && this.contactGroupDetails.contactPeople.length > 0)
+          this.contactGroupDetails.contactPeople = [...this.contactGroupDetails.contactPeople, ...contactPeople]
+        else {
+          this.contactGroupDetails.contactPeople = [...contactPeople]
+        }
         console.log(
           this.contactGroupDetails.contactPeople,
           'new group from merged with stroage',
@@ -877,8 +882,6 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
 
   onSaveComplete(contactGroup: ContactGroup): void {
     console.log('onSaveComplete: contactGroup ', contactGroup)
-    localStorage.removeItem('contactPeople')
-    localStorage.removeItem('newCompany')
     this.pendingChanges = false
     this.isSubmitting = false
     this.messageService.add({
