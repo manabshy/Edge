@@ -3096,6 +3096,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.isLastKnownOwnerVisible = true
   }
 
+  onRefreshDocuments() {
+    console.log('refresh documents')
+  }
+
   ngOnDestroy() {
     console.log('destroying valuation detail edit component 💣')
     this._valuationFacadeSvc._valuationData.next({})
