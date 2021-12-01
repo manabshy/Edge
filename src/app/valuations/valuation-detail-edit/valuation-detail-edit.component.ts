@@ -653,14 +653,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   controlStatus(data) {
     this.contactGroupLoading = false
     if (data) {
-      if (
-        this.valuation &&
-        (this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
-          this.valuation.valuationStatus === ValuationStatusEnum.Closed ||
-          this.valuation.valuationStatus === ValuationStatusEnum.Instructed)
-      ) {
-        return
-      }
       if (this.valuation && this.valuation.valuationStatus === ValuationStatusEnum.None) {
         this.statuses.find((x) => x.value == 0).isNext = true
         this.statuses.find((x) => x.value == 1).isNext = true
@@ -781,6 +773,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           )
             this.statuses.find((x) => x.value == 9).isNext = true
         }
+      }
+
+      if (
+        this.valuation &&
+        (this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Closed ||
+          this.valuation.valuationStatus === ValuationStatusEnum.Instructed)
+      ) {
+        this.statuses.forEach((x) => (x.isNext = false))
       }
     }
     if (this.statuses.findIndex((x) => x.isValid == false) === -1) {
@@ -3106,6 +3107,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   onRefreshDocuments() {
     console.log('refresh documents')
+    this.isDisabledInstructButton = true
   }
 
   ngOnDestroy() {
