@@ -1099,7 +1099,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuationForm.patchValue({
       propertyStyleId: this.property.propertyStyleId,
       propertyTypeId: this.property.propertyTypeId,
-      propertyFloorId: this.property['propertyFloorId']
+      propertyFloorId: this.property['propertyFloorId'],
+      floorOther: this.property['floorOther']
     })
   }
 
