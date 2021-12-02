@@ -28,6 +28,9 @@ export class CompanyDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.companyService.newCompanyContactGroupIsSavedBs.subscribe((data) => {
+      if (data == true) window.location.reload()
+    })
     console.log('CompanyDetailComponent here 1', this.companyId)
     this.route.params.subscribe((params) => (this.companyId = this.companyId || +params['id'] || 0))
     this.route.queryParams.subscribe((params) => {

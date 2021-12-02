@@ -903,11 +903,14 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
     if (!contactGroup.contactGroupId) {
       this.sharedService.back()
     } else {
-      this._router.navigate(['/contact-centre/detail/', 0, 'people', contactGroup.contactGroupId], {
-        replaceUrl: true
-      })
       if (this.isExistingCompany && this.existingCompanyId) {
-        this._router.navigate(['/company-centre/detail', this.existingCompanyId])
+        this._router.navigateByUrl('/company-centre/detail/' + this.existingCompanyId).then(() => {
+          this.companyService.newCompanyContactGroupIsSavedBs.next(true)
+        })
+      } else {
+        this._router.navigate(['/contact-centre/detail/', 0, 'people', contactGroup.contactGroupId], {
+          replaceUrl: true
+        })
       }
     }
   }

@@ -14,6 +14,8 @@ export class CompanyService {
   companyPageChanges$ = this.companyPageChangeSubject.asObservable()
   newCompanyChanges$ = this.newCompanySubject.asObservable()
 
+  newCompanyContactGroupIsSavedBs = new BehaviorSubject(false)
+
   constructor(private http: HttpClient) {}
 
   /***
@@ -88,7 +90,7 @@ export class CompanyService {
    * @param {number} valuationEventId - ID of the valuation documents are attached to
    * @description freezes documents for a company linked to a specific valuation
    */
-   freezeCompanyDocsForValuation(people, contactGroupId: number, valuationEventId: number): Observable<any> {
+  freezeCompanyDocsForValuation(people, contactGroupId: number, valuationEventId: number): Observable<any> {
     const url = `${AppConstants.baseCompanyDocumentUrl}/${contactGroupId}/${valuationEventId}`
     return this.http.post<any>(url, people).pipe(map((response) => response.result))
   }
