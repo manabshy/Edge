@@ -242,7 +242,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           ...state.entities,
           {
             ...entityToAdd,
-            companyId: state.companyId,
+            companyId: entityToAdd.companyId ? state.companyId : null, // this prop determines if the entity is a company or person, only add companyId if the entity is a company
             associatedCompanyId:  entityToAdd.id,
             isMain: state.companyId === entityToAdd.id,
             documents: mapDocumentsForView(entityToAdd.documents)
