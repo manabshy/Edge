@@ -57,7 +57,7 @@ IdUploadedValid.args = {
   files: [{
     id: 0,
     label: 'ID',
-    dateReplaced: '07/04/21',
+    updateDate: '07/04/21',
     idValidationDateExpiry: '01/11/26',
     url: 'https://google.com'
  }],
@@ -69,7 +69,7 @@ IdUploadedInvalid.args = {
   files: [{
     id: 0,
     label: 'ID',
-    dateReplaced: '07/04/21',
+    updateDate: '07/04/21',
     idValidationDateExpiry: '02/09/21',
     url: 'https://google.com'
   }],
@@ -89,7 +89,7 @@ ProofOfAddressUploaded.args = {
   files: [{
     id: 0,
     label: 'Proof of Address',
-    dateReplaced: '05/09/21'
+    updateDate: '05/09/21'
   }]
 };
 
@@ -107,7 +107,7 @@ ReportUploaded.args = {
   files: [{
     id: 0,
     label: 'Report',
-    dateReplaced: '10/19/21'
+    updateDate: '10/19/21'
   }]
 };
 
@@ -118,11 +118,11 @@ MultipleReportsUploaded.args = {
   files: [{
     id: 0,
     label: 'Report',
-    dateReplaced: '01/09/21'
+    updateDate: '01/09/21'
   }, {
     id: 0,
     label: 'Report',
-    dateReplaced: '01/09/21'
+    updateDate: '01/09/21'
   }]
 };
 
@@ -140,7 +140,7 @@ AdditionalDocumentUploaded.args = {
   files: [{
     id: 0,
     label: 'Document.pdf',
-    dateReplaced: '01/09/21'
+    updateDate: '01/09/21'
   }]
 };
 
@@ -151,11 +151,11 @@ MultipleAdditionalDocumentsUploaded.args = {
   files: [{
     id: 0,
     label: 'Other-doc.pdf',
-    dateReplaced: '01/09/21'
+    updateDate: '01/09/21'
   }, {
     id: 0,
     label: 'Reference-x.pdf',
-    dateReplaced: '01/09/21'
+    updateDate: '01/09/21'
   }]
 };
 
@@ -165,12 +165,12 @@ LongNameDocumentsUploaded.args = {
   label: 'Additional Documents',
   files: [{
     id: 0,
-    dateReplaced: '01/09/21',
+    updateDate: '01/09/21',
     label: 'p-52364_LandReg_0d4f32873cfa40ae918644e85472bcbe.pdf'
   }, {
     id: 0,
     label: 'Reference-x.pdf',
-    dateReplaced: '01/09/21'
+    updateDate: '01/09/21'
   }]
 };
 
