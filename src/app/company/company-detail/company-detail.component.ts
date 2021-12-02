@@ -74,7 +74,7 @@ export class CompanyDetailComponent implements OnInit {
       localStorage.removeItem('contactPeople')
       this.router.navigate(['/contact-centre/detail/0/people/0'], {
         queryParams: {
-          isNewCompanyContact: false,
+          isNewCompanyContact: true,
           isExistingCompany: true,
           existingCompanyId: this.companyId
         }
