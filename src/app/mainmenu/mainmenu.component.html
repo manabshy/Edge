@@ -62,11 +62,11 @@
             </summary>
             <ol class="nav nav--secondary">
               <li class="nav__item" (click)="toggleMobileMenu()"><a routerLink="/contact-centre"
-                  routerLinkActive="active">Contact centre</a></li>
+                  (click)="clearLocalStroge()" routerLinkActive="active">Contact centre</a></li>
               <li class="nav__item"><a routerLink="/applicant-register" routerLinkActive="active"
                   *ngIf="false">Applicants</a></li>
               <li class="nav__item" (click)="toggleMobileMenu()"><a routerLink="/company-centre"
-                  routerLinkActive="active">Company centre</a></li>
+                  (click)="clearLocalStroge()" routerLinkActive="active">Company centre</a></li>
               <li class="nav__item"><a routerLink="/leads" routerLinkActive="active"
                   (click)="toggleMobileMenu()">Leads</a></li>
             </ol>
