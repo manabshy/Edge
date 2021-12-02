@@ -15,9 +15,6 @@ import { PopoverModule } from 'ngx-bootstrap/popover'
 import { ButtonsModule } from 'ngx-bootstrap/buttons'
 import { CarouselModule } from 'ngx-bootstrap/carousel'
 
-import { FormlyModule } from '@ngx-formly/core'
-import { FormlyPrimeNGModule } from '@ngx-formly/primeng'
-
 // vendor
 import { OrderModule } from 'ngx-order-pipe'
 import { ToastrModule, ToastContainerModule } from 'ngx-toastr'
@@ -53,13 +50,6 @@ const externalModules = [
   NgxFileDropModule,
   PrimeNGModule,
   FileUploadModule,
-  FormlyModule.forRoot({
-    validationMessages: [
-      { name: 'required', message: 'This field is required'}
-    ],
-  }),
-  FormlyPrimeNGModule,
-  // FormlyRadioModule
 ]
 
 @NgModule({
