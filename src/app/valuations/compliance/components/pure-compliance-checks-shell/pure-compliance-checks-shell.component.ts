@@ -28,6 +28,7 @@ export class PureComplianceChecksShellComponent implements OnInit, OnChanges {
   @Output() onQueryDuplicates: EventEmitter<any> = new EventEmitter()
   @Output() onCreateNewPerson: EventEmitter<any> = new EventEmitter()
   @Output() onCreateNewCompany: EventEmitter<any> = new EventEmitter()
+  @Output() afterFileOperation: EventEmitter<any> = new EventEmitter()
 
   smartSearchAddedDate = new Date() // TODO
   searchTerm: string = ''
@@ -76,5 +77,4 @@ export class PureComplianceChecksShellComponent implements OnInit, OnChanges {
   getCompanyName(ev) {
     console.log('getCompanyName: ', ev)
   }
-
 }

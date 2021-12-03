@@ -869,7 +869,8 @@
                   [(selected)]="activeState[6]">
                   <div [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled($event, isCancelled)">
-                    <app-compliance-checks-shell (refreshDocumentsEmitter)="onRefreshDocuments($event)">
+                    <app-compliance-checks-shell (refreshDocumentsEmitter)="onRefreshDocuments($event)"
+                      (afterFileOperation)="scrollSpecificElement('complianceChecksTab')">
                     </app-compliance-checks-shell>
                   </div>
                 </p-accordionTab>
