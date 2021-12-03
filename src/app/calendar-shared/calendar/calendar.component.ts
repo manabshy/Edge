@@ -84,6 +84,8 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   @Input() myCalendarOnly: boolean
   @Input() isSelectingDate: boolean
   @Input() isOnlyShowPurposes: boolean
+  // todo for release purposes
+  forReleaseClosed = true
   @Output() selectedDate = new EventEmitter<any>()
   @ViewChild('calendarContainer', { static: true })
   calendarContainer: ElementRef
@@ -411,6 +413,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       endDate: new Date(clickedEvent.endDateTime)
     })
     if (this.isOnlyShowPurposes) return
+    if (this.forReleaseClosed) return
     if (!clickedEvent.isBusy) {
       if (+clickedEvent.eventTypeId === 8 || +clickedEvent.eventTypeId === 2048) {
         this.router.navigate(['/valuations/detail', clickedEvent.properties[0].propertyEventId, 'edit'], {
@@ -481,6 +484,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   // New draggable here....
   startDragToCreate(segment: WeekViewHourSegment, mouseDownEvent: MouseEvent, segmentElement: HTMLElement) {
     if (this.isOnlyShowPurposes) return
+    if (this.forReleaseClosed) return
     if (!this.isSelectingDate) {
       const dragToSelectEvent: CalendarEvent = {
         id: this.diaryEvents.length,
