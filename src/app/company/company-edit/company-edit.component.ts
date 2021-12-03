@@ -146,7 +146,7 @@ export class CompanyEditComponent implements OnInit {
     })
     this.existingSigner = company.signer
   }
-  
+
   populateNewCompanyDetails() {
     if (this.companyForm) {
       this.companyForm.reset()
@@ -324,6 +324,8 @@ export class CompanyEditComponent implements OnInit {
     }
     console.log('navigating to new company detail page: ', company.companyId)
     this._router.navigate(['company-centre/detail', company.companyId])
+    this._location.replaceState('company-centre/detail/' + company.companyId)
+    window.location.reload()
   }
 
   canDeactivate(): boolean {
