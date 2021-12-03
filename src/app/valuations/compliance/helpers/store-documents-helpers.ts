@@ -26,6 +26,7 @@ export const workOutDataShapeForApi = (entities, companyOrContact, companyId, co
           isMain: entity.isMain,
           isAdmin: entity.isAdmin,
           position: entity.position ? entity.position : '',
+          uboAdded: entity.uboAdded ? entity.uboAdded : null,
           personDateAmlCompleted: entity.personDateAmlCompleted ? entity.personDateAmlCompleted : null
         }
       })
