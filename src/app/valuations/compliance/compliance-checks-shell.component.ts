@@ -44,6 +44,7 @@ import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-
 export class ComplianceChecksShellComponent implements OnInit {
   @Output() refreshDocumentsEmitter: EventEmitter<any> = new EventEmitter()
   @Output() afterFileOperation: EventEmitter<any> = new EventEmitter()
+  
   vm$: Observable<ComplianceChecksState>
   contactSearchResults$: Observable<PotentialDuplicateResult>
 
