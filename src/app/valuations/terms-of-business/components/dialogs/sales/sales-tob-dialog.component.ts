@@ -86,6 +86,7 @@ import { SharedService } from 'src/app/core/services/shared.service'
 })
 export class SalesToBDialogComponent implements OnInit, OnDestroy {
   @Output() onSubmitTermsOfBusiness: EventEmitter<any> = new EventEmitter()
+  @Output() afterFileOperation: EventEmitter<any> = new EventEmitter()
   @Input() showDialog: boolean = false
   @Input() data: any = {}
   @Input() suggestedAskingPrice: number = 0
@@ -147,11 +148,11 @@ export class SalesToBDialogComponent implements OnInit, OnDestroy {
       this.updateMessages()
     })
   }
-  
+
   ngOnDestroy() {
     this.formSub.unsubscribe()
   }
-  
+
   public getFiles(files): void {
     this.tmpFiles = files
     this.fileUploaded = !!files ? true : false
@@ -172,6 +173,7 @@ export class SalesToBDialogComponent implements OnInit, OnDestroy {
   public close() {
     this.onSubmitTermsOfBusiness.emit(false)
     this.showDialog = false
+    this.afterFileOperation.emit(true)
   }
 
   private updateMessages() {
