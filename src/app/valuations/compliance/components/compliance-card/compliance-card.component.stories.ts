@@ -1,17 +1,17 @@
-import { moduleMetadata, componentWrapperDecorator } from '@storybook/angular';
-import { CommonModule } from '@angular/common';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MessageService } from 'primeng/api';
+import { moduleMetadata, componentWrapperDecorator } from '@storybook/angular'
+import { CommonModule } from '@angular/common'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { MessageService } from 'primeng/api'
 // also exported from '@storybook/angular' if you can deal with breaking changes in 6.1
-import { Story, Meta } from '@storybook/angular/types-6-0';
-import { action } from '@storybook/addon-actions';
-import { VendorsModule } from '../../../../shared/vendors.module';
+import { Story, Meta } from '@storybook/angular/types-6-0'
+import { action } from '@storybook/addon-actions'
+import { VendorsModule } from '../../../../shared/vendors.module'
 
 // component under test
-import { ComplianceCardComponent } from './compliance-card.component';
+import { ComplianceCardComponent } from './compliance-card.component'
 
 // document-info component and stories
-import { DocumentInfoComponent } from '../document-info/document-info.component';
+import { DocumentInfoComponent } from '../document-info/document-info.component'
 import {
   IdBlank,
   IdUploadedValid,
@@ -24,8 +24,9 @@ import {
   AdditionalDocumentsBlank,
   AdditionalDocumentUploaded,
   MultipleAdditionalDocumentsUploaded,
-} from '../document-info/document-info.component.stories';
-import { FileUploadComponent } from '../../../../shared/components/file-upload/file-upload.component';
+  LongNameDocumentsUploaded
+} from '../document-info/document-info.component.stories'
+import { FileUploadComponent } from '../../../../shared/components/file-upload/file-upload.component'
 
 export default {
   title: 'Valuations/Compliance/Components/ComplianceCard',
@@ -35,30 +36,30 @@ export default {
     moduleMetadata({
       declarations: [ComplianceCardComponent, DocumentInfoComponent, FileUploadComponent],
       imports: [CommonModule, VendorsModule, BrowserAnimationsModule],
-      providers: [MessageService],
+      providers: [MessageService]
     }),
     componentWrapperDecorator(
       (story) => `
         <div class="m-10 w-full md:w-1/2 mx-auto shadow-md">${story}</div>
-      `,
-    ),
-  ],
-} as Meta;
+      `
+    )
+  ]
+} as Meta
 
 export const actionsData = {
   fileUploaded: action('fileUploaded'),
-  fileDeleted: action('fileDeleted'),
-};
+  fileDeleted: action('fileDeleted')
+}
 const ComplianceCardTemplate: Story<ComplianceCardComponent> = (args: ComplianceCardComponent) => ({
   props: {
     ...args,
     fileUploaded: actionsData.fileUploaded,
-    fileDeleted: actionsData.fileDeleted,
-  },
-});
+    fileDeleted: actionsData.fileDeleted
+  }
+})
 
 // Lead entity stories
-export const LeadContactBlank = ComplianceCardTemplate.bind({});
+export const LeadContactBlank = ComplianceCardTemplate.bind({})
 LeadContactBlank.args = {
   entity: {
     id: 123,
@@ -71,12 +72,12 @@ LeadContactBlank.args = {
       idDoc: IdBlank.args,
       proofOfAddressDoc: ProofOfAddressBlank.args,
       reportDocs: ReportBlank.args,
-      additionalDocs: AdditionalDocumentsBlank.args,
-    },
-  },
-};
+      additionalDocs: AdditionalDocumentsBlank.args
+    }
+  }
+}
 
-export const LeadContactValid = ComplianceCardTemplate.bind({});
+export const LeadContactValid = ComplianceCardTemplate.bind({})
 LeadContactValid.args = {
   entity: {
     id: 456,
@@ -89,12 +90,12 @@ LeadContactValid.args = {
       idDoc: IdUploadedValid.args,
       proofOfAddressDoc: ProofOfAddressUploaded.args,
       reportDocs: ReportUploaded.args,
-      additionalDocs: AdditionalDocumentUploaded.args,
-    },
-  },
-};
+      additionalDocs: AdditionalDocumentUploaded.args
+    }
+  }
+}
 
-export const LeadContactAndUBO = ComplianceCardTemplate.bind({});
+export const LeadContactAndUBO = ComplianceCardTemplate.bind({})
 LeadContactAndUBO.args = {
   entity: {
     id: 456,
@@ -108,12 +109,12 @@ LeadContactAndUBO.args = {
       idDoc: IdUploadedValid.args,
       proofOfAddressDoc: ProofOfAddressUploaded.args,
       reportDocs: ReportUploaded.args,
-      additionalDocs: AdditionalDocumentUploaded.args,
-    },
-  },
-};
+      additionalDocs: AdditionalDocumentUploaded.args
+    }
+  }
+}
 
-export const LeadContactInvalid = ComplianceCardTemplate.bind({});
+export const LeadContactInvalid = ComplianceCardTemplate.bind({})
 LeadContactInvalid.args = {
   entity: {
     id: 789,
@@ -126,12 +127,12 @@ LeadContactInvalid.args = {
       idDoc: IdUploadedInvalid.args,
       proofOfAddressDoc: ProofOfAddressUploaded.args,
       reportDocs: ReportUploaded.args,
-      additionalDocs: AdditionalDocumentsBlank.args,
-    },
-  },
-};
+      additionalDocs: AdditionalDocumentsBlank.args
+    }
+  }
+}
 
-export const LeadContactMixed = ComplianceCardTemplate.bind({});
+export const LeadContactMixed = ComplianceCardTemplate.bind({})
 LeadContactMixed.args = {
   entity: {
     id: 101,
@@ -144,13 +145,31 @@ LeadContactMixed.args = {
       idDoc: IdUploadedValid.args,
       proofOfAddressDoc: ProofOfAddressUploaded.args,
       reportDocs: MultipleReportsUploaded.args,
-      additionalDocs: MultipleAdditionalDocumentsUploaded.args,
-    },
-  },
-};
+      additionalDocs: MultipleAdditionalDocumentsUploaded.args
+    }
+  }
+}
+
+export const LeadContactLongFileNames = ComplianceCardTemplate.bind({})
+LeadContactLongFileNames.args = {
+  entity: {
+    id: 101,
+    personId: 101,
+    isMain: true,
+    name: 'Andrew Whitbread',
+    address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
+    personDateAmlCompleted: new Date('04/30/2020'),
+    documents: {
+      idDoc: IdUploadedValid.args,
+      proofOfAddressDoc: ProofOfAddressUploaded.args,
+      reportDocs: MultipleReportsUploaded.args,
+      additionalDocs: LongNameDocumentsUploaded.args
+    }
+  }
+}
 
 // Associated entity stories
-export const AssociatedContactBlank = ComplianceCardTemplate.bind({});
+export const AssociatedContactBlank = ComplianceCardTemplate.bind({})
 AssociatedContactBlank.args = {
   isFrozen: false,
   entity: {
@@ -164,12 +183,12 @@ AssociatedContactBlank.args = {
       idDoc: IdBlank.args,
       proofOfAddressDoc: ProofOfAddressBlank.args,
       reportDocs: ReportBlank.args,
-      additionalDocs: AdditionalDocumentsBlank.args,
-    },
-  },
-};
+      additionalDocs: AdditionalDocumentsBlank.args
+    }
+  }
+}
 
-export const AssociatedContactValid = ComplianceCardTemplate.bind({});
+export const AssociatedContactValid = ComplianceCardTemplate.bind({})
 AssociatedContactValid.args = {
   isFrozen: false,
   entity: {
@@ -183,12 +202,12 @@ AssociatedContactValid.args = {
       idDoc: IdUploadedValid.args,
       proofOfAddressDoc: ProofOfAddressUploaded.args,
       reportDocs: MultipleReportsUploaded.args,
-      additionalDocs: AdditionalDocumentsBlank.args,
-    },
-  },
-};
+      additionalDocs: AdditionalDocumentsBlank.args
+    }
+  }
+}
 
-export const AssociatedContactInvalid = ComplianceCardTemplate.bind({});
+export const AssociatedContactInvalid = ComplianceCardTemplate.bind({})
 AssociatedContactInvalid.args = {
   isFrozen: false,
   entity: {
@@ -202,12 +221,12 @@ AssociatedContactInvalid.args = {
       idDoc: IdUploadedInvalid.args,
       proofOfAddressDoc: ProofOfAddressUploaded.args,
       reportDocs: MultipleReportsUploaded.args,
-      additionalDocs: AdditionalDocumentUploaded.args,
-    },
-  },
-};
+      additionalDocs: AdditionalDocumentUploaded.args
+    }
+  }
+}
 
-export const CompanyContact = ComplianceCardTemplate.bind({});
+export const CompanyContact = ComplianceCardTemplate.bind({})
 CompanyContact.args = {
   isFrozen: false,
   entity: {
@@ -221,12 +240,12 @@ CompanyContact.args = {
       idDoc: IdBlank.args,
       proofOfAddressDoc: ProofOfAddressBlank.args,
       reportDocs: ReportBlank.args,
-      additionalDocs: MultipleAdditionalDocumentsUploaded.args,
-    },
-  },
-};
+      additionalDocs: MultipleAdditionalDocumentsUploaded.args
+    }
+  }
+}
 
-export const AssociatedCompanyContact = ComplianceCardTemplate.bind({});
+export const AssociatedCompanyContact = ComplianceCardTemplate.bind({})
 AssociatedCompanyContact.args = {
   isFrozen: false,
   entity: {
@@ -240,7 +259,7 @@ AssociatedCompanyContact.args = {
       idDoc: IdBlank.args,
       proofOfAddressDoc: ProofOfAddressBlank.args,
       reportDocs: ReportBlank.args,
-      additionalDocs: MultipleAdditionalDocumentsUploaded.args,
-    },
-  },
-};
+      additionalDocs: MultipleAdditionalDocumentsUploaded.args
+    }
+  }
+}

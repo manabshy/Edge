@@ -3,7 +3,7 @@
   [ngClass]="idHasExpired ? 'border-red-500 bg-red-100' : ''">
   <div *ngFor="let file of files" class="flex flex-row content-center w-full my-1">
     <i class="mt-1 mr-1 tracking-normal text-gray-400 fa fa-file"></i>
-    <a class="mr-2 tracking-tight" [ngClass]="documentType == DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS ? 'w-3/4' : ''"
+    <a class="mr-2 tracking-tight" [ngClass]="documentType == DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS ? 'w-3/5' : ''"
       href="{{ file.url }}" target="_blank">
       <p class="overflow-hidden truncate">
         {{ file.label || label }}
