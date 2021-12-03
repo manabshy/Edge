@@ -290,7 +290,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       .pipe(
         filter(([contactGroupData, valuationData]) => {
           // console.log('loadStore filter: ', contactGroupData, valuationData)
-          return !!contactGroupData && !!valuationData
+          return !!contactGroupData && !!valuationData && (contactGroupData.contactGroupId  === valuationData.propertyOwner.contactGroupId)
         }),
         take(1),
         mergeMap(([contactGroupData, valuationData, entityToAdd]: [any, any, any]) => {
