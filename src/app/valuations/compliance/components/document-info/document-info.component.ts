@@ -27,6 +27,7 @@ export class DocumentInfoComponent implements OnInit {
 
   @Output() deleteFile: EventEmitter<any> = new EventEmitter()
   @Output() onFileUploaded: EventEmitter<any> = new EventEmitter()
+  @Output() afterFileOperation: EventEmitter<any> = new EventEmitter()
 
   constructor(private fb: FormBuilder) {}
 
@@ -137,9 +138,10 @@ export class DocumentInfoComponent implements OnInit {
       this.message.text = this.tmpFiles.length ? ['Enter SmartSearch ID below'] : this.message.text
       const formValid = this.smartSearchIdForm.controls['smartSearchId'].valid
       this.message.type = formValid && this.tmpFiles.length ? 'success' : 'info'
-      this.message.text = formValid && this.tmpFiles.length ? ['Valid for upload'] : ['Please enter SmartSearch report ID below']
+      this.message.text =
+        formValid && this.tmpFiles.length ? ['Valid for upload'] : ['Please enter SmartSearch report ID below']
     } else {
-      this.message.type = this.tmpFiles.length ? 'success' :'info'
+      this.message.type = this.tmpFiles.length ? 'success' : 'info'
       this.message.text = this.tmpFiles.length ? ['Ready to upload'] : ['Please attach a file']
       this.saveFileBtnDisabled = false
     }
@@ -184,6 +186,4 @@ export class DocumentInfoComponent implements OnInit {
     this.saveFileBtnDisabled = !id
     this.validate()
   }
-
-  
 }

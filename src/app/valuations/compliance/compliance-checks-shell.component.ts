@@ -35,14 +35,15 @@ import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-
         (onQueryDuplicates)="facadeSvc.onQueryDuplicates($event)"
         (onCreateNewPerson)="facadeSvc.onCreateNewPerson($event)"
         (onCreateNewCompany)="facadeSvc.onCreateNewCompany($event)"
+        (afterFileOperation)="afterFileOperation.emit(true)"
       ></app-pure-compliance-checks-shell>
     </div>
   `,
   providers: [ComplianceChecksStore]
 })
 export class ComplianceChecksShellComponent implements OnInit {
-  
   @Output() refreshDocumentsEmitter: EventEmitter<any> = new EventEmitter()
+  @Output() afterFileOperation: EventEmitter<any> = new EventEmitter()
   vm$: Observable<ComplianceChecksState>
   contactSearchResults$: Observable<PotentialDuplicateResult>
 
@@ -74,7 +75,7 @@ export class ComplianceChecksShellComponent implements OnInit {
     this.store.loadStore()
   }
 
-  onRefreshDocuments(){
+  onRefreshDocuments() {
     this.store.onRefreshDocuments()
     this.refreshDocumentsEmitter.emit()
   }

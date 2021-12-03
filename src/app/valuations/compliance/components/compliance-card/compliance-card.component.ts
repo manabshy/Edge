@@ -20,6 +20,7 @@ export class ComplianceCardComponent implements OnInit {
   @Output() onToggleIsUBO: EventEmitter<any> = new EventEmitter()
   @Output() onRemoveEntity: EventEmitter<any> = new EventEmitter()
   @Output() onUpdateEntity: EventEmitter<any> = new EventEmitter()
+  @Output() afterFileOperation: EventEmitter<any> = new EventEmitter()
 
   contactForm: FormGroup = new FormGroup({
     name: new FormControl(),
@@ -51,9 +52,7 @@ export class ComplianceCardComponent implements OnInit {
     if (this.entity.companyId) {
       this.pillLabel = this.entity.isMain ? 'Company' : 'Associated Company'
     } else {
-      this.pillLabel = this.entity.isMain
-        ? 'Lead Contact'
-        : 'Associated Contact'
+      this.pillLabel = this.entity.isMain ? 'Lead Contact' : 'Associated Contact'
     }
 
     if (this.entity.isAdmin) {
@@ -82,14 +81,14 @@ export class ComplianceCardComponent implements OnInit {
         }
       })
     }
-      menuItems.push({
-        label: this.entity.isUBO ? 'Remove as UBO' : 'Make UBO',
-        icon: this.entity.isUBO ? 'fa fa-toggle-off' : 'fa fa-toggle-on',
-        command: () => {
-          this.setMenuItems() // refreshes options again
-          this.onToggleIsUBO.emit(this.entity)
-        }
-      })
+    menuItems.push({
+      label: this.entity.isUBO ? 'Remove as UBO' : 'Make UBO',
+      icon: this.entity.isUBO ? 'fa fa-toggle-off' : 'fa fa-toggle-on',
+      command: () => {
+        this.setMenuItems() // refreshes options again
+        this.onToggleIsUBO.emit(this.entity)
+      }
+    })
 
     this.menuItems = menuItems
   }
