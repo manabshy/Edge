@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common'
 import { Story, Meta } from '@storybook/angular/types-6-0'
 
 import { LettingsToBDialogComponent } from './lettings-tob-dialog.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 export default {
   title: 'Valuations/TermsOfBusiness/Dialogs/Lettings',
@@ -11,7 +12,7 @@ export default {
   decorators: [
     moduleMetadata({
       declarations: [LettingsToBDialogComponent],
-      imports: [CommonModule]
+      imports: [CommonModule, FormsModule, ReactiveFormsModule]
     }),
     componentWrapperDecorator(
       (story) => `
@@ -28,6 +29,7 @@ const LettingsTemplate: Story<LettingsToBDialogComponent> = (args: LettingsToBDi
 export const SingleEntry = LettingsTemplate.bind({})
 SingleEntry.args = {
   data: {
+    showDialog: true,
     signedOn: new Date(),
     isShortLetInstruction: 'Yes',
     isLongLetInstruction: 'Yes',
