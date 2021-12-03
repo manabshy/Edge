@@ -107,6 +107,7 @@ ReportUploaded.args = {
   files: [{
     id: 0,
     label: 'Report',
+    smartSearchId: 9189,
     updateDate: '10/19/21'
   }]
 };
@@ -118,11 +119,13 @@ MultipleReportsUploaded.args = {
   files: [{
     id: 0,
     label: 'Report',
-    updateDate: '01/09/21'
+    updateDate: '01/09/21',
+    smartSearchId: 8965,
   }, {
     id: 0,
     label: 'Report',
-    updateDate: '01/09/21'
+    updateDate: '01/09/21',
+    smartSearchId: 9520,
   }]
 };
 
