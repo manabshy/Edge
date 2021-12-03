@@ -14,7 +14,18 @@ export class ContactSearchComponent implements OnInit {
   @Input() isCreateNewPerson = false
   @Input() isCreateNewPersonVisible = false
   @Input() searchTerm: string
-  @Input() potentialDuplicatePeople: PotentialDuplicateResult
+
+  private _potentialDuplicatePeople: PotentialDuplicateResult
+  set potentialDuplicatePeople(value) {
+    if (value && value.matches && value.matches.length > 0 && value.matches.some((x) => x.matchType === 'FullMatch')) {
+      this.isCreateNewPersonVisible = false
+    }
+    this._potentialDuplicatePeople = value
+  }
+  @Input() get potentialDuplicatePeople(): PotentialDuplicateResult {
+    return this._potentialDuplicatePeople
+  }
+
   @Input() existingIds: number[]
 
   @Output() addedPersonDetails = new EventEmitter<Person>()
@@ -49,7 +60,10 @@ export class ContactSearchComponent implements OnInit {
     }
     this.personFinderForm.valueChanges.pipe(debounceTime(750)).subscribe((data: BasicPerson) => {
       if (data.fullName && (data.phoneNumber || data.emailAddress)) {
-        this.isCreateNewPersonVisible = true
+        let fullNameArr = data.fullName.split(' ')
+        if (fullNameArr.length > 1 && (data.phoneNumber.length > 6 || data.emailAddress.indexOf('@') > -1)) {
+          this.isCreateNewPersonVisible = true
+        }
       }
       this.findPotentialDuplicatePerson.emit(data)
     })
