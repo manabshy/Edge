@@ -44,6 +44,7 @@ export const buildEntitiesArray = (entitites, passedDate?) => {
       companyId: e.companyId, // see above
       associatedCompanyId: e.associatedCompanyId,
       isUBO: !!e.uboAdded,
+      uboAdded: e.uboAdded ? e.uboAdded : null,
       position: e.position,
       name: e.name,
       isMain: e.isNew ? false : e.companyId ? e.id === e.companyId : e.isMain,
