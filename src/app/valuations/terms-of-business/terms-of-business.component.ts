@@ -124,6 +124,7 @@ interface toBSale {
           [showDialog]="showDialog"
           [data]="termsOfBusinessDocument?.toBSale"
           [suggestedAskingPrice]="valuationData.suggestedAskingPrice"
+          (afterFileOperation)="afterFileOperation.emit(true)"
         ></app-sales-tob-dialog>
       </ng-container>
 
@@ -138,6 +139,7 @@ interface toBSale {
           (onSubmitTermsOfBusiness)="submitTermsOfBusiness($event)"
           [showDialog]="showDialog"
           [data]="termsOfBusinessDocument?.toBLetting"
+          (afterFileOperation)="afterFileOperation.emit(true)"
         ></app-lettings-tob-dialog>
       </ng-container>
 
@@ -157,6 +159,7 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   @Output() onSendTermsOfBusinessReminder: EventEmitter<any> = new EventEmitter()
   @Output() onSubmitTermsOfBusiness: EventEmitter<any> = new EventEmitter()
   @Output() onModelChange: EventEmitter<any> = new EventEmitter()
+  @Output() afterFileOperation: EventEmitter<any> = new EventEmitter()
 
   formSubscription: Subscription = new Subscription()
   form: FormGroup
