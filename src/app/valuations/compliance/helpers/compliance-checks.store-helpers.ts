@@ -24,12 +24,6 @@ export const buildStoreState = (storeState) => {
   }
 }
 
-export const patchEntities = (entitiesData) => {
-  return {
-    entities: buildEntitiesArray(entitiesData)
-  }
-}
-
 /***
  * @function buildEntitiesArray
  * @param {Object[]} entitites - array of company | person objects for the store

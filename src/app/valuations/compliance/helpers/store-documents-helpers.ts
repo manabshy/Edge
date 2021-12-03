@@ -40,15 +40,19 @@ export const workOutDataShapeForApi = (entities, companyOrContact, companyId, co
       return contactComplianceChecksSavePayload
 
     case 'company':
+      // this is a company valuation. need to build personDocuments and companyDocuments arrays.
       const personDocuments = []
       const companyDocuments = []
+      
       entities.forEach((entity) => {
-        // console.log('entity: ', entity)
+        console.log('entity for api: ', entity)
+        // here we build up the minimal props needed to send compliance docs back to API in correct state
         const updatedEntity: any = {
           uboAdded: entity.uboAdded,
           documents: mapDocsForAPI(entity.documents)
         }
         if (entity.companyId) {
+          // here we're detecting which array the entity should go into: companyDocuments or personDocuments
           updatedEntity.companyId = companyId
           updatedEntity.associatedCompanyId = entity.associatedCompanyId
           companyDocuments.push(updatedEntity)
@@ -280,7 +284,7 @@ export const mapDocumentsForView = (documents): ComplianceDocTypes => {
 }
 
 /***
- * maps docsObject model back into documents array for sending to the API
+ * maps docsObject model back into a single documents array
  */
 export const mapDocsForAPI = (docs) => {
   let docsArray = []
