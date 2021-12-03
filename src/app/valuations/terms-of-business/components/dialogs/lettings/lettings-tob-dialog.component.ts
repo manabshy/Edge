@@ -121,6 +121,7 @@ import { FileTypeEnum } from 'src/app/core/services/file.service'
 })
 export class LettingsToBDialogComponent implements OnInit, OnDestroy {
   @Output() onSubmitTermsOfBusiness: EventEmitter<any> = new EventEmitter()
+  @Output() afterFileOperation: EventEmitter<any> = new EventEmitter()
   @Input() showDialog: boolean = false
   @Input() data: any = {}
 
@@ -183,6 +184,7 @@ export class LettingsToBDialogComponent implements OnInit, OnDestroy {
     this.updateMessages()
     this.onSubmitTermsOfBusiness.emit(false)
     this.showDialog = false
+    this.afterFileOperation.emit(true)
   }
 
   private updateFormValidators(formData) {

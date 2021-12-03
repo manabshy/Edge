@@ -3,7 +3,7 @@
   <fieldset class="w-64" *ngIf="showNoteFilter">
     <div>
       <p-multiSelect [options]="filterOptions" selectedItemsLabel="{0} items selected" name="selectedOptions"
-        [group]="true" [(ngModel)]="selectedOptions" defaultLabel="Filter Options" scrollHeight="250px" display="chip"
+        [group]="true" [(ngModel)]="selectedOptions" defaultLabel="Filter Options" scrollHeight="250px"
         (onChange)="selectFilterItem($event.value)">
         <ng-template let-group pTemplate="group">
           <div class="p-d-flex p-ai-center">

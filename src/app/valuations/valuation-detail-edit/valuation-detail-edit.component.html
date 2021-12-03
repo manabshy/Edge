@@ -850,6 +850,7 @@
                         [termsOfBusinessDocument]="valuationData?.eSignSignatureTob" [formErrors]="formErrors"
                         (onSendTermsOfBusinessReminder)="onSendTermsOfBusinessReminder($event)"
                         (onModelChange)="onUpdateToBForm($event)"
+                        (afterFileOperation)="scrollSpecificElement('termsOfBusinessTab')"
                         (onSubmitTermsOfBusiness)="submitTermsOfBusiness($event)"></app-terms-of-business>
                     </ng-container>
                   </div>
