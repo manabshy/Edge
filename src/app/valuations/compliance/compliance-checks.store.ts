@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core'
 import { ComponentStore } from '@ngrx/component-store'
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs'
 import { mergeMap, tap, filter, switchMap, take, map } from 'rxjs/operators'
-import { buildStoreState, buildEntitiesArray, patchEntities } from './helpers/compliance-checks.store-helpers'
+import { buildStoreState, buildEntitiesArray } from './helpers/compliance-checks.store-helpers'
 import { ComplianceChecksFacadeService } from './compliance-checks.facade.service'
 import { buildComplianceChecksStatusMessages, checkAllEntitiesHaveValidDocs } from './helpers/store-validation-helpers'
 import {
@@ -243,7 +243,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           {
             ...entityToAdd,
             companyId: entityToAdd.companyId ? state.companyId : null, // this prop determines if the entity is a company or person, only add companyId if the entity is a company
-            associatedCompanyId:  entityToAdd.id,
+            associatedCompanyId: entityToAdd.id,
             isMain: state.companyId === entityToAdd.id,
             documents: mapDocumentsForView(entityToAdd.documents)
           }
@@ -290,7 +290,11 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       .pipe(
         filter(([contactGroupData, valuationData]) => {
           // console.log('loadStore filter: ', contactGroupData, valuationData)
-          return !!contactGroupData && !!valuationData && (contactGroupData.contactGroupId  === valuationData.propertyOwner.contactGroupId)
+          return (
+            !!contactGroupData &&
+            !!valuationData &&
+            contactGroupData.contactGroupId === valuationData.propertyOwner.contactGroupId
+          )
         }),
         take(1),
         mergeMap(([contactGroupData, valuationData, entityToAdd]: [any, any, any]) => {
@@ -302,9 +306,9 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           }
           this.patchState(buildStoreState(storeState))
           console.log('✔️ compliance checks state built for contactGroupId', contactGroupData.contactGroupId)
-          return this.validationMessage$
+          return this.pushContactsToValuationServiceForSave$
         }),
-        map(() => this.pushContactsToValuationServiceForSave$),
+        mergeMap(() => this.validationMessage$.pipe()), // need to push to valuation service as it could be the user has just created a company/contact and so this needs to make it's way to the loading bay for saving.
         take(1)
       )
       .subscribe(
@@ -431,7 +435,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           return this.pushContactsToValuationServiceForSave$
         }),
         mergeMap(() => {
-          return  this.validationMessage$.pipe()
+          return this.validationMessage$.pipe()
         }),
         take(1)
       )
@@ -472,7 +476,6 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    * @description adds a NEW contact to the valuation. Since this is called before the valuation loads it's set as a BehaviorSubject so the load function can grab it on demand
    */
   public onAddNewContact = (entity: any): void => {
-    console.log('onAddNewContact', entity)
     this._newEntityStream.next({
       ...entity,
       isNew: true,
@@ -492,11 +495,14 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
    * @description adds a NEW company to the valuation. Since this is called before the valuation loads it's set as a BehaviorSubject so the load function can grab it on demand
    */
   public onAddNewCompany = (entity: any): void => {
+    console.log('entity: ', entity)
+
     this._newEntityStream.next({
       ...entity,
       isNew: true,
       name: entity.companyName,
       id: entity.companyId,
+      associatedCompanyId: entity.companyId,
       documents: [],
       address:
         entity.companyAddress && entity.companyAddress.addressLines && entity.companyAddress.postCode
@@ -504,20 +510,20 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
           : ''
     })
   }
-  
+
   /***
    * @function onAddExistingContact
    * @param {Object} entity - the contact to add to the store
    * @description adds an EXISTING contact to the valuation. grabs their docs & data from API and puts in the store
    */
-   public onAddExistingContact = (entity: any): void => {
+  public onAddExistingContact = (entity: any): void => {
     this._complianceChecksFacadeSvc
       .getAllPersonDocs(entity.id)
       .pipe(
         switchMap((entityDataFromApi) => {
           // console.log('onAddExistingContact result from server: ', entityDataFromApi)
-           this.loadExistingEntity(entityDataFromApi)
-           return this.pushContactsToValuationServiceForSave$
+          this.loadExistingEntity(entityDataFromApi)
+          return this.pushContactsToValuationServiceForSave$
         }),
         mergeMap(() => this.validationMessage$.pipe()),
         take(1)
@@ -601,10 +607,10 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     filter((data) => data.action),
     mergeMap((data): any => {
       console.log('inside isPowerAttorneyObservable$: ', data)
-      console.log('inside isFrozen: ', data.isFrozen)
+
       switch (data.action) {
         case 'add':
-          data.admin.isAdmin = true
+          data.admin.isAdmin = true // controls the admin pill in UI
           this.patchState({
             compliancePassedBy: null,
             compliancePassedDate: null,
@@ -612,12 +618,13 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
             checksAreValid: false
           })
           if (data.isFrozen) {
-            console.log('frozen', data.allDocuments, data.admin)
             const entityAlreadyExists = data.allDocuments.find((e) => e.id === data.admin.id)
             if (!entityAlreadyExists) {
               data.allDocuments.push(data.admin)
             }
-            this.patchState(patchEntities(data.allDocuments))
+            this.patchState({
+              entities: buildEntitiesArray(data.allDocuments)
+            })
           } else {
             console.log('!frozen')
             this.loadExistingEntity(data.admin)
@@ -639,15 +646,21 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
   )
 
   private removePoAandRefreshDocuments(data) {
+    // remove the Power of Attorney from the array of entities
     this.removeFromValuation(data.id)
+
     if (data.isFrozen) {
+      // patch store state to no longer be valid or frozen
       this.patchState({
         compliancePassedBy: null,
         compliancePassedDate: null,
         isFrozen: false,
         checksAreValid: false
       })
+
+      // removes cc timestamps from all entities in the store
       this.voidUserComplianceTimestamps()
+
       // call refresh docs endpoints
       if (data.companyOrContact === 'company') {
         this._complianceChecksFacadeSvc
