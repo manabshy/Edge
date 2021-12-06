@@ -14,6 +14,8 @@ import { environment } from 'src/environments/environment'
   styleUrls: ['./mainmenu.component.scss']
 })
 export class MainmenuComponent implements OnInit {
+  appVersion:string = environment.version
+  production: boolean = environment.production
   navbarCollapsed = false
   isLoggedIn: boolean
   currentStaffMember: StaffMember
