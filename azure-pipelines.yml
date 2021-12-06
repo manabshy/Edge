@@ -13,10 +13,14 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    npm install -g @angular/cli
     npm install
+  displayName: 'npm install'
+  condition: eq(variables['CacheRestored'],False)
+
+- script: |
+    npm install -g @angular/cli
     ng build --prod
-  displayName: 'npm install and build'
+  displayName: 'build prod'
 
 - task: PublishBuildArtifacts@1
   inputs:
