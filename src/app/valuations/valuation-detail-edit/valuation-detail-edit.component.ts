@@ -39,11 +39,13 @@ import moment from 'moment'
 import { eSignTypes } from 'src/app/core/shared/eSignTypes'
 import { ValuationFacadeService } from '../shared/valuation-facade.service'
 import { enumDepartments } from 'src/app/core/shared/departments'
+import { ValuationDetailStore } from './valuation-detail-store'
 
 @Component({
   selector: 'app-valuation-detail-edit',
   templateUrl: './valuation-detail-edit.component.html',
-  styleUrls: ['./valuation-detail-edit.component.scss']
+  styleUrls: ['./valuation-detail-edit.component.scss'],
+  providers: [ValuationDetailStore]
 })
 export class ValuationDetailEditComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
   showCalendar = false
@@ -343,7 +345,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     private router: Router,
     private fb: FormBuilder,
     private primengConfig: PrimeNGConfig,
-    private sidenavService: SidenavService
+    private sidenavService: SidenavService,
+    private store: ValuationDetailStore
   ) {
     super()
   }
@@ -412,6 +415,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         }
       }
       this._valuationFacadeSvc._valuationData.next(this.valuation)
+      this.store.loadStore()
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0)
       if (this.propertyId) {
         this.controlPreviousValuations(this.propertyId)
@@ -1440,6 +1444,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.isValuationMeetingNotesVisible = false
           this.setRequirementValuationNoteBs.next(true)
         }
+        this.store.loadStore() // loads NGRX component store for this valuation. Objective is to centralise the state and put this class on a strict diet!
       })
       .catch((err) => {
         console.log('err: ', err)
