@@ -1,5 +1,5 @@
-<div class="w-full p-4 border-0 rounded-sm border-grey-100">
-  <div class="flex flex-row">
+<div class="w-full p-2 border-0 rounded-sm border-grey-100">
+  <div class="flex flex-row p-2">
     <div>
       <div class="flex flex-row">
         <span class="h-6 text-white pill" [ngClass]="pillClass">
@@ -28,7 +28,7 @@
   </div>
 
   <p class="mt-3 mb-1 font-medium">Documents</p>
-  <div class="flex flex-col w-full md:flex-row gap-x-2 gap-y-2" *ngIf="!entity.companyId">
+  <div class="flex flex-col w-full md:flex-row gap-y-2" *ngIf="!entity.companyId">
     <div class="w-full md:w-1/2">
       <app-document-info [label]="entity.documents.idDoc.label" [documentType]="entity.documents.idDoc.documentType"
         [name]="entity.name" [files]="entity.documents.idDoc.files" [isFrozen]="isFrozen" [isMultiple]="'false'"
@@ -36,7 +36,7 @@
         (onFileUploaded)="onFileUploaded.emit({ entity: entity, ev: $event })"
         (deleteFile)="onFileDeleted.emit({ entity: entity, ev: $event })"></app-document-info>
     </div>
-    <div class="w-full md:w-1/2">
+    <div class="w-full md:w-1/2 ml-2">
       <app-document-info [label]="entity.documents.proofOfAddressDoc.label" [isMultiple]="'false'" [name]="entity.name"
         [documentType]="entity.documents.proofOfAddressDoc.documentType"
         [files]="entity.documents.proofOfAddressDoc.files" [isFrozen]="isFrozen"
