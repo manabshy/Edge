@@ -69,7 +69,7 @@
               <p class="mt-2 message message--negative"> {{formErrors?.ownerConfirmed}}</p>
             </fieldset>
             <div *ngIf="landRegistryForm.get('ownerConfirmed').value == '2'">
-              <fieldset [ngClass]="{'invalid': (showFileUploadForNameChangeError)}">
+              <fieldset [ngClass]="{'invalid': (showFileUploadForNameChangeError)}" [disabled]="isInstructed">
                 <h1 class="mb-2 text-lg font-bold"> Proof of Name </h1>
                 <app-file-list [type]="'P'" (afterFileOperation)="afterFileOperation.emit(true)"
                   [edgeFileList]="valuation?.nameChangeRegFiles" [header]="'Proof of Name'" [isMultiple]="'false'"
