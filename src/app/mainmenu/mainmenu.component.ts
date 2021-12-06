@@ -15,7 +15,6 @@ import { environment } from 'src/environments/environment'
 })
 export class MainmenuComponent implements OnInit {
   appVersion:string = environment.version
-  production: boolean = environment.production
   navbarCollapsed = false
   isLoggedIn: boolean
   currentStaffMember: StaffMember

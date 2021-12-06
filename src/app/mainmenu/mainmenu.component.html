@@ -130,7 +130,7 @@
         </li>
       </ol>
     </div>
-    <div class="p-2 mb-2" *ngIf="!production">
+    <div class="p-2 mb-2" *ngIf="isNonProdEnvironment">
       <p >🚀 {{appVersion}}</p>
     </div>
   </aside>
