@@ -85,7 +85,7 @@
         <div class="grid grid--50 grid--dividerLeft" *ngIf="showLeaseExpiryDate">
           <div class="flex flex-col">
             <div>
-              <fieldset [ngClass]="{'invalid': (showFileUploadForLeaseError)}">
+              <fieldset [ngClass]="{'invalid': (showFileUploadForLeaseError)}" [disabled]="isInstructed">
                 <h1 class="mb-2 text-lg font-bold"> Lease </h1>
                 <app-file-list [type]="'L'" (afterFileOperation)="afterFileOperation.emit(true)"
                   [edgeFileList]="valuation?.leaseLandRegFiles" [header]="'Lease'" [isMultiple]="'false'"
@@ -96,7 +96,7 @@
             </div>
             <div class="mt-2">
               <div class="flex flex-col md:flex-row">
-                <fieldset [ngClass]="{'invalid': formErrors?.leaseExpiryDate}">
+                <fieldset [ngClass]="{'invalid': formErrors?.leaseExpiryDate}" [disabled]="isInstructed">
                   <label for="leaseExpiryDate">Lease expiry date</label>
                   <input class="w-48 p-2" type="text" id="leaseExpiryDate" placeholder="dd/mm/yyyy"
                     [ngClass]="{'invalid': formErrors?.leaseExpiryDate}"
