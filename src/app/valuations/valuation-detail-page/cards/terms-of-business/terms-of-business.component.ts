@@ -98,6 +98,7 @@ interface toBSale {
         <fieldset class="mb-3">
           <p-dropdown
             *ngIf="model.declarableInterest"
+            [disabled]="isInstructed"
             [options]="interestList"
             formControlName="section21StatusId"
             optionLabel="value"
