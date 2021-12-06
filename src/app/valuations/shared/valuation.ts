@@ -244,3 +244,7 @@ export enum LettingsAgencyTypeEnum {
   Sole = 1,
   Multi = 2
 }
+
+export interface ValuationDetailState{
+  valuationData: Valuation
+}

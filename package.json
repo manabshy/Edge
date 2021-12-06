@@ -1,11 +1,14 @@
 {
   "name": "wedge",
-  "version": "4.0.0-54",
+  "version": "4.0.0-55",
   "scripts": {
     "ng": "nx",
     "start": "ng serve --hmr",
+    "start:local": "ng serve --hmr -c=local",
+    "start:dev": "ng serve --hmr -c=dev",
     "start:test": "ng serve --hmr -c=test",
     "build": "ng build",
+    "build:stats": "ng build --stats-json --source-map=false",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

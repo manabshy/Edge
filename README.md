@@ -2,9 +2,20 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
-## Development server
+## Development server(s)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+>> npm scripts in package.json:
+"start:dev": "ng serve --hmr -c=dev", 
+"start:local": "ng serve --hmr -c=local",
+"start:test": "ng serve --hmr -c=test",
+
+--hmr flag is for Hot Module Reloading. 
+-c flag points to respective configurations in angular.json file. 
+
+Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+## Full Stack Development
+Run `npm run start:local` for a dev server pointed at localhost API. You will need to ensure the baseUrl address is pointed to the correct port where Edge API project is running.
 
 ## Code scaffolding
 
