@@ -3057,7 +3057,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.salesValuer && (this.isSalesOnly || this.isSalesAndLettings)) {
       this.valuation.salesValuationBooking = {
         startDateTime: this.selectedSalesDate,
-        totalHours: this.isWeekdays(this.selectedSalesDate) && this.is15Minutes(this.selectedSalesDate) ? 0.75 : 1,
+        totalHours: this.isWeekdays(new Date(this.selectedSalesDate)) && this.is15Minutes(new Date(this.selectedSalesDate)) ? 0.75 : 1,
       }
       this.salesValuerControl.setValue(this.salesValuer)
       this.salesValuerControl.updateValueAndValidity()
@@ -3065,7 +3065,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.lettingsValuer && (this.isLettingsOnly || this.isSalesAndLettings)) {
       this.valuation.lettingsValuationBooking = {
         startDateTime: this.selectedLettingsDate,
-        totalHours: this.isWeekdays(this.selectedLettingsDate) && this.is15Minutes(this.selectedLettingsDate) ? 0.75 : 1,
+        totalHours: this.isWeekdays(new Date(this.selectedSalesDate)) && this.is15Minutes(new Date(this.selectedSalesDate)) ? 0.75 : 1,
       }
       this.lettingsValuerControl.setValue(this.lettingsValuer)
       this.lettingsValuerControl.updateValueAndValidity()
