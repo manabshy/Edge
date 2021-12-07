@@ -702,7 +702,7 @@
                                 type="text"
                                 id="duration"
                                 disabled
-                                value="{{ valuationForm.get('totalHours').value + ' Hour' }}"
+                                value="{{  getDuration(valuation?.salesValuationBooking?.totalHours) }}"
                               />
                             </fieldset>
                           </span>
@@ -890,7 +890,7 @@
                                 type="text"
                                 id="duration"
                                 disabled
-                                value="{{ valuationForm.get('totalHours').value + ' Hour' }}"
+                                value="{{ getDuration(valuation?.lettingsValuationBooking?.totalHours)  }}"
                               />
                             </fieldset>
                           </span>
