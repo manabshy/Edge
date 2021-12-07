@@ -2888,7 +2888,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         associationId: valuation.salesMeetingOwner == false ? valuation.salesOwnerAssociateType : '',
         meetingOwner: valuation.salesMeetingOwner,
         startDateTime: valuation.salesValuationBooking?.startDateTime,
-        totalHours: this.isWeekdays(valuation.salesValuationBooking?.startDateTime) && this.is15Minutes(valuation.salesValuationBooking?.startDateTime) ? 0.75 : 1,
+        totalHours: this.isWeekdays(new Date(valuation.salesValuationBooking?.startDateTime)) && this.is15Minutes(new Date(valuation.salesValuationBooking?.startDateTime)) ? 0.75 : 1,
       }
       valuation.combinedValuationBooking.meetingOwner = valuation.salesMeetingOwner == false ? false : true
       valuation.lettingsValuationBooking = null
@@ -2903,7 +2903,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           associationId: valuation.salesMeetingOwner == false ? valuation.salesOwnerAssociateType : '',
           meetingOwner: valuation.salesMeetingOwner,
           startDateTime: valuation.salesValuationBooking?.startDateTime,
-          totalHours: this.isWeekdays(valuation.salesValuationBooking?.startDateTime) && this.is15Minutes(valuation.salesValuationBooking?.startDateTime) ? 0.75 : 1,
+          totalHours: this.isWeekdays(new Date(valuation.salesValuationBooking?.startDateTime)) && this.is15Minutes(new Date(valuation.salesValuationBooking?.startDateTime)) ? 0.75 : 1,
         }
         valuation.salesValuationBooking.meetingOwner = valuation.salesMeetingOwner == false ? false : true
       }
@@ -2915,7 +2915,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           associationId: valuation.lettingsMeetingOwner == false ? valuation.lettingsOwnerAssociateType : '',
           meetingOwner: valuation.lettingsMeetingOwner,
           startDateTime: valuation.lettingsValuationBooking?.startDateTime,
-          totalHours: this.isWeekdays(valuation.salesValuationBooking?.startDateTime) && this.is15Minutes(valuation.salesValuationBooking?.startDateTime) ? 0.75 : 1,
+          totalHours: this.isWeekdays(new Date(valuation.lettingsValuationBooking?.startDateTime)) && this.is15Minutes(new Date(valuation.lettingsValuationBooking?.startDateTime)) ? 0.75 : 1,
         }
         valuation.lettingsValuationBooking.meetingOwner = valuation.lettingsMeetingOwner == false ? false : true
       }
@@ -3065,7 +3065,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.lettingsValuer && (this.isLettingsOnly || this.isSalesAndLettings)) {
       this.valuation.lettingsValuationBooking = {
         startDateTime: this.selectedLettingsDate,
-        totalHours: this.isWeekdays(new Date(this.selectedSalesDate)) && this.is15Minutes(new Date(this.selectedSalesDate)) ? 0.75 : 1,
+        totalHours: this.isWeekdays(new Date(this.selectedLettingsDate)) && this.is15Minutes(new Date(this.selectedLettingsDate)) ? 0.75 : 1,
       }
       this.lettingsValuerControl.setValue(this.lettingsValuer)
       this.lettingsValuerControl.updateValueAndValidity()
