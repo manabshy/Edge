@@ -490,10 +490,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.isNewValuation && !this.isFromProperty ? (this.showProperty = true) : (this.showProperty = false)
   }
 
-
   /***
    * GET existing valuation from API or create NEW valuation
-  */
+   */
   private addValuationDataToView() {
     if (this.valuationId > 0) {
       console.log('loading existing valuation. off I go!')
@@ -504,7 +503,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  private newValuation(){
+  private newValuation() {
     this.valuation = {
       valuationStatus: ValuationStatusEnum.None,
       valuationStatusDescription: 'New',
@@ -771,7 +770,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   controlStatus(data) {
-    console.log('controlStatus being set via')
+    // console.log('controlStatus being set via')
     this.contactGroupLoading = false
     if (data) {
       if (this.valuation && this.valuation.valuationStatus === ValuationStatusEnum.None) {
@@ -860,11 +859,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
 
       if (this._valuationFacadeSvc.landRegisterValid.getValue()) {
-        console.log('setting land registry traffic light to GREEN', this.statuses)
+        // console.log('setting land registry traffic light to GREEN', this.statuses)
         this.statuses.find((x) => x.value == 6).isValid = true
         this.statuses.find((x) => x.value == 6).isNext = false
       } else {
-        console.log('setting land registry traffic light to AMBER ')
+        // console.log('setting land registry traffic light to AMBER ')
         this.statuses.find((x) => x.value == 6).isValid = false
         if (this.statuses.findIndex((x) => x.isNext === true) == -1) {
           if (
@@ -1601,7 +1600,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.isValuationMeetingNotesVisible = false
           this.setRequirementValuationNoteBs.next(true)
         }
-        this.controlStatus(this.valuation)
+
+        setTimeout(() => {
+          this.controlStatus(this.valuation)
+        }, 1000)
 
         // this.store.loadStore() // loads NGRX component store for this valuation. Objective is to centralise the state and put this class on a strict diet!
         console.log(`👷 getValuation done`)
