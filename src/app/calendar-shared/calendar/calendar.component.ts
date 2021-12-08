@@ -343,9 +343,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
           }
         })
         this.diaryEvents = [...this.staffEvents]
-        console.log(request.staffMemberId)
-        console.log('deneme')
-        console.log(this.diaryEvents)
+
       })
   }
 

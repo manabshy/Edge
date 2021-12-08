@@ -46,7 +46,7 @@ export class ValuationsLandRegisterComponent implements OnInit, AfterViewInit, O
   @Input() valuation
 
   @Output() afterFileOperation: EventEmitter<any> = new EventEmitter()
-  isValid$: Observable<boolean> = this._valuationService.landRegisterValid
+  isValid$: Observable<boolean> = this._valuationFacadeService.landRegisterValid
   isTermOfBusinessSigned = false
   lastEmailDate: Date = new Date()
   public get valuationType(): typeof ValuationTypeEnum {
@@ -70,7 +70,7 @@ export class ValuationsLandRegisterComponent implements OnInit, AfterViewInit, O
 
   constructor(
     private fb: FormBuilder,
-    private _valuationService: ValuationFacadeService,
+    private _valuationFacadeService: ValuationFacadeService,
     private _sharedService: SharedService
   ) {}
 
@@ -97,21 +97,21 @@ export class ValuationsLandRegisterComponent implements OnInit, AfterViewInit, O
         this.property.userEnteredOwner = data.userEnteredOwner
         this.valuation.ownerConfirmed = data.ownerConfirmed
         const ownerConfirmed = parseInt(data.ownerConfirmed)
-        this._valuationService.updateLocalValuation({ ownerConfirmed })
+        this._valuationFacadeService.updateLocalValuation({ ownerConfirmed })
         this.property.leaseExpiryDate = data.leaseExpiryDate ? new Date(data.leaseExpiryDate) : null
       }
       this.getValidationResult()
     })
 
-    this.subscription = this._valuationService.valuationValidation$.subscribe((data) => {
+    this.subscription = this._valuationFacadeService.valuationValidation$.subscribe((data) => {
       this.controlValidation = data
       if (data === true) {
         this._sharedService.logValidationErrors(this.landRegistryForm, true)
-        this._valuationService.validationControlBs.next(this.getValidationResult())
+        this._valuationFacadeService.validationControlBs.next(this.getValidationResult())
       }
     })
 
-    this._valuationService.contactGroup$.subscribe((data) => {
+    this._valuationFacadeService.contactGroup$.subscribe((data) => {
       let contactGroup = data
       if (contactGroup) {
         this.contactNamesQuestion = 'Are'
@@ -137,7 +137,7 @@ export class ValuationsLandRegisterComponent implements OnInit, AfterViewInit, O
     let result: boolean = false
     result = this.landRegistryForm.valid && this.controlFiles()
     let ownerConfirmed = this.landRegistryForm.controls['ownerConfirmed'].value
-    this._valuationService.landRegisterValid.next(result && ownerConfirmed != '0')
+    this._valuationFacadeService.landRegisterValid.next(result && ownerConfirmed != '0')
     return result
   }
 
@@ -167,13 +167,13 @@ export class ValuationsLandRegisterComponent implements OnInit, AfterViewInit, O
     if (fileObj) {
       if (fileObj.type == 'L') {
         this.valuation.leaseLandRegFiles = [...fileObj.file]
-        this._valuationService.updateLocalValuation({ leaseLandRegFiles: [...fileObj.file] })
+        this._valuationFacadeService.updateLocalValuation({ leaseLandRegFiles: [...fileObj.file] })
       } else if (fileObj.type == 'D') {
         this.valuation.deedLandRegFiles = [...fileObj.file]
-        this._valuationService.updateLocalValuation({ deedLandRegFiles: [...fileObj.file] })
+        this._valuationFacadeService.updateLocalValuation({ deedLandRegFiles: [...fileObj.file] })
       } else if (fileObj.type == 'P') {
         this.valuation.nameChangeRegFiles = [...fileObj.file]
-        this._valuationService.updateLocalValuation({ nameChangeRegFiles: [...fileObj.file] })
+        this._valuationFacadeService.updateLocalValuation({ nameChangeRegFiles: [...fileObj.file] })
       }
     }
     this.controlFiles()

@@ -230,6 +230,7 @@
           ></app-property-card>
         </div>
 
+        <!-- MAIN SECTION TODO: break into components and be able to see all components in view! 😣 -->
         <form [formGroup]="valuationForm" autocompleteOff>
           <ng-container *ngIf="property">
             <p-accordion [multiple]="true">
@@ -319,7 +320,7 @@
                       </fieldset>
                     </div>
 
-                    <div id="propertyInfoTab">
+                    <div >
                       <fieldset
                         class="mb-3 inline-child"
                         [ngClass]="{ invalid: formErrors?.generalNotes }"
@@ -346,27 +347,33 @@
                     </div>
                   </div>
                 </p-accordionTab>
+
                 <!-- PROPERTY INFO TAB TODO MAKE COMPONENT -->
                 <p-accordionTab id="propertyInfoTab" header="Property Info" [(selected)]="activeState[1]">
-                  <!-- <app-property-info 
-                    [(valuationForm)]="valuationForm" 
-                    [formErrors]="formErrors"
-                    [tenures]="tenures"
-                    [propertyTypes]="propertyTypes"
-                    [propertyStyles]="propertyStyles"
-                    [propertyFloors]="propertyFloors"
-                    [isEditable]="isEditable"
-                    [isNewValuation]="isNewValuation"
-                    [isCancelled]="isCancelled"
-                    [showLeaseExpiryDate]="showLeaseExpiryDate"
-                    [showStudioLabel]="showStudioLabel"
-                    (controlIsCancelled)="controlIsCancelled($event)"
-                    (onPropertyTypeChange)="onPropertyType($event)">
-                  </app-property-info> -->
                   <div
                     [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
                     (click)="controlIsCancelled(isCancelled)"
                   >
+                    <!-- <div class="border border-red-500">
+                      <h1>Component</h1>
+
+                      <app-property-info
+                        [(valuationForm)]="valuationForm"
+                        [formErrors]="formErrors"
+                        [tenures]="tenures"
+                        [propertyTypes]="propertyTypes"
+                        [propertyStyles]="propertyStyles"
+                        [propertyFloors]="propertyFloors"
+                        [isEditable]="isEditable"
+                        [isNewValuation]="isNewValuation"
+                        [isCancelled]="isCancelled"
+                        [showLeaseExpiryDate]="showLeaseExpiryDate"
+                        [showStudioLabel]="showStudioLabel"
+                        (controlIsCancelled)="controlIsCancelled($event)"
+                        (onPropertyTypeChange)="onPropertyType($event)"
+                      ></app-property-info>
+                    </div>
+                    <h1>Inline</h1> -->
                     <div class="inline-parent inline-parent__hasLabels">
                       <fieldset class="inline-child" [ngClass]="{ invalid: formErrors?.propertyTypeId }">
                         <label for="propertyTypeId">Property Type</label>
@@ -447,6 +454,7 @@
                           </span>
                         </span>
                       </fieldset>
+
                       <fieldset class="pb-2">
                         <span class="checkbox">
                           <span>
@@ -638,6 +646,7 @@
                     </fieldset>
                   </div>
                 </p-accordionTab>
+
                 <!-- APPOINTMENT TAB TODO MAKE COMPONENT -->
                 <p-accordionTab header="Appointment" [(selected)]="activeState[2]">
                   <div
@@ -1354,9 +1363,7 @@
                 </p-accordionTab>
                 <!-- TERMS OF BUSINESS TAB -->
                 <p-accordionTab header="Terms of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
-                  <div
-                    [ngClass]="{ 'opacity-75': isCancelled}"
-                  >
+                  <div [ngClass]="{ 'opacity-75': isCancelled }">
                     <ng-container *ngIf="valuationData$ | async as valuationData">
                       <app-terms-of-business
                         [valuationData]="valuationData"
@@ -1380,9 +1387,7 @@
                   header="Land Registry"
                   [(selected)]="activeState[5]"
                 >
-                  <div
-                    [ngClass]="{ 'opacity-75': isCancelled }"
-                  >
+                  <div [ngClass]="{ 'opacity-75': isCancelled }">
                     <app-valuation-land-register
                       [showLeaseExpiryDate]="showLeaseExpiryDate"
                       [valuation]="valuation"
@@ -1399,9 +1404,7 @@
                   *ngIf="isLandRegisterVisible"
                   [(selected)]="activeState[6]"
                 >
-                  <div
-                    [ngClass]="{ 'opacity-75': isCancelled }"
-                  >
+                  <div [ngClass]="{ 'opacity-75': isCancelled }">
                     <app-compliance-checks-shell
                       (refreshDocumentsEmitter)="onRefreshDocuments($event)"
                       (afterFileOperation)="scrollSpecificElement('complianceChecksTab')"
@@ -1570,7 +1573,7 @@
   ></app-property-finder>
 </p-dialog>
 
-<!-- for active valuations -->
+<!-- DIALOG for active valuations. User is shown this if they open a new valuation and there's existing open valuations found for the property. -->
 <p-dialog
   header="Active Valuations"
   [closable]="false"

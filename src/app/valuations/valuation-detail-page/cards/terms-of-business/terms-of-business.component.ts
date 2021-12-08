@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs'
 import { MessageService } from 'primeng/api'
 
 export interface ToBDocument {
-  dateRequestSent: Date
+  dateRequestSent?: Date
   toBLetting?: toBLetting
   toBSale?: toBSale
 }
