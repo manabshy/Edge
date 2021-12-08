@@ -1602,6 +1602,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         }
 
         setTimeout(() => {
+          // HACK! TODO find out when to call controlStatus (after the valuation call has been made in the valuation-land-register.component)
           this.controlStatus(this.valuation)
         }, 1000)
 

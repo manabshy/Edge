@@ -591,8 +591,6 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
         if (!this.basicPerson) {
           this.subs.sink = this.contactGroupService.updatePerson(person).subscribe(
             (res) =>{
-              console.log('!basicPerson setting newPersonId to ', res.result.personId)
-              this.newPersonId = res.result.personId
               this.onSaveComplete(res.result, otherPersonToAdd)
               },
             (error: WedgeError) => {
