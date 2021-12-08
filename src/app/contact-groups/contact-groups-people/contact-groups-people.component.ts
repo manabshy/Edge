@@ -13,7 +13,7 @@ import {
   ContactNote
 } from '../shared/contact-group'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { take, takeUntil } from 'rxjs/operators'
+import { filter, take, takeUntil } from 'rxjs/operators'
 import { Subject, Observable, EMPTY } from 'rxjs'
 import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component'
 import { WedgeError, SharedService } from 'src/app/core/services/shared.service'
@@ -364,22 +364,26 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   getNewlyAddedPerson() {
-    this.contactGroupService.newPerson$.pipe(takeUntil(this.destroy)).subscribe((person) => {
-      console.log('getNewlyAddedPerson: ', person)
-      if (person) {
-        person.isNewPerson = true
-        this.showDuplicateChecker = false
+    this.contactGroupService.newPerson$
+      .pipe(
+        takeUntil(this.destroy)
+      )
+      .subscribe((person) => {
+        console.log('getNewlyAddedPerson running and about to store this person in local storage: ', person)
+        if (person) {
+          person.isNewPerson = true
+          this.showDuplicateChecker = false
 
-        if ((this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) || this.isExistingCompany) {
-          this.contactGroupDetails?.contactPeople?.push(person)
-          this.storeContactPeople(this.contactGroupDetails.contactPeople)
-        } else {
-          const people: Person[] = []
-          people.push(person)
-          this.storeContactPeople(people)
+          if ((this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) || this.isExistingCompany) {
+            this.contactGroupDetails?.contactPeople?.push(person)
+            this.storeContactPeople(this.contactGroupDetails.contactPeople)
+          } else {
+            const people: Person[] = []
+            people.push(person)
+            this.storeContactPeople(people)
+          }
         }
-      }
-    })
+      })
   }
 
   getNewlyAddedCompany() {
@@ -404,21 +408,23 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   getContactGroupById(contactGroupId: number) {
-    const contactPeople = this.getContactPeopleFromStorage()
+    const contactPeopleFromStorage = this.getContactPeopleFromStorage()
     this.contactGroupService.getContactGroupById(contactGroupId, true).subscribe((data) => {
-      console.log('contactGroupDetails: ', data)
       this.contactGroupDetails = data
-      if (contactPeople?.length) {
+      if (contactPeopleFromStorage?.length) {
         this.pendingChanges = true
         if (this.contactGroupDetails.contactPeople && this.contactGroupDetails.contactPeople.length > 0)
-          this.contactGroupDetails.contactPeople = [...this.contactGroupDetails.contactPeople, ...contactPeople]
+          this.contactGroupDetails.contactPeople = [
+            ...this.contactGroupDetails.contactPeople,
+            ...contactPeopleFromStorage
+          ]
         else {
-          this.contactGroupDetails.contactPeople = [...contactPeople]
+          this.contactGroupDetails.contactPeople = [...contactPeopleFromStorage]
         }
         console.log(
           this.contactGroupDetails.contactPeople,
           'new group from merged with stroage',
-          contactPeople,
+          contactPeopleFromStorage,
           'from storage'
         )
       }
@@ -446,8 +452,6 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       this.firstContactGroupPerson = data
       if (this.contactGroupId === 0) {
         if (this.contactGroupDetails) {
-          console.log('details hre...', this.contactGroupDetails)
-
           if (!isSelectedTypeCompany) {
             this.contactGroupDetails.contactType = ContactType.Individual
           }
@@ -576,8 +580,6 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   editSelectedPerson(id: number) {
-    event.stopPropagation()
-    event.preventDefault()
     this.isEditingSelectedPerson = true
     this.contactGroupBackUp()
     this._router.navigate(['../../edit'], {
