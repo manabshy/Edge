@@ -44,7 +44,7 @@ import { enumDepartments } from 'src/app/core/shared/departments'
 @Component({
   selector: 'app-valuation-detail-edit',
   templateUrl: './valuation-detail-edit.component.html',
-  styleUrls: ['./valuation-detail-edit.component.scss'],
+  styleUrls: ['./valuation-detail-edit.component.scss']
   // providers: [ValuationDetailStore] // TODO switch to this store once implemented state clean up!
 })
 export class ValuationDetailEditComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -301,8 +301,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   get areValuesVisible() {
     if (this.valuation) {
-
-      // TODO might be a bug here as throws undefined on test after adding new contact 
+      // TODO might be a bug here as throws undefined on test after adding new contact
       return this.valuation.valuationStatus !== ValuationStatusEnum.None
     }
   }
@@ -346,14 +345,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     private router: Router,
     private fb: FormBuilder,
     private primengConfig: PrimeNGConfig,
-    private sidenavService: SidenavService,
-    // private store: ValuationDetailStore
-  ) {
+    private sidenavService: SidenavService
+  ) // private store: ValuationDetailStore
+  {
     super()
   }
 
   ngOnInit() {
-    console.log('valuation detail edit component on init ============')
+    console.log('valuation detail edit component on init ============ start')
+
     this._valuationFacadeSvc.landRegisterValid.next(false)
     this.primengConfig.ripple = true
     this.setupForm()
@@ -421,6 +421,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.setHeaderDropdownList(ValuationStatusEnum.None, 0)
       if (this.propertyId) {
         this.controlPreviousValuations(this.propertyId)
+        console.log('WIP: call to getPropertyInformation 426')
         this.getPropertyInformation(this.propertyId)
       }
     }
@@ -615,6 +616,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       if (this.contactId == null) {
         this.page = 0
       }
+      console.log('hello?')
       this.getNextContactNotesPage(this.page)
     })
 
@@ -805,7 +807,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       else if (this.valuation?.valuationStatus == ValuationStatusEnum.Valued) {
         this.scrollSpecificElement('termsOfBusinessTab')
         this.activeState = [false, false, false, true, true, true, true]
-      } 
+      }
     }, 1000)
   }
 
@@ -862,10 +864,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   private getNextContactNotesPage(page: number) {
     if (this.contactId) {
+      console.log('getNextContactNotesPage running')
+      console.time('getnotes')
       this.contactGroupService
         .getContactGroupNotes(this.contactId, this.pageSize, page, this.showOnlyMyNotes)
         .subscribe((data) => {
           if (data) {
+            console.timeEnd('getnotes')
             if (page === 1) {
               this.contactNotes = data
             } else {
@@ -1272,34 +1277,73 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.lettingsValuers = this.allValuers.lettings
   }
 
+  /***
+   * @description loads a valuation from the API into the view.
+   * TODO: reduce/tidy the state/logic involved in loading a valuation
+   */
   getValuation(id: number) {
+    console.log('👷 getVal step 1: getValuationById from API')
     this._valuationFacadeSvc
       .getValuationById(id)
       .toPromise()
       .then((data) => {
+        console.log('👷 getVal step 2: valuation data from API: ', data)
         if (data) {
-          // console.log('getValuation: ', data)
           this.valuation = data
-          this.propertyId = this.valuation.property.propertyId
+          // what is this doing here and why?
+          this.propertyId = this.valuation.property.propertyId // ???!
           if (this.propertyId) {
+            console.log(
+              '👷 getVal step 3 a: propertyId found on valuation.property object, off to call API to getProperty ',
+              this.propertyId
+            )
             return this.propertyService.getProperty(this.propertyId, true, true, false, true).toPromise()
           }
+          console.log(
+            '👷 getVal step 3 b: property object exists on valuation (but not propertyId?!), resolve property to next step'
+          )
           return of(this.valuation.property).toPromise()
         }
       })
       .then((result) => {
+        console.log('👷 getVal step 4: setPropertyDetail, getValuationPropertyInfo, getValuers ')
         this.setPropertyDetail(result)
-        this.getValuationPropertyInfo(this.propertyId)
+        this.getValuationPropertyInfo(this.propertyId) // this loads and merges some property attributes from most recent valuation in to the view. It overwrites the valuation data saved.
         this.getValuers(this.propertyId)
       })
       .then(() => {
-        // console.log(this.valuation.property)
-
+        console.log(`👷 
+        getValuation step 5: set following view props: 
+        headerDropdownList, 
+        canInstruct, 
+        isEditable, 
+        isCancelled, 
+        isPropertyInfoDisabled, 
+        canSaveValuation, 
+        property, 
+        valuation.property,
+        isValuationNotesVisible,
+        optional navigation to cancelled state,
+        valuation.cancelledBy,
+        cancelReasonString,
+        showDateAndDuration,
+        valuation.salesValuer,
+        valuation.combinedValuationBooking,
+        valuation.salesValuationBooking,
+        valuation.lettingsValuationBooking,
+        selectedLettingsDate,
+        selectedSalesDate,
+        getTimeSalesValuationDate,
+        getTimeLettingsValuationDate,
+        lastKnownOwner,
+        contactGroup,
+        contactGroupLoading,
+        isAllowedForValueChanges,
+        isValuationMeetingNotesVisible
+        `)
         this.setHeaderDropdownList(this.valuation.valuationStatus, this.valuation.valuationType)
-
         this.valuation.valuationStatus === 3 ? (this.canInstruct = true) : (this.canInstruct = false)
         this.valuation.approxLeaseExpiryDate ? (this.showLeaseExpiryDate = true) : (this.showLeaseExpiryDate = false)
-
         if (
           this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
           this.valuation.valuationStatus === ValuationStatusEnum.Valued ||
@@ -1310,17 +1354,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         } else {
           this.isEditable = true
         }
-
         if (this.valuation.valuationStatus === ValuationStatusEnum.Instructed) {
           this.isCancelled = true
         }
-
         if (
           this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
           this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
           this.valuation.valuationStatus === ValuationStatusEnum.Closed
         ) {
-          // console.log(' this.canSaveValuation FALSE. valuation is instructed or cancelled')
           this.isPropertyInfoDisabled = true
           this.canSaveValuation = false
           this.property = {
@@ -1415,7 +1456,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
             // console.log('valuation has last know owner, off to fetch their contact group')
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
               this.contactGroup = result
-              console.log(this.contactGroup)
               this._valuationFacadeSvc.updateLocalContactGroup(this.contactGroup)
               this.getSearchedPersonSummaryInfo(this.contactGroup)
               this.setAdminContact()
@@ -1559,7 +1599,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
 
       this.onPropertyType(valuation.property?.propertyTypeId)
-
+      console.log('1 about to patchValue on valuationForm  ', valuation)
       this.valuationForm.patchValue({
         property: valuation.property,
         propertyOwner: valuation.propertyOwner,
@@ -1690,6 +1730,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   displayValuationPropInfo(info: ValuationPropertyInfo) {
     if (info) {
+      console.log('displayValuationPropInfo running and will change sqFt to ', info.sqFt)
       this.studioLabelCheck(info.bedrooms)
       this.valuationForm.patchValue({
         bedrooms: info.bedrooms || 0,
@@ -1870,6 +1911,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.property = newProperty
         this.showProperty = false
         this.valuationForm.get('property').setValue(this.property)
+        console.log('WIP: call to getPropertyInformation 1881')
         this.getPropertyInformation(newProperty.propertyId)
         // this.getContactGroup(newProperty.lastKnownOwner?.contactGroupId);
         this.getSelectedOwner(newProperty.lastKnownOwner)
