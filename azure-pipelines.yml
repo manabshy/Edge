@@ -20,7 +20,7 @@ steps:
     cacheHitVar: 'CacheRestored'
 
 - script: |
-    npm install
+    npm ci
   displayName: 'npm install if !cacheRestored'
   condition: eq(variables['CacheRestored'],'False')
 
