@@ -101,7 +101,7 @@
               "statsJson": false,
               "progress": false,
               "vendorChunk": true,
-              "buildOptimizer": false,
+              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

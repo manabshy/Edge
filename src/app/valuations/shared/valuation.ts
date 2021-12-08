@@ -85,7 +85,7 @@ export interface Valuation extends ValuationInfo {
 export interface eSignTermsOfBusinessDoc {
   toBLetting?: ToBDocument
   toBSale?: ToBDocument
-  dateRequestSent: Date
+  dateRequestSent?: Date
 }
 
 export interface ToBDocument {

@@ -331,7 +331,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   interestList: any[] = []
 
-  valuationData$ = this._valuationFacadeSvc.valuationData$
+  valuationData$ = this._valuationFacadeSvc.valuationData$ // Observable of valuation data from service. Used by Terms of Business component. GOAL: replace this.valution this this observable
 
   constructor(
     private _valuationFacadeSvc: ValuationFacadeService,
@@ -345,19 +345,99 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     private router: Router,
     private fb: FormBuilder,
     private primengConfig: PrimeNGConfig,
-    private sidenavService: SidenavService
-  ) // private store: ValuationDetailStore
-  {
+    private sidenavService: SidenavService // private store: ValuationDetailStore // TODO migrate state to NGRX component store for valuation data
+  ) {
     super()
   }
 
   ngOnInit() {
-    console.log('valuation detail edit component on init ============ start')
+    console.log('valuation detail edit component inniting')
 
+    // builds forms, reacts to data changes from all over the shop
+    this.setViewLevelPropsAndSubscriptions()
+
+    // creates new or loads existing valuation. The meat and potatos!
+    this.addValuationDataToView()
+  }
+
+  /***
+   * functions used by OnInit 👷
+   */
+  private setViewLevelPropsAndSubscriptions() {
+    // random props and bs next
+    this.miscellaneousConfig()
+
+    // valuationId, propertyId,
+    this.setViewLevelPropsFromRouteParams()
+
+    // sets up forms used in the view (valuation, appointment, instruction)
+    this.setupForms()
+
+    // subscribes to a bunch of different streams
+    this.subscribeToStreams()
+
+    // more calendar stuff for appointment bookings
+    this.toggleValuerType()
+
+    // sets some props and builds sidenav items
+    this.buildSideNav()
+  }
+
+  private miscellaneousConfig() {
     this._valuationFacadeSvc.landRegisterValid.next(false)
     this.primengConfig.ripple = true
-    this.setupForm()
+  }
 
+  private subscribeToStreams() {
+    // info dropdown options and currentUser assignment
+    this.subscribeToStorageStreams()
+
+    // subscribes to newPropertyAdded$ in property service and sets property to that value (if/when ones exists)
+    this.subscribeToNewPropertyStream()
+
+    // subscribes to signer stream in contact group service.
+    this.subscribeToContactGroupSignerStream()
+
+    // transforms valuation form values and validation based on changes to valuation data changes in UI
+    this.subscribeToValuationFormChangesStream()
+
+    // transform values for view (currency pipes etc)
+    this.subscribeToInstructionFormChangesStream()
+
+    // logs errors & updates view labels etc
+    this.subscribeToAvailabilityFormChangesStream()
+
+    // stream that adds admin contact to valuation when certain criteria hit
+    this.subscribeToOpenContactGroupChangedStream()
+
+    // shows val cancelled info when detects cancellation event from the shared service
+    this.subscribeToCancelValuationStream()
+
+    // handles notes for valuation
+    this.subscribeToContactGroupNoteChangesStream()
+
+    // for valuation status update
+    this.subscribeToESignTriggerChangesStream()
+
+    // another place that listens to change in contact group and updates the on on this page
+    this.subscribeToContactGroupStreams()
+
+    // updates notes page number on change
+    this.subscribeToContactNotePageChangesStream()
+  }
+
+  private setupForms() {
+    // builds valuation form
+    this.setupValuationForm()
+
+    // form for instructing a valuation. used in last step of the val process
+    this.setupInstructionForm()
+
+    // calendar availability form for booking appointments
+    this.setupAvailabilityForm()
+  }
+
+  private subscribeToStorageStreams() {
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
       if (info) {
         this.setupListInfo(info)
@@ -373,7 +453,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     })
 
-    // todo checking client service
     this.storage.get('currentUser').subscribe((currentStaffMember: StaffMember) => {
       if (currentStaffMember) {
         this.currentStaffMember = currentStaffMember
@@ -393,7 +472,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     })
 
-    this.setupInstructionForm()
+    this.storage.get('info').subscribe((data: DropdownListInfo) => {
+      if (data) {
+        this.viewingArrangements = data.viewingArrangements
+      }
+    })
+  }
+
+  private setViewLevelPropsFromRouteParams() {
     this.valuationId = +this.route.snapshot.paramMap.get('id')
     this.propertyId = +this.route.snapshot.queryParamMap.get('propertyId')
     this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get('lastKnownOwnerId')
@@ -402,32 +488,41 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.isNewValuation = this.route.snapshot.queryParamMap.get('isNewValuation') as unknown as boolean
     this.isFromProperty = this.route.snapshot.queryParamMap.get('isFromProperty') as unknown as boolean
     this.isNewValuation && !this.isFromProperty ? (this.showProperty = true) : (this.showProperty = false)
+  }
 
+
+  /***
+   * GET existing valuation from API or create NEW valuation
+  */
+  private addValuationDataToView() {
     if (this.valuationId > 0) {
+      console.log('loading existing valuation. off I go!')
       this.getValuation(this.valuationId)
     } else {
-      this.valuation = {
-        valuationStatus: ValuationStatusEnum.None,
-        valuationStatusDescription: 'New',
-        originId: this.originId | 0,
-        originTypeId: 0,
-        declarableInterest: null,
-        eSignSignatureTob: {
-          dateRequestSent: null
-        }
-      }
-      this._valuationFacadeSvc._valuationData.next(this.valuation)
-      // this.store.loadStore()
-      this.setHeaderDropdownList(ValuationStatusEnum.None, 0)
-      if (this.propertyId) {
-        this.controlPreviousValuations(this.propertyId)
-        console.log('WIP: call to getPropertyInformation 426')
-        this.getPropertyInformation(this.propertyId)
-      }
+      console.log('NEW valuation...')
+      this.newValuation()
     }
+  }
 
-    this.getAddedProperty()
+  private newValuation(){
+    this.valuation = {
+      valuationStatus: ValuationStatusEnum.None,
+      valuationStatusDescription: 'New',
+      originId: this.originId | 0,
+      originTypeId: 0,
+      declarableInterest: null,
+      eSignSignatureTob: {}
+    }
+    this._valuationFacadeSvc._valuationData.next(this.valuation)
+    this.setHeaderDropdownList(ValuationStatusEnum.None, 0)
+    if (this.propertyId) {
+      // new val for existing property, check to see if there's other active valuations
+      this.controlPreviousValuations(this.propertyId)
+      this.getPropertyInformation(this.propertyId)
+    }
+  }
 
+  private subscribeToContactGroupSignerStream() {
     this.contactGroupService.signer$.subscribe((data) => {
       if (data) {
         this.lastKnownOwner = data
@@ -435,7 +530,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.isCreatingNewSigner = false
       }
     })
+  }
 
+  private subscribeToValuationFormChangesStream() {
     this.valuationForm.valueChanges.subscribe((data) => {
       this.valuationForm.patchValue(
         {
@@ -506,7 +603,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.setValidationForPropertyFloorOther(false)
       }
     })
+  }
 
+  private subscribeToInstructionFormChangesStream() {
     this.instructionForm.valueChanges.pipe(debounceTime(100), distinctUntilChanged()).subscribe((form) => {
       this.instructionForm.patchValue(
         {
@@ -529,7 +628,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.sharedService.logValidationErrors(this.instructionForm, false)
       this.setInstructionRentFigures()
     })
+  }
 
+  private setupAvailabilityForm() {
     // availability form
     this.availabilityForm = this.fb.group({
       fromDate: [new Date(), Validators.required],
@@ -537,22 +638,73 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       lettingsValuerId: [null, Validators.required],
       type: 'both'
     })
+  }
 
-    this.toggleValuerType()
+  private subscribeToAvailabilityFormChangesStream() {
     this.availabilityForm.valueChanges.subscribe((data) => {
       this.sharedService.logValidationErrors(this.availabilityForm, false)
     })
-
     this.availabilityForm.controls['type'].valueChanges.subscribe((data) => {
       this.toggleValuerType()
     })
+  }
 
-    this.storage.get('info').subscribe((data: DropdownListInfo) => {
+  private subscribeToCancelValuationStream() {
+    this.cancelValuationSubscription = this.sharedService.cancelValuationOperationChanged.subscribe((value) => {
+      this.isCancelValuationVisible = value
+    })
+  }
+
+  private subscribeToContactGroupNoteChangesStream() {
+    this.contactGroupService.noteChanges$.subscribe((data) => {
       if (data) {
-        this.viewingArrangements = data.viewingArrangements
+        this.contactNotes = []
+        this.page = 1
+        if (this.contactId) {
+          this.getContactNotes()
+        }
       }
     })
+  }
 
+  private subscribeToESignTriggerChangesStream() {
+    this.eSignSubscription = this.sharedService.eSignTriggerChanged.subscribe((data: eSignTypes) => {
+      if (data) {
+        this._valuationFacadeSvc.createValuationESign(data, this.valuation.valuationEventId).subscribe((result) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: this.removeUnderLine(eSignTypes[data]) + ' send',
+            closable: false
+          })
+        })
+      }
+    })
+  }
+
+  private subscribeToContactGroupStreams() {
+    this.contactGroupSubscription = this._valuationFacadeSvc.contactGroup$.subscribe((result: ContactGroup) => {
+      if (result?.contactGroupId && this.contactId != result?.contactGroupId) {
+        if (!this.contactGroup) {
+          this.contactGroup = result
+          console.log(this.contactGroup)
+        }
+        this.contactId = result.contactGroupId
+        this.getContactNotes()
+      }
+    })
+  }
+
+  private subscribeToContactNotePageChangesStream() {
+    this.contactGroupService.contactNotePageChanges$.pipe(takeUntil(this.destroy)).subscribe((newPageNumber) => {
+      this.page = newPageNumber
+      if (this.contactId == null) {
+        this.page = 0
+      }
+      this.getNextContactNotesPage(this.page)
+    })
+  }
+
+  private subscribeToOpenContactGroupChangedStream() {
     this.openContactGroupSubscription = this.sharedService.openContactGroupChanged.subscribe((value) => {
       if (value === true) {
         if (this.lastKnownOwner && this.lastKnownOwner.companyName && this.lastKnownOwner.companyName.length > 0) {
@@ -573,57 +725,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.removeAdminContact()
       }
     })
+  }
 
-    this.cancelValuationSubscription = this.sharedService.cancelValuationOperationChanged.subscribe((value) => {
-      this.isCancelValuationVisible = value
-    })
-
-    this.contactGroupService.noteChanges$.subscribe((data) => {
-      if (data) {
-        this.contactNotes = []
-        this.page = 1
-        if (this.contactId) {
-          this.getContactNotes()
-        }
-      }
-    })
-
-    this.eSignSubscription = this.sharedService.eSignTriggerChanged.subscribe((data: eSignTypes) => {
-      if (data) {
-        this._valuationFacadeSvc.createValuationESign(data, this.valuation.valuationEventId).subscribe((result) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: this.removeUnderLine(eSignTypes[data]) + ' send',
-            closable: false
-          })
-        })
-      }
-    })
-
-    this.contactGroupSubscription = this._valuationFacadeSvc.contactGroup$.subscribe((result: ContactGroup) => {
-      if (result?.contactGroupId && this.contactId != result?.contactGroupId) {
-        if (!this.contactGroup) {
-          this.contactGroup = result
-          console.log(this.contactGroup)
-        }
-        this.contactId = result.contactGroupId
-        this.getContactNotes()
-      }
-    })
-
-    this.contactGroupService.contactNotePageChanges$.pipe(takeUntil(this.destroy)).subscribe((newPageNumber) => {
-      this.page = newPageNumber
-      if (this.contactId == null) {
-        this.page = 0
-      }
-      console.log('hello?')
-      this.getNextContactNotesPage(this.page)
-    })
-
+  private buildSideNav() {
     let sideNavList = [...this.sidenavService.valuationSideNavItems]
     sideNavList.find((x) => x.name == 'valuationTicket').isCurrent = true
     this.sideNavItems = sideNavList
   }
+
+  /***
+   * END functions used by OnInit 👷
+   */
 
   ngAfterViewInit(): void {
     if (this.sharedService.addedContactBs.getValue()) {
@@ -659,6 +771,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   controlStatus(data) {
+    console.log('controlStatus being set via')
     this.contactGroupLoading = false
     if (data) {
       if (this.valuation && this.valuation.valuationStatus === ValuationStatusEnum.None) {
@@ -747,9 +860,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
 
       if (this._valuationFacadeSvc.landRegisterValid.getValue()) {
+        console.log('setting land registry traffic light to GREEN', this.statuses)
         this.statuses.find((x) => x.value == 6).isValid = true
         this.statuses.find((x) => x.value == 6).isNext = false
       } else {
+        console.log('setting land registry traffic light to AMBER ')
         this.statuses.find((x) => x.value == 6).isValid = false
         if (this.statuses.findIndex((x) => x.isNext === true) == -1) {
           if (
@@ -1068,6 +1183,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       })
   }
 
+  /***
+   * sets property details for the view. called when valuation is loaded, saved,
+   */
   setPropertyDetail(propertyDetails) {
     if (propertyDetails.lastKnownOwner) this.lastKnownOwner = propertyDetails.lastKnownOwner
     else {
@@ -1082,8 +1200,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.changedLastOwner = null
     }
 
-    this.property = propertyDetails // valuation object is set to property within component
-    this.valuation.property = { ...this.property } // the property on the valuation gets set to the valuation ?
+    this.property = propertyDetails
+    this.valuation.property = { ...this.property }
     this.valuation.officeId = this.property.officeId
     this._valuationFacadeSvc.updateLocalValuation(this.valuation)
     // this.valuers = result.valuers;
@@ -1205,7 +1323,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     return weeklyRent
   }
 
-  setupForm() {
+  setupValuationForm() {
     this.valuationForm = this.fb.group({
       property: [''],
       propertyOwner: [''],
@@ -1308,12 +1426,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       .then((result) => {
         console.log('👷 getVal step 4: setPropertyDetail, getValuationPropertyInfo, getValuers ')
         this.setPropertyDetail(result)
-        this.getValuationPropertyInfo(this.propertyId) // this loads and merges some property attributes from most recent valuation in to the view. It overwrites the valuation data saved.
         this.getValuers(this.propertyId)
       })
       .then(() => {
         console.log(`👷 
-        getValuation step 5: set following view props: 
+        getValuation step 5: set following view props based mostly off this.valuation state: 
         headerDropdownList, 
         canInstruct, 
         isEditable, 
@@ -1484,10 +1601,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.isValuationMeetingNotesVisible = false
           this.setRequirementValuationNoteBs.next(true)
         }
+        this.controlStatus(this.valuation)
+
         // this.store.loadStore() // loads NGRX component store for this valuation. Objective is to centralise the state and put this class on a strict diet!
+        console.log(`👷 getValuation done`)
       })
       .catch((err) => {
-        console.log('err: ', err)
+        console.log('👷 getValuation err: ', err)
       })
   }
 
@@ -1804,6 +1924,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     return null
   }
 
+  /***
+   * fetches any valuations for the property and shows them in a list inside a dialog for the user to select from
+   */
   controlPreviousValuations(propertyId) {
     this.propertySubscription = this.propertyService
       .getValuations(propertyId, true)
@@ -1905,7 +2028,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     })
   }
 
-  private getAddedProperty() {
+  private subscribeToNewPropertyStream() {
     this.propertyService.newPropertyAdded$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((newProperty) => {
       if (newProperty && newProperty.propertyId != this.property?.propertyId) {
         this.property = newProperty
@@ -2788,8 +2911,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     return idArray
   }
 
-  addOrUpdateValuation() {
-    this.setLeaseExpiryDate()
+  private gatherValuationPropsFromViewReadyForSaving() {
     this.isSubmitting = true
 
     let valuationValue = this._valuationFacadeSvc._valuationData.getValue() // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
@@ -2800,15 +2922,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     valuation.originId = this.valuation.originId
     valuation.bookedBy = this.valuation.bookedBy
     valuation.bookedById = this.valuation.bookedBy ? this.valuation.bookedBy.staffMemberId : this.valuation.bookedById
-
+    valuation.eSignSignatureTob = valuationValue.eSignSignatureTob ? valuationValue.eSignSignatureTob : {}
     valuation.isPowerOfAttorney =
       this.adminContact && this.adminContact.contactGroupId > 0 ? this.adminContact?.isPowerOfAttorney : false
     valuation.ccOwner = this.adminContact && this.adminContact.contactGroupId > 0 ? this.adminContact?.ccOwner : false
 
     valuation.valuationContactNote = {
-      ...this.valuation.valuationContactNote,
-      text: this.valuationForm.controls['valuationNote'].value
+      ...this.valuation.valuationContactNote
     }
+    let text = this.valuationForm.controls['valuationNote'].value
+    if (text) valuation.valuationContactNote.text = text
 
     valuation.suggestedAskingRentShortLetMonthly = this.sharedService.convertStringToNumber(
       valuation.suggestedAskingRentShortLetMonthly
@@ -2833,11 +2956,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.valuationForm.get('isRetirementHome').value) valuation.otherFeatures.push(OtherFeatures.Retirement_Home)
     if (this.valuationForm.get('hasDisabledAccess').value)
       valuation.propertyFeature.push(PropertyFeatures.Disabled_Access)
-
-    // console.log('typeof(this.suggestedAskingRentLongLetMonthly): ', typeof(valuation.suggestedAskingRentLongLetMonthly))
-    // console.log('typeof(this.suggestedAskingPrice): ', typeof(valuation.suggestedAskingPrice))
-    // console.log('typeof(this.suggestedAskingRentShortLet): ', typeof(valuation.suggestedAskingRentShortLet))
-    // console.log('typeof(this.suggestedAskingRentLongLet): ', typeof(valuation.suggestedAskingRentLongLet))
 
     valuation.suggestedAskingRentLongLetMonthly =
       typeof valuation.suggestedAskingRentLongLetMonthly === 'string'
@@ -2868,6 +2986,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     valuation.outsideSpace = this.getInfoIdArray(this.valuationForm.get('outsideSpace').value)
 
     this.setValuers(valuation)
+    return valuation
+  }
+
+  addOrUpdateValuation() {
+    this.setLeaseExpiryDate()
+    const valuation = this.gatherValuationPropsFromViewReadyForSaving()
     console.log('valuation about to be saved: ', valuation)
     if (this.isNewValuation) {
       this.saveValuationSubscription = this._valuationFacadeSvc.addValuation(valuation).subscribe(
@@ -2903,9 +3027,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   getDuration(totalHours: number) {
     let duration = ''
     if (totalHours >= 1) {
-     duration = `${totalHours} hours`
+      duration = `${totalHours} hours`
     } else {
-      const minutes = Math.floor(totalHours * 60);
+      const minutes = Math.floor(totalHours * 60)
       duration = `${minutes} minutes`
     }
     return duration
@@ -2919,7 +3043,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     const minutes = date.getMinutes()
     return minutes === 15
   }
- 
 
   setValuers(valuation) {
     if (valuation.salesValuationBooking?.startDateTime == valuation.lettingsValuationBooking?.startDateTime) {
@@ -2930,7 +3053,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         associationId: valuation.salesMeetingOwner == false ? valuation.salesOwnerAssociateType : '',
         meetingOwner: valuation.salesMeetingOwner,
         startDateTime: valuation.salesValuationBooking?.startDateTime,
-        totalHours: this.isWeekdays(new Date(valuation.salesValuationBooking?.startDateTime)) && this.is15Minutes(new Date(valuation.salesValuationBooking?.startDateTime)) ? 0.75 : 1,
+        totalHours:
+          this.isWeekdays(new Date(valuation.salesValuationBooking?.startDateTime)) &&
+          this.is15Minutes(new Date(valuation.salesValuationBooking?.startDateTime))
+            ? 0.75
+            : 1
       }
       valuation.combinedValuationBooking.meetingOwner = valuation.salesMeetingOwner == false ? false : true
       valuation.lettingsValuationBooking = null
@@ -2945,7 +3072,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           associationId: valuation.salesMeetingOwner == false ? valuation.salesOwnerAssociateType : '',
           meetingOwner: valuation.salesMeetingOwner,
           startDateTime: valuation.salesValuationBooking?.startDateTime,
-          totalHours: this.isWeekdays(new Date(valuation.salesValuationBooking?.startDateTime)) && this.is15Minutes(new Date(valuation.salesValuationBooking?.startDateTime)) ? 0.75 : 1,
+          totalHours:
+            this.isWeekdays(new Date(valuation.salesValuationBooking?.startDateTime)) &&
+            this.is15Minutes(new Date(valuation.salesValuationBooking?.startDateTime))
+              ? 0.75
+              : 1
         }
         valuation.salesValuationBooking.meetingOwner = valuation.salesMeetingOwner == false ? false : true
       }
@@ -2957,7 +3088,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           associationId: valuation.lettingsMeetingOwner == false ? valuation.lettingsOwnerAssociateType : '',
           meetingOwner: valuation.lettingsMeetingOwner,
           startDateTime: valuation.lettingsValuationBooking?.startDateTime,
-          totalHours: this.isWeekdays(new Date(valuation.lettingsValuationBooking?.startDateTime)) && this.is15Minutes(new Date(valuation.lettingsValuationBooking?.startDateTime)) ? 0.75 : 1,
+          totalHours:
+            this.isWeekdays(new Date(valuation.lettingsValuationBooking?.startDateTime)) &&
+            this.is15Minutes(new Date(valuation.lettingsValuationBooking?.startDateTime))
+              ? 0.75
+              : 1
         }
         valuation.lettingsValuationBooking.meetingOwner = valuation.lettingsMeetingOwner == false ? false : true
       }
@@ -3013,7 +3148,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.isSubmitting = false
     this.errorMessage = null
     if (this.isNewValuation) {
-      // this.toastr.success('Valuation successfully saved');
       this.messageService.add({
         severity: 'success',
         summary: 'Valuation successfully saved',
@@ -3021,7 +3155,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       })
       this.sharedService.resetUrl(this.valuationId, valuation.valuationEventId)
     } else {
-      // this.toastr.success('Valuation successfully updated');
       this.messageService.add({
         severity: 'success',
         summary: 'Valuation successfully updated',
@@ -3029,7 +3162,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       })
     }
 
-    // Why is the route reloaded here? TODO: make necessary state changes on client to not have to reload the page
+    // Why is the route reloaded here?
+    // TODO: make necessary state changes on client to not have to reload the page
     if (valuation && valuation.valuationEventId > 0)
       this.router
         .navigateByUrl('/', { skipLocationChange: true })
@@ -3099,7 +3233,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.salesValuer && (this.isSalesOnly || this.isSalesAndLettings)) {
       this.valuation.salesValuationBooking = {
         startDateTime: this.selectedSalesDate,
-        totalHours: this.isWeekdays(new Date(this.selectedSalesDate)) && this.is15Minutes(new Date(this.selectedSalesDate)) ? 0.75 : 1,
+        totalHours:
+          this.isWeekdays(new Date(this.selectedSalesDate)) && this.is15Minutes(new Date(this.selectedSalesDate))
+            ? 0.75
+            : 1
       }
       this.salesValuerControl.setValue(this.salesValuer)
       this.salesValuerControl.updateValueAndValidity()
@@ -3107,7 +3244,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.lettingsValuer && (this.isLettingsOnly || this.isSalesAndLettings)) {
       this.valuation.lettingsValuationBooking = {
         startDateTime: this.selectedLettingsDate,
-        totalHours: this.isWeekdays(new Date(this.selectedLettingsDate)) && this.is15Minutes(new Date(this.selectedLettingsDate)) ? 0.75 : 1,
+        totalHours:
+          this.isWeekdays(new Date(this.selectedLettingsDate)) && this.is15Minutes(new Date(this.selectedLettingsDate))
+            ? 0.75
+            : 1
       }
       this.lettingsValuerControl.setValue(this.lettingsValuer)
       this.lettingsValuerControl.updateValueAndValidity()
