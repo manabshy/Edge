@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnChanges, OnInit } from '@angular/core'
-import { ContactGroup, PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-group'
+import { ContactGroup, PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { Observable, of } from 'rxjs'
 
 @Component({

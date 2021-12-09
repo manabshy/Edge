@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core';
-import { ContactGroupAutoCompleteResult } from '../shared/contact-group';
+import { ContactGroupAutoCompleteResult } from '../shared/contact-group.interfaces';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from '../shared/contact-groups.service';

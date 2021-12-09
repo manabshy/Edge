@@ -1,6 +1,6 @@
 import { Component, OnInit, Renderer2, Input, Output, EventEmitter, OnChanges } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
-import { PotentialDuplicateResult, ContactGroup, ContactType } from '../contact-group'
+import { PotentialDuplicateResult, ContactGroup, ContactType } from '../contact-group.interfaces'
 import { BasicPerson, Person } from 'src/app/shared/models/person'
 import { ContactGroupsService } from '../contact-groups.service'
 import { Router } from '@angular/router'

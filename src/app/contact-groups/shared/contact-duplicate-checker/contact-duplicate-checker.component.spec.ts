@@ -10,7 +10,7 @@ import { ContactGroupsService } from '../contact-groups.service';
 import { Renderer2, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MockBasicPerson, PotentialDuplicatePersonMock } from 'src/testing/fixture-data/person-data.json';
 import { of } from 'rxjs';
-import { PeopleAutoCompleteResult, PotentialDuplicateResult } from '../contact-group';
+import { PeopleAutoCompleteResult, PotentialDuplicateResult } from '../contact-group.interfaces';
 import { HighlightPipe } from 'src/app/shared/pipes/highlight.pipe';
 
 describe('ContactDuplicateCheckerComponent', () => {

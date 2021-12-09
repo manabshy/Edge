@@ -6,7 +6,7 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { filter, tap, take } from 'rxjs/operators'
-import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-group'
+import { PotentialDuplicateResult } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { ValuationFacadeService } from '../../../shared/valuation-facade.service'
 
 @Injectable({

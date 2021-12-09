@@ -36,7 +36,7 @@ import { Property, PropertySearchEnum } from "src/app/property/shared/property";
 import {
   Signer,
   ContactGroup,
-} from "src/app/contact-groups/shared/contact-group";
+} from "src/app/contact-groups/shared/contact-group.interfaces";
 import { ToastrService } from "ngx-toastr";
 import { Router, ActivatedRoute } from "@angular/router";
 import { BaseStaffMember } from "src/app/shared/models/base-staff-member";

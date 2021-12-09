@@ -14,7 +14,7 @@ import { ContactGroupsAutocompleteMock } from 'src/testing/fixture-data/contact-
 import { MockPerson } from 'src/testing/fixture-data/person-data.json';
 import { Person } from 'src/app/shared/models/person';
 import { contactGroupDetailsMock } from 'src/testing/fixture-data/contact-groups-details';
-import { ContactGroup } from '../shared/contact-group';
+import { ContactGroup } from '../shared/contact-group.interfaces';
 
 describe('ContactGroupsPeopleComponent', () => {
   let component: ContactGroupsPeopleComponent;

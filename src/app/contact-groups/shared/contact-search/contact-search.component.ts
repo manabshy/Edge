@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
-import { PotentialDuplicateResult, ContactGroup } from '../contact-group'
+import { PotentialDuplicateResult, ContactGroup } from '../contact-group.interfaces'
 import { BasicPerson, Person } from 'src/app/shared/models/person'
 import { debounceTime } from 'rxjs/operators'
 

@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { StorageMap } from '@ngx-pwa/local-storage'
 import { debounceTime, takeUntil, distinctUntilChanged, map } from 'rxjs/operators'
-import { ContactGroup, ContactNote, PersonSummaryFigures, Signer } from 'src/app/contact-groups/shared/contact-group'
+import { ContactGroup, ContactNote, PersonSummaryFigures, Signer } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service'
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service'
@@ -1569,9 +1569,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.sharedService.valuationLastOwnerChanged.next(this.lastKnownOwner)
 
           if (this.lastKnownOwner && this.lastKnownOwner.contactGroupId > 0) {
-            // console.log('valuation has last know owner, off to fetch their contact group')
-            this.getContactGroup(this.lastKnownOwner?.contactGroupId).then((result) => {
+            // console.log('valuation has last know owner, off to fetch their contact group') // WIP
+            this.getContactGroup(this.valuation.propertyOwner?.contactGroupId).then((result) => {
               this.contactGroup = result
+              console.log('======================= ', result)
               this._valuationFacadeSvc.updateLocalContactGroup(this.contactGroup)
               this.getSearchedPersonSummaryInfo(this.contactGroup)
               this.setAdminContact()

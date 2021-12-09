@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { SharedService } from 'src/app/core/services/shared.service'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Company, BasicContactGroup } from 'src/app/contact-groups/shared/contact-group'
+import { Company, BasicContactGroup } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { CompanyService } from '../shared/company.service'
 
 @Component({

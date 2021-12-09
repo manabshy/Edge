@@ -20,7 +20,7 @@ import {
   mapDocumentsForView
 } from './helpers/store-documents-helpers'
 import { ComplianceChecksState, FileUpdateEvent, FileDeletionPayload } from './compliance-checks.interfaces'
-import { Company } from 'src/app/contact-groups/shared/contact-group'
+import { Company } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { Person } from 'src/app/shared/models/person'
 
 const defaultState: ComplianceChecksState = {
@@ -289,7 +289,8 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
     ])
       .pipe(
         filter(([contactGroupData, valuationData]) => {
-          // console.log('loadStore filter: ', contactGroupData, valuationData)
+          console.log('loadStore filter contactGroupData: ' , contactGroupData)
+          console.log('loadStore filter valuationData: ' , valuationData)
           return (
             !!contactGroupData &&
             !!valuationData &&
@@ -298,6 +299,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
         }),
         take(1),
         mergeMap(([contactGroupData, valuationData, entityToAdd]: [any, any, any]) => {
+          console.log('✔️ filter valid, loading store.')
           valuationData.isFrozen = valuationData.complianceCheck?.compliancePassedDate ? true : false
           const storeState = {
             contactGroupData,
@@ -319,6 +321,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
 
   /***
    * lastKnownOwnerChanged$
+   * is the last known owner of a property changes then the store needs to update to reflect the compliance documents of the people in that contact group
    */
   private lastKnownOwnerChanged$: Observable<any> = this._complianceChecksFacadeSvc.lastKnownOwnerChanged$.pipe(
     filter((data) => {
@@ -337,7 +340,7 @@ export class ComplianceChecksStore extends ComponentStore<ComplianceChecksState>
       }
 
       this.patchState(buildStoreState(data))
-      // console.log('✔️ lastKnownOwnerChanged, compliance checks state built for contactGroupId', contactGroupData.contactGroupId)
+      console.log('✔️ lastKnownOwnerChanged, compliance checks state built')
       return of(this.pushContactsToValuationServiceForSave$)
     }),
     mergeMap(() => this.validationMessage$.pipe())

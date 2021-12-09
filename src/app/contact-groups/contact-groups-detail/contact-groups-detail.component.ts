@@ -5,7 +5,7 @@ import {
   PersonSummaryFigures,
   ContactGroupDetailsSubNavItems,
   ContactNote
-} from '../shared/contact-group'
+} from '../shared/contact-group.interfaces'
 import { ContactGroupsService } from '../shared/contact-groups.service'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Person } from 'src/app/shared/models/person'
