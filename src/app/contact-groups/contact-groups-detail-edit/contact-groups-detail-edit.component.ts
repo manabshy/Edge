@@ -108,6 +108,7 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   }
 
   public keepOriginalOrder = (a) => a.key
+
   constructor(
     public sharedService: SharedService,
     private messageService: MessageService,
@@ -574,7 +575,7 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   }
 
   savePerson(otherPersonToAdd) {
-    
+    console.log('savePerson... saving')
     this.errorMessage = null
     this.removeOthers()
     this.logValidationErrors(this.personForm, true, true)

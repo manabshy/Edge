@@ -24,7 +24,7 @@ import {
   ContactNote,
   ContactNoteData,
   ContactType
-} from './contact-group'
+} from './contact-group.interfaces'
 import { map, switchMap, tap, shareReplay } from 'rxjs/operators'
 import { Person, BasicPerson } from 'src/app/shared/models/person'
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper'

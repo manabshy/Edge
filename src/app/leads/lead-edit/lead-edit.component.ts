@@ -17,7 +17,7 @@ import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service'
 import { StaffMemberService } from 'src/app/core/services/staff-member.service'
 import { StaffMember } from 'src/app/shared/models/staff-member'
-import { ContactNote, PersonSummaryFigures, BasicContactGroup } from 'src/app/contact-groups/shared/contact-group'
+import { ContactNote, PersonSummaryFigures, BasicContactGroup } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { Person, PersonProperty } from 'src/app/shared/models/person'
 import { ToastrService } from 'ngx-toastr'

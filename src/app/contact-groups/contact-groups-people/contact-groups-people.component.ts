@@ -11,7 +11,7 @@ import {
   Company,
   PotentialDuplicateResult,
   ContactNote
-} from '../shared/contact-group'
+} from '../shared/contact-group.interfaces'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { filter, take, takeUntil } from 'rxjs/operators'
 import { Subject, Observable, EMPTY } from 'rxjs'
@@ -884,6 +884,8 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
 
   onSaveComplete(contactGroup: ContactGroup): void {
     console.log('onSaveComplete: contactGroup ', contactGroup)
+    localStorage.removeItem('contactPeople')
+    localStorage.removeItem('newCompany')
     this.pendingChanges = false
     this.isSubmitting = false
     this.messageService.add({

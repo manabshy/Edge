@@ -1,5 +1,5 @@
 import { format, isDate } from 'date-fns';
-import { Company } from 'src/app/contact-groups/shared/contact-group';
+import { Company } from 'src/app/contact-groups/shared/contact-group.interfaces';
 import { Person } from '../../shared/models/person';
 import { StaffMember } from '../../shared/models/staff-member';
 import { DetachedRouteHandle } from '@angular/router';

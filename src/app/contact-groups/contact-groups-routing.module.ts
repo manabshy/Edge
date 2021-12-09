@@ -17,7 +17,7 @@ import { ContactgroupsDetailHomeHelperComponent } from '../shared/contact-groups
 
 const routes: Routes = [
   {
-    path: '',
+    path: '', // contact-centre/
     component: ContactGroupsComponent,
     data: { shouldDetach: true, title: 'Contact Centre' }
   },

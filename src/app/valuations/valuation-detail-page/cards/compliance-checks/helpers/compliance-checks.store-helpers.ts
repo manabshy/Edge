@@ -13,7 +13,7 @@ export const buildStoreState = (storeState) => {
   const entitiesData = mergeEntitiesReadyForStore(storeState.valuationData, storeState.entityToAdd)
   return {
     valuationEventId: storeState.valuationData.valuationEventId,
-    contactGroupId: storeState.contactGroupData.contactGroupId,
+    contactGroupId: storeState.valuationData.propertyOwner.contactGroupId,
     companyId: storeState.contactGroupData ? storeState.contactGroupData.companyId : null,
     companyOrContact: storeState.contactGroupData?.companyId ? 'company' : 'contact',
     checkType: identifyAmlOrKyc(storeState.valuationData),

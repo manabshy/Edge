@@ -7,7 +7,7 @@ import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constant
 import { Location } from '@angular/common'
 import { Address } from '../../shared/models/address'
 import { SharedService, WedgeError } from '../../core/services/shared.service'
-import { Signer } from 'src/app/contact-groups/shared/contact-group'
+import { Signer } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { ToastrService } from 'ngx-toastr'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { InfoDetail } from 'src/app/core/services/info.service'

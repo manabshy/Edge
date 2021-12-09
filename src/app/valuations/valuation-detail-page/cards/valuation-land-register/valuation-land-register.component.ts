@@ -7,7 +7,7 @@ import { ValuationTypeEnum } from '../../../shared/valuation'
 import { FileTypeEnum } from 'src/app/core/services/file.service'
 import { Observable, Subscription } from 'rxjs'
 import { SharedService } from 'src/app/core/services/shared.service'
-import { ContactType } from 'src/app/contact-groups/shared/contact-group'
+import { ContactType } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { Property } from 'src/app/property/shared/property'
 
 @Component({

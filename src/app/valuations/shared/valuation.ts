@@ -5,7 +5,7 @@ import { BaseStaffMember } from 'src/app/shared/models/base-staff-member'
 import { Property } from 'src/app/property/shared/property'
 import { Office } from 'src/app/shared/models/staff-member'
 import { EdgeFile } from 'src/app/shared/models/edgeFile'
-import { BaseNote, Signer } from 'src/app/contact-groups/shared/contact-group'
+import { BaseNote, Signer } from 'src/app/contact-groups/shared/contact-group.interfaces'
 
 export interface ValuationInfo {
   reason?: string
