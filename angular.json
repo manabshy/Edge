@@ -14,6 +14,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
+            "optimization": false,
             "outputPath": "dist/wedge",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -86,22 +87,17 @@
               "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
-            },
-            "dev": {
-              "optimization": false,
-              "outputHashing": "none",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "showCircularDependencies": false,
-              "aot": true,
-              "extractLicenses": false,
-              "statsJson": false,
-              "progress": false,
               "vendorChunk": true,
               "buildOptimizer": true,
+              "aot": true
+            },
+            "dev": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

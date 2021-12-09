@@ -364,26 +364,22 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   getNewlyAddedPerson() {
-    this.contactGroupService.newPerson$
-      .pipe(
-        takeUntil(this.destroy)
-      )
-      .subscribe((person) => {
-        console.log('getNewlyAddedPerson running and about to store this person in local storage: ', person)
-        if (person) {
-          person.isNewPerson = true
-          this.showDuplicateChecker = false
+    this.contactGroupService.newPerson$.pipe(takeUntil(this.destroy)).subscribe((person) => {
+      if (person) {
+        console.log('🚧 new person being added', person)
+        person.isNewPerson = true
+        this.showDuplicateChecker = false
 
-          if ((this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) || this.isExistingCompany) {
-            this.contactGroupDetails?.contactPeople?.push(person)
-            this.storeContactPeople(this.contactGroupDetails.contactPeople)
-          } else {
-            const people: Person[] = []
-            people.push(person)
-            this.storeContactPeople(people)
-          }
+        if ((this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) || this.isExistingCompany) {
+          this.contactGroupDetails?.contactPeople?.push(person)
+          this.storeContactPeople(this.contactGroupDetails.contactPeople)
+        } else {
+          const people: Person[] = []
+          people.push(person)
+          this.storeContactPeople(people)
         }
-      })
+      }
+    })
   }
 
   getNewlyAddedCompany() {
@@ -408,20 +404,24 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   getContactGroupById(contactGroupId: number) {
+    console.log('🚧 getContactGroupById: ', contactGroupId)
     const contactPeopleFromStorage = this.getContactPeopleFromStorage()
     this.contactGroupService.getContactGroupById(contactGroupId, true).subscribe((data) => {
       this.contactGroupDetails = data
       if (contactPeopleFromStorage?.length) {
         this.pendingChanges = true
-        if (this.contactGroupDetails.contactPeople && this.contactGroupDetails.contactPeople.length > 0)
-          this.contactGroupDetails.contactPeople = [
-            ...this.contactGroupDetails.contactPeople,
-            ...contactPeopleFromStorage
-          ]
-        else {
+        if (this.contactGroupDetails.contactPeople && this.contactGroupDetails.contactPeople.length > 0) {
+          console.log(
+            '🚧 merging contact people:  this.contactGroupDetails.contactPeople ',
+            this.contactGroupDetails.contactPeople
+          )
+          console.log('🚧 merging contact people:  contactPeopleFromStorage ', contactPeopleFromStorage)
+          this.contactGroupDetails.contactPeople = this.mergeDedupe(this.contactGroupDetails.contactPeople, contactPeopleFromStorage)
+        } else {
           this.contactGroupDetails.contactPeople = [...contactPeopleFromStorage]
         }
         console.log(
+          '🚧',
           this.contactGroupDetails.contactPeople,
           'new group from merged with stroage',
           contactPeopleFromStorage,
@@ -443,6 +443,19 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
 
       this.setPageLabel()
     })
+  }
+
+  private mergeDedupe = (arr1, arr2) => {
+    for (var i = 0, l = arr1.length; i < l; i++) {
+      for (var j = 0, ll = arr2.length; j < ll; j++) {
+        if (arr1[i].id === arr2[j].id) {
+          arr1.splice(i, 1, arr2[j])
+          break
+        }
+      }
+    }
+    console.log('deduped contacts array ... ', arr1)
+    return arr1
   }
 
   getContactGroupFirstPerson(personId: number, isSelectedTypeCompany?: boolean) {
@@ -883,7 +896,7 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   onSaveComplete(contactGroup: ContactGroup): void {
-    console.log('onSaveComplete: contactGroup ', contactGroup)
+    console.log('onSaveComplete: contactGroup removing items from local storage ', contactGroup)
     localStorage.removeItem('contactPeople')
     localStorage.removeItem('newCompany')
     this.pendingChanges = false
