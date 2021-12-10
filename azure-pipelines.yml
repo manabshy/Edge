@@ -29,6 +29,10 @@ steps:
     ng build --prod
   displayName: 'build prod'
 
+  - script: |
+     npm run chromatic 
+  displayName: 'publish Storybook'
+
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: 'dist'

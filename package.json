@@ -22,7 +22,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "npm run docs:json && build-storybook",
     "rmrf": "rimraf node_modules",
-    "nx:affected": "nx affected --target=test"
+    "nx:affected": "nx affected --target=test",
+    "chromatic": "chromatic --exit-zero-on-changes"
   },
   "private": true,
   "dependencies": {
