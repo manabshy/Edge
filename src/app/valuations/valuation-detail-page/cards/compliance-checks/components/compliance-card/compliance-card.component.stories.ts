@@ -5,7 +5,7 @@ import { MessageService } from 'primeng/api'
 // also exported from '@storybook/angular' if you can deal with breaking changes in 6.1
 import { Story, Meta } from '@storybook/angular/types-6-0'
 import { action } from '@storybook/addon-actions'
-import { VendorsModule } from '../../../../shared/vendors.module'
+import { VendorsModule } from 'src/app/shared/vendors.module'
 
 // component under test
 import { ComplianceCardComponent } from './compliance-card.component'
@@ -26,7 +26,7 @@ import {
   MultipleAdditionalDocumentsUploaded,
   LongNameDocumentsUploaded
 } from '../document-info/document-info.component.stories'
-import { FileUploadComponent } from '../../../../shared/components/file-upload/file-upload.component'
+import { FileUploadComponent } from 'src/app/shared/components/file-upload/file-upload.component'
 
 export default {
   title: 'Valuations/Compliance/Components/ComplianceCard',

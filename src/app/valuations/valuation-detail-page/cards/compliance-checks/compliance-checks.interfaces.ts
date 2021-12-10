@@ -1,4 +1,4 @@
-import { Person } from '../../../../shared/models/person'
+import { Person } from 'src/app/shared/models/person'
 
 export enum DOCUMENT_TYPE {
   PROOF_OF_ADDRESS = 54,

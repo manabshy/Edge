@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common'
 /*** 
  * D&G Modules
  */
-import { SharedModule } from '../../../../shared/shared.module'
+import { SharedModule } from 'src/app/shared/shared.module'
 import { ComponentsModule } from 'src/app/shared/components.module'
 import { ContactGroupsComponentsModule } from 'src/app/contact-groups/contact-groups.components.module'
 
