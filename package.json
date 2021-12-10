@@ -1,6 +1,6 @@
 {
   "name": "wedge",
-  "version": "4.0.0-71",
+  "version": "4.0.0-72",
   "scripts": {
     "ng": "nx",
     "start": "ng serve --hmr",
@@ -123,6 +123,7 @@
     "@types/node": "^12.20.33",
     "@webcomponents/custom-elements": "^1.5.0",
     "babel-loader": "^8.2.2",
+    "chromatic": "^6.2.0",
     "codelyzer": "^5.2.2",
     "cypress": "^6.8.0",
     "http-server": "^0.12.3",

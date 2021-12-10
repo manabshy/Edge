@@ -5,9 +5,9 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Story, Meta } from '@storybook/angular/types-6-0';
 import { action } from '@storybook/addon-actions'
 import { DocumentInfoComponent } from './document-info.component';
-import { VendorsModule } from '../../../../shared/vendors.module';
-import { FileUploadComponent } from '../../../../shared/components/file-upload/file-upload.component';
-import { MessagesComponent } from '../../../../shared/components/messages/messages.component';
+import { VendorsModule } from 'src/app/shared/vendors.module';
+import { FileUploadComponent } from 'src/app/shared/components/file-upload/file-upload.component';
+import { MessagesComponent } from 'src/app/shared/components/messages/messages.component';
 import { MessageService } from 'primeng/api';
 import { DOCUMENT_TYPE } from '../../compliance-checks.interfaces'
 
