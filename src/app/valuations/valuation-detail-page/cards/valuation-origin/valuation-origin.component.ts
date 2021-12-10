@@ -1,7 +1,7 @@
 import { DashboardMember } from 'src/app/shared/models/dashboard-member'
 import { StaffMemberService } from 'src/app/core/services/staff-member.service'
 import { InfoDetail } from 'src/app/core/services/info.service'
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core'
+import { AfterViewInit, Component, Input, OnInit, OnChanges } from '@angular/core'
 import { Valuation } from '../../../shared/valuation'
 import { Observable, of, Subscription } from 'rxjs'
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member'
@@ -12,7 +12,7 @@ import { StorageMap } from '@ngx-pwa/local-storage'
   selector: 'app-valuation-origin',
   templateUrl: './valuation-origin.component.html'
 })
-export class ValuationOriginComponent implements OnInit, AfterViewInit {
+export class ValuationOriginComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() valuation: Valuation
   @Input() leadTypeId: number
   @Input() isClientService: boolean = false
@@ -47,6 +47,38 @@ export class ValuationOriginComponent implements OnInit, AfterViewInit {
   constructor(private staffMembersService: StaffMemberService, private storage: StorageMap) {}
 
   ngOnInit(): void {
+    this.initDropdowns()
+
+    this.subscriptions = this.staffMembersService.getCsStaffMembers().subscribe((data) => {
+      this.bookByOptions = data
+      if (
+        this.valuation &&
+        this.valuation.bookedById > 0 &&
+        !this.bookByOptions.some((x) => x.staffMemberId == this.valuation.bookedById)
+      ) {
+        this.storage.get('allstaffmembers').subscribe((dataStaffMembers: StaffMember[]) => {
+          if (dataStaffMembers) {
+            this.bookByOptions.unshift(dataStaffMembers.find((x) => x.staffMemberId == this.valuation.bookedById))
+            this.bookByOptions = [...this.bookByOptions]
+            // let bookedById = this.valuation.bookedById
+            // this.valuation.bookedById = null
+            // this.valuation.bookedById = bookedById
+          }
+        })
+      }
+    })
+  }
+
+  ngOnChanges(changes): void {
+    if(changes.allOrigins && !changes.allOrigins.firstChanges){
+      this.allOrigins = changes.allOrigins.currentValue
+      this.initDropdowns()
+    }
+  }
+
+  ngAfterViewInit(): void {}
+
+  private initDropdowns() {
     if (
       !(this.valuation.originId && this.valuation.originId > 0) &&
       !(this.valuation.originTypeId && this.valuation.originTypeId > 0)
@@ -111,28 +143,7 @@ export class ValuationOriginComponent implements OnInit, AfterViewInit {
 
       this.controlValues()
     }
-
-    this.subscriptions = this.staffMembersService.getCsStaffMembers().subscribe((data) => {
-      this.bookByOptions = data
-      if (
-        this.valuation &&
-        this.valuation.bookedById > 0 &&
-        !this.bookByOptions.some((x) => x.staffMemberId == this.valuation.bookedById)
-      ) {
-        this.storage.get('allstaffmembers').subscribe((dataStaffMembers: StaffMember[]) => {
-          if (dataStaffMembers) {
-            this.bookByOptions.unshift(dataStaffMembers.find((x) => x.staffMemberId == this.valuation.bookedById))
-            this.bookByOptions = [...this.bookByOptions]
-            // let bookedById = this.valuation.bookedById
-            // this.valuation.bookedById = null
-            // this.valuation.bookedById = bookedById
-          }
-        })
-      }
-    })
   }
-
-  ngAfterViewInit(): void {}
 
   setOriginTypeId(originTypeId: number) {
     if (originTypeId) {
