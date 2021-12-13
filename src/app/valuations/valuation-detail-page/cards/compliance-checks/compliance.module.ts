@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
-/*** 
+/***
  * D&G Modules
  */
 import { SharedModule } from 'src/app/shared/shared.module'
@@ -25,6 +25,6 @@ const components = [
 @NgModule({
   imports: [CommonModule, SharedModule, ComponentsModule, ContactGroupsComponentsModule],
   declarations: components,
-  exports: components,
+  exports: components
 })
 export class ComplianceModule {}
