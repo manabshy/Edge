@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms'
 @Component({
   selector: 'app-instructions-search',
   template: `
-    <div class="border border-grey-300 w-64 p-4">
+    <div class="border border-grey-300 w-56 p-4">
       <h3 class="font-bold">
         <i class="fas fa-search"></i>
         Search
@@ -55,7 +55,7 @@ import { FormBuilder, FormGroup } from '@angular/forms'
 })
 export class InstructionsSearchComponent implements OnInit {
   instructionFinderForm: FormGroup
-@Input() suggestions: any
+  @Input() suggestions: any
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
@@ -72,6 +72,6 @@ export class InstructionsSearchComponent implements OnInit {
     })
   }
 
-  getInstructions(){}
-  suggestionSelected(e){}
+  getInstructions() {}
+  suggestionSelected(e) {}
 }

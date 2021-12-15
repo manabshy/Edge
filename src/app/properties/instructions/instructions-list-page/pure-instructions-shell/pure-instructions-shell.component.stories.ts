@@ -6,8 +6,9 @@ import { PureInstructionsShellComponent } from './pure-instructions-shell.compon
 import { InfoService } from 'src/app/core/services/info.service'
 import { APP_INITIALIZER } from '@angular/core'
 import { VendorsModule } from 'src/app/shared/vendors.module'
-import { InstructionsSearchComponent } from '../instructions-search-component/instructions-search.component'
-import { InstructionsTableComponent } from '../instructions-table-component/instructions-table.component'
+import { InstructionsSearchComponent } from '../components/instructions-search-component/instructions-search.component'
+import { InstructionsTableComponent } from '../components/instructions-table-component/instructions-table.component'
+import { LettingsTable } from '../components/instructions-table-component/instructions-table.component.stories'
 
 export default {
   title: 'Properties/Instructions/PureInstructionsShellComponent',
@@ -19,7 +20,7 @@ export default {
     }),
     componentWrapperDecorator(
       (story) => `
-        <div style="margin: 3em">${story}</div>
+        <div style="margin: 1em">${story}</div>
       `
     )
   ]
@@ -46,5 +47,8 @@ const InstructionShell: Story<PureInstructionsShellComponent> = (args: PureInstr
 
 export const InstructionsShell = InstructionShell.bind({})
 InstructionsShell.args = {
-  data: []
+  vm: {
+    tableType: 'LETTINGS',
+    tableData: LettingsTable.args.tableData
+  }
 }
