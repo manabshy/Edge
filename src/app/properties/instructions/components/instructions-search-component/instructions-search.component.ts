@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Input } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 
 @Component({
@@ -55,7 +55,7 @@ import { FormBuilder, FormGroup } from '@angular/forms'
 })
 export class InstructionsSearchComponent implements OnInit {
   instructionFinderForm: FormGroup
-
+@Input() suggestions: any
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
@@ -71,4 +71,7 @@ export class InstructionsSearchComponent implements OnInit {
       officeId: [0]
     })
   }
+
+  getInstructions(){}
+  suggestionSelected(e){}
 }
