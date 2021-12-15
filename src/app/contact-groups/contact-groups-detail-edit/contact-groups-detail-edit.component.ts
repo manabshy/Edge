@@ -108,6 +108,7 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   }
 
   public keepOriginalOrder = (a) => a.key
+
   constructor(
     public sharedService: SharedService,
     private messageService: MessageService,
@@ -142,7 +143,9 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
       if (newPerson) {
         this.basicPerson = JSON.parse(newPerson) as BasicPerson
       }
-      this.emailPhoneRequired = JSON.parse(params['emailPhoneRequired'])
+      if(params['emailPhoneRequired']){
+        this.emailPhoneRequired = JSON.parse(params['emailPhoneRequired'])
+      }
       this.addNewEntityToComplianceChecks = params['addNewEntityToComplianceChecks'] === 'true' ? true : false
     })
     this.setupEditForm()
@@ -572,7 +575,7 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   }
 
   savePerson(otherPersonToAdd) {
-    
+    console.log('savePerson... saving')
     this.errorMessage = null
     this.removeOthers()
     this.logValidationErrors(this.personForm, true, true)
@@ -591,8 +594,6 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
         if (!this.basicPerson) {
           this.subs.sink = this.contactGroupService.updatePerson(person).subscribe(
             (res) =>{
-              console.log('!basicPerson setting newPersonId to ', res.result.personId)
-              this.newPersonId = res.result.personId
               this.onSaveComplete(res.result, otherPersonToAdd)
               },
             (error: WedgeError) => {

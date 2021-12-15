@@ -158,6 +158,9 @@
         </li>
       </ol>
     </div>
+    <div class="p-2 mb-2" *ngIf="isNonProdEnvironment || isDev">
+      <p ><i class="fa fa-rocket"></i> {{appVersion}}</p>
+    </div>
   </aside>
 </nav>
 

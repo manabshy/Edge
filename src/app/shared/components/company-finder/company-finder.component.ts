@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
-import { Company, CompanyAutoCompleteResult } from 'src/app/contact-groups/shared/contact-group'
+import { Company, CompanyAutoCompleteResult } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { distinctUntilChanged, switchMap, tap, catchError, debounceTime } from 'rxjs/operators'
 import { Observable, EMPTY } from 'rxjs'
 

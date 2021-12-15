@@ -26,7 +26,7 @@ import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-grou
 import { FileService } from 'src/app/core/services/file.service'
 import { PeopleService } from 'src/app/core/services/people.service'
 import { CompanyService } from 'src/app/company/shared/company.service'
-import { ContactGroup } from 'src/app/contact-groups/shared/contact-group'
+import { ContactGroup } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { InfoService } from 'src/app/core/services/info.service'
 
 @Injectable({
@@ -121,7 +121,7 @@ export class ValuationFacadeService {
   }
 
   public updateLocalContactGroup(contactGroupData) {
-    // console.log('updateLocalContactGroup: contactGroupData', contactGroupData)
+    console.log('updateLocalContactGroup: contactGroupData', contactGroupData)
     this._contactGroupBs.next(contactGroupData)
   }
 

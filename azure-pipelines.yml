@@ -1,4 +1,5 @@
 # Node.js with Angular
+
 # Build a Node.js project that uses Angular.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
@@ -12,11 +13,28 @@ steps:
     versionSpec: '12.x'
   displayName: 'Install Node.js'
 
+- task: Cache@2
+  inputs:
+    key: '$(System.DefaultWorkingDirectory)/package-lock.json'
+    path: '$(System.DefaultWorkingDirectory)/node_modules'
+    cacheHitVar: 'CacheRestored'
+
+- script: |
+    npm install
+  displayName: 'npm install if !cacheRestored'
+  condition: eq(variables['CacheRestored'],'False')
+
 - script: |
     npm install -g @angular/cli
-    npm install
     ng build --prod
-  displayName: 'npm install and build'
+  displayName: 'build prod'
+
+  #👇Adds Chromatic as a step in the pipeline
+- task: CmdLine@2
+  displayName: Publish to Chromatic
+  inputs:
+    #👇Runs Chromatic with the flag to prevent pipeline failure 
+    script: npx chromatic --project-token=c163955510a4 --exit-zero-on-changes
 
 - task: PublishBuildArtifacts@1
   inputs:

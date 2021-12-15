@@ -2,9 +2,20 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
-## Development server
+## Development server(s)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+>> npm scripts in package.json:
+"start:dev": "ng serve --hmr -c=dev", 
+"start:local": "ng serve --hmr -c=local",
+"start:test": "ng serve --hmr -c=test",
+
+--hmr flag is for Hot Module Reloading. 
+-c flag points to respective configurations in angular.json file. 
+
+Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+## Full Stack Development
+Run `npm run start:local` for a dev server pointed at localhost API. You will need to ensure the baseUrl address is pointed to the correct port where Edge API project is running.
 
 ## Code scaffolding
 
@@ -43,3 +54,12 @@ Storybook also has a docs plugin that leverages these same comments to provide d
 
 ## Running scripts
 if running scripts has been disabled by admin persmissions then you may need a way of running update schematics or other dev scripts. One way around this is to run the scripts via package.json scripts block. From there you can use packages such as rimraf to remove node_modules etc etc
+
+## Releasing
+- this project follows Semantic Versioning (semver https://semver.org/) and the version number from the package.json file is displayed in the sidenav of the UI to show the user what version of the code they're on.  This helps during dev & testing to make sure we're on the version we think we should be on!
+- when creating a release that will go to either dev,test,prod then be sure to bump the version number in package.json.
+- most of the time you will be incrementing the pre-release number which comes after a hyphen on the main version you're working to get released into production.
+- for example, 4.0.0-60
+- here 4 is the major version, 0 minor, 0 patch - 60 prerelease
+- once all dev is done for a version then bump prerelease to -beta and then drop that flag when it goes to production as simply 4.0.0 (no prerelease tags)
+

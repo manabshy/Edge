@@ -5,7 +5,7 @@ import { BaseStaffMember } from 'src/app/shared/models/base-staff-member'
 import { Property } from 'src/app/property/shared/property'
 import { Office } from 'src/app/shared/models/staff-member'
 import { EdgeFile } from 'src/app/shared/models/edgeFile'
-import { BaseNote, Signer } from 'src/app/contact-groups/shared/contact-group'
+import { BaseNote, Signer } from 'src/app/contact-groups/shared/contact-group.interfaces'
 
 export interface ValuationInfo {
   reason?: string
@@ -85,7 +85,7 @@ export interface Valuation extends ValuationInfo {
 export interface eSignTermsOfBusinessDoc {
   toBLetting?: ToBDocument
   toBSale?: ToBDocument
-  dateRequestSent: Date
+  dateRequestSent?: Date
 }
 
 export interface ToBDocument {
@@ -243,4 +243,8 @@ export enum SalesAgencyTypeEnum {
 export enum LettingsAgencyTypeEnum {
   Sole = 1,
   Multi = 2
+}
+
+export interface ValuationDetailState{
+  valuationData: Valuation
 }

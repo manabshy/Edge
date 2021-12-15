@@ -11,9 +11,9 @@ import {
   Company,
   PotentialDuplicateResult,
   ContactNote
-} from '../shared/contact-group'
+} from '../shared/contact-group.interfaces'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { take, takeUntil } from 'rxjs/operators'
+import { filter, take, takeUntil, tap } from 'rxjs/operators'
 import { Subject, Observable, EMPTY } from 'rxjs'
 import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component'
 import { WedgeError, SharedService } from 'src/app/core/services/shared.service'
@@ -364,22 +364,28 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   getNewlyAddedPerson() {
-    this.contactGroupService.newPerson$.pipe(takeUntil(this.destroy)).subscribe((person) => {
-      console.log('getNewlyAddedPerson: ', person)
-      if (person) {
-        person.isNewPerson = true
-        this.showDuplicateChecker = false
+    this.contactGroupService.newPerson$
+      .pipe(
+        filter((newPerson) => !!newPerson),
+        tap((person) => console.log('adding new person to contact group: ', person), takeUntil(this.destroy))
+      )
+      .subscribe((person) => {
+        if (person) {
+          console.log('🚧🚧🚧🚧🚧🚧 new person being added', person)
+          person.isNewPerson = true
+          this.showDuplicateChecker = false
 
-        if ((this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) || this.isExistingCompany) {
-          this.contactGroupDetails?.contactPeople?.push(person)
-          this.storeContactPeople(this.contactGroupDetails.contactPeople)
-        } else {
-          const people: Person[] = []
-          people.push(person)
-          this.storeContactPeople(people)
+          if ((this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) || this.isExistingCompany) {
+            this.contactGroupDetails?.contactPeople?.push(person)
+            this.storeContactPeople(this.contactGroupDetails.contactPeople)
+          } else {
+            const people: Person[] = []
+            people.push(person)
+            this.storeContactPeople(people)
+          }
+          this.contactGroupService.getAddedPerson(null)
         }
-      }
-    })
+      })
   }
 
   getNewlyAddedCompany() {
@@ -404,39 +410,59 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   getContactGroupById(contactGroupId: number) {
-    const contactPeople = this.getContactPeopleFromStorage()
-    this.contactGroupService.getContactGroupById(contactGroupId, true).subscribe((data) => {
-      console.log('contactGroupDetails: ', data)
-      this.contactGroupDetails = data
-      if (contactPeople?.length) {
-        this.pendingChanges = true
-        if (this.contactGroupDetails.contactPeople && this.contactGroupDetails.contactPeople.length > 0)
-          this.contactGroupDetails.contactPeople = [...this.contactGroupDetails.contactPeople, ...contactPeople]
-        else {
-          this.contactGroupDetails.contactPeople = [...contactPeople]
+    console.log('🚧 getContactGroupById: ', contactGroupId)
+    const contactPeopleFromStorage = this.getContactPeopleFromStorage()
+    this.contactGroupService
+      .getContactGroupById(contactGroupId, true)
+
+      .subscribe((data) => {
+        this.contactGroupDetails = data
+        if (contactPeopleFromStorage?.length) {
+          this.pendingChanges = true
+          if (this.contactGroupDetails.contactPeople && this.contactGroupDetails.contactPeople.length > 0) {
+            console.log(
+              '🚧 merging contact people:  this.contactGroupDetails.contactPeople ',
+              this.contactGroupDetails.contactPeople
+            )
+            console.log('🚧 merging contact people:  contactPeopleFromStorage ', contactPeopleFromStorage)
+            this.contactGroupDetails.contactPeople = this.mergeDedupe(
+              this.contactGroupDetails.contactPeople,
+              contactPeopleFromStorage
+            )
+          } else {
+            this.contactGroupDetails.contactPeople = [...contactPeopleFromStorage]
+          }
+          console.log(
+            '🚧',
+            this.contactGroupDetails.contactPeople,
+            'new group from merged with stroage',
+            contactPeopleFromStorage,
+            'from storage'
+          )
         }
-        console.log(
-          this.contactGroupDetails.contactPeople,
-          'new group from merged with stroage',
-          contactPeople,
-          'from storage'
-        )
-      }
-      this.setImportantNotes()
-      this.initialContactGroupLength = this.contactGroupDetails.contactPeople.length
-      console.log('contact details', this.contactGroupDetails)
+        this.setImportantNotes()
+        this.initialContactGroupLength = this.contactGroupDetails.contactPeople.length
+        console.log('contact details', this.contactGroupDetails)
 
-      this.populateFormDetails(this.contactGroupDetails)
-      this.setSalutation()
-      // this.addSelectedPeople();
-      if (this.isCloned) {
-        this.contactGroupDetails.referenceCount = 0
-        this.contactGroupDetails.contactGroupId = 0
-      }
-      this.isTypePicked = true
+        this.populateFormDetails(this.contactGroupDetails)
+        this.setSalutation()
+        // this.addSelectedPeople();
+        if (this.isCloned) {
+          this.contactGroupDetails.referenceCount = 0
+          this.contactGroupDetails.contactGroupId = 0
+        }
+        this.isTypePicked = true
 
-      this.setPageLabel()
-    })
+        this.setPageLabel()
+      })
+  }
+
+  private mergeDedupe = (arr1, arr2) => {
+    const unique = []
+    const joinedArr = arr1.concat(arr2)
+    joinedArr.map((x) => (unique.filter((a) => a.personId == x.personId).length > 0 ? null : unique.push(x)))
+    console.log('unique: ', unique)
+    return unique
   }
 
   getContactGroupFirstPerson(personId: number, isSelectedTypeCompany?: boolean) {
@@ -446,8 +472,6 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
       this.firstContactGroupPerson = data
       if (this.contactGroupId === 0) {
         if (this.contactGroupDetails) {
-          console.log('details hre...', this.contactGroupDetails)
-
           if (!isSelectedTypeCompany) {
             this.contactGroupDetails.contactType = ContactType.Individual
           }
@@ -576,8 +600,6 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   editSelectedPerson(id: number) {
-    event.stopPropagation()
-    event.preventDefault()
     this.isEditingSelectedPerson = true
     this.contactGroupBackUp()
     this._router.navigate(['../../edit'], {
@@ -881,7 +903,9 @@ export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   onSaveComplete(contactGroup: ContactGroup): void {
-    console.log('onSaveComplete: contactGroup ', contactGroup)
+    console.log('onSaveComplete: contactGroup removing items from local storage ', contactGroup)
+    localStorage.removeItem('contactPeople')
+    localStorage.removeItem('newCompany')
     this.pendingChanges = false
     this.isSubmitting = false
     this.messageService.add({

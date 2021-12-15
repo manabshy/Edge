@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Company } from 'src/app/contact-groups/shared/contact-group'
+import { Company } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { BehaviorSubject, Observable, Subject } from 'rxjs'
 import { AppConstants } from 'src/app/core/shared/app-constants'
 import { map, tap } from 'rxjs/operators'

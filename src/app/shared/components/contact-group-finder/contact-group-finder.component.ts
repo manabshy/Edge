@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { Observable, EMPTY } from 'rxjs'
 import { tap, catchError, distinctUntilChanged, switchMap, debounceTime } from 'rxjs/operators'
-import { ContactGroup, Signer } from 'src/app/contact-groups/shared/contact-group'
+import { ContactGroup, Signer } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { PeopleService } from 'src/app/core/services/people.service'
 

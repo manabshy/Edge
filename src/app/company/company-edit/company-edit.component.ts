@@ -5,7 +5,7 @@ import { SharedService, WedgeError } from 'src/app/core/services/shared.service'
 import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
-import { Company, Signer } from 'src/app/contact-groups/shared/contact-group'
+import { Company, Signer } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { CompanyService } from '../shared/company.service'
 import { debounceTime } from 'rxjs/operators'
 import { WedgeValidators } from 'src/app/shared/wedge-validators'
@@ -146,7 +146,7 @@ export class CompanyEditComponent implements OnInit {
     })
     this.existingSigner = company.signer
   }
-  
+
   populateNewCompanyDetails() {
     if (this.companyForm) {
       this.companyForm.reset()
@@ -324,6 +324,8 @@ export class CompanyEditComponent implements OnInit {
     }
     console.log('navigating to new company detail page: ', company.companyId)
     this._router.navigate(['company-centre/detail', company.companyId])
+    this._location.replaceState('company-centre/detail/' + company.companyId)
+    window.location.reload()
   }
 
   canDeactivate(): boolean {

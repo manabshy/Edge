@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment'
   styleUrls: ['./mainmenu.component.scss']
 })
 export class MainmenuComponent implements OnInit {
+  appVersion:string = environment.version
   navbarCollapsed = false
   isLoggedIn: boolean
   currentStaffMember: StaffMember
@@ -29,7 +30,8 @@ export class MainmenuComponent implements OnInit {
   canSeeCsBoard = false
   showMobileProfile: boolean
   isNonProdEnvironment: boolean
-
+  isDev = !environment.production
+  
   get isLeaderboardVisible() {
     if (this.currentStaffMember) {
       return this.currentStaffMember.dashboardMode !== ApiRole.NotApplicable

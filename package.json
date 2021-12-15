@@ -1,11 +1,14 @@
 {
   "name": "wedge",
-  "version": "4.0.0-48",
+  "version": "4.0.0-72",
   "scripts": {
     "ng": "nx",
     "start": "ng serve --hmr",
+    "start:local": "ng serve --hmr -c=local",
+    "start:dev": "ng serve --hmr -c=dev",
     "start:test": "ng serve --hmr -c=test",
     "build": "ng build",
+    "build:stats": "ng build --stats-json --source-map=false",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -19,7 +22,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "npm run docs:json && build-storybook",
     "rmrf": "rimraf node_modules",
-    "nx:affected": "nx affected --target=test"
+    "nx:affected": "nx affected --target=test",
+    "chromatic": "chromatic --exit-zero-on-changes --allow-console-errors"
   },
   "private": true,
   "dependencies": {
@@ -120,6 +124,7 @@
     "@types/node": "^12.20.33",
     "@webcomponents/custom-elements": "^1.5.0",
     "babel-loader": "^8.2.2",
+    "chromatic": "^6.2.0",
     "codelyzer": "^5.2.2",
     "cypress": "^6.8.0",
     "http-server": "^0.12.3",

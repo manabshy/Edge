@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { ContactGroupsService } from './shared/contact-groups.service'
-import { ContactGroupAutoCompleteResult } from './shared/contact-group'
+import { ContactGroupAutoCompleteResult } from './shared/contact-group.interfaces'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AppUtils } from '../core/shared/utils'
 import { FormGroup, FormBuilder } from '@angular/forms'

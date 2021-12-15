@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter, OnDestroy } from '@angular/core'
-import { ContactNote, JobTypes } from 'src/app/contact-groups/shared/contact-group'
+import { ContactNote, JobTypes } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { SharedService } from 'src/app/core/services/shared.service'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { Person } from '../models/person'
