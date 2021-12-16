@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
 @Component({
-  selector: 'app-pure-instructions-shell',
+  selector: 'app-pure-instructions-list-page-shell',
   template: `
     <div class="row">
       <app-instructions-search></app-instructions-search>
@@ -13,11 +13,11 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
     </div>
   `
 })
-export class PureInstructionsShellComponent implements OnInit {
+export class PureInstructionsListPageShellComponent implements OnInit {
   @Input() vm: any
   @Output() onNavigateToInstruction: EventEmitter<any> = new EventEmitter()
   constructor() {
-    console.log('PureInstructionsShellComponent constructor')
+    console.log('PureInstructionsListPageShellComponent constructor')
   }
 
   ngOnInit() {}
