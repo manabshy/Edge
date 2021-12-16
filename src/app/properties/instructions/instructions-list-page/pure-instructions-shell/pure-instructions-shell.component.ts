@@ -7,7 +7,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
       <app-instructions-search></app-instructions-search>
       <app-instructions-table
         [tableType]="vm.tableType"
-        [tableData]="vm.tableData"
+        [tableData]="vm.instructions"
         (navigateTo)="onNavigateToInstruction.emit($event)"
       ></app-instructions-table>
     </div>
@@ -16,7 +16,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 export class PureInstructionsShellComponent implements OnInit {
   @Input() vm: any
   @Output() onNavigateToInstruction: EventEmitter<any> = new EventEmitter()
+  
   constructor() {
+
     console.log('PureInstructionsShellComponent constructor')
   }
 

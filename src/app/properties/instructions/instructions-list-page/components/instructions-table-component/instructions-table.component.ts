@@ -57,7 +57,7 @@ import {
               <td data-title="Instruction Date">
                 <span class="cell-content">
                   <span>
-                    {{ row.instructionDate }}
+                    {{ row.instructionDate | date: 'dd/MM/yyyy' || '-' }}
                   </span>
                 </span>
               </td>

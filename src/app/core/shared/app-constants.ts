@@ -19,6 +19,9 @@ export class AppConstants {
   public static get baseValuationUrl(): string {
     return `${environment.baseUrl}/valuations`
   }
+  public static get baseInstructionUrl(): string {
+    return `${environment.baseUrl}/instructions`
+  }
   public static get esignUrl(): string {
     return `${environment.baseUrl}/esign`
   }

@@ -1,12 +1,13 @@
 import { HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ValuationRequestOption, ValuersAvailabilityOption } from './valuation'
+import { ValuationRequestOption, ValuersAvailabilityOption } from '../valuations/shared/valuation'
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper'
+import { InstructionRequestOption } from '../properties/instructions/instructions.interfaces'
 
 @Injectable({
   providedIn: 'root'
 })
-export class ValuationApiHelperService {
+export class ApiHelperService {
   public setAvailabilityQueryParams(requestOption: ValuersAvailabilityOption) {
     if (!requestOption.page) {
       requestOption.page = 1
@@ -43,7 +44,30 @@ export class ValuationApiHelperService {
         date: requestOption.date ? requestOption.date.toString() : '',
         status: requestOption.status.toString(),
         valuerId: requestOption.valuerId.toString(),
-        officeId: requestOption.officeId.toString()
+        officeId: requestOption.officeId.toString(),
+      }
+    })
+    return options
+  }
+
+  public setQueryParamsForInstructions(requestOption: InstructionRequestOption) {
+    if (!requestOption.page) {
+      requestOption.page = 1
+    }
+    if (requestOption.pageSize == null) {
+      requestOption.pageSize = 20
+    }
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper(),
+      fromObject: {
+        // searchTerm: requestOption.searchTerm,
+        // pageSize: requestOption.pageSize.toString(),
+        // page: requestOption.page.toString(),
+        // date: requestOption.date ? requestOption.date.toString() : '',
+        // status: requestOption.status.toString(),
+        // valuerId: requestOption.valuerId.toString(),
+        // officeId: requestOption.officeId.toString(),
+        DepartmentTypeId: requestOption.departmentTypeId.toString()
       }
     })
     return options
