@@ -6,6 +6,7 @@ import { InstructionsSearchComponent } from './instructions-search.component'
 import { InfoService } from 'src/app/core/services/info.service'
 import { APP_INITIALIZER } from '@angular/core'
 import { VendorsModule } from 'src/app/shared/vendors.module'
+import { within, userEvent } from '@storybook/testing-library'
 
 export default {
   title: 'Properties/Instructions/Components/InstructionsSearchComponent',
@@ -39,10 +40,15 @@ const InstructionSearch: Story<InstructionsSearchComponent> = (args: Instruction
     ]
   },
   component: InstructionsSearchComponent,
-  props: args
+  props: args,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.type(canvas.getByTestId('instructionSearch'), 'michael@chromatic.com')
+    // await userEvent.type(canvas.getByTestId('password1'), 'k32904n£#1kjad', { delay: 50 })
+    // await userEvent.type(canvas.getByTestId('password2'), 'k32904n£#1kjad', { delay: 50 })
+    await userEvent.click(canvas.getByTestId('submit'))
+  }
 })
 
 export const EmptySearch = InstructionSearch.bind({})
-InstructionSearch.args = {
-  
-}
+InstructionSearch.args = {}

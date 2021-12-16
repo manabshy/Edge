@@ -17,6 +17,7 @@ import { FormBuilder, FormGroup } from '@angular/forms'
             class="p-2"
             type="search"
             id="instructionSearch"
+            data-testid="instructionSearch"
             aria-label="Search criteria"
             (keydown.enter)="getInstructions()"
             [ngbTypeahead]="suggestions"

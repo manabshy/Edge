@@ -2,7 +2,7 @@ import { moduleMetadata, componentWrapperDecorator } from '@storybook/angular'
 import { CommonModule } from '@angular/common'
 // also exported from '@storybook/angular' if you can deal with breaking changes in 6.1
 import { Story, Meta } from '@storybook/angular/types-6-0'
-import { PureInstructionsShellComponent } from './pure-instructions-shell.component'
+import { PureInstructionsListPageShellComponent } from './pure-instructions-list-page-shell.component'
 import { InfoService } from 'src/app/core/services/info.service'
 import { APP_INITIALIZER } from '@angular/core'
 import { VendorsModule } from 'src/app/shared/vendors.module'
@@ -11,11 +11,11 @@ import { InstructionsTableComponent } from '../components/instructions-table-com
 import { LettingsTable } from '../components/instructions-table-component/instructions-table.component.stories'
 
 export default {
-  title: 'Properties/Instructions/PureInstructionsShellComponent',
-  component: PureInstructionsShellComponent,
+  title: 'Properties/Instructions/InstructionsListPage',
+  component: PureInstructionsListPageShellComponent,
   decorators: [
     moduleMetadata({
-      declarations: [PureInstructionsShellComponent, InstructionsSearchComponent, InstructionsTableComponent],
+      declarations: [PureInstructionsListPageShellComponent, InstructionsSearchComponent, InstructionsTableComponent],
       imports: [CommonModule, VendorsModule]
     }),
     componentWrapperDecorator(
@@ -30,7 +30,9 @@ function initInfo(infoService: InfoService) {
   return () => infoService.getDropdownListInfo()
 }
 
-const InstructionShell: Story<PureInstructionsShellComponent> = (args: PureInstructionsShellComponent) => ({
+const InstructionShell: Story<PureInstructionsListPageShellComponent> = (
+  args: PureInstructionsListPageShellComponent
+) => ({
   moduleMetadata: {
     providers: [
       {
@@ -41,7 +43,7 @@ const InstructionShell: Story<PureInstructionsShellComponent> = (args: PureInstr
       }
     ]
   },
-  component: PureInstructionsShellComponent,
+  component: PureInstructionsListPageShellComponent,
   props: args
 })
 

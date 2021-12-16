@@ -10,7 +10,7 @@ import { action } from '@storybook/addon-actions'
 import { InstructionStatus, InstructionViewingAndMarketingStatus } from '../../../instructions.interfaces'
 
 export default {
-  title: 'Properties/Instructions/InstructionsTableComponent',
+  title: 'Properties/Instructions/Components/InstructionsTableComponent',
   component: InstructionsTableComponent,
   excludeStories: /.*Data$/,
   decorators: [
