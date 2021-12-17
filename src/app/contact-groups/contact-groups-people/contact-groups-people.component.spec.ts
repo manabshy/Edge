@@ -8,25 +8,26 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { of } from 'rxjs';
-import { contactPersonMock } from 'src/testing/fixture-data/contact-person-data';
 import { Renderer2, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ContactGroupsAutocompleteMock } from 'src/testing/fixture-data/contact-groups-autocomplete.json';
 import { MockPerson } from 'src/testing/fixture-data/person-data.json';
 import { Person } from 'src/app/shared/models/person';
-import { contactGroupDetailsMock } from 'src/testing/fixture-data/contact-groups-details';
 import { ContactGroup } from '../shared/contact-group.interfaces';
+import { contactGroupDetailsMock } from 'src/testing/fixture-data/contactgroups-details';
+import { DialogService } from 'primeng/dynamicdialog';
+import { SharedService } from 'src/app/core/services/shared.service';
+import { CurrencyPipe } from '@angular/common';
+import { ComponentLoaderFactory } from 'ngx-bootstrap/component-loader';
+import { PositioningService } from 'ngx-bootstrap/positioning';
+import { MessageService } from 'primeng/api';
 
 describe('ContactGroupsPeopleComponent', () => {
   let component: ContactGroupsPeopleComponent;
   let fixture: ComponentFixture<ContactGroupsPeopleComponent>;
   let contactGroupsService: ContactGroupsService;
+  let sharedService;
   const contactPerson = contactGroupDetailsMock;
 
   beforeEach(waitForAsync(() => {
-    // const contactGroupsService = jasmine.createSpyObj<ContactGroupsService>(['getPerson', 'getContactGroupNotes']);
-    //  service.addCompanyContactGroup.and.returnValue(of([]));
-    // contactGroupsService.getPerson.and.returnValue(of(contactPerson));
-    // contactGroupsService.getContactGroupNotes.and.returnValue(of(contactPerson.personNotes));
     TestBed.configureTestingModule({
       declarations: [ContactGroupsPeopleComponent],
       imports: [
@@ -38,9 +39,15 @@ describe('ContactGroupsPeopleComponent', () => {
         RouterTestingModule.withRoutes([])
       ],
       providers: [
-        BsModalService,
         { provide: ToastrService, useValue: {} },
         { provide: Renderer2, useValue: {} },
+        { provide: DialogService },
+        { provide: SharedService, usevalue: sharedService },
+        { provide: BsModalService },
+        { provide: MessageService},
+        ComponentLoaderFactory,
+        PositioningService,
+        CurrencyPipe
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

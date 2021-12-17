@@ -14,7 +14,6 @@ import { PropertyFinderComponent } from 'src/app/shared/property-finder/property
 import { StaffMemberFinderComponent } from 'src/app/shared/staff-member-finder/staff-member-finder.component';
 // import { MockComponents } from 'ng-mocks';
 import { of } from 'rxjs';
-import { createStorageMapSpy } from 'src/testing/test-spies';
 import { DiaryEventService } from '../shared/diary-event.service';
 import { mockDiaryEvents } from 'src/testing/fixture-data/dairy-event-data';
 import { BreadcrumbComponent } from 'src/app/shared/breadcrumb/breadcrumb.component';
@@ -34,7 +33,6 @@ describe('AddDiaryEventComponent should', () => {
   let fixture: ComponentFixture<AddDiaryEventComponent>;
   let rootElement: DebugElement;
   let diaryEventService: DiaryEventService;
-  const storageMapSpy = createStorageMapSpy();
   const diaryEvents = (mockDiaryEvents as unknown as DiaryEvent[]);
   const mockDiaryEventService = jasmine.createSpyObj('DiaryEventService', ['getDiaryEvents', 'getDiaryEventById'])
   beforeEach(waitForAsync(() => {
@@ -81,7 +79,6 @@ describe('AddDiaryEventComponent should', () => {
     diaryEventService = TestBed.inject(DiaryEventService);
     rootElement = fixture.debugElement;
     component.eventTypes = MockDropdownListInfo.result.diaryEventTypes;
-    storageMapSpy.get.and.returnValue(of(MockDropdownListInfo));
     // mockDiaryEventService.getDiaryEvents.and.returnValue(of(mockDiaryEvents));
 
     fixture.detectChanges();
