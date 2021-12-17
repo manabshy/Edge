@@ -5,10 +5,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ValuationFacadeService } from '../shared/valuation-facade.service';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { BsModalService, BsModalRef, ModalModule } from 'ngx-bootstrap/modal';
-import { createStorageMapSpy } from 'src/testing/test-spies';
 import { of } from 'rxjs';
 import { PropertyService } from 'src/app/property/shared/property.service';
 import { By } from '@angular/platform-browser';
@@ -17,10 +15,12 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 // import { MockComponent, MockedComponent, MockRender } from 'ng-mocks';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MockVals, mockAllValuers } from 'src/testing/fixture-data/valuations-data';
-import { Valuation, Valuer } from '../shared/valuation';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { MockDropdownListInfo } from 'src/testing/fixture-data/dropdown-list-data.json';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
+import { Valuation } from 'src/app/dashboard/shared/dashboard';
+import { Valuer } from '../../shared/valuation';
+import { ValuationFacadeService } from '../../shared/valuation-facade.service';
 
 let component: ValuationDetailEditComponent;
 let fixture: ComponentFixture<ValuationDetailEditComponent>;
@@ -63,7 +63,6 @@ const tenures = [{ id: 1, value: 'Freehold' },
 { id: 3, value: 'Leasehold' }];
 
 describe('ValuationDetailEditComponent', () => {
-  const storageMapSpy = createStorageMapSpy();
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ValuationDetailEditComponent,
@@ -97,7 +96,6 @@ describe('ValuationDetailEditComponent', () => {
     fixture = TestBed.createComponent(ValuationDetailEditComponent);
     component = fixture.componentInstance;
     component.isNewValuation = true;
-    storageMapSpy.get.and.returnValue(of(MockDropdownListInfo));
     fixture.detectChanges();
     propertyService = TestBed.inject(PropertyService);
     _valuationFacadeSvc = TestBed.inject(ValuationFacadeService);
@@ -275,74 +273,6 @@ describe('ValuationDetailEditComponent', () => {
     });
 
 
-  });
-
-  describe('Component', () => {
-    /**services starts here */
-    it('should call getproperty if property id is set', fakeAsync(() => {
-      spyOn(propertyService, 'getProperty').and.returnValue(of(property));
-      component.propertyId = 5;
-      fixture.detectChanges();
-
-      component.getPropertyDetails();
-      fixture.detectChanges();
-      tick();
-
-      expect(propertyService.getProperty).toHaveBeenCalledTimes(1);
-      expect(component.property).toEqual(property);
-    }));
-
-    it('should get valuation', fakeAsync(() => {
-      spyOn(_valuationFacadeSvc, 'getValuation').and.returnValue(of(valuation));
-
-      component.getValuation(1234);
-      fixture.detectChanges();
-      tick();
-      console.log('val', component.valuation);
-
-      expect(component.valuation).toEqual(valuation);
-    }));
-
-    // utility functions
-    it('should correctly calculate weekly rent given the monthly rent', () => {
-      const expectedRent = 923.08;
-      const actualRent = component.calculateWeeklyRent(4000);
-
-      expect(+actualRent).toEqual(expectedRent);
-    });
-
-    it('should correctly calculate monthly rent given the weekly rent', () => {
-      const expectedRent = 4333.33;
-      const actualRent = component.calculateMonthlyRent(1000);
-
-      expect(+actualRent).toEqual(expectedRent);
-    });
-
-    it('should correctly set valuation type for lettings only valuation', () => {
-      component.setValuationType(valuation);
-
-      expect(component.isLettingsOnly).toEqual(true);
-    });
-
-    it('should correctly set valuation type for lettings and sales valuation', () => {
-      const salesValuer = { firstName: 'Sophie', fullName: 'Sophie Hayward', lastName: 'Hayward', staffMemberId: 2088 } as unknown as BaseStaffMember;
-      valuation.salesValuer = salesValuer;
-
-      component.setValuationType(valuation);
-
-      expect(component.isSalesAndLettings).toEqual(true);
-    });
-
-    it('should correctly set valuation type for sales only valuation', () => {
-      const salesValuer = { firstName: 'Sophie', fullName: 'Sophie Hayward', lastName: 'Hayward', staffMemberId: 2088 } as unknown as BaseStaffMember;
-      valuation.salesValuer = salesValuer;
-      valuation.lettingsValuer = null;
-      console.log({ salesValuer }, 'lettings', valuation.lettingsValuer);
-
-      component.setValuationType(valuation);
-
-      expect(component.isSalesOnly).toEqual(true);
-    });
   });
 });
 

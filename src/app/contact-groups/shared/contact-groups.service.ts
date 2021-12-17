@@ -394,6 +394,7 @@ export class ContactGroupsService {
     )
   }
 
+  // TODO: This method is no longer in use. Please delete
   addPersonNote(personNote: ContactNote): Observable<ContactNote | any> {
     if (personNote) {
       if (personNote.isImportant == null) {
@@ -403,7 +404,6 @@ export class ContactGroupsService {
         personNote.isPinned = false
       }
     }
-    // console.log('person note in service', personNote)
     const url = `${AppConstants.basePersonUrl}/${personNote.personId}/notes`
     return this.http.post<ContactNoteData>(url, personNote).pipe(
       map((response) => response.result)

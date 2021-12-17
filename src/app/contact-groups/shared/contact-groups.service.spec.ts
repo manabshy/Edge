@@ -3,15 +3,16 @@ import { HttpClientTestingModule, HttpTestingController, TestRequest  } from '@a
 
 import { ContactGroupsService } from './contact-groups.service';
 import { AppConstants } from 'src/app/core/shared/app-constants';
-import { ContactGroupsAutocompleteMock } from '../../../testing/fixture-data/contact-groups-autocomplete.json';
 import { PersonNote } from './contact-group.interfaces';
 import { NewPersonNoteMock, AddedPersonNoteMock, PersonNotesMock } from 'src/testing/fixture-data/person-note.json';
+import { doesNotReject } from 'assert';
 
 describe('ContactGroupsService should', () => {
   let httpTestingController: HttpTestingController;
   let service: ContactGroupsService;
   const baseContactGroupUrl = `https://dandg-api-wedge-dev.azurewebsites.net/v10/contactGroups`;
   const basePersonUrl = `https://dandg-api-wedge-dev.azurewebsites.net/v10/people`;
+  const addedPersonNote = <any>AddedPersonNoteMock;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -30,20 +31,25 @@ describe('ContactGroupsService should', () => {
     expect(service).toBeTruthy();
   });
 
-  it('add a person note', fakeAsync( () => {
+
+  // TODO: These tests need to be taken out as the method is no longer in use
+  xit('add a person note', () => {
     const personNote = (<PersonNote>NewPersonNoteMock);
-    const addedPersonNote = <any>AddedPersonNoteMock;
     const url = `${basePersonUrl}/${personNote.personId}/personNotes`;
     console.log('mock person note', personNote);
 
-    service.addPersonNote(personNote).subscribe()
+    service.addPersonNote(personNote).subscribe(
+      (data => {
+        console.log(data);
+      })
+    );
 
     const req: TestRequest = httpTestingController.expectOne(url);
     expect(req.request.method).toEqual('POST');
     req.flush(addedPersonNote);
-  }));
+  });
 
-  it('return person notes', fakeAsync(() => {
+  xit('return person notes', fakeAsync(() => {
     const url = `${basePersonUrl}/297426/personNotes?pageSize=10&page=1`;
     const notes = PersonNotesMock as any[];
     let response: any[];
@@ -54,19 +60,4 @@ describe('ContactGroupsService should', () => {
     tick();
     // expect(response.length).toEqual(2);
   }));
-
-  // it('return contact groups autocomplete for a person', ()=>{
-  //   const searchTerm = 'wendy younges';
-  //   const url = `${baseContactGroupUrl}/search?searchTerm=${searchTerm}`;
-  //   service.getAutocompleteContactGroups(searchTerm).subscribe();
-
-  //   const req = httpTestingController.match((request)=> {
-  //     return request.urlWithParams == `${baseContactGroupUrl}/search?searchTerm=${searchTerm}`
-  //   });
-  //   console.log('requst....', req[0])
-  //   expect(req[0].request.params);
-
-  //   // const req = httpTestingController.expectOne(url);
-  //   // req.flush({searchTerm:searchTerm});
-  // });
 });
