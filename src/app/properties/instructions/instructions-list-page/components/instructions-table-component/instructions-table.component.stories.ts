@@ -102,7 +102,7 @@ SalesTable.args = {
     },
     {
       instructionEventId: 16,
-      status: InstructionStatus.under_offer_oa,
+      status: InstructionStatus.underOfferOA,
       address: 'The Rise, Cashend Drive, Old Brompton Road, London, SW5 0ED',
       owner: 'Mrs Constance Hepworth',
       instructionDate: '01/01/2020',
@@ -181,7 +181,7 @@ LettingsTable.args = {
     },
     {
       instructionEventId: 8,
-      status: InstructionStatus.under_offer,
+      status: InstructionStatus.underOffer,
       address: 'TFF\r\n100\r\nWarriner Gardens\r\nLondon\r\nSW11\r\n4DU\r\n',
       // address: 'Flat 1, Mercury Mansions, Dryburgh Road, London, SW15 1BT',
       owner: 'Mr Matthew Thompson (Beazer Bungalows)',

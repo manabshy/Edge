@@ -148,10 +148,10 @@ export class InstructionsTableComponent {
       case InstructionStatus.instructed:
         return 'bg-gray-800'
 
-      case InstructionStatus.under_offer:
+      case InstructionStatus.underOffer:
         return 'bg-blue-400'
 
-      case InstructionStatus.under_offer_oa:
+      case InstructionStatus.underOfferOA:
         return 'bg-blue-200'
 
       case InstructionStatus.end:
