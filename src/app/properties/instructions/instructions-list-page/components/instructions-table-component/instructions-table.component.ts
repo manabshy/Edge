@@ -119,7 +119,7 @@ export class InstructionsTableComponent {
   constructor() {}
 
   setViewingAndMarketingStatusColour(status) {
-    console.log('setViewingAndMarketingStatusColour for ', status)
+    
     switch (status) {
       case InstructionViewingAndMarketingStatus.not_ready:
         return 'bg-gray-400'
@@ -136,7 +136,7 @@ export class InstructionsTableComponent {
   }
 
   setStatusColour(status) {
-    console.log('setStatusColour for ', status)
+    
     switch (status) {
       case InstructionStatus.let:
       case InstructionStatus.completed:

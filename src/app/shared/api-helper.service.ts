@@ -60,14 +60,14 @@ export class ApiHelperService {
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper(),
       fromObject: {
-        // searchTerm: requestOption.searchTerm,
+        searchTerm: requestOption.searchTerm,
+        status: requestOption.status.toString(),
+        departmentType: requestOption.departmentType.toString(),
+        dateFrom: requestOption.dateFrom ? requestOption.dateFrom.toString() : '',
         // pageSize: requestOption.pageSize.toString(),
         // page: requestOption.page.toString(),
-        // date: requestOption.date ? requestOption.date.toString() : '',
-        // status: requestOption.status.toString(),
         // valuerId: requestOption.valuerId.toString(),
         // officeId: requestOption.officeId.toString(),
-        DepartmentTypeId: requestOption.departmentTypeId.toString()
       }
     })
     return options

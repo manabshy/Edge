@@ -1,4 +1,4 @@
-import { BaseRequestOption } from "src/app/shared/models/base-request-option";
+import { BaseRequestOption } from 'src/app/shared/models/base-request-option'
 
 export enum InstructionViewingAndMarketingStatus {
   not_ready = 'Not Ready',
@@ -16,7 +16,11 @@ export enum InstructionStatus {
   end = 'End',
   exchanged = 'Exchanged',
   tom = 'TOM',
-  completed = 'Completed'
+  completed = 'Completed',
+  notSet = 'Not Set',
+  notOnMarket = 'Not on market',
+  valued = 'Valued',
+  lapsed = 'Lapsed'
 }
 
 export interface InstructionTableCell {
@@ -37,8 +41,10 @@ export interface Instruction extends InstructionTableCell {
 }
 
 export interface InstructionsStoreState {
-  tableType: InstructionsTableType,
+  tableType: InstructionsTableType
   instructions: Instruction[]
+  searchSuggestions: any[]
+  searchStats: any
 }
 
 export enum InstructionsTableType {
@@ -48,8 +54,8 @@ export enum InstructionsTableType {
 
 export interface InstructionRequestOption extends BaseRequestOption {
   status?: number[]
-  date?: string
+  dateFrom?: string
   valuerId?: number[]
   officeId?: number[]
-  departmentTypeId: number
+  departmentType: number
 }
