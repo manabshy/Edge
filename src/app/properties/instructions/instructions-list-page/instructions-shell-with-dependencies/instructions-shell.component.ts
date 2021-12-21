@@ -1,4 +1,4 @@
-import { Component, OnChanges, SimpleChanges } from '@angular/core'
+import { Component } from '@angular/core'
 import { Observable } from 'rxjs'
 import { InstructionsStoreState } from '../../instructions.interfaces'
 import { InstructionsStore } from '../../instructions.store'
@@ -20,11 +20,7 @@ export class InstructionsShellComponent  {
   constructor(
     public store: InstructionsStore    
   ) {
-    console.log('InstructionShellComponent constructor')
-    // this.store.populateSelectOptions()
     this.vm$ = this.store.instructionsVm$
   }
-
-
  
 }
