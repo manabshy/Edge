@@ -69,7 +69,7 @@ SalesTable.args = {
     },
     {
       instructionEventId: 13,
-      status: InstructionStatus.Withdrawn,
+      status: InstructionStatus.withdrawn,
       address: 'The Rise, Cashend Drive, Old Brompton Road, London, SW5 0ED',
       owner: 'Mrs Constance Hepworth',
       instructionDate: '01/01/2020',
@@ -80,7 +80,7 @@ SalesTable.args = {
     },
     {
       instructionEventId: 14,
-      status: InstructionStatus.Instructed,
+      status: InstructionStatus.instructed,
       address: 'The Rise, Cashend Drive, Old Brompton Road, London, SW5 0ED',
       owner: 'Mrs Constance Hepworth',
       instructionDate: '01/01/2020',
@@ -91,7 +91,7 @@ SalesTable.args = {
     },
     {
       instructionEventId: 15,
-      status: InstructionStatus.UnderOffer,
+      status: InstructionStatus.underOffer,
       address: 'The Rise, Cashend Drive, Old Brompton Road, London, SW5 0ED',
       owner: 'Mrs Constance Hepworth',
       instructionDate: '01/01/2020',

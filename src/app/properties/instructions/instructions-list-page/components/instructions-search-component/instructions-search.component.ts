@@ -110,7 +110,7 @@ import { InstructionsService } from '../../../instructions.service'
           </div>
         </div>
       </form>
-
+<!--
       <div>
         Search model:
         <pre>
@@ -118,13 +118,12 @@ import { InstructionsService } from '../../../instructions.service'
         </pre
         >
       </div>
-
+-->
      
     </div>
   `
 })
-export class InstructionsSearchComponent implements OnInit, OnDestroy, OnChanges {
-  // @Input() searchSuggestions$: Observable<any>
+export class InstructionsSearchComponent implements OnInit, OnDestroy {
   @Input() searchModel: any
   @Input() searchStats: any
   @Input() listerOptions: any[]
@@ -213,17 +212,10 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy, OnChanges
   }
 
   ngOnInit() {
-    console.log('listers: ', this.listerOptions)
-    console.log('offices: ', this.officeOptions)
-    console.log('statuses: ', this.statusOptions)
   }
 
   ngOnDestroy(): void {
     this.formSubscription.unsubscribe()
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.log('changes: ', changes)
   }
 
   onDateChange(d) {
@@ -237,6 +229,7 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy, OnChanges
 
   suggestionSelected(e) {}
 
+  // TODO move this out of here up into instructions-shell-component
   searchSuggestions$ = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),

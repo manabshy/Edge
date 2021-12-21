@@ -76,6 +76,7 @@ import { MenuComponent } from './components/menu/menu.component'
 
 // Vendors module
 import { VendorsModule } from './vendors.module'
+import { TableColumnSortComponent } from './components/table-col-sort/table-col-sort.component'
 
 const components = [
   BreadcrumbComponent,
@@ -131,7 +132,8 @@ const components = [
   FileListComponent,
   BigButtonComponent,
   StandAloneNoteComponent,
-  MenuComponent
+  MenuComponent,
+  TableColumnSortComponent
 ]
 const pipes = [
   RoundingPipe,

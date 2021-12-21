@@ -1,5 +1,4 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core'
-import { Observable } from 'rxjs'
+import { Component, Input, Output, EventEmitter } from '@angular/core'
 import { InstructionsStoreState } from '../../instructions.interfaces'
 
 @Component({
@@ -8,33 +7,28 @@ import { InstructionsStoreState } from '../../instructions.interfaces'
     <div class="row">
       <app-instructions-search
         [searchStats]="vm.searchStats"
+        [searchModel]="vm.searchModel"
         [listerOptions]="vm.listersForSelect"
         [statusOptions]="vm.statusesForSelect"
         [officeOptions]="vm.officesForSelect"
-        [searchModel]="vm.searchModel"
         (onGetInstructions)="onGetInstructions.emit($event)"
         (onDepartmentChanged)="onDepartmentChanged.emit($event)"
       ></app-instructions-search>
 
       <app-instructions-table
-        [tableType]="vm.tableType"
+        [tableType]="vm.searchModel.departmentType"
         [tableData]="vm.instructions"
-        (navigateTo)="onNavigateToInstruction.emit($event)"
+        [orderBy]="vm.searchModel.orderBy"
+        (onNavigateToInstruction)="onNavigateToInstruction.emit($event)"
+        (onSortClicked)="onSortClicked.emit($event)"
       ></app-instructions-table>
     </div>
   `
 })
-export class PureInstructionsListPageShellComponent implements OnChanges {
+export class PureInstructionsListPageShellComponent {
   @Input() vm: InstructionsStoreState
   @Output() onNavigateToInstruction: EventEmitter<any> = new EventEmitter()
   @Output() onGetInstructions: EventEmitter<any> = new EventEmitter()
   @Output() onDepartmentChanged: EventEmitter<any> = new EventEmitter()
-
-  constructor() {
-    console.log('PureInstructionsListPageShellComponent constructor')
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.log('changes!: ', changes)
-  }
+  @Output() onSortClicked: EventEmitter<any> = new EventEmitter()
 }

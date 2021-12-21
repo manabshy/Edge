@@ -41,15 +41,13 @@ export interface Instruction extends InstructionTableCell {
 }
 
 export interface InstructionsStoreState {
-  tableType: InstructionsTableType
   instructions: Instruction[]
   searchSuggestions: any[]
   searchStats: any
   listersForSelect: any[]
   officesForSelect: any[]
   statusesForSelect: any[]
-  searchModel?: any
-  sortColumn: string
+  searchModel: InstructionRequestOption
 }
 
 export enum InstructionsTableType {
@@ -59,10 +57,21 @@ export enum InstructionsTableType {
 }
 
 export interface InstructionRequestOption extends BaseRequestOption {
-  salesStatus?: number[]
-  lettingsStatus?: number[]
+  salesStatus?: string[]
+  lettingsStatus?: string[]
   dateFrom?: string
   valuerId?: number[]
   officeId?: number[]
-  departmentType: number
+  departmentType: string
+  orderBy: string
+}
+
+export enum SortableColumnsForInstructions {
+  PropertyAddress = 'address',
+  PropertyOwner = 'owner',
+  InstructionStatusId = 'status',
+  InstructionLister = 'lister',
+  VisibleOnWebsites = 'visibleOnWebsites',
+  SearchableOnWebsite = 'searchableOnWebsite',
+  InstructionDate = 'instructionDate'
 }

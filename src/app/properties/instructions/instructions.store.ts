@@ -7,21 +7,23 @@
  */
 import { Injectable } from '@angular/core'
 import { ComponentStore } from '@ngrx/component-store'
-import { Observable } from 'rxjs'
-import { tap, map } from 'rxjs/operators'
-import { InstructionsStoreState, InstructionsTableType } from './instructions.interfaces'
+import { Observable, of } from 'rxjs'
+import { tap, map, mergeMap, take, distinctUntilChanged } from 'rxjs/operators'
+import { InstructionRequestOption, InstructionsStoreState, InstructionsTableType } from './instructions.interfaces'
 import { InstructionsService } from './instructions.service'
 import { splitSalesAndLettingsStatuses } from './instructions.store.helper-functions'
 
 const defaultState: InstructionsStoreState = {
-  tableType: InstructionsTableType.SALES_AND_LETTINGS,
   instructions: [],
   searchSuggestions: [],
   statusesForSelect: [],
   listersForSelect: [],
   officesForSelect: [],
-  searchModel: {},
-  sortColumn: '',
+  searchModel: {
+    searchTerm: '',
+    departmentType: InstructionsTableType.SALES_AND_LETTINGS,
+    orderBy: '-instructionDate'
+  },
   searchStats: {
     queryCount: true,
     pageLength: 21,
@@ -32,7 +34,6 @@ const defaultState: InstructionsStoreState = {
 @Injectable()
 export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
   // Observable slices of store state
-  readonly tableType$: Observable<any> = this.select(({ tableType }) => tableType)
   readonly instructions$: Observable<any> = this.select(({ instructions }) => instructions)
   readonly searchSuggestions$: Observable<any> = this.select(({ searchSuggestions }) => searchSuggestions)
   readonly searchStats$: Observable<any> = this.select(({ searchStats }) => searchStats)
@@ -48,15 +49,13 @@ export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
    * @description data streams to serve the view model for compliance checks components
    */
   public instructionsVm$: Observable<any> = this.select(
-    this.tableType$,
     this.instructions$,
     this.searchStats$,
     this.statusesForSelect$,
     this.listersForSelect$,
     this.officesForSelect$,
     this.searchModel$,
-    (tableType, instructions, searchStats, statusesForSelect, listersForSelect, officesForSelect, searchModel) => ({
-      tableType,
+    (instructions, searchStats, statusesForSelect, listersForSelect, officesForSelect, searchModel) => ({
       instructions,
       searchStats,
       statusesForSelect,
@@ -82,15 +81,16 @@ export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
   }
 
   public getInstructions = (request) => {
-    const adjustedRequest = splitSalesAndLettingsStatuses(request)
-    this.patchState({
-      searchModel: adjustedRequest
-    })
-    this._instructionsSvc
-      .getInstructions(adjustedRequest)
+    this.searchModel$
       .pipe(
+        mergeMap((searchModel) => {
+          request.orderBy = searchModel.orderBy
+          const adjustedRequest: InstructionRequestOption = splitSalesAndLettingsStatuses(request)
+          console.log('adjustedRequest: ', adjustedRequest)
+          return this._instructionsSvc.getInstructions(adjustedRequest)
+        }),
         tap((data) => console.log('instruction data back from server ', data)),
-        map((data) =>
+        map((data) => {
           this.patchState({
             instructions: data,
             searchStats: {
@@ -99,14 +99,25 @@ export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
               queryResultCount: data[0].queryResultCount
             }
           })
-        )
+        }),
+        take(1)
       )
       .subscribe()
   }
 
-  public onDepartmentChanged = (val) => {
-    this.patchState({
-      tableType: val
-    })
-  }
+  readonly onDepartmentChanged = this.updater((state, department: string) => ({
+    ...state,
+    searchModel: {
+      ...state.searchModel,
+      departmentType: department
+    }
+  }))
+
+  readonly onSortColumnClick = this.updater((state, columnName: string) => ({
+    ...state,
+    searchModel: {
+      ...state.searchModel,
+      orderBy: columnName === state.searchModel.orderBy ? '-' + columnName : columnName
+    }
+  }))
 }

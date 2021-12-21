@@ -1,9 +1,10 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
+import { Component, Input, Output, EventEmitter } from '@angular/core'
 import {
   InstructionViewingAndMarketingStatus,
   InstructionStatus,
   InstructionTableCell,
-  InstructionsTableType
+  InstructionsTableType,
+  SortableColumnsForInstructions
 } from '../../../instructions.interfaces'
 
 @Component({
@@ -14,23 +15,62 @@ import {
         <table class="border border-red-400">
           <thead>
             <tr>
-              <th>Status</th>
-              <th>Address</th>
-              <th>Owner</th>
-              <th>Instruction Date</th>
-              <th>Lister</th>
-              <th *ngIf="tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS">Long Let</th>
-              <th *ngIf="tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS">Short Let</th>
-              <th *ngIf="tableType === instructionsTableType.SALES || tableType === instructionsTableType.SALES_AND_LETTINGS">Marketing Price</th>
-              <th>Viewing</th>
-              <th>Marketing</th>
+              <th (click)="onSortClicked.emit('status')" class="cursor-pointer">
+                Status
+                <app-table-col-sort [orderBy]="orderBy" [columnId]="'SearchableOnWebsite'"></app-table-col-sort>
+              </th>
+              <th (click)="onSortClicked.emit('address')" class="cursor-pointer">
+                Address
+                <app-table-col-sort [orderBy]="orderBy" [columnId]="'PropertyAddress'"></app-table-col-sort>
+              </th>
+              <th (click)="onSortClicked.emit('owner')" class="cursor-pointer">
+                Owner
+                <app-table-col-sort [orderBy]="orderBy" [columnId]="'PropertyOwner'"></app-table-col-sort>
+              </th>
+              <th (click)="onSortClicked.emit('instructionDate')" class="cursor-pointer">
+                <span>Instruction Date</span>
+                <app-table-col-sort [orderBy]="orderBy" [columnId]="'InstructionDate'"></app-table-col-sort>
+              </th>
+              <th (click)="onSortClicked.emit('lister')" class="cursor-pointer">
+                Lister
+                <app-table-col-sort [orderBy]="orderBy" [columnId]="'InstructionLister'"></app-table-col-sort>
+              </th>
+              <th
+                (click)="onSortClicked.emit('longLet')"
+                class="cursor-pointer"
+                *ngIf="
+                  tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS
+                "
+              >
+                Long Let
+              </th>
+              <th
+                (click)="onSortClicked.emit('shortLet')"
+                class="cursor-pointer"
+                *ngIf="
+                  tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS
+                "
+              >
+                Short Let
+              </th>
+              <th
+                (click)="onSortClicked.emit('marketingPrice')"
+                class="cursor-pointer"
+                *ngIf="
+                  tableType === instructionsTableType.SALES || tableType === instructionsTableType.SALES_AND_LETTINGS
+                "
+              >
+                Marketing Price
+              </th>
+              <th (click)="onSortClicked.emit('viewingStatus')" class="cursor-pointer">Viewing</th>
+              <th (click)="onSortClicked.emit('marketingStatus')" class="cursor-pointer">Marketing</th>
             </tr>
           </thead>
 
           <tbody>
             <tr
               *ngFor="let row of tableData"
-              (click)="navigateTo(val)"
+              (click)="onNavigateToInstruction.emit(row)"
               data-cy="instructionsList"
               class="cursor-pointer"
             >
@@ -69,27 +109,39 @@ import {
                   </span>
                 </span>
               </td>
-              <td data-title="LongLet" *ngIf="tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS">
+              <td
+                data-title="LongLet"
+                *ngIf="
+                  tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS
+                "
+              >
                 <span class="cell-content">
                   <span>
-                    {{ row.longLetPrice |
-                      currency:'GBP':'symbol':'1.0-0' || '-' }}
+                    {{ row.longLetPrice | currency: 'GBP':'symbol':'1.0-0' || '-' }}
                   </span>
                 </span>
               </td>
-              <td data-title="ShortLet" *ngIf="tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS">
+              <td
+                data-title="ShortLet"
+                *ngIf="
+                  tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS
+                "
+              >
                 <span class="cell-content">
                   <span>
-                    {{ row.shortLetPrice |
-                      currency:'GBP':'symbol':'1.0-0' }}
+                    {{ row.shortLetPrice | currency: 'GBP':'symbol':'1.0-0' }}
                   </span>
                 </span>
               </td>
-              <td data-title="MarketingPrice" *ngIf="tableType === instructionsTableType.SALES || tableType === instructionsTableType.SALES_AND_LETTINGS">
+              <td
+                data-title="MarketingPrice"
+                *ngIf="
+                  tableType === instructionsTableType.SALES || tableType === instructionsTableType.SALES_AND_LETTINGS
+                "
+              >
                 <span class="cell-content">
                   <span>
-                    {{ row.marketingPrice |
-                      currency:'GBP':'symbol':'1.0-0' || '-' }}
+                    {{ row.marketingPrice | currency: 'GBP':'symbol':'1.0-0' || '-' }}
                   </span>
                 </span>
               </td>
@@ -116,21 +168,17 @@ import {
     </div>
   `
 })
-export class InstructionsTableComponent implements OnInit {
+export class InstructionsTableComponent {
   @Input() tableType: string = InstructionsTableType.SALES_AND_LETTINGS
+  @Input() orderBy: string
   @Input() tableData: InstructionTableCell[] = []
-  @Output() navigateTo: EventEmitter<any> = new EventEmitter()
-  
+  @Output() onSortClicked: EventEmitter<any> = new EventEmitter()
+  @Output() onNavigateToInstruction: EventEmitter<any> = new EventEmitter()
+
   instructionsTableType = InstructionsTableType
-
-  ngOnInit() {
-    console.log('tableType: ', this.tableType)
-  }
-
-  constructor() {}
+  sortableColumnHeaders = SortableColumnsForInstructions
 
   setViewingAndMarketingStatusColour(status) {
-    
     switch (status) {
       case InstructionViewingAndMarketingStatus.not_ready:
         return 'bg-gray-400'
@@ -147,7 +195,6 @@ export class InstructionsTableComponent implements OnInit {
   }
 
   setStatusColour(status) {
-    
     switch (status) {
       case InstructionStatus.let:
       case InstructionStatus.completed:

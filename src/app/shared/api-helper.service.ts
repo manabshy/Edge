@@ -65,10 +65,11 @@ export class ApiHelperService {
         lettingsStatus: requestOption.lettingsStatus.toString(),
         departmentType: requestOption.departmentType.toString(),
         dateFrom: requestOption.dateFrom ? requestOption.dateFrom.toString() : '',
-        // pageSize: requestOption.pageSize.toString(),
-        // page: requestOption.page.toString(),
-        // valuerId: requestOption.valuerId.toString(),
-        // officeId: requestOption.officeId.toString(),
+        pageSize: requestOption.pageSize.toString(),
+        page: requestOption.page.toString(),
+        valuerId: requestOption.valuerId ? requestOption.valuerId.toString() : '',
+        officeId: requestOption.officeId ? requestOption.officeId.toString() : '',
+        orderBy: requestOption.orderBy.toString()
       }
     })
     return options
