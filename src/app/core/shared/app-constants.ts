@@ -64,6 +64,9 @@ export class AppConstants {
   public static get baseEmailUrl(): string {
     return `${environment.baseUrl}/email`
   }
+  public static get baseRewardsHubUrl(): string {
+    return `${environment.baseUrl}/rewards-hub`
+  }
   public static get redirectUri(): string {
     return `${environment.baseRedirectUri}/auth-callback`
   }

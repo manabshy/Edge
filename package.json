@@ -88,7 +88,8 @@
     "subsink": "^1.0.2",
     "tailwindcss": "^2.2.19",
     "tslib": "^1.14.1",
-    "zone.js": "^0.11.4"
+    "zone.js": "^0.11.4",
+    "@aspnet/signalr": "^1.0.4"
   },
   "devDependencies": {
     "@angular/cli": "^11.2.4",

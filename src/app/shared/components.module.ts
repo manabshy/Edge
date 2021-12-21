@@ -73,6 +73,7 @@ import { FileListComponent } from './components/file-list/file-list.component'
 import { BigButtonComponent } from './components/big-button/big-button.component'
 import { StandAloneNoteComponent } from './notes/standalone-note.component'
 import { MenuComponent } from './components/menu/menu.component'
+import { SharedRewardsComponent } from './rewards/rewards.compoment'
 
 // Vendors module
 import { VendorsModule } from './vendors.module'
@@ -133,7 +134,8 @@ const components = [
   BigButtonComponent,
   StandAloneNoteComponent,
   MenuComponent,
-  TableColumnSortComponent
+  TableColumnSortComponent,
+  SharedRewardsComponent
 ]
 const pipes = [
   RoundingPipe,
