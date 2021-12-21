@@ -1,7 +1,7 @@
 <ngx-loading-bar [color]="'#4DA685'" [height]="'5px'"></ngx-loading-bar>
 <div class="wrapper" #appContainer>
   <app-mainmenu></app-mainmenu>
-  <div class="body" [ngClass]="{'fade-in': isFading}">
+  <div class="flex flex-col w-full" [ngClass]="{'fade-in': isFading}">
     <app-header></app-header>
     <div toastContainer></div>
     <router-outlet></router-outlet>
