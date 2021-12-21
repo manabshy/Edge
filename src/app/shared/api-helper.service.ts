@@ -61,7 +61,8 @@ export class ApiHelperService {
       encoder: new CustomQueryEncoderHelper(),
       fromObject: {
         searchTerm: requestOption.searchTerm,
-        status: requestOption.status.toString(),
+        salesStatus: requestOption.salesStatus.toString(),
+        lettingsStatus: requestOption.lettingsStatus.toString(),
         departmentType: requestOption.departmentType.toString(),
         dateFrom: requestOption.dateFrom ? requestOption.dateFrom.toString() : '',
         // pageSize: requestOption.pageSize.toString(),

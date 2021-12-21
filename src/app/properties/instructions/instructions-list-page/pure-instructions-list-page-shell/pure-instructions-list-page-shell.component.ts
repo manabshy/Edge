@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core'
-// [searchSuggestions]="searchSuggestions$"
+import { Component, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core'
+import { Observable } from 'rxjs'
+import { InstructionsStoreState } from '../../instructions.interfaces'
 
 @Component({
   selector: 'app-pure-instructions-list-page-shell',
@@ -7,11 +8,14 @@ import { Component, Input, Output, EventEmitter } from '@angular/core'
     <div class="row">
       <app-instructions-search
         [searchStats]="vm.searchStats"
-        [valuerOptions]="valuerOptions"
-        [statusOptions]="statusOptions"
-        [officeOptions]="officeOptions"
+        [listerOptions]="vm.listersForSelect"
+        [statusOptions]="vm.statusesForSelect"
+        [officeOptions]="vm.officesForSelect"
+        [searchModel]="vm.searchModel"
         (onGetInstructions)="onGetInstructions.emit($event)"
+        (onDepartmentChanged)="onDepartmentChanged.emit($event)"
       ></app-instructions-search>
+
       <app-instructions-table
         [tableType]="vm.tableType"
         [tableData]="vm.instructions"
@@ -20,17 +24,17 @@ import { Component, Input, Output, EventEmitter } from '@angular/core'
     </div>
   `
 })
-export class PureInstructionsListPageShellComponent {
-  @Input() vm: any
-  @Input() valuerOptions: any[]
-  @Input() statusOptions: any[]
-  @Input() officeOptions: any[]
-  // @Input() searchSuggestions$: Observable<any>
-
+export class PureInstructionsListPageShellComponent implements OnChanges {
+  @Input() vm: InstructionsStoreState
   @Output() onNavigateToInstruction: EventEmitter<any> = new EventEmitter()
   @Output() onGetInstructions: EventEmitter<any> = new EventEmitter()
+  @Output() onDepartmentChanged: EventEmitter<any> = new EventEmitter()
 
   constructor() {
     console.log('PureInstructionsListPageShellComponent constructor')
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('changes!: ', changes)
   }
 }

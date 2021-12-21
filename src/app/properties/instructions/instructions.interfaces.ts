@@ -12,13 +12,13 @@ export enum InstructionStatus {
   withdrawn = 'Withdrawn',
   instructed = 'Instructed',
   underOffer = 'Under Offer',
-  underOfferOA = 'Under Offer OA',
+  underOfferOtherAgent = 'Under Offer Other Agent',
   end = 'End',
   exchanged = 'Exchanged',
   tom = 'TOM',
   completed = 'Completed',
   notSet = 'Not Set',
-  notOnMarket = 'Not on market',
+  notOnMarket = 'Not On Market',
   valued = 'Valued',
   lapsed = 'Lapsed'
 }
@@ -45,15 +45,21 @@ export interface InstructionsStoreState {
   instructions: Instruction[]
   searchSuggestions: any[]
   searchStats: any
+  listersForSelect: any[]
+  officesForSelect: any[]
+  statusesForSelect: any[]
+  searchModel?: any
 }
 
 export enum InstructionsTableType {
-  SALES = 'sales',
-  LETTINGS = 'lettings'
+  SALES = 'salesInstruction',
+  LETTINGS = 'lettingsInstruction',
+  SALES_AND_LETTINGS = 'salesAndLettings'
 }
 
 export interface InstructionRequestOption extends BaseRequestOption {
-  status?: number[]
+  salesStatus?: number[]
+  lettingsStatus?: number[]
   dateFrom?: string
   valuerId?: number[]
   officeId?: number[]

@@ -1,8 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core'
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
 import {
   InstructionViewingAndMarketingStatus,
   InstructionStatus,
-  InstructionTableCell
+  InstructionTableCell,
+  InstructionsTableType
 } from '../../../instructions.interfaces'
 
 @Component({
@@ -18,11 +19,11 @@ import {
               <th>Owner</th>
               <th>Instruction Date</th>
               <th>Lister</th>
-              <th *ngIf="tableType === 'SALES'">Marketing Price</th>
-              <th *ngIf="tableType === 'LETTINGS'">Long Let</th>
-              <th *ngIf="tableType === 'LETTINGS'">Short Let</th>
-              <th>Viewing Status</th>
-              <th>Marketing Status</th>
+              <th *ngIf="tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS">Long Let</th>
+              <th *ngIf="tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS">Short Let</th>
+              <th *ngIf="tableType === instructionsTableType.SALES || tableType === instructionsTableType.SALES_AND_LETTINGS">Marketing Price</th>
+              <th>Viewing</th>
+              <th>Marketing</th>
             </tr>
           </thead>
 
@@ -68,24 +69,27 @@ import {
                   </span>
                 </span>
               </td>
-              <td data-title="LongLet" *ngIf="tableType === 'LETTINGS'">
+              <td data-title="LongLet" *ngIf="tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS">
                 <span class="cell-content">
                   <span>
-                    {{ row.longLetPrice || '-' }}
+                    {{ row.longLetPrice |
+                      currency:'GBP':'symbol':'1.0-0' || '-' }}
                   </span>
                 </span>
               </td>
-              <td data-title="ShortLet" *ngIf="tableType === 'LETTINGS'">
+              <td data-title="ShortLet" *ngIf="tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS">
                 <span class="cell-content">
                   <span>
-                    {{ row.shortLetPrice }}
+                    {{ row.shortLetPrice |
+                      currency:'GBP':'symbol':'1.0-0' }}
                   </span>
                 </span>
               </td>
-              <td data-title="MarketingPrice" *ngIf="tableType === 'SALES'">
+              <td data-title="MarketingPrice" *ngIf="tableType === instructionsTableType.SALES || tableType === instructionsTableType.SALES_AND_LETTINGS">
                 <span class="cell-content">
                   <span>
-                    {{ row.marketingPrice || '-' }}
+                    {{ row.marketingPrice |
+                      currency:'GBP':'symbol':'1.0-0' || '-' }}
                   </span>
                 </span>
               </td>
@@ -112,10 +116,17 @@ import {
     </div>
   `
 })
-export class InstructionsTableComponent {
-  @Input() tableType: string = 'LETTINGS'
+export class InstructionsTableComponent implements OnInit {
+  @Input() tableType: string = InstructionsTableType.SALES_AND_LETTINGS
   @Input() tableData: InstructionTableCell[] = []
   @Output() navigateTo: EventEmitter<any> = new EventEmitter()
+  
+  instructionsTableType = InstructionsTableType
+
+  ngOnInit() {
+    console.log('tableType: ', this.tableType)
+  }
+
   constructor() {}
 
   setViewingAndMarketingStatusColour(status) {
@@ -151,7 +162,7 @@ export class InstructionsTableComponent {
       case InstructionStatus.underOffer:
         return 'bg-blue-400'
 
-      case InstructionStatus.underOfferOA:
+      case InstructionStatus.underOfferOtherAgent:
         return 'bg-blue-200'
 
       case InstructionStatus.end:

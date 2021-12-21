@@ -4,18 +4,43 @@ import { Observable, of } from 'rxjs'
 import { map, tap } from 'rxjs/operators'
 import { AppConstants } from 'src/app/core/shared/app-constants'
 import { ApiHelperService } from 'src/app/shared/api-helper.service'
-
+import { StaffMemberService } from 'src/app/core/services/staff-member.service'
+import { OfficeService } from 'src/app/core/services/office.service'
 import {
   InstructionRequestOption,
   InstructionStatus,
   InstructionViewingAndMarketingStatus
 } from './instructions.interfaces'
+import { StorageMap } from '@ngx-pwa/local-storage'
 
 @Injectable({
   providedIn: 'root'
 })
 export class InstructionsService {
-  constructor(private http: HttpClient, private helperSvc: ApiHelperService) {}
+  instructionStatus = InstructionStatus
+
+  selectControlOptions = {
+    statusesForSelect: [],
+    officesForSelect: [],
+    listersForSelect: []
+  }
+
+  constructor(
+    private http: HttpClient,
+    private helperSvc: ApiHelperService,
+    private storage: StorageMap,
+    private staffMemberService: StaffMemberService,
+    private officeService: OfficeService
+  ) {}
+
+  async getSelectControlOptions() {
+    console.log('getSelectControlOptions start')
+    this.getStatuses()
+    await this.getOffices()
+    await this.getListers()
+    console.log('getSelectControlOptions end')
+    return await Promise.resolve(this.selectControlOptions)
+  }
 
   public getInstructions(request: InstructionRequestOption): Observable<any[] | any> {
     const options = this.helperSvc.setQueryParamsForInstructions(request)
@@ -24,19 +49,6 @@ export class InstructionsService {
     return this.http.get<any>(url, { params: options }).pipe(
       map((response) =>
         response.result.map((i) => {
-          /***
-           * mapping API response to client model
-           *instructionDate: "2009-10-12T12:36:17.11+01:00"
-            instructionLister: "Emma Seckel"
-            instructionStatus: "End"
-            longLetPrice: 275
-            marketingPrice: null
-            propertyAddress: "C, 47, Rosenau Road, London, SW11 4QX"
-            propertyEventId: 33237
-            propertyOwner: "Mr Colm McDermott"
-            queryResultCount: 39369
-            shortLetPrice: 0
-           */
           return {
             ...i,
             instructionDate: new Date(i.instructionDate),
@@ -61,5 +73,50 @@ export class InstructionsService {
         headers: { ignoreLoadingBar: '' }
       })
       .pipe(map((response) => response.result))
+  }
+
+  private getStatuses() {
+    this.selectControlOptions.statusesForSelect = Object.keys(this.instructionStatus).map((statusVal, ix) => {
+      return {
+        id: statusVal,
+        value: this.instructionStatus[statusVal]
+      }
+    })
+  }
+
+  private getOffices() {
+    console.log('getOffices...')
+    return Promise.resolve(
+      this.officeService
+        .getOffices()
+        .toPromise()
+        .then((res) => {
+          console.log('getOffices...res ', res)
+          this.selectControlOptions.officesForSelect = res.result.map((office) => {
+            return {
+              id: office.officeId,
+              value: office.name
+            }
+          })
+        })
+    )
+  }
+
+  private getListers() {
+    console.log('getListers...')
+    return Promise.resolve(
+      this.staffMemberService
+        .getActiveStaffMembers()
+        .toPromise()
+        .then((res) => {
+          console.log('getListers got from API...', res)
+          this.selectControlOptions.listersForSelect = res.result.map((lister) => {
+            return {
+              id: lister.staffMemberId,
+              value: lister.fullName
+            }
+          })
+        })
+    )
   }
 }

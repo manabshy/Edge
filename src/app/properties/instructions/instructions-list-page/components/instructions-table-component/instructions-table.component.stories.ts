@@ -102,7 +102,7 @@ SalesTable.args = {
     },
     {
       instructionEventId: 16,
-      status: InstructionStatus.underOfferOA,
+      status: InstructionStatus.underOfferOtherAgent,
       address: 'The Rise, Cashend Drive, Old Brompton Road, London, SW5 0ED',
       owner: 'Mrs Constance Hepworth',
       instructionDate: '01/01/2020',

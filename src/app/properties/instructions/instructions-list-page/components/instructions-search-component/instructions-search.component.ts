@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { EMPTY, Observable, Subscription } from 'rxjs'
 import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators'
-import { InstructionStatus } from '../../../instructions.interfaces'
+import { InstructionStatus, InstructionsTableType } from '../../../instructions.interfaces'
 import { format } from 'date-fns'
 import { InstructionsService } from '../../../instructions.service'
 
@@ -67,12 +67,12 @@ import { InstructionsService } from '../../../instructions.service'
 
           <fieldset class="mb-3 w-full">
             <app-generic-multi-select-control
-              [label]="'Valuer'"
-              [placeholder]="'Select valuer'"
-              [options]="valuerOptions"
-              [cyProp]="'valStatus'"
-              (onSelectionChange)="selectionControlChange('valuerId', $event)"
-              [model]="selectControlModels.valuerId"
+              [label]="'Lister'"
+              [placeholder]="'Select lister'"
+              [options]="listerOptions"
+              [cyProp]="'listerOptions'"
+              (onSelectionChange)="selectionControlChange('listerId', $event)"
+              [model]="selectControlModels.listerId"
             ></app-generic-multi-select-control>
           </fieldset>
 
@@ -81,23 +81,21 @@ import { InstructionsService } from '../../../instructions.service'
               [label]="'Office'"
               [placeholder]="'Select office'"
               [options]="officeOptions"
-              [cyProp]="'valStatus'"
+              [cyProp]="'officeOptions'"
               (onSelectionChange)="selectionControlChange('officeId', $event)"
               [model]="selectControlModels.officeId"
             ></app-generic-multi-select-control>
           </fieldset>
 
           <fieldset class="mb-3 w-full">
-            <label for="Department">Department</label>
-            <p-dropdown
-              [disabled]="false"
+            <app-generic-multi-select-control
+              [label]="'Department'"
+              [placeholder]="'Select department'"
               [options]="departmentOptions"
-              formControlName="departmentType"
-              optionLabel="label"
-              optionValue="value"
-              [filter]="false"
-              data-cy="departmentType"
-            ></p-dropdown>
+              [cyProp]="'departmentOptions'"
+              (onSelectionChange)="selectionControlChange('departmentId', $event)"
+              [model]="selectControlModels.departmentId"
+            ></app-generic-multi-select-control>
           </fieldset>
 
           <div class="flex">
@@ -112,16 +110,28 @@ import { InstructionsService } from '../../../instructions.service'
           </div>
         </div>
       </form>
+
+      <div>
+        Search model:
+        <pre>
+          {{ searchModel | json }}
+        </pre
+        >
+      </div>
+
+     
     </div>
   `
 })
-export class InstructionsSearchComponent implements OnInit, OnDestroy {
+export class InstructionsSearchComponent implements OnInit, OnDestroy, OnChanges {
   // @Input() searchSuggestions$: Observable<any>
+  @Input() searchModel: any
   @Input() searchStats: any
-  @Input() valuerOptions: any[]
+  @Input() listerOptions: any[]
   @Input() statusOptions: any[]
   @Input() officeOptions: any[]
   @Output() onGetInstructions: EventEmitter<any> = new EventEmitter()
+  @Output() onDepartmentChanged: EventEmitter<any> = new EventEmitter()
 
   instructionStatus = InstructionStatus
 
@@ -129,7 +139,7 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
     searchTerm: '',
     dateFrom: '',
     status: '',
-    valuerId: '',
+    listerId: '',
     officeId: '',
     departmentType: ''
   }
@@ -137,12 +147,12 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
   // dropdown options. All others passed in via Input
   departmentOptions: any[] = [
     {
-      label: 'Lettings',
-      value: 'LettingsInstruction'
+      value: 'Lettings',
+      id: InstructionsTableType.LETTINGS
     },
     {
-      label: 'Sales',
-      value: 'SalesInstruction'
+      value: 'Sales',
+      id: InstructionsTableType.SALES
     }
   ]
 
@@ -152,15 +162,16 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
     searchTerm: ['', Validators.nullValidator],
     dateFrom: ['', Validators.nullValidator],
     statusId: ['', Validators.nullValidator],
-    valuerId: [0, Validators.nullValidator],
+    listerId: [0, Validators.nullValidator],
     officeId: [0, Validators.nullValidator],
-    departmentType: ['LettingsInstruction', Validators.nullValidator]
+    departmentType: [InstructionsTableType.SALES_AND_LETTINGS, Validators.nullValidator]
   })
 
   selectControlModels = {
     status: [],
-    valuerId: [],
-    officeId: []
+    listerId: [],
+    officeId: [],
+    departmentId: []
   }
 
   queryResultCount: number
@@ -170,16 +181,27 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
       [fieldId]: ev
     })
     this.selectControlModels[fieldId] = ev
+    if (fieldId === 'departmentId') {
+      const department =
+        ev.length === 2
+          ? InstructionsTableType.SALES_AND_LETTINGS
+          : ev[0] === InstructionsTableType.SALES
+          ? InstructionsTableType.SALES
+          : InstructionsTableType.LETTINGS
+      this.instructionFinderForm.patchValue({
+        departmentType: department
+      })
+
+      this.onDepartmentChanged.emit(department)
+    }
   }
 
-  constructor(private fb: FormBuilder, private _instructionSvc: InstructionsService){
-
+  constructor(private fb: FormBuilder, private _instructionSvc: InstructionsService) {
     this.formSubscription = this.instructionFinderForm.valueChanges
       .pipe(
         filter((formData) => !!formData),
         debounceTime(300),
         map((formData) => {
-          console.log('formData: ', formData)
           this.searchFormModel = {
             ...formData,
             dateFrom: formData.dateFrom ? format(formData.dateFrom, 'yyyy-MM-dd') : '',
@@ -191,11 +213,17 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    
+    console.log('listers: ', this.listerOptions)
+    console.log('offices: ', this.officeOptions)
+    console.log('statuses: ', this.statusOptions)
   }
 
   ngOnDestroy(): void {
     this.formSubscription.unsubscribe()
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('changes: ', changes)
   }
 
   onDateChange(d) {
@@ -206,19 +234,21 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
     console.log('searchPayload: ', this.searchFormModel)
     this.onGetInstructions.emit(this.searchFormModel)
   }
+
   suggestionSelected(e) {}
 
   searchSuggestions$ = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      switchMap((term) =>{
+      switchMap((term) => {
+        console.log('off to search typeahead for ', term)
         const department = this.searchFormModel.departmentType
         return this._instructionSvc.getInstructionsSuggestions(term, department).pipe(
           catchError(() => {
             return EMPTY
           })
-        )}
-      )
+        )
+      })
     )
 }
