@@ -30,11 +30,11 @@ steps:
   displayName: 'build prod'
 
   #👇Adds Chromatic as a step in the pipeline
-- task: CmdLine@2
-  displayName: Publish to Chromatic
-  inputs:
-    #👇Runs Chromatic with the flag to prevent pipeline failure 
-    script: npx chromatic --project-token=c163955510a4 --exit-zero-on-changes
+# - task: CmdLine@2
+#   displayName: Publish to Chromatic
+#   inputs:
+#     #👇Runs Chromatic with the flag to prevent pipeline failure 
+#     script: npx chromatic --project-token=c163955510a4 --exit-zero-on-changes
 
 - task: PublishBuildArtifacts@1
   inputs:
