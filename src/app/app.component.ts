@@ -17,6 +17,7 @@ import manifest from 'src/manifest.json'
 import { ConfigsLoaderService } from './configs-loader.service'
 import { BaseStaffMember } from './shared/models/base-staff-member'
 import { BsLocaleService } from 'ngx-bootstrap/datepicker'
+import { SignalRService } from './core/services/signal-r.service'
 
 @Component({
   selector: 'app-root',
@@ -57,7 +58,8 @@ export class AppComponent extends BaseComponent implements OnInit {
     private renderer: Renderer2,
     private toastr: ToastrService,
     private serviceWorker: EdgeServiceWorkerService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    public signalRService: SignalRService
   ) {
     super()
     this.localeService.use(this.locale)
@@ -118,7 +120,9 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.setManifestName()
     this.setImpersonatedAsCurrentUser()
     this.storage.delete('calendarStaffMembers').subscribe() // Remove from localstorage
-
+    this.signalRService.startConnection();
+    this.signalRService.addRewardsDataListener();
+    
     this.route.queryParams.subscribe((params) => {
       if (params['docTitle']) {
         this.sharedService.setTitle(params['docTitle'])
