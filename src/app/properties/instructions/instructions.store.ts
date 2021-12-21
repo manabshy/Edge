@@ -21,6 +21,7 @@ const defaultState: InstructionsStoreState = {
   listersForSelect: [],
   officesForSelect: [],
   searchModel: {},
+  sortColumn: '',
   searchStats: {
     queryCount: true,
     pageLength: 21,
@@ -71,10 +72,7 @@ export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
   }
 
   populateSelectOptions() {
-    console.log('populateSelectOptions running')
     this._instructionsSvc.getSelectControlOptions().then((selectControlOptions) => {
-      console.log('this._instructionsSvc.selectControlOptions: ', selectControlOptions)
-
       this.patchState({
         listersForSelect: selectControlOptions.listersForSelect,
         officesForSelect: selectControlOptions.officesForSelect,
@@ -84,7 +82,6 @@ export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
   }
 
   public getInstructions = (request) => {
-    console.log('getInstructions running: ', request)
     const adjustedRequest = splitSalesAndLettingsStatuses(request)
     this.patchState({
       searchModel: adjustedRequest
@@ -93,7 +90,16 @@ export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
       .getInstructions(adjustedRequest)
       .pipe(
         tap((data) => console.log('instruction data back from server ', data)),
-        map((data) => this.patchState({ instructions: data }))
+        map((data) =>
+          this.patchState({
+            instructions: data,
+            searchStats: {
+              queryCount: true,
+              pageLength: data.length,
+              queryResultCount: data[0].queryResultCount
+            }
+          })
+        )
       )
       .subscribe()
   }

@@ -49,6 +49,7 @@ export interface InstructionsStoreState {
   officesForSelect: any[]
   statusesForSelect: any[]
   searchModel?: any
+  sortColumn: string
 }
 
 export enum InstructionsTableType {

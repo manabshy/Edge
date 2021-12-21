@@ -34,11 +34,9 @@ export class InstructionsService {
   ) {}
 
   async getSelectControlOptions() {
-    console.log('getSelectControlOptions start')
     this.getStatuses()
     await this.getOffices()
     await this.getListers()
-    console.log('getSelectControlOptions end')
     return await Promise.resolve(this.selectControlOptions)
   }
 
@@ -85,13 +83,11 @@ export class InstructionsService {
   }
 
   private getOffices() {
-    console.log('getOffices...')
     return Promise.resolve(
       this.officeService
         .getOffices()
         .toPromise()
         .then((res) => {
-          console.log('getOffices...res ', res)
           this.selectControlOptions.officesForSelect = res.result.map((office) => {
             return {
               id: office.officeId,
@@ -103,13 +99,11 @@ export class InstructionsService {
   }
 
   private getListers() {
-    console.log('getListers...')
     return Promise.resolve(
       this.staffMemberService
         .getActiveStaffMembers()
         .toPromise()
         .then((res) => {
-          console.log('getListers got from API...', res)
           this.selectControlOptions.listersForSelect = res.result.map((lister) => {
             return {
               id: lister.staffMemberId,
