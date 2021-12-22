@@ -21,6 +21,7 @@ import { InstructionsStoreState } from '../../instructions.interfaces'
         [orderBy]="vm.searchModel.orderBy"
         (onNavigateToInstruction)="onNavigateToInstruction.emit($event)"
         (onSortClicked)="onSortClicked.emit($event)"
+        (onScrollDown)="onScrollDown.emit($event)"
       ></app-instructions-table>
     </div>
   `
@@ -31,4 +32,5 @@ export class PureInstructionsListPageShellComponent {
   @Output() onGetInstructions: EventEmitter<any> = new EventEmitter()
   @Output() onDepartmentChanged: EventEmitter<any> = new EventEmitter()
   @Output() onSortClicked: EventEmitter<any> = new EventEmitter()
+  @Output() onScrollDown: EventEmitter<any> = new EventEmitter()
 }

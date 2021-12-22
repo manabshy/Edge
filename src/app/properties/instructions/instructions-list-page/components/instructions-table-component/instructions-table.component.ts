@@ -10,7 +10,8 @@ import {
 @Component({
   selector: 'app-instructions-table',
   template: `
-    <div class="p-4">
+  <div class="p-4">
+    <app-infinite-scroll (scrolled)="onScrollDown.emit()">
       <div class="table">
         <table class="border border-red-400">
           <thead>
@@ -167,6 +168,7 @@ import {
           </tbody>
         </table>
       </div>
+      </app-infinite-scroll>
     </div>
   `
 })
@@ -175,6 +177,7 @@ export class InstructionsTableComponent {
   @Input() orderBy: string
   @Input() tableData: InstructionTableCell[] = []
   @Output() onSortClicked: EventEmitter<any> = new EventEmitter()
+  @Output() onScrollDown: EventEmitter<any> = new EventEmitter()
   @Output() onNavigateToInstruction: EventEmitter<any> = new EventEmitter()
 
   instructionsTableType = InstructionsTableType

@@ -12,6 +12,7 @@ import { InstructionsStore } from '../../instructions.store'
       (onDepartmentChanged)="store.onDepartmentChanged($event)"
       (onNavigateToInstruction)="onNavigateToInstruction($event)"
       (onSortClicked)="onSortClicked($event)"
+      (onScrollDown)="onScrollDown($event)"
     ></app-pure-instructions-list-page-shell>
   `,
   providers: [InstructionsStore]
@@ -42,5 +43,9 @@ export class InstructionsShellComponent {
   onSortClicked(columnName) {
     console.log('onSortClicked TODO: ', columnName)
     this.store.onSortColumnClick(columnName)
+  }
+
+  onScrollDown(event) {
+    console.log('onScrollDown TODO: ')
   }
 }
