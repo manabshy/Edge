@@ -15,13 +15,13 @@ import { InstructionsStoreState } from '../../instructions.interfaces'
         (onDepartmentChanged)="onDepartmentChanged.emit($event)"
       ></app-instructions-search>
 
-      <app-instructions-table
+      <app-instructions-list
         [tableType]="vm.searchModel.departmentType"
         [tableData]="vm.instructions"
         [orderBy]="vm.searchModel.orderBy"
         (onNavigateToInstruction)="onNavigateToInstruction.emit($event)"
         (onSortClicked)="onSortClicked.emit($event)"
-      ></app-instructions-table>
+      ></app-instructions-list>
     </div>
   `
 })

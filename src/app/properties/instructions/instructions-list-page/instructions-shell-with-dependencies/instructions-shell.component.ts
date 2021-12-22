@@ -1,6 +1,8 @@
 import { Component } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 import { Observable } from 'rxjs'
-import {  InstructionsStoreState, InstructionsTableType } from '../../instructions.interfaces'
+import { ValuationStatusEnum } from 'src/app/valuations/shared/valuation'
+import { InstructionsStoreState, InstructionsTableType } from '../../instructions.interfaces'
 import { InstructionsStore } from '../../instructions.store'
 
 @Component({
@@ -19,7 +21,7 @@ import { InstructionsStore } from '../../instructions.store'
 export class InstructionsShellComponent {
   vm$: Observable<InstructionsStoreState>
 
-  constructor(public store: InstructionsStore) {
+  constructor(public store: InstructionsStore, private router: Router, private activatedRoute: ActivatedRoute) {
     this.vm$ = this.store.instructionsVm$
 
     this.loadDefaultPageData()
@@ -36,11 +38,20 @@ export class InstructionsShellComponent {
   }
 
   onNavigateToInstruction(instruction) {
-    console.log('onNavigateToInstruction TODO: ', instruction)
+    console.log('onNavigateToInstruction: ', instruction)
+    let path = ['detail', instruction?.valuationEventId, 'edit']
+    if (
+      instruction.valuationStatus === ValuationStatusEnum.Cancelled ||
+      instruction.valuationStatus === ValuationStatusEnum.Closed
+    ) {
+      path = ['detail', instruction?.valuationEventId, 'cancelled']
+    } else if (instruction.valuationStatus === ValuationStatusEnum.Instructed) {
+      path = ['detail', instruction?.valuationEventId, 'instructed']
+    }
+    this.router.navigate(path, { relativeTo: this.activatedRoute })
   }
 
   onSortClicked(columnName) {
-    console.log('onSortClicked TODO: ', columnName)
     this.store.onSortColumnClick(columnName)
   }
 }

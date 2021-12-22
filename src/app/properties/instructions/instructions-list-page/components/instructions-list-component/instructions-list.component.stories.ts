@@ -5,17 +5,17 @@ import { Story, Meta } from '@storybook/angular/types-6-0'
 import { InfoService } from 'src/app/core/services/info.service'
 import { APP_INITIALIZER } from '@angular/core'
 import { VendorsModule } from 'src/app/shared/vendors.module'
-import { InstructionsTableComponent } from './instructions-table.component'
+import { InstructionsListComponent } from './instructions-list.component'
 import { action } from '@storybook/addon-actions'
 import { InstructionStatus, InstructionViewingAndMarketingStatus } from '../../../instructions.interfaces'
 
 export default {
-  title: 'Properties/Instructions/Components/InstructionsTableComponent',
-  component: InstructionsTableComponent,
+  title: 'Properties/Instructions/Components/InstructionsListComponent',
+  component: InstructionsListComponent,
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      declarations: [InstructionsTableComponent],
+      declarations: [InstructionsListComponent],
       imports: [CommonModule, VendorsModule]
     }),
     componentWrapperDecorator(
@@ -34,7 +34,7 @@ export const actionsData = {
   navigateTo: action('navigateTo')
 }
 
-const InstructionsTable: Story<InstructionsTableComponent> = (args: InstructionsTableComponent) => ({
+const InstructionsTable: Story<InstructionsListComponent> = (args: InstructionsListComponent) => ({
   moduleMetadata: {
     providers: [
       {
@@ -45,7 +45,7 @@ const InstructionsTable: Story<InstructionsTableComponent> = (args: Instructions
       }
     ]
   },
-  component: InstructionsTableComponent,
+  component: InstructionsListComponent,
   props: {
     ...args,
     navigateTo: actionsData.navigateTo

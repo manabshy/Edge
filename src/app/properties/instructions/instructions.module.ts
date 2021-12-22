@@ -15,14 +15,14 @@ import { ComponentsModule } from '../../shared/components.module'
 import { InstructionsShellComponent } from './instructions-list-page/instructions-shell-with-dependencies/instructions-shell.component'
 import { PureInstructionsListPageShellComponent } from './instructions-list-page/pure-instructions-list-page-shell/pure-instructions-list-page-shell.component'
 import { InstructionsSearchComponent } from './instructions-list-page/components/instructions-search-component/instructions-search.component'
-import { InstructionsTableComponent } from './instructions-list-page/components/instructions-table-component/instructions-table.component'
+import { InstructionsListComponent } from './instructions-list-page/components/instructions-list-component/instructions-list.component'
 import { InstructionDetailShellComponent } from './instruction-detail-page/instruction-detail-shell.component'
 
 const components = [
   InstructionsShellComponent,
   PureInstructionsListPageShellComponent,
   InstructionsSearchComponent,
-  InstructionsTableComponent,
+  InstructionsListComponent,
   InstructionDetailShellComponent
 ]
 

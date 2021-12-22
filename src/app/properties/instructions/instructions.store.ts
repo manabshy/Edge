@@ -112,7 +112,7 @@ export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
       departmentType: department
     }
   }))
-
+ 
   readonly onSortColumnClick = this.updater((state, columnName: string) => ({
     ...state,
     searchModel: {

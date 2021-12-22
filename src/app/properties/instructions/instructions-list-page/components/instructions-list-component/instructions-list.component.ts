@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core'
+import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core'
 import {
   InstructionViewingAndMarketingStatus,
   InstructionStatus,
@@ -8,9 +8,19 @@ import {
 } from '../../../instructions.interfaces'
 
 @Component({
-  selector: 'app-instructions-table',
+  selector: 'app-instructions-list',
   template: `
     <div class="p-4">
+      <div
+        *ngIf="tableData"
+        class="search-results"
+        infiniteScroll
+        [infiniteScrollDistance]="5"
+        [infiniteScrollUpDistance]="1.5"
+        [infiniteScrollThrottle]="20"
+        [immediateCheck]="true"
+        [alwaysCallback]="true"
+      ></div>
       <div class="table">
         <table class="border border-red-400">
           <thead>
@@ -170,15 +180,42 @@ import {
     </div>
   `
 })
-export class InstructionsTableComponent {
+export class InstructionsListComponent {
   @Input() tableType: string = InstructionsTableType.SALES_AND_LETTINGS
   @Input() orderBy: string
   @Input() tableData: InstructionTableCell[] = []
+  @Input() searchTerm: string
+  @Input() bottomReached: boolean
+  @Input() pageNumber: number
+
   @Output() onSortClicked: EventEmitter<any> = new EventEmitter()
   @Output() onNavigateToInstruction: EventEmitter<any> = new EventEmitter()
 
+  page: number
   instructionsTableType = InstructionsTableType
   sortableColumnHeaders = SortableColumnsForInstructions
+
+  onScrollDown() {
+    this.onWindowScroll()
+    // console.log('scrolled')
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll() {
+    let scrollHeight: number, totalHeight: number
+    scrollHeight = document.body.scrollHeight
+    totalHeight = window.scrollY + window.innerHeight
+
+    if (totalHeight >= scrollHeight && !this.bottomReached) {
+      // console.log('%c first request NOOOOO', 'color:green', this.page)
+      if (this.tableData && this.tableData.length) {
+        this.page++
+        console.log('%c Not first request', 'color:purple', this.page)
+        // this._valuationFacadeSvc.valuationPageNumberChanged(this.page)
+        console.log('instructions page number', this.page)
+      }
+    }
+  }
 
   setViewingAndMarketingStatusColour(status) {
     switch (status) {
