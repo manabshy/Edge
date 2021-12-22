@@ -232,6 +232,15 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     });
   }
 
+  private setValuersForSelectControl() {
+    this.valuersForSelect = this.valuers.map((valuer) => {
+      return {
+        id: valuer.staffMemberId,
+        value: valuer.fullName,
+      };
+    });
+  }
+
   private getOffices() {
     this.officeService
       .getOffices()
@@ -244,15 +253,6 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
           };
         });
       });
-  }
-
-  private setValuersForSelectControl() {
-    this.valuersForSelect = this.valuers.map((valuer) => {
-      return {
-        id: valuer.staffMemberId,
-        value: valuer.fullName,
-      };
-    });
   }
 
   private setupForm() {

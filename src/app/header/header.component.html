@@ -1,16 +1,16 @@
-<header class="header">
-  <ol class="header-title">
-    <li>
-      <ng-container *ngIf="headerLabel; else labelFromRoute">{{ headerLabel }}</ng-container>
-      <ng-template #labelFromRoute>
-        {{ navTitle }}
-        <span class="flex-1"></span>
-        <ng-container *ngIf="showMenuEditItem && filteredItems">
-          <app-menu [menuItems]="filteredItems"></app-menu>
-        </ng-container>
-      </ng-template>
-    </li>
-  </ol>
-
-  <app-profile class="header-navigation"></app-profile>
-</header>
+<div class="w-full flex flex-row h-14 p-4 border items-center">
+  <ng-container *ngIf="headerLabel; else labelFromRoute">{{ headerLabel }}</ng-container>
+  <ng-template #labelFromRoute>
+    <span class="text-base font-bold">
+      {{ navTitle }}
+    </span>
+    <span class="flex-1"></span>
+    <ng-container *ngIf="showMenuEditItem && filteredItems">
+      <app-menu [menuItems]="filteredItems"></app-menu>
+    </ng-container>
+  </ng-template>
+  <div class="flex flex-row">
+    <app-shared-rewards></app-shared-rewards>
+    <app-profile class="header-navigation"></app-profile>
+  </div>
+</div>

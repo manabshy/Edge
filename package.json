@@ -1,6 +1,6 @@
 {
   "name": "wedge",
-  "version": "4.0.0-72",
+  "version": "4.0.0-73",
   "scripts": {
     "ng": "nx",
     "start": "ng serve --hmr",
@@ -19,10 +19,11 @@
     "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
     "docs:serve": "npx run http-server ./docs",
     "serve-storybook": "npm run ng lint && start-storybook -p 6006",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "npm run docs:json && build-storybook",
     "rmrf": "rimraf node_modules",
-    "nx:affected": "nx affected --target=test"
+    "nx:affected": "nx affected --target=test",
+    "chromatic": "chromatic --exit-zero-on-changes --allow-console-errors"
   },
   "private": true,
   "dependencies": {
@@ -87,7 +88,8 @@
     "subsink": "^1.0.2",
     "tailwindcss": "^2.2.19",
     "tslib": "^1.14.1",
-    "zone.js": "^0.11.4"
+    "zone.js": "^0.11.4",
+    "@aspnet/signalr": "^1.0.4"
   },
   "devDependencies": {
     "@angular/cli": "^11.2.4",
@@ -104,14 +106,14 @@
     "@nrwl/tao": "^13.1.4",
     "@nrwl/workspace": "^13.1.4",
     "@schematics/angular": "^9.1.14",
-    "@storybook/addon-actions": "^6.4.4",
-    "@storybook/addon-essentials": "^6.4.4",
-    "@storybook/addon-interactions": "^6.4.4",
-    "@storybook/addon-links": "^6.4.4",
-    "@storybook/addons": "^6.4.4",
-    "@storybook/angular": "^6.4.4",
+    "@storybook/addon-actions": "^6.4.9",
+    "@storybook/addon-essentials": "^6.4.9",
+    "@storybook/addon-interactions": "^6.4.9",
+    "@storybook/addon-links": "^6.4.9",
+    "@storybook/addons": "^6.4.9",
+    "@storybook/angular": "^6.4.9",
     "@storybook/testing-library": "^0.0.7",
-    "@storybook/theming": "^6.4.4",
+    "@storybook/theming": "^6.4.9",
     "@types/chart.js": "^2.9.34",
     "@types/dompurify": "^2.2.1",
     "@types/google-libphonenumber": "^7.4.19",
@@ -136,6 +138,8 @@
     "karma-coverage-istanbul-reporter": "~2.0.0",
     "karma-jasmine": "~1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "msw": "^0.35.0",
+    "msw-storybook-addon": "^1.5.0",
     "postcss": "^8.3.6",
     "protractor": "^7.0.0",
     "ts-node": "~5.0.1",
@@ -154,5 +158,8 @@
         }
       ]
     }
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
