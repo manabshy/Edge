@@ -1,3 +1,4 @@
+
 import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 
 import { AdminPanelListComponent } from './admin-panel-list.component';
@@ -43,53 +44,4 @@ describe('AdminPanelListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display team members when initialised', fakeAsync(() => {
-    spyOn(boardService, 'getCsBoard').and.returnValue(of(teamMembers));
-    component.ngOnInit();
-    component.members$.subscribe(members => {
-      expect(members.length).toBe(2);
-    });
-    tick();
-  }));
-
-  it('should show the name of the first team member', waitForAsync(() => {
-    spyOn(boardService, 'getCsBoard').and.returnValue(of(teamMembers));
-    let member: TeamMember;
-    component.ngOnInit();
-    fixture.detectChanges();
-    component.members$.subscribe(res => member = res[0]);
-
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      const nameElement = fixture.debugElement.query(By.css('h5'));
-      nameElement.nativeElement.textContent = member.name;
-      expect(nameElement.nativeElement.textContent).toBe(member.name);
-    });
-  }));
-
-  it('should display 2 anchor tags for a team with 2 members', waitForAsync(() => {
-    spyOn(boardService, 'getCsBoard').and.returnValue(of(teamMembers));
-    component.ngOnInit();
-    fixture.detectChanges();
-    component.members$.subscribe();
-
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      const anchorTags = fixture.debugElement.queryAll(By.css('a'));
-      expect(anchorTags.length).toBe(2);
-    });
-  }));
-
-  it('should not display board when when there are no team members', waitForAsync(() => {
-    spyOn(boardService, 'getCsBoard').and.returnValue(of([]));
-    component.ngOnInit();
-    fixture.detectChanges();
-    component.members$.subscribe();
-
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      const anchorTags = fixture.debugElement.queryAll(By.css('a'));
-      expect(anchorTags.length).toBe(0);
-    });
-  }));
 });

@@ -2,7 +2,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angul
 
 import { ContactDuplicateCheckerComponent } from './contact-duplicate-checker.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -12,12 +12,18 @@ import { MockBasicPerson, PotentialDuplicatePersonMock } from 'src/testing/fixtu
 import { of } from 'rxjs';
 import { PeopleAutoCompleteResult, PotentialDuplicateResult } from '../contact-group.interfaces';
 import { HighlightPipe } from 'src/app/shared/pipes/highlight.pipe';
+import { CurrencyPipe } from '@angular/common';
+import { ComponentLoaderFactory } from 'ngx-bootstrap/component-loader';
+import { PositioningService } from 'ngx-bootstrap/positioning';
+import { DialogService } from 'primeng/dynamicdialog';
+import { SharedService } from 'src/app/core/services/shared.service';
 
 describe('ContactDuplicateCheckerComponent', () => {
   let component: ContactDuplicateCheckerComponent;
   let fixture: ComponentFixture<ContactDuplicateCheckerComponent>;
   let person;
   let contactGroupsService: ContactGroupsService;
+  let sharedService;
   beforeEach(waitForAsync(() => {
 
     TestBed.configureTestingModule({
@@ -31,9 +37,16 @@ describe('ContactDuplicateCheckerComponent', () => {
         RouterTestingModule.withRoutes([])
       ],
       providers: [
-        BsModalService,
+
         { provide: ToastrService, useValue: {} },
         { provide: Renderer2, useValue: {} },
+        { provide: DialogService },
+        { provide: SharedService, usevalue: sharedService },
+        { provide: BsModalService },
+        ComponentLoaderFactory,
+        PositioningService,
+        CurrencyPipe
+
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
@@ -44,6 +57,11 @@ describe('ContactDuplicateCheckerComponent', () => {
     fixture = TestBed.createComponent(ContactDuplicateCheckerComponent);
     component = fixture.componentInstance;
     contactGroupsService = TestBed.inject(ContactGroupsService);
+    component.personFinderForm = new FormGroup ({
+      emailAddress: new FormControl('test@test.com'),
+      phonenumber: new FormControl('22615759')
+    });
+
   });
 
   afterEach(() => { person = null; });
@@ -59,9 +77,8 @@ describe('ContactDuplicateCheckerComponent', () => {
     const spy = spyOn(contactGroupsService, 'getPotentialDuplicatePeople').and.returnValue(of(person));
 
     component.findPotentialDuplicatePerson(basicPerson);
-    tick();
+    expect(component.newPerson.emailAddress).toBe('test@test.com');
 
-    expect(spy).toHaveBeenCalledTimes(1);
   }));
 
   it('should set the match score of a duplicate person to 10', fakeAsync(() => {
