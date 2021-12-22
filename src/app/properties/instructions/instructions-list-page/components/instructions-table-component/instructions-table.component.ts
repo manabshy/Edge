@@ -16,23 +16,23 @@ import {
           <thead>
             <tr>
               <th (click)="onSortClicked.emit('status')" class="cursor-pointer">
-                Status
+              <span class="mr-1">Status</span>
                 <app-table-col-sort [orderBy]="orderBy" [columnId]="'SearchableOnWebsite'"></app-table-col-sort>
               </th>
               <th (click)="onSortClicked.emit('address')" class="cursor-pointer">
-                Address
+              <span class="mr-1">Address</span>
                 <app-table-col-sort [orderBy]="orderBy" [columnId]="'PropertyAddress'"></app-table-col-sort>
               </th>
               <th (click)="onSortClicked.emit('owner')" class="cursor-pointer">
-                Owner
+              <span class="mr-1">Owner</span>
                 <app-table-col-sort [orderBy]="orderBy" [columnId]="'PropertyOwner'"></app-table-col-sort>
               </th>
               <th (click)="onSortClicked.emit('instructionDate')" class="cursor-pointer">
-                <span>Instruction Date</span>
+                <span class="mr-1">Instruction Date</span>
                 <app-table-col-sort [orderBy]="orderBy" [columnId]="'InstructionDate'"></app-table-col-sort>
               </th>
               <th (click)="onSortClicked.emit('lister')" class="cursor-pointer">
-                Lister
+              <span class="mr-1">Lister</span>
                 <app-table-col-sort [orderBy]="orderBy" [columnId]="'InstructionLister'"></app-table-col-sort>
               </th>
               <th
@@ -42,7 +42,7 @@ import {
                   tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
-                Long Let
+              Long Let
               </th>
               <th
                 (click)="onSortClicked.emit('shortLet')"
@@ -51,6 +51,7 @@ import {
                   tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
+              
                 Short Let
               </th>
               <th
