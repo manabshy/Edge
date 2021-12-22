@@ -1,6 +1,6 @@
 {
   "name": "wedge",
-  "version": "4.0.0-72",
+  "version": "4.0.0-73",
   "scripts": {
     "ng": "nx",
     "start": "ng serve --hmr",
@@ -19,10 +19,11 @@
     "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
     "docs:serve": "npx run http-server ./docs",
     "serve-storybook": "npm run ng lint && start-storybook -p 6006",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "npm run docs:json && build-storybook",
     "rmrf": "rimraf node_modules",
-    "nx:affected": "nx affected --target=test"
+    "nx:affected": "nx affected --target=test",
+    "chromatic": "chromatic --exit-zero-on-changes --allow-console-errors"
   },
   "private": true,
   "dependencies": {
@@ -157,5 +158,8 @@
         }
       ]
     }
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

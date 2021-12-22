@@ -15,13 +15,13 @@ import {
 import { AppConstants } from 'src/app/core/shared/app-constants'
 import { map, tap } from 'rxjs/operators'
 import { Instruction } from 'src/app/shared/models/instruction'
-import { ValuationApiHelperService } from './valuation-api-helper.service'
+import { ApiHelperService } from '../../shared/api-helper.service'
 
 @Injectable({
   providedIn: 'root'
 })
 export class ValuationApiService {
-  constructor(private http: HttpClient, private helperSvc: ValuationApiHelperService) {}
+  constructor(private http: HttpClient, private helperSvc: ApiHelperService) {}
 
   getValuations(request: ValuationRequestOption): Observable<Valuation[] | any> {
     const options = this.helperSvc.setQueryParams(request)

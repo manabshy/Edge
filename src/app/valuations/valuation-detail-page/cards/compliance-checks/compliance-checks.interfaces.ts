@@ -89,7 +89,7 @@ export interface CompanyComplianceChecksSavePayload {
   companyOrContact: string
 }
 
-interface contactComplianceChecksGroup{
+interface contactComplianceChecksGroup {
   personDocuments: any[]
 }
 export interface ContactComplianceChecksSavePayload {
