@@ -73,5 +73,8 @@ export enum SortableColumnsForInstructions {
   InstructionLister = 'lister',
   VisibleOnWebsites = 'visibleOnWebsites',
   SearchableOnWebsite = 'searchableOnWebsite',
-  InstructionDate = 'instructionDate'
+  InstructionDate = 'instructionDate',
+  LongLetPrice = 'longLetPrice',
+  ShortLetPrice = 'shortLetPrice',
+  MarketingPrice = 'marketingPrice',
 }

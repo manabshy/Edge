@@ -7,6 +7,7 @@ import { of } from 'rxjs'
   template: `
     <ng-container *ngIf="data$ | async as d">
       <div class="flex flex-row w-40 items-center">
+      <!-- TODO add money bag icon here when available -->
         <span class="text-sm w-12  font-bold leading-4">Your total</span>
         <div class="text-2xl flex flex-row items-center">
           <div><i class="fa fa-pound-sign text-green-500"></i></div>
@@ -23,7 +24,7 @@ export class SharedRewardsComponent {
 
   // comment this out if using storybook 
   constructor(private signalRService: SignalRService) {
-    this.data$ =  of({ rewardAmount: 911 })
-    // this.data$ = this.signalRService.messageStream$
+    // this.data$ =  of({ rewardAmount: 911 })
+    this.data$ = this.signalRService.messageStream$
   }
 }

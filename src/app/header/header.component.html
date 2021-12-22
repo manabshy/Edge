@@ -1,4 +1,4 @@
-<div class="w-full flex flex-row h-14 p-4 border items-center">
+<div class="w-full flex flex-row h-14 p-4 border items-center fixed top-0 z-1 shadow-sm">
   <ng-container *ngIf="headerLabel; else labelFromRoute">{{ headerLabel }}</ng-container>
   <ng-template #labelFromRoute>
     <span class="text-base font-bold">

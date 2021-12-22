@@ -16,23 +16,22 @@ import {
           <thead>
             <tr>
               <th (click)="onSortClicked.emit('status')" class="cursor-pointer">
-              <span class="mr-1">Status</span>
-                <app-table-col-sort [orderBy]="orderBy" [columnId]="'SearchableOnWebsite'"></app-table-col-sort>
+                <span class="mr-1">Status</span>
+                <app-table-col-sort [orderBy]="orderBy" [columnId]="'InstructionStatusId'"></app-table-col-sort>
               </th>
               <th (click)="onSortClicked.emit('address')" class="cursor-pointer">
-              <span class="mr-1">Address</span>
+                <span class="mr-1">Address</span>
                 <app-table-col-sort [orderBy]="orderBy" [columnId]="'PropertyAddress'"></app-table-col-sort>
               </th>
-              <th (click)="onSortClicked.emit('owner')" class="cursor-pointer">
-              <span class="mr-1">Owner</span>
-                <app-table-col-sort [orderBy]="orderBy" [columnId]="'PropertyOwner'"></app-table-col-sort>
+              <th>
+                <span class="mr-1">Owner</span>
               </th>
               <th (click)="onSortClicked.emit('instructionDate')" class="cursor-pointer">
                 <span class="mr-1">Instruction Date</span>
                 <app-table-col-sort [orderBy]="orderBy" [columnId]="'InstructionDate'"></app-table-col-sort>
               </th>
               <th (click)="onSortClicked.emit('lister')" class="cursor-pointer">
-              <span class="mr-1">Lister</span>
+                <span class="mr-1">Lister</span>
                 <app-table-col-sort [orderBy]="orderBy" [columnId]="'InstructionLister'"></app-table-col-sort>
               </th>
               <th
@@ -42,7 +41,8 @@ import {
                   tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
-              Long Let
+                <span class="mr-1">Long Let</span>
+                <app-table-col-sort [orderBy]="orderBy" [columnId]="'LongLetPrice'"></app-table-col-sort>
               </th>
               <th
                 (click)="onSortClicked.emit('shortLet')"
@@ -51,8 +51,8 @@ import {
                   tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
-              
-                Short Let
+                <span class="mr-1">Short Let</span>
+                <app-table-col-sort [orderBy]="orderBy" [columnId]="'ShortLetPrice'"></app-table-col-sort>
               </th>
               <th
                 (click)="onSortClicked.emit('marketingPrice')"
@@ -61,7 +61,8 @@ import {
                   tableType === instructionsTableType.SALES || tableType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
-                Marketing Price
+                <span class="mr-1">Marketing Price</span>
+                <app-table-col-sort [orderBy]="orderBy" [columnId]="'MarketingPrice'"></app-table-col-sort>
               </th>
               <th (click)="onSortClicked.emit('viewingStatus')" class="cursor-pointer">Viewing</th>
               <th (click)="onSortClicked.emit('marketingStatus')" class="cursor-pointer">Marketing</th>

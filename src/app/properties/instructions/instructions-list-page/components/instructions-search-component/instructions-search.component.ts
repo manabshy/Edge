@@ -110,7 +110,7 @@ import { InstructionsService } from '../../../instructions.service'
           </div>
         </div>
       </form>
-<!--
+
       <div>
         Search model:
         <pre>
@@ -118,7 +118,7 @@ import { InstructionsService } from '../../../instructions.service'
         </pre
         >
       </div>
--->
+
      
     </div>
   `
