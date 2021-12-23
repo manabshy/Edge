@@ -22,12 +22,14 @@ const defaultState: InstructionsStoreState = {
   searchModel: {
     searchTerm: '',
     departmentType: InstructionsTableType.SALES_AND_LETTINGS,
-    orderBy: '-instructionDate'
+    orderBy: '-instructionDate',
+    page: 1,
+    pageSize: 20
   },
   searchStats: {
     queryCount: true,
-    pageLength: 21,
-    queryResultCount: 99
+    pageLength: 0,
+    queryResultCount: 0
   }
 }
 
@@ -112,7 +114,7 @@ export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
       departmentType: department
     }
   }))
- 
+
   readonly onSortColumnClick = this.updater((state, columnName: string) => ({
     ...state,
     searchModel: {

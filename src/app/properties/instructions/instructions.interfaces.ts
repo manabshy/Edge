@@ -1,7 +1,7 @@
 import { BaseRequestOption } from 'src/app/shared/models/base-request-option'
 
 export enum InstructionViewingAndMarketingStatus {
-  not_ready = 'Not Ready',
+  notReady = 'NotReady',
   ready = 'Ready',
   commenced = 'Commenced',
   stopped = 'Stopped'

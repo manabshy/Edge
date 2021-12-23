@@ -9,7 +9,7 @@ import { InstructionsService } from '../../../instructions.service'
 @Component({
   selector: 'app-instructions-search',
   template: `
-    <div class="border border-grey-300 w-56 p-4">
+    <div class="border border-gray-300 w-56 p-4">
       <h3 class="font-bold text-md">
         <i class="fas fa-search"></i>
         Search Instructions
@@ -176,6 +176,7 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
   queryResultCount: number
 
   selectionControlChange(fieldId, ev) {
+    console.log('selectionControlChange: ', fieldId, ev)
     this.instructionFinderForm.patchValue({
       [fieldId]: ev
     })
@@ -235,7 +236,6 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
       debounceTime(200),
       distinctUntilChanged(),
       switchMap((term) => {
-        console.log('off to search typeahead for ', term)
         const department = this.searchFormModel.departmentType
         return this._instructionSvc.getInstructionsSuggestions(term, department).pipe(
           catchError(() => {

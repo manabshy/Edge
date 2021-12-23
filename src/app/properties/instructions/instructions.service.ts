@@ -6,11 +6,7 @@ import { AppConstants } from 'src/app/core/shared/app-constants'
 import { ApiHelperService } from 'src/app/shared/api-helper.service'
 import { StaffMemberService } from 'src/app/core/services/staff-member.service'
 import { OfficeService } from 'src/app/core/services/office.service'
-import {
-  InstructionRequestOption,
-  InstructionStatus,
-  InstructionViewingAndMarketingStatus
-} from './instructions.interfaces'
+import { InstructionRequestOption, InstructionsTableType, InstructionStatus } from './instructions.interfaces'
 import { StorageMap } from '@ngx-pwa/local-storage'
 
 @Injectable({
@@ -55,8 +51,8 @@ export class InstructionsService {
             address: i.propertyAddress,
             instructionId: i.propertyEventId,
             owner: i.propertyOwner,
-            viewingStatus: InstructionViewingAndMarketingStatus.stopped,
-            marketingStatus: InstructionViewingAndMarketingStatus.stopped
+            viewingStatus: i.viewingStatus,
+            marketingStatus: i.marketingStatus
           }
         })
       )
@@ -64,6 +60,10 @@ export class InstructionsService {
   }
 
   public getInstructionsSuggestions(searchTerm, departmentType): Observable<any> {
+    if (departmentType === InstructionsTableType.SALES_AND_LETTINGS) {
+      departmentType = ''
+    }
+    console.log('departmentType: ', departmentType)
     const url = `${AppConstants.baseInstructionUrl}/suggestions?SearchTerm=${searchTerm}&DepartmentType=${departmentType}`
 
     return this.http

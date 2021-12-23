@@ -161,7 +161,7 @@ LettingsTable.args = {
       instructionDate: '31/10/2020',
       lister: 'Oliver Mason',
       marketingPrice: '',
-      viewingStatus: InstructionViewingAndMarketingStatus.not_ready,
+      viewingStatus: InstructionViewingAndMarketingStatus.notReady,
       marketingStatus: InstructionViewingAndMarketingStatus.ready,
       longLetPrice: '£475pw',
       shortLetPrice: ''
@@ -188,8 +188,8 @@ LettingsTable.args = {
       instructionDate: '15/12/2019',
       lister: 'Kitty Cavendish',
       marketingPrice: '',
-      viewingStatus: InstructionViewingAndMarketingStatus.not_ready,
-      marketingStatus: InstructionViewingAndMarketingStatus.not_ready,
+      viewingStatus: InstructionViewingAndMarketingStatus.notReady,
+      marketingStatus: InstructionViewingAndMarketingStatus.notReady,
       longLetPrice: '',
       shortLetPrice: '£450pw'
     },
@@ -214,7 +214,7 @@ LettingsTable.args = {
       instructionDate: '15/12/2019',
       lister: 'Mark Rubber',
       marketingPrice: '',
-      viewingStatus: InstructionViewingAndMarketingStatus.not_ready,
+      viewingStatus: InstructionViewingAndMarketingStatus.notReady,
       marketingStatus: InstructionViewingAndMarketingStatus.stopped,
       longLetPrice: '£450px',
       shortLetPrice: ''
@@ -228,7 +228,7 @@ LettingsTable.args = {
       lister: 'Mary Jones',
       marketingPrice: '',
       viewingStatus: InstructionViewingAndMarketingStatus.stopped,
-      marketingStatus: InstructionViewingAndMarketingStatus.not_ready,
+      marketingStatus: InstructionViewingAndMarketingStatus.notReady,
       longLetPrice: '£1,000pw',
       shortLetPrice: ''
     }

@@ -218,8 +218,9 @@ export class InstructionsListComponent {
   }
 
   setViewingAndMarketingStatusColour(status) {
+    console.log('setViewingAndMarketingStatusColour', status)
     switch (status) {
-      case InstructionViewingAndMarketingStatus.not_ready:
+      case InstructionViewingAndMarketingStatus.notReady:
         return 'bg-gray-400'
 
       case InstructionViewingAndMarketingStatus.ready:
@@ -243,7 +244,7 @@ export class InstructionsListComponent {
         return 'bg-red-400'
 
       case InstructionStatus.instructed:
-        return 'bg-gray-800'
+        return 'bg-gray-700'
 
       case InstructionStatus.underOffer:
         return 'bg-blue-400'

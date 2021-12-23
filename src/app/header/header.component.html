@@ -1,4 +1,4 @@
-<div class="w-full flex flex-row h-14 p-4 border items-center fixed top-0 z-1 shadow-sm">
+<div class="w-full flex flex-row h-14 p-4 border items-center shadow-sm">
   <ng-container *ngIf="headerLabel; else labelFromRoute">{{ headerLabel }}</ng-container>
   <ng-template #labelFromRoute>
     <span class="text-base font-bold">
@@ -9,8 +9,7 @@
       <app-menu [menuItems]="filteredItems"></app-menu>
     </ng-container>
   </ng-template>
-  <div class="flex flex-row border border-red-400">
-    <app-shared-rewards></app-shared-rewards>
-    <app-profile class="header-navigation"></app-profile>
-  </div>
+
+  <app-shared-rewards></app-shared-rewards>
+  <app-profile></app-profile>
 </div>
