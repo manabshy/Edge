@@ -17,52 +17,52 @@ import {
             <tr>
               <th (click)="onSortClicked.emit('status')" class="w-24 cursor-pointer">
                 <span class="mr-1">Status</span>
-                <app-table-col-sort [orderBy]="orderBy" [columnId]="'InstructionStatusId'"></app-table-col-sort>
+                <app-table-col-sort [orderBy]="searchModel.orderBy" [columnId]="'InstructionStatusId'"></app-table-col-sort>
               </th>
               <th (click)="onSortClicked.emit('address')" class="cursor-pointer">
                 <span class="mr-1">Address</span>
-                <app-table-col-sort [orderBy]="orderBy" [columnId]="'PropertyAddress'"></app-table-col-sort>
+                <app-table-col-sort [orderBy]="searchModel.orderBy" [columnId]="'PropertyAddress'"></app-table-col-sort>
               </th>
               <th>
                 <span class="mr-1">Owner</span>
               </th>
               <th (click)="onSortClicked.emit('instructionDate')" class="w-24 cursor-pointer">
                 <span class="mr-1">Instruction Date</span>
-                <app-table-col-sort [orderBy]="orderBy" [columnId]="'InstructionDate'"></app-table-col-sort>
+                <app-table-col-sort [orderBy]="searchModel.orderBy" [columnId]="'InstructionDate'"></app-table-col-sort>
               </th>
               <th (click)="onSortClicked.emit('lister')" class="cursor-pointer w-40">
                 <span class="mr-1">Lister</span>
-                <app-table-col-sort [orderBy]="orderBy" [columnId]="'InstructionLister'"></app-table-col-sort>
+                <app-table-col-sort [orderBy]="searchModel.orderBy" [columnId]="'InstructionLister'"></app-table-col-sort>
               </th>
               <th
                 (click)="onSortClicked.emit('longLet')"
-                class="cursor-pointer  w-24"
+                class="cursor-pointer w-24"
                 *ngIf="
-                  tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS
+                  searchModel.departmentType === instructionsTableType.LETTINGS || searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
                 <span class="mr-1">Long Let</span>
-                <app-table-col-sort [orderBy]="orderBy" [columnId]="'LongLetPrice'"></app-table-col-sort>
+                <app-table-col-sort [orderBy]="searchModel.orderBy" [columnId]="'LongLetPrice'"></app-table-col-sort>
               </th>
               <th
                 (click)="onSortClicked.emit('shortLet')"
                 class="cursor-pointer w-24"
                 *ngIf="
-                  tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS
+                searchModel.departmentType === instructionsTableType.LETTINGS || searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
                 <span class="mr-1">Short Let</span>
-                <app-table-col-sort [orderBy]="orderBy" [columnId]="'ShortLetPrice'"></app-table-col-sort>
+                <app-table-col-sort [orderBy]="searchModel.orderBy" [columnId]="'ShortLetPrice'"></app-table-col-sort>
               </th>
               <th
                 (click)="onSortClicked.emit('marketingPrice')"
-                class="cursor-pointer  w-24"
+                class="cursor-pointer w-24"
                 *ngIf="
-                  tableType === instructionsTableType.SALES || tableType === instructionsTableType.SALES_AND_LETTINGS
+                  searchModel.departmentType === instructionsTableType.SALES || searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
                 <span class="mr-1">Marketing Price</span>
-                <app-table-col-sort [orderBy]="orderBy" [columnId]="'MarketingPrice'"></app-table-col-sort>
+                <app-table-col-sort [orderBy]="searchModel.orderBy" [columnId]="'MarketingPrice'"></app-table-col-sort>
               </th>
               <th (click)="onSortClicked.emit('viewingStatus')" class="w-20 cursor-pointer">Viewing</th>
               <th (click)="onSortClicked.emit('marketingStatus')" class="w-20 cursor-pointer">Marketing</th>
@@ -114,7 +114,7 @@ import {
               <td
                 data-title="LongLet"
                 *ngIf="
-                  tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS
+                  searchModel.departmentType === instructionsTableType.LETTINGS || searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
                 <span class="cell-content">
@@ -126,7 +126,7 @@ import {
               <td
                 data-title="ShortLet"
                 *ngIf="
-                  tableType === instructionsTableType.LETTINGS || tableType === instructionsTableType.SALES_AND_LETTINGS
+                  searchModel.departmentType === instructionsTableType.LETTINGS || searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
                 <span class="cell-content">
@@ -138,7 +138,7 @@ import {
               <td
                 data-title="MarketingPrice"
                 *ngIf="
-                  tableType === instructionsTableType.SALES || tableType === instructionsTableType.SALES_AND_LETTINGS
+                  searchModel.departmentType === instructionsTableType.SALES || searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
                 <span class="cell-content">
@@ -171,13 +171,10 @@ import {
   `
 })
 export class InstructionsListComponent {
-  @Input() tableType: string = InstructionsTableType.SALES_AND_LETTINGS
-  @Input() orderBy: string
+  @Input() searchModel: any
   @Input() tableData: InstructionTableCell[] = []
-  @Input() searchTerm: string
   @Input() bottomReached: boolean
-  @Input() pageNumber: number
-
+  
   @Output() onSortClicked: EventEmitter<any> = new EventEmitter()
   @Output() onScrollDown: EventEmitter<any> = new EventEmitter()
   @Output() onNavigateToInstruction: EventEmitter<any> = new EventEmitter()
@@ -185,23 +182,6 @@ export class InstructionsListComponent {
   page: number
   instructionsTableType = InstructionsTableType
   sortableColumnHeaders = SortableColumnsForInstructions
-
-  // @HostListener('window:scroll', ['$event'])
-  // onWindowScroll() {
-  //   let scrollHeight: number, totalHeight: number
-  //   scrollHeight = document.body.scrollHeight
-  //   totalHeight = window.scrollY + window.innerHeight
-
-  //   if (totalHeight >= scrollHeight && !this.bottomReached) {
-  //     // console.log('%c first request NOOOOO', 'color:green', this.page)
-  //     if (this.tableData && this.tableData.length) {
-  //       this.page++
-  //       console.log('%c Not first request', 'color:purple', this.page)
-  //       // this._valuationFacadeSvc.valuationPageNumberChanged(this.page)
-  //       console.log('instructions page number', this.page)
-  //     }
-  //   }
-  // }
 
   setViewingAndMarketingStatusColour(status) {
     switch (status) {

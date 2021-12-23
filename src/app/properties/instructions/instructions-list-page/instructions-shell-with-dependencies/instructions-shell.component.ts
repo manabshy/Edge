@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { Observable } from 'rxjs'
-import { InstructionsStoreState } from '../../instructions.interfaces'
+import { InstructionsStoreState, InstructionsTableType } from '../../instructions.interfaces'
 import { InstructionsStore } from '../../instructions.store'
 
 @Component({
@@ -8,12 +8,11 @@ import { InstructionsStore } from '../../instructions.store'
   template: `
     <app-pure-instructions-list-page-shell
       [vm]="vm$ | async"
-      (onGetInstructions)="store.fetchInstructions()"
-      (onDepartmentChanged)="store.onDepartmentChanged($event)"
+      (onGetInstructions)="store.fetchInstructions($event)"
       (onNavigateToInstruction)="onNavigateToInstruction($event)"
       (onSortClicked)="onSortClicked($event)"
       (onScrollDown)="store.fetchNextPage()"
-      (onSearchModelChanges)="store.updateSearchModel($event)"
+      (onSearchModelChanges)="updateSearchModel($event)"
     ></app-pure-instructions-list-page-shell>
   `,
   providers: [InstructionsStore]
@@ -25,11 +24,9 @@ export class InstructionsShellComponent {
     public store: InstructionsStore, 
     ) {
     this.vm$ = this.store.instructionsVm$
-    this.loadDefaultPageData()
-  }
-
-  loadDefaultPageData() {
-    this.store.fetchInstructions()
+    this.store.fetchInstructions({
+      departmentType: InstructionsTableType.SALES_AND_LETTINGS
+    })
   }
 
   onNavigateToInstruction(instruction) {
@@ -38,6 +35,11 @@ export class InstructionsShellComponent {
 
   onSortClicked(columnName) {
     this.store.onSortColumnClick(columnName)
+  }
+
+  updateSearchModel(ev) {
+    console.log('updateSearchModel(', ev)
+    this.store.updateSearchModel(ev)
   }
 
 }

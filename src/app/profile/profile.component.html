@@ -2,7 +2,7 @@
   <img
     [src]="currentStaffMember?.thumbnailUrl"
     alt=""
-    class="w-12 rounded-full py-2"
+    class="w-8 rounded-full py-2"
     *ngIf="currentStaffMember?.thumbnailUrl; else noPhoto"
   />
   <ng-template #noPhoto>
@@ -13,7 +13,7 @@
     </svg>
   </ng-template>
 
-  <span class="staffname ml-2">{{ currentStaffMember?.fullName }}</span>
+  <span class="staffname ml-2 font-semibold">{{ currentStaffMember?.fullName }}</span>
   <!-- removed from svg icon--onRight -->
   <!-- <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onRight">
     <path

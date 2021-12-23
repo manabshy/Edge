@@ -1,23 +1,22 @@
-import { Component, OnInit, Input, OnChanges, EventEmitter, Output } from '@angular/core'
+import { Component, Input, EventEmitter, Output } from '@angular/core'
 import { Valuation, ValuationStatusEnum } from '../../../shared/valuation'
-import { ValuationFacadeService } from '../../../shared/valuation-facade.service'
 
 @Component({
   selector: 'app-valuations-list',
   template: `
-    <div class="table">
+    <div class="p-4 mt-4">
       <app-infinite-scroll (scrolled)="onScrollDown.emit()">
-        <table class="table--mobile table--rowHover">
-          <thead class="sticky top-14">
+        <table class="table-fixed border bg-white">
+          <thead class="sticky top-14 bg-white z-10">
             <tr>
-              <th>Status</th>
+              <th class="w-24">Status</th>
               <th>Address</th>
               <th>Owner</th>
-              <th>Valuation Date</th>
-              <th>Valuer</th>
-              <th>Sale</th>
-              <th>Long Let</th>
-              <th>Short Let</th>
+              <th class="w-24">Valuation Date</th>
+              <th class="w-40">Valuer</th>
+              <th class="w-24">Sale</th>
+              <th class="w-24">Long Let</th>
+              <th class="w-24">Short Let</th>
             </tr>
           </thead>
 
@@ -88,7 +87,7 @@ import { ValuationFacadeService } from '../../../shared/valuation-facade.service
         </table>
       </app-infinite-scroll>
     </div>
-    <div class="text-center text-danger" *ngIf="isMessageVisible && searchModel.page === 1">
+    <div class="text-center text-danger" *ngIf="isMessageVisible && page === 1">
       <i class="far fa-sad-tear"></i>
       No results for your current search
     </div>
@@ -96,27 +95,16 @@ import { ValuationFacadeService } from '../../../shared/valuation-facade.service
     <ng-template #noValue>-</ng-template>
   `
 })
-export class ValuationsListComponent implements OnInit, OnChanges {
+export class ValuationsListComponent  {
   @Input() valuations: Valuation[]
-  @Input() searchModel: any
+  @Input() page: any
   @Input() bottomReached: boolean
   @Input() isMessageVisible: boolean
+
   @Output() onScrollDown: EventEmitter<any> = new EventEmitter()
   @Output() onNavigateTo: EventEmitter<any> = new EventEmitter()
 
-  constructor(private _valuationFacadeSvc: ValuationFacadeService) {}
-
-  ngOnInit() {}
-
-  ngOnChanges() {
-    if (this.valuations) {
-      // console.log('valuations', this.valuations)
-      this.valuations.forEach((x) => {
-        x.valuationStatusLabel = ValuationStatusEnum[x.valuationStatus]
-      })
-    }
-  }
-
+ 
   getStatusColor(valuation: Valuation) {
     if (valuation) {
       if (valuation.valuationStatus == ValuationStatusEnum.Booked) return '#4DA685'

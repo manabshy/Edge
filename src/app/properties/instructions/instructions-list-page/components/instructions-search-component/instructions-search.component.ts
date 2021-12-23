@@ -9,104 +9,101 @@ import { InstructionsService } from '../../../instructions.service'
 @Component({
   selector: 'app-instructions-search',
   template: `
-    <div class="border border-red-300 w-56 p-4 sticky top-20 z-10">
+    <div class="border border-red-300 w-56 p-4 sticky top-20 z-10 card">
       <h3 class="font-bold text-md">
         <i class="fas fa-search"></i>
         Search Instructions
       </h3>
 
       <form [formGroup]="instructionFinderForm" autocompleteOff>
-        <div class="flex flex-col">
-          <fieldset class="mb-0">
-            <label for="instructionSearch">Name, email, phone or address</label>
-            <input
-              class="p-2"
-              type="search"
-              id="instructionSearch"
-              data-testid="instructionSearch"
-              aria-label="Search criteria"
-              [ngbTypeahead]="searchSuggestions$"
-              [focusFirst]="false"
-              (selectItem)="suggestionSelected($event)"
-              (keydown.enter)="getInstructions()"
-              formControlName="searchTerm"
-            />
-          </fieldset>
+        <fieldset class="mb-0">
+          <label for="instructionSearch">Name, email, phone or address</label>
+          <input
+            class="p-2"
+            type="search"
+            id="instructionSearch"
+            data-testid="instructionSearch"
+            aria-label="Search criteria"
+            [ngbTypeahead]="searchSuggestions$"
+            [focusFirst]="false"
+            (selectItem)="suggestionSelected($event)"
+            (keydown.enter)="getInstructions()"
+            formControlName="searchTerm"
+          />
+        </fieldset>
 
-          <fieldset [ngClass]="{ invalid: false }" class="ml-0 mb-0 w-full">
-            <label for="">Date From</label>
-            <input
-              class="p-2 mt-1"
-              type="text"
-              id="dateFrom"
-              placeholder="dd/mm/yyyy"
-              formControlName="dateFrom"
-              [bsConfig]="{
-                showWeekNumbers: false,
-                dateInputFormat: 'DD/MM/YYYY',
-                customTodayClass: 'font-weight-bold'
-              }"
-              (bsValueChange)="onDateChange($event)"
-              bsDatepicker
-              #datepicker="bsDatepicker"
-              [ngClass]="{ invalid: false }"
-            />
-            <p class="message message--negative" *ngIf="false">Invalid Expiry Date</p>
-          </fieldset>
+        <fieldset [ngClass]="{ invalid: false }" class="ml-0 mb-0 w-full">
+          <label for="">Date From</label>
+          <input
+            class="p-2 mt-1"
+            type="text"
+            id="dateFrom"
+            placeholder="dd/mm/yyyy"
+            formControlName="dateFrom"
+            [bsConfig]="{
+              showWeekNumbers: false,
+              dateInputFormat: 'DD/MM/YYYY',
+              customTodayClass: 'font-weight-bold'
+            }"
+            bsDatepicker
+            #datepicker="bsDatepicker"
+            [ngClass]="{ invalid: false }"
+          />
+          <p class="message message--negative" *ngIf="false">Invalid Expiry Date</p>
+        </fieldset>
 
-          <fieldset class="mb-0 w-full">
-            <app-generic-multi-select-control
-              [label]="'Status'"
-              [placeholder]="'Select status'"
-              [options]="statusOptions"
-              [cyProp]="'valStatus'"
-              (onSelectionChange)="selectionControlChange('status', $event)"
-              [model]="selectControlModels.status"
-            ></app-generic-multi-select-control>
-          </fieldset>
+        <fieldset class="mb-0 w-full">
+          <app-generic-multi-select-control
+            [label]="'Status'"
+            [placeholder]="'Select status'"
+            [options]="statusOptions"
+            [cyProp]="'valStatus'"
+            (onSelectionChange)="selectionControlChange('status', $event)"
+            [model]="selectControlModels.status"
+          ></app-generic-multi-select-control>
+        </fieldset>
 
-          <fieldset class="mb-0 w-full">
-            <app-generic-multi-select-control
-              [label]="'Lister'"
-              [placeholder]="'Select lister'"
-              [options]="listerOptions"
-              [cyProp]="'listerOptions'"
-              (onSelectionChange)="selectionControlChange('listerId', $event)"
-              [model]="selectControlModels.listerId"
-            ></app-generic-multi-select-control>
-          </fieldset>
+        <fieldset class="mb-0 w-full">
+          <app-generic-multi-select-control
+            [label]="'Lister'"
+            [placeholder]="'Select lister'"
+            [options]="listerOptions"
+            [cyProp]="'listerOptions'"
+            (onSelectionChange)="selectionControlChange('listerId', $event)"
+            [model]="selectControlModels.listerId"
+          ></app-generic-multi-select-control>
+        </fieldset>
 
-          <fieldset class="mb-0 w-full">
-            <app-generic-multi-select-control
-              [label]="'Office'"
-              [placeholder]="'Select office'"
-              [options]="officeOptions"
-              [cyProp]="'officeOptions'"
-              (onSelectionChange)="selectionControlChange('officeId', $event)"
-              [model]="selectControlModels.officeId"
-            ></app-generic-multi-select-control>
-          </fieldset>
+        <fieldset class="mb-0 w-full">
+          <app-generic-multi-select-control
+            [label]="'Office'"
+            [placeholder]="'Select office'"
+            [options]="officeOptions"
+            [cyProp]="'officeOptions'"
+            (onSelectionChange)="selectionControlChange('officeId', $event)"
+            [model]="selectControlModels.officeId"
+          ></app-generic-multi-select-control>
+        </fieldset>
 
-          <fieldset class="mb-0 w-full">
-            <app-generic-multi-select-control
-              [label]="'Department'"
-              [placeholder]="'Select department'"
-              [options]="departmentOptions"
-              [cyProp]="'departmentOptions'"
-              (onSelectionChange)="selectionControlChange('departmentTypeArr', $event)"
-              [model]="selectControlModels.departmentTypeArr"
-            ></app-generic-multi-select-control>
-          </fieldset>
+        <fieldset class="mb-0 w-full">
+          <app-generic-multi-select-control
+            [label]="'Department'"
+            [placeholder]="'Select department'"
+            [options]="departmentOptions"
+            [cyProp]="'departmentOptions'"
+            (onSelectionChange)="selectionControlChange('departmentTypeArr', $event)"
+            [model]="selectControlModels.departmentTypeArr"
+          ></app-generic-multi-select-control>
+        </fieldset>
 
-          <div class="flex">
-            <button class="btn btn--info" id="btnSearch" (click)="getInstructions()" data-cy="searchInstructions">
-              Search
-            </button>
-            <div class="flex ml-2" *ngIf="searchStats.queryCount">
-              <span class="font-extrabold !important mt-2">
-                {{ searchStats.pageLength }} of {{ searchStats.queryResultCount }}
-              </span>
-            </div>
+        <div class="flex">
+          <button class="btn btn--info" id="btnSearch" (click)="getInstructions()" data-cy="searchInstructions">
+            Search
+          </button>
+          <div class="flex ml-2" *ngIf="searchStats.queryCount">
+            <span class="font-extrabold !important mt-2">
+              {{ searchStats.pageLength }} of {{ searchStats.queryResultCount }}
+            </span>
           </div>
         </div>
       </form>
@@ -172,17 +169,18 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
       [fieldId]: ev
     })
     this.selectControlModels[fieldId] = ev
-    if (fieldId === 'departmentTypeArr') {
-      const department =
-        ev.length === 2
-          ? InstructionsTableType.SALES_AND_LETTINGS
-          : ev[0] === InstructionsTableType.SALES
-          ? InstructionsTableType.SALES
-          : InstructionsTableType.LETTINGS
-      this.instructionFinderForm.patchValue({
-        departmentType: department
-      })
-    }
+    // if (fieldId === 'departmentTypeArr') {
+    //   // controls the show/hide of columns in the list component
+    //   const department =
+    //     ev.length === 2
+    //       ? InstructionsTableType.SALES_AND_LETTINGS
+    //       : ev[0] === InstructionsTableType.SALES
+    //       ? InstructionsTableType.SALES
+    //       : InstructionsTableType.LETTINGS
+    //   this.instructionFinderForm.patchValue({
+    //     departmentType: department
+    //   })
+    // }
   }
 
   constructor(private fb: FormBuilder, private _instructionSvc: InstructionsService) {}
@@ -206,7 +204,7 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
             ...formData,
             dateFrom: formData.dateFrom ? format(formData.dateFrom, 'yyyy-MM-dd') : '',
             ...this.selectControlModels
-          }
+          }          
           this.onSearchModelChanges.emit(this.searchFormModel)
         })
       )
@@ -217,12 +215,15 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
     this.formSubscription.unsubscribe()
   }
 
-  onDateChange(d) {
-    console.log('onDateChange: ', d)
-  }
-
   getInstructions() {
-    this.onGetInstructions.emit()
+    this.onGetInstructions.emit({
+      departmentType:
+        this.selectControlModels.departmentTypeArr.length === 2
+          ? InstructionsTableType.SALES_AND_LETTINGS
+          : this.selectControlModels.departmentTypeArr[0] === InstructionsTableType.SALES
+          ? InstructionsTableType.SALES
+          : InstructionsTableType.LETTINGS
+    })
   }
 
   suggestionSelected(e) {}

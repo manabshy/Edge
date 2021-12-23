@@ -7,9 +7,9 @@
  */
 import { Injectable } from '@angular/core'
 import { ComponentStore } from '@ngrx/component-store'
-import { Observable, of } from 'rxjs'
-import { tap, map, mergeMap, take, distinctUntilChanged } from 'rxjs/operators'
-import { InstructionRequestOption, InstructionsStoreState, InstructionsTableType } from './instructions.interfaces'
+import { Observable } from 'rxjs'
+import { tap, map, mergeMap, take } from 'rxjs/operators'
+import { InstructionsStoreState, InstructionsTableType } from './instructions.interfaces'
 import { InstructionsService } from './instructions.service'
 import { splitSalesAndLettingsStatuses } from './instructions.store.helper-functions'
 
@@ -88,14 +88,15 @@ export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
     })
   }
 
-  public readonly onDepartmentChanged = this.updater((state, department: string) => ({
+  public updateSearchModel = this.updater((state, searchModel: any) => ({
     ...state,
     searchModel: {
       ...state.searchModel,
-      departmentType: department
+      ...splitSalesAndLettingsStatuses(searchModel)
     }
   }))
 
+  // TODO: call API after orderBy has been updated
   public readonly onSortColumnClick = this.updater((state, columnName: string) => ({
     ...state,
     searchModel: {
@@ -108,7 +109,7 @@ export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
    * fetchInstructions
    * @description calls API with current searchModel and sets results into the store
    */
-  public fetchInstructions = () => {
+  public fetchInstructions = (partialRequest) => {
     this.searchModel$
       .pipe(
         take(1),
@@ -124,6 +125,7 @@ export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
             instructions: data,
             searchModel: {
               ...state.searchModel,
+              ...partialRequest,
               page: 2
             },
             searchStats: {
@@ -144,36 +146,28 @@ export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
    */
   public fetchNextPage = () => {
     this.searchModel$
-    .pipe(
-      take(1),
-      mergeMap((searchModel) => {
-        console.log('fetchNextPage, searchModel: ', searchModel)
-        return this._instructionsSvc.getInstructions(searchModel)
-      }),
-      map(
-        this.updater((state, data: any[]) => ({
-          ...state,
-          instructions: [...state.instructions, ...data],
-          searchModel: {
-            ...state.searchModel,
-            page: (state.searchModel.page += 1)
-          },
-          searchStats: {
-            ...state.searchStats,
-            pageLength: state.instructions.length + data.length
-          }
-        }))
-        ),
+      .pipe(
         take(1),
+        mergeMap((searchModel) => {
+          console.log('fetchNextPage, searchModel: ', searchModel)
+          return this._instructionsSvc.getInstructions(searchModel)
+        }),
+        map(
+          this.updater((state, data: any[]) => ({
+            ...state,
+            instructions: [...state.instructions, ...data],
+            searchModel: {
+              ...state.searchModel,
+              page: (state.searchModel.page += 1)
+            },
+            searchStats: {
+              ...state.searchStats,
+              pageLength: state.instructions.length + data.length
+            }
+          }))
+        ),
+        take(1)
       )
       .subscribe()
   }
-
-  public updateSearchModel = this.updater((state, searchModel: any) => ({
-    ...state,
-    searchModel: {
-      ...state.searchModel,
-      ...splitSalesAndLettingsStatuses(searchModel)
-    }
-  }))
 }

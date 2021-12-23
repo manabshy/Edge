@@ -163,7 +163,7 @@ summary                                         { padding:0; list-style:none; mi
 
 @for $i from 0 through 100  {
     .progressBar#{$i}       {
-        &:after             { width:round(percentage($i/100)); }
+        &:after             { width:round(percentage(calc($i/100))); }
     }
 }
 

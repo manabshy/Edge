@@ -2,20 +2,21 @@ import { Component, OnInit } from '@angular/core'
 import { ValuationFacadeService } from '../../shared/valuation-facade.service'
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators'
 import { Valuation, ValuationStatuses, ValuationStatusEnum } from '../../shared/valuation'
-import { WedgeError, SharedService } from '../../../core/services/shared.service'
+import { WedgeError } from '../../../core/services/shared.service'
 import { StorageMap } from '@ngx-pwa/local-storage'
-import { StaffMember, Office, RoleName } from '../../../shared/models/staff-member'
+import { StaffMember, Office } from '../../../shared/models/staff-member'
 import { BaseComponent } from '../../../shared/models/base-component'
 import { StaffMemberService } from '../../../core/services/staff-member.service'
 import { OfficeService } from '../../../core/services/office.service'
 import { Router, ActivatedRoute } from '@angular/router'
+import { map } from 'rxjs/operators'
 
 @Component({
   selector: 'app-valuations-list-page-shell',
   template: `
     <app-pure-valuations-list-page-shell
       [valuerOptions]="valuersForSelect"
-      [officeOptions]="statuses"
+      [statusOptions]="statuses"
       [officeOptions]="offices"
       [isMessageVisible]="isMessageVisible"
       [isHintVisible]="isHintVisible"
@@ -26,6 +27,7 @@ import { Router, ActivatedRoute } from '@angular/router'
       (onSearchModelChanges)="onSearchModelChanges($event)"
       (onNavigateTo)="navigateToValuation($event)"
       (onGetValuations)="getNextValuationsPage()"
+      (onScrollDown)="onScrollDown()"
     ></app-pure-valuations-list-page-shell>
   `
 })
@@ -39,17 +41,17 @@ export class ValuationsShellComponent extends BaseComponent implements OnInit {
   isHintVisible: boolean
   isAdvancedSearchVisible: boolean = false
   bottomReached = false
-  queryResultCount: number
+  currentStaffMember: StaffMember
 
-  searchModel: {
-    searchTerm: ''
-    suggestedTerm: ''
-    date: ''
-    status: [0]
-    valuerId: [0]
-    officeId: [0]
-    orderBy: '-valuationDate'
-    page: 1
+  searchModel = {
+    searchTerm: '',
+    suggestedTerm: '',
+    date: '',
+    status: [0],
+    valuerId: [0],
+    officeId: [0],
+    orderBy: '-valuationDate',
+    page: 1,
     pageSize: 20
   }
 
@@ -58,17 +60,26 @@ export class ValuationsShellComponent extends BaseComponent implements OnInit {
     valuerId: [],
     officeId: []
   }
-  searchStats: any = {}
 
-  public keepOriginalOrder = (a) => a.key
+  searchStats: any = {
+    queryCount: true,
+    pageLength: 20,
+    queryResultCount: 0
+  }
 
   onSearchModelChanges(ev) {
     console.log('onSearchModelChanges: ', ev)
     this.searchModel = {
       ...this.searchModel,
-      ...ev
+      ...ev,
+      page: 1 // first page of new search
     }
     console.log('merged searchModel: ', this.searchModel)
+  }
+
+  onScrollDown() {
+    this.searchModel.page += 1
+    this.getNextValuationsPage()
   }
 
   constructor(
@@ -76,12 +87,11 @@ export class ValuationsShellComponent extends BaseComponent implements OnInit {
     private staffMemberService: StaffMemberService,
     private officeService: OfficeService,
     private storage: StorageMap,
-    private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {
     super()
   }
-  currentStaffMember: StaffMember
 
   ngOnInit() {
     this.getValuers()
@@ -98,11 +108,24 @@ export class ValuationsShellComponent extends BaseComponent implements OnInit {
   }
 
   getNextValuationsPage() {
+    console.log('getNextValuationsPage start: ', this.searchModel)
     this._valuationFacadeSvc
       .getValuations(this.searchModel)
-      .pipe(distinctUntilChanged())
-      .subscribe(
-        (result) => {
+      .pipe(
+        distinctUntilChanged(),
+        map((results) => {
+          return results.map((result) => {
+            return {
+              ...result,
+              valuationStatusLabel: ValuationStatusEnum[result.valuationStatus]
+            }
+          })
+        })
+      )
+      .subscribe({
+        next: (result) => {
+          // console.log('getNextValuationsPage next: ', result)
+
           if (this.searchModel.searchTerm) {
             if (result && !result.length) {
               this.isMessageVisible = true
@@ -112,7 +135,7 @@ export class ValuationsShellComponent extends BaseComponent implements OnInit {
             }
           }
           if (result && result.length) {
-            this.queryResultCount = result[0].queryResultCount
+            this.searchStats.queryResultCount = result[0]?.queryResultCount
             if (this.searchModel.page === 1) {
               this.isAdvancedSearchVisible = false
               this.valuations = result
@@ -120,16 +143,16 @@ export class ValuationsShellComponent extends BaseComponent implements OnInit {
               this.valuations = this.valuations.concat(result)
             }
           } else {
-            this.queryResultCount = 0
+            this.searchStats.queryResultCount = 0
           }
         },
-        (error: WedgeError) => {
+        error: (error: WedgeError) => {
           console.error('error: ', error)
           this.valuations = []
           this.searchModel.searchTerm = ''
           this.isHintVisible = true
         }
-      )
+      })
   }
 
   suggestionSelected(event) {
@@ -150,24 +173,14 @@ export class ValuationsShellComponent extends BaseComponent implements OnInit {
     this.router.navigate(path, { relativeTo: this.activatedRoute })
   }
 
-  // PRIVATE
-  // private setPage() {
-  //   this._valuationFacadeSvc.valuationPageNumberChanges$
-  //     .pipe(takeUntil(this.ngUnsubscribe))
-  //     .subscribe((newPageNumber) => {
-  //       this.page = newPageNumber
-  //       this.getNextValuationsPage(this.page)
-  //       // console.log("%c HEYYYY", "color: blue", this.page);
-  //     })
-  // }
-
   private getCurrentStaffMember() {
+    console.log('getCurrentStaffMember start')
     this.staffMemberService
       .getCurrentStaffMember()
       .toPromise()
       .then((res) => {
+        console.log('getCurrentStaffMember then: ', res)
         this.currentStaffMember = res
-        // this.setInitialFilters()
         this.getValuations()
       })
   }

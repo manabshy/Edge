@@ -12,14 +12,14 @@ import { Valuation } from '../../shared/valuation'
         [valuerOptions]="valuerOptions"
         [statusOptions]="statusOptions"
         [officeOptions]="officeOptions"
+        [currentStaffMember]="currentStaffMember"
         (onGetValuations)="onGetValuations.emit($event)"
         (onSearchModelChanges)="onSearchModelChanges.emit($event)"
       ></app-valuations-search>
 
       <app-valuations-list
-        class="appWrapper"
         *ngIf="!isHintVisible"
-        [searchModel]="searchModel"
+        [page]="searchModel.page"
         [valuations]="valuations"
         [bottomReached]="bottomReached"
         (onScrollDown)="onScrollDown.emit($event)"
