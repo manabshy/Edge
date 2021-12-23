@@ -9,7 +9,7 @@ import { InstructionsService } from '../../../instructions.service'
 @Component({
   selector: 'app-instructions-search',
   template: `
-    <div class="border border-gray-300 w-56 p-4">
+    <div class="border border-red-300 w-56 p-4 sticky top-20 z-10">
       <h3 class="font-bold text-md">
         <i class="fas fa-search"></i>
         Search Instructions
@@ -17,7 +17,7 @@ import { InstructionsService } from '../../../instructions.service'
 
       <form [formGroup]="instructionFinderForm" autocompleteOff>
         <div class="flex flex-col">
-          <fieldset class="mb-3">
+          <fieldset class="mb-0">
             <label for="instructionSearch">Name, email, phone or address</label>
             <input
               class="p-2"
@@ -33,7 +33,7 @@ import { InstructionsService } from '../../../instructions.service'
             />
           </fieldset>
 
-          <fieldset [ngClass]="{ invalid: false }" class="ml-0 mb-3 w-full">
+          <fieldset [ngClass]="{ invalid: false }" class="ml-0 mb-0 w-full">
             <label for="">Date From</label>
             <input
               class="p-2 mt-1"
@@ -54,7 +54,7 @@ import { InstructionsService } from '../../../instructions.service'
             <p class="message message--negative" *ngIf="false">Invalid Expiry Date</p>
           </fieldset>
 
-          <fieldset class="mb-3 w-full">
+          <fieldset class="mb-0 w-full">
             <app-generic-multi-select-control
               [label]="'Status'"
               [placeholder]="'Select status'"
@@ -65,7 +65,7 @@ import { InstructionsService } from '../../../instructions.service'
             ></app-generic-multi-select-control>
           </fieldset>
 
-          <fieldset class="mb-3 w-full">
+          <fieldset class="mb-0 w-full">
             <app-generic-multi-select-control
               [label]="'Lister'"
               [placeholder]="'Select lister'"
@@ -76,7 +76,7 @@ import { InstructionsService } from '../../../instructions.service'
             ></app-generic-multi-select-control>
           </fieldset>
 
-          <fieldset class="mb-3 w-full">
+          <fieldset class="mb-0 w-full">
             <app-generic-multi-select-control
               [label]="'Office'"
               [placeholder]="'Select office'"
@@ -87,14 +87,14 @@ import { InstructionsService } from '../../../instructions.service'
             ></app-generic-multi-select-control>
           </fieldset>
 
-          <fieldset class="mb-3 w-full">
+          <fieldset class="mb-0 w-full">
             <app-generic-multi-select-control
               [label]="'Department'"
               [placeholder]="'Select department'"
               [options]="departmentOptions"
               [cyProp]="'departmentOptions'"
-              (onSelectionChange)="selectionControlChange('departmentId', $event)"
-              [model]="selectControlModels.departmentId"
+              (onSelectionChange)="selectionControlChange('departmentTypeArr', $event)"
+              [model]="selectControlModels.departmentTypeArr"
             ></app-generic-multi-select-control>
           </fieldset>
 
@@ -110,7 +110,7 @@ import { InstructionsService } from '../../../instructions.service'
           </div>
         </div>
       </form>
-
+      <!-- UNCOMMENT TO SEE WHAT THE SEARCH MODEL LOOKS LIKE (handy for debugging) 
       <div>
         Search model:
         <pre>
@@ -118,8 +118,7 @@ import { InstructionsService } from '../../../instructions.service'
         </pre
         >
       </div>
-
-     
+      -->
     </div>
   `
 })
@@ -131,17 +130,9 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
   @Input() officeOptions: any[]
   @Output() onGetInstructions: EventEmitter<any> = new EventEmitter()
   @Output() onDepartmentChanged: EventEmitter<any> = new EventEmitter()
+  @Output() onSearchModelChanges: EventEmitter<any> = new EventEmitter()
 
   instructionStatus = InstructionStatus
-
-  searchFormModel = {
-    searchTerm: '',
-    dateFrom: '',
-    status: '',
-    listerId: '',
-    officeId: '',
-    departmentType: ''
-  }
 
   // dropdown options. All others passed in via Input
   departmentOptions: any[] = [
@@ -157,31 +148,31 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
 
   formSubscription: Subscription
 
-  instructionFinderForm: FormGroup = this.fb.group({
-    searchTerm: ['', Validators.nullValidator],
-    dateFrom: ['', Validators.nullValidator],
-    statusId: ['', Validators.nullValidator],
-    listerId: [0, Validators.nullValidator],
-    officeId: [0, Validators.nullValidator],
-    departmentType: [InstructionsTableType.SALES_AND_LETTINGS, Validators.nullValidator]
-  })
-
+  instructionFinderForm: FormGroup
+  searchFormModel = {
+    searchTerm: '',
+    dateFrom: '',
+    status: '',
+    listerId: '',
+    officeId: '',
+    departmentType: ''
+  }
   selectControlModels = {
     status: [],
     listerId: [],
     officeId: [],
-    departmentId: []
+    departmentTypeArr: []
   }
 
   queryResultCount: number
 
   selectionControlChange(fieldId, ev) {
-    console.log('selectionControlChange: ', fieldId, ev)
+    // console.log('selectionControlChange: ', fieldId, ev)
     this.instructionFinderForm.patchValue({
       [fieldId]: ev
     })
     this.selectControlModels[fieldId] = ev
-    if (fieldId === 'departmentId') {
+    if (fieldId === 'departmentTypeArr') {
       const department =
         ev.length === 2
           ? InstructionsTableType.SALES_AND_LETTINGS
@@ -191,12 +182,21 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
       this.instructionFinderForm.patchValue({
         departmentType: department
       })
-
-      this.onDepartmentChanged.emit(department)
     }
   }
 
-  constructor(private fb: FormBuilder, private _instructionSvc: InstructionsService) {
+  constructor(private fb: FormBuilder, private _instructionSvc: InstructionsService) {}
+
+  ngOnInit() {
+    this.instructionFinderForm = this.fb.group({
+      searchTerm: [this.searchModel.searchTerm, Validators.nullValidator],
+      dateFrom: [this.searchModel.dateFrom, Validators.nullValidator],
+      status: [this.searchModel.status, Validators.nullValidator],
+      listerId: [0, Validators.nullValidator],
+      officeId: [0, Validators.nullValidator],
+      departmentType: [this.searchModel.departmentType, Validators.nullValidator]
+    })
+
     this.formSubscription = this.instructionFinderForm.valueChanges
       .pipe(
         filter((formData) => !!formData),
@@ -207,12 +207,10 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
             dateFrom: formData.dateFrom ? format(formData.dateFrom, 'yyyy-MM-dd') : '',
             ...this.selectControlModels
           }
+          this.onSearchModelChanges.emit(this.searchFormModel)
         })
       )
       .subscribe()
-  }
-
-  ngOnInit() {
   }
 
   ngOnDestroy(): void {
@@ -224,8 +222,7 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
   }
 
   getInstructions() {
-    console.log('searchPayload: ', this.searchFormModel)
-    this.onGetInstructions.emit(this.searchFormModel)
+    this.onGetInstructions.emit()
   }
 
   suggestionSelected(e) {}

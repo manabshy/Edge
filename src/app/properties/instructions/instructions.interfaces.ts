@@ -48,6 +48,7 @@ export interface InstructionsStoreState {
   officesForSelect: any[]
   statusesForSelect: any[]
   searchModel: InstructionRequestOption
+  
 }
 
 export enum InstructionsTableType {
@@ -57,10 +58,11 @@ export enum InstructionsTableType {
 }
 
 export interface InstructionRequestOption extends BaseRequestOption {
+  status?: string[]
   salesStatus?: string[]
   lettingsStatus?: string[]
   dateFrom?: string
-  valuerId?: number[]
+  listerId?: number[]
   officeId?: number[]
   departmentType: string
   orderBy: string

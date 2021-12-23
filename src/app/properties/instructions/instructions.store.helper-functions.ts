@@ -1,7 +1,7 @@
 import { InstructionsTableType } from './instructions.interfaces'
 
 export const splitSalesAndLettingsStatuses = (request) => {
-  // console.log('request: ', request)
+  console.log('request: ', request)
   const updatedRequest = {
     ...request,
     salesStatus:

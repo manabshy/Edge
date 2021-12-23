@@ -22,6 +22,12 @@ const defaultState: InstructionsStoreState = {
   searchModel: {
     searchTerm: '',
     departmentType: InstructionsTableType.SALES_AND_LETTINGS,
+    lettingsStatus: [],
+    salesStatus: [],
+    status: ['notSet'],
+    dateFrom: '',
+    listerId: [],
+    officeId: [],
     orderBy: '-instructionDate',
     page: 1,
     pageSize: 20
@@ -82,33 +88,7 @@ export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
     })
   }
 
-
-  public getInstructions = (request) => {
-    this.searchModel$
-      .pipe(
-        mergeMap((searchModel) => {
-          request.orderBy = searchModel.orderBy
-          const adjustedRequest: InstructionRequestOption = splitSalesAndLettingsStatuses(request)
-          console.log('adjustedRequest: ', adjustedRequest)
-          return this._instructionsSvc.getInstructions(adjustedRequest)
-        }),
-        tap((data) => console.log('instruction data back from server ', data)),
-        map((data) => {
-          this.patchState({
-            instructions: data,
-            searchStats: {
-              queryCount: true,
-              pageLength: data.length,
-              queryResultCount: data[0].queryResultCount
-            }
-          })
-        }),
-        take(1)
-      )
-      .subscribe()
-  }
-
-  readonly onDepartmentChanged = this.updater((state, department: string) => ({
+  public readonly onDepartmentChanged = this.updater((state, department: string) => ({
     ...state,
     searchModel: {
       ...state.searchModel,
@@ -116,11 +96,84 @@ export class InstructionsStore extends ComponentStore<InstructionsStoreState> {
     }
   }))
 
-  readonly onSortColumnClick = this.updater((state, columnName: string) => ({
+  public readonly onSortColumnClick = this.updater((state, columnName: string) => ({
     ...state,
     searchModel: {
       ...state.searchModel,
       orderBy: columnName === state.searchModel.orderBy ? '-' + columnName : columnName
+    }
+  }))
+
+  /***
+   * fetchInstructions
+   * @description calls API with current searchModel and sets results into the store
+   */
+  public fetchInstructions = () => {
+    this.searchModel$
+      .pipe(
+        take(1),
+        mergeMap((searchModel) => {
+          searchModel.page = 1
+          console.log('fetchInstructions, searchModel: ', searchModel)
+          return this._instructionsSvc.getInstructions(searchModel)
+        }),
+        tap((data) => console.log('instruction data back from server ', data)),
+        map(
+          this.updater((state, data: any) => ({
+            ...state,
+            instructions: data,
+            searchModel: {
+              ...state.searchModel,
+              page: 2
+            },
+            searchStats: {
+              ...state.searchStats,
+              queryCount: !!data.length,
+              pageLength: data.length,
+              queryResultCount: data.length ? data[0].queryResultCount : 0
+            }
+          }))
+        ),
+        take(1)
+      )
+      .subscribe()
+  }
+
+  /***
+   * @description calls api with current searchModel for next page, merges results into store
+   */
+  public fetchNextPage = () => {
+    this.searchModel$
+    .pipe(
+      take(1),
+      mergeMap((searchModel) => {
+        console.log('fetchNextPage, searchModel: ', searchModel)
+        return this._instructionsSvc.getInstructions(searchModel)
+      }),
+      map(
+        this.updater((state, data: any[]) => ({
+          ...state,
+          instructions: [...state.instructions, ...data],
+          searchModel: {
+            ...state.searchModel,
+            page: (state.searchModel.page += 1)
+          },
+          searchStats: {
+            ...state.searchStats,
+            pageLength: state.instructions.length + data.length
+          }
+        }))
+        ),
+        take(1),
+      )
+      .subscribe()
+  }
+
+  public updateSearchModel = this.updater((state, searchModel: any) => ({
+    ...state,
+    searchModel: {
+      ...state.searchModel,
+      ...splitSalesAndLettingsStatuses(searchModel)
     }
   }))
 }

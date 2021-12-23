@@ -13,16 +13,17 @@ import { InstructionsStoreState } from '../../instructions.interfaces'
         [officeOptions]="vm.officesForSelect"
         (onGetInstructions)="onGetInstructions.emit($event)"
         (onDepartmentChanged)="onDepartmentChanged.emit($event)"
+        (onSearchModelChanges)="onSearchModelChanges.emit($event)"
       ></app-instructions-search>
 
       <app-instructions-list
         [tableType]="vm.searchModel.departmentType"
         [tableData]="vm.instructions"
         [orderBy]="vm.searchModel.orderBy"
-        (onNavigateToInstruction)="onNavigateToInstruction.emit($event)"
+        (onNavigatToInstruction)="onNavigateToInstruction.emit($event)"
         (onSortClicked)="onSortClicked.emit($event)"
         (onScrollDown)="onScrollDown.emit($event)"
-      ></app-instructions-table>
+      ></app-instructions-list>
     </div>
   `
 })
@@ -31,6 +32,7 @@ export class PureInstructionsListPageShellComponent {
   @Output() onNavigateToInstruction: EventEmitter<any> = new EventEmitter()
   @Output() onGetInstructions: EventEmitter<any> = new EventEmitter()
   @Output() onDepartmentChanged: EventEmitter<any> = new EventEmitter()
+  @Output() onSearchModelChanges: EventEmitter<any> = new EventEmitter()
   @Output() onSortClicked: EventEmitter<any> = new EventEmitter()
   @Output() onScrollDown: EventEmitter<any> = new EventEmitter()
 }
