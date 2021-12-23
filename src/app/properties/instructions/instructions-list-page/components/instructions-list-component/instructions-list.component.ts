@@ -10,6 +10,7 @@ import {
 @Component({
   selector: 'app-instructions-list',
   template: `
+<<<<<<< HEAD:src/app/properties/instructions/instructions-list-page/components/instructions-list-component/instructions-list.component.ts
     <div class="p-4">
       <div
         *ngIf="tableData"
@@ -21,6 +22,10 @@ import {
         [immediateCheck]="true"
         [alwaysCallback]="true"
       ></div>
+=======
+  <div class="p-4">
+    <app-infinite-scroll (scrolled)="onScrollDown.emit()">
+>>>>>>> f561a4539399f706ccfe0e38303519e5f806d820:src/app/properties/instructions/instructions-list-page/components/instructions-table-component/instructions-table.component.ts
       <div class="table">
         <table class="border border-red-400">
           <thead>
@@ -177,6 +182,7 @@ import {
           </tbody>
         </table>
       </div>
+      </app-infinite-scroll>
     </div>
   `
 })
@@ -189,16 +195,12 @@ export class InstructionsListComponent {
   @Input() pageNumber: number
 
   @Output() onSortClicked: EventEmitter<any> = new EventEmitter()
+  @Output() onScrollDown: EventEmitter<any> = new EventEmitter()
   @Output() onNavigateToInstruction: EventEmitter<any> = new EventEmitter()
 
   page: number
   instructionsTableType = InstructionsTableType
   sortableColumnHeaders = SortableColumnsForInstructions
-
-  onScrollDown() {
-    this.onWindowScroll()
-    // console.log('scrolled')
-  }
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
