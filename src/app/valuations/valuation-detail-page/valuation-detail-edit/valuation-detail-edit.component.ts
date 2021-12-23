@@ -1428,15 +1428,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.getValuers(this.propertyId)
       })
       .then(() => {
-        console.log(`👷 
-        getValuation step 5: set following view props based mostly off this.valuation state: 
-        headerDropdownList, 
-        canInstruct, 
-        isEditable, 
-        isCancelled, 
-        isPropertyInfoDisabled, 
-        canSaveValuation, 
-        property, 
+        console.log(`👷
+        getValuation step 5: set following view props based mostly off this.valuation state:
+        headerDropdownList,
+        canInstruct,
+        isEditable,
+        isCancelled,
+        isPropertyInfoDisabled,
+        canSaveValuation,
+        property,
         valuation.property,
         isValuationNotesVisible,
         optional navigation to cancelled state,
@@ -2020,7 +2020,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       summary: 'Valuation cancelled',
       closable: false
     })
-    this._valuationFacadeSvc.doValuationSearchBs.next(true)
+    // this._valuationFacadeSvc.doValuationSearchBs.next(true)
     this.router.navigate(['/valuations'])
   }
 

@@ -1,4 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core'
+import { StaffMember } from 'src/app/shared/models/staff-member'
+import { Valuation } from '../../shared/valuation'
 
 @Component({
   selector: 'app-pure-valuations-list-page-shell',
@@ -10,38 +12,37 @@ import { Component, Input, Output, EventEmitter } from '@angular/core'
         [valuerOptions]="valuerOptions"
         [statusOptions]="statusOptions"
         [officeOptions]="officeOptions"
-        (onGetInstructions)="onGetInstructions.emit($event)"
-        (onDepartmentChanged)="onDepartmentChanged.emit($event)"
+        (onGetValuations)="onGetValuations.emit($event)"
         (onSearchModelChanges)="onSearchModelChanges.emit($event)"
       ></app-valuations-search>
 
       <app-valuations-list
         class="appWrapper"
         *ngIf="!isHintVisible"
-        [pageNumber]="page"
+        [searchModel]="searchModel"
         [valuations]="valuations"
         [bottomReached]="bottomReached"
-        [searchTerm]="searchTerm"
         (onScrollDown)="onScrollDown.emit($event)"
+        (onNavigateTo)="onNavigateTo.emit($event)"
       ></app-valuations-list>
     </div>
   `
 })
 export class PureValuationsListPageShellComponent {
-  @Input() valuations: any[]
+  @Input() valuations: Valuation[]
   @Input() valuerOptions: any[]
   @Input() statusOptions: any[]
   @Input() officeOptions: any[]
   @Input() isMessageVisible: boolean
   @Input() isHintVisible: boolean
   @Input() bottomReached: boolean
-  @Input() page: number
-  @Input() searchTerm: string
+  @Input() searchModel: any
+  @Input() searchStats: any
+  @Input() currentStaffMember: StaffMember
 
   @Output() onNavigateToInstruction: EventEmitter<any> = new EventEmitter()
-  @Output() onGetInstructions: EventEmitter<any> = new EventEmitter()
-  @Output() onDepartmentChanged: EventEmitter<any> = new EventEmitter()
+  @Output() onGetValuations: EventEmitter<any> = new EventEmitter()
   @Output() onSearchModelChanges: EventEmitter<any> = new EventEmitter()
-  @Output() onSortClicked: EventEmitter<any> = new EventEmitter()
   @Output() onScrollDown: EventEmitter<any> = new EventEmitter()
+  @Output() onNavigateTo: EventEmitter<any> = new EventEmitter()
 }

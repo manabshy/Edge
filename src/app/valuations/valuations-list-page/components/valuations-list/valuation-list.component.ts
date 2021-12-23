@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, OnChanges, HostListener, OnDestroy, EventEmitter, Output } from '@angular/core'
+import { Component, OnInit, Input, OnChanges, EventEmitter, Output } from '@angular/core'
 import { Valuation, ValuationStatusEnum } from '../../../shared/valuation'
 import { ValuationFacadeService } from '../../../shared/valuation-facade.service'
-import { Router, ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'app-valuations-list',
@@ -23,7 +22,12 @@ import { Router, ActivatedRoute } from '@angular/router'
           </thead>
 
           <tbody>
-            <tr *ngFor="let val of valuations" (click)="navigateTo(val)" data-cy="valuationList" class="cursor-pointer">
+            <tr
+              *ngFor="let val of valuations"
+              (click)="onNavigateTo.emit(val)"
+              data-cy="valuationList"
+              class="cursor-pointer"
+            >
               <td data-title="Status">
                 <span class="cell-content">
                   <span class="pill" [ngStyle]="{ 'background-color': getStatusColor(val), color: 'white' }">
@@ -84,7 +88,7 @@ import { Router, ActivatedRoute } from '@angular/router'
         </table>
       </app-infinite-scroll>
     </div>
-    <div class="text-center text-danger" *ngIf="isMessageVisible && page === 1">
+    <div class="text-center text-danger" *ngIf="isMessageVisible && searchModel.page === 1">
       <i class="far fa-sad-tear"></i>
       No results for your current search
     </div>
@@ -92,20 +96,15 @@ import { Router, ActivatedRoute } from '@angular/router'
     <ng-template #noValue>-</ng-template>
   `
 })
-export class ValuationsListComponent implements OnInit, OnChanges, OnDestroy {
+export class ValuationsListComponent implements OnInit, OnChanges {
   @Input() valuations: Valuation[]
-  @Input() searchTerm: string
+  @Input() searchModel: any
   @Input() bottomReached: boolean
   @Input() isMessageVisible: boolean
-  @Input() pageNumber: number
   @Output() onScrollDown: EventEmitter<any> = new EventEmitter()
-  page: number
+  @Output() onNavigateTo: EventEmitter<any> = new EventEmitter()
 
-  constructor(
-    private _valuationFacadeSvc: ValuationFacadeService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute
-  ) {}
+  constructor(private _valuationFacadeSvc: ValuationFacadeService) {}
 
   ngOnInit() {}
 
@@ -116,39 +115,7 @@ export class ValuationsListComponent implements OnInit, OnChanges, OnDestroy {
         x.valuationStatusLabel = ValuationStatusEnum[x.valuationStatus]
       })
     }
-    this.page = this.pageNumber
   }
-
-  navigateTo(val: Valuation) {
-    let path = ['detail', val?.valuationEventId, 'edit']
-    if (val.valuationStatus === ValuationStatusEnum.Cancelled || val.valuationStatus === ValuationStatusEnum.Closed) {
-      path = ['detail', val?.valuationEventId, 'cancelled']
-    } else if (val.valuationStatus === ValuationStatusEnum.Instructed) {
-      path = ['detail', val?.valuationEventId, 'instructed']
-    }
-    this.router.navigate(path, { relativeTo: this.activatedRoute })
-  }
-
-  // @HostListener('window:scroll', ['$event'])
-  // onWindowScroll() {
-  //   let scrollHeight: number, totalHeight: number
-  //   scrollHeight = document.body.scrollHeight
-  //   totalHeight = window.scrollY + window.innerHeight
-  //   const url = this.router.url
-  //   const isValuationsRegister = url.endsWith('/valuations')
-
-  //   if (isValuationsRegister) {
-  //     if (totalHeight >= scrollHeight && !this.bottomReached) {
-  //       // console.log('%c first request NOOOOO', 'color:green', this.page)
-  //       if (this.valuations && this.valuations.length) {
-  //         this.page++
-  //         // console.log('%c Not first request', 'color:purple', this.page)
-  //         this._valuationFacadeSvc.valuationPageNumberChanged(this.page)
-  //         // console.log('valuations page number', this.page)
-  //       }
-  //     }
-  //   }
-  // }
 
   getStatusColor(valuation: Valuation) {
     if (valuation) {
@@ -163,10 +130,5 @@ export class ValuationsListComponent implements OnInit, OnChanges, OnDestroy {
         return '#FFB134'
       }
     }
-  }
-
-  ngOnDestroy() {
-    this._valuationFacadeSvc.valuationPageNumberChanged(0)
-    // console.log('%c on destroy ', 'color:blue', this.page)
   }
 }

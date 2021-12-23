@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
-import { ValuationsShellComponent } from './valuation-list-page/valuations-shell-with-dependencies/valuations.component'
+import { ValuationsShellComponent } from './valuations-list-page/valuations-shell-with-dependencies/valuations.component'
 import { ValuationDetailEditComponent } from './valuation-detail-page/valuation-detail-edit/valuation-detail-edit.component'
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard'
 
