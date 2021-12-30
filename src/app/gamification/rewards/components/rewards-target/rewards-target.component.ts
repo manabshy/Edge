@@ -17,18 +17,18 @@ import {
         <p class="font-bold px-2 text-center text-sm mb-2">
           SMASHED IT - and you rolled a 5
         </p>
-        <img class="w-44 mx-auto" src="/assets/dice.jpg" />
+        <img class="w-44 mx-auto border-0" src="/assets/gamification-icons/dice.jpg" />
       </ng-container>
       <ng-template #default>
         <div class="flex flex-col justify-between flex-1">
           <ng-container [ngSwitch]="action">
             <ng-container *ngSwitchCase="'bookViewings'">
               <p class="text-blue-900 text-center">
-                Book <span class="text-green-600">{{ target }}</span>
+                Book <span class="text-green-600 font-bold">{{ target }}</span>
                 new viewings
               </p>
               <div class="my-2">
-                <img src="/assets/viewings-icn.jpg" class="w-28 mx-auto" />
+                <img src="/assets/gamification-icons/viewings-icn.jpg" class="w-28 mx-auto border-0" />
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'conductViewings'">
@@ -38,8 +38,8 @@ import {
               </p>
               <div class="my-2">
                 <img
-                  src="/assets/viewings-conducted-icn.jpg"
-                  class="w-28 mx-auto"
+                  src="/assets/gamification-icons/viewings-conducted-icn.jpg"
+                  class="w-28 mx-auto border-0"
                 />
               </div>
             </ng-container>
@@ -49,7 +49,7 @@ import {
                 valuation
               </p>
               <div class="my-2">
-                <img src="/assets/valuations-icn.jpg" class="w-28 mx-auto" />
+                <img src="/assets/gamification-icons/valuations-icn.jpg" class="w-28 h-20 mx-auto border-0" />
               </div>
             </ng-container>
           </ng-container>

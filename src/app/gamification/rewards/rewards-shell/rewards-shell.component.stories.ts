@@ -4,7 +4,8 @@ import { RewardsToolbarComponent } from '../components/rewards-toolbar/rewards-t
 import { RewardsChallengeOverviewComponent } from '../components/rewards-challenge-overview/rewards-challenge-overview.component'
 import { RewardsTargetComponent } from '../components/rewards-target/rewards-target.component'
 import { RewardsTimerComponent } from '../components/rewards-timer/rewards-timer.component'
-import { RewardsDailyTargetComponent } from '../components/rewards-daily-target/rewards-daily-target.component'
+import { RewardsGoal } from '../components/rewards-goal/rewards-goal.component'
+import { RewardsBonusBankComponent } from '../components/rewards-bonus-bank/rewards-bonus-bank.component'
 
 export default {
   title: 'Rewards/Shell',
@@ -17,7 +18,8 @@ export default {
         RewardsChallengeOverviewComponent,
         RewardsTargetComponent,
         RewardsTimerComponent,
-        RewardsDailyTargetComponent,
+        RewardsGoal,
+        RewardsBonusBankComponent
       ],
     }),
   ],

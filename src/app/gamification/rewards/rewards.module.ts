@@ -6,7 +6,9 @@ import { RewardsTimerComponent } from './components/rewards-timer/rewards-timer.
 import { RewardsToolbarComponent } from './components/rewards-toolbar/rewards-toolbar.component'
 import { RewardsChallengeOverviewComponent } from './components/rewards-challenge-overview/rewards-challenge-overview.component'
 import { RewardsTargetComponent } from './components/rewards-target/rewards-target.component'
-import { RewardsDailyTargetComponent } from './components/rewards-daily-target/rewards-daily-target.component'
+import { RewardsGoal } from './components/rewards-goal/rewards-goal.component'
+import { RewardsRoutingModule } from './rewards-routing.module'
+import { RewardsBonusBankComponent } from './components/rewards-bonus-bank/rewards-bonus-bank.component'
 
 const components = [
   RewardsShellComponent,
@@ -14,12 +16,13 @@ const components = [
   RewardsToolbarComponent,
   RewardsChallengeOverviewComponent,
   RewardsTargetComponent,
-  RewardsDailyTargetComponent,
+  RewardsGoal,
+  RewardsBonusBankComponent
 ]
 
 @NgModule({
   declarations: components,
-  imports: [CommonModule],
+  imports: [CommonModule, RewardsRoutingModule],
   exports: components,
 })
 export class RewardsModule {}

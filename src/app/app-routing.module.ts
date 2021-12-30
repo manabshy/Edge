@@ -67,6 +67,12 @@ const routes: Routes = [
     canActivate: [MsalGuard],
   },
   {
+    path: "rewards",
+    loadChildren: () =>
+      import("./gamification/rewards/rewards.module").then((m) => m.RewardsModule),
+    canActivate: [MsalGuard],
+  },
+  {
     path: "",
     component: CalendarComponent,
     canActivate: [MsalGuard],

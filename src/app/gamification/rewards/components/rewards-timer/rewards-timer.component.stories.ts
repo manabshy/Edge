@@ -20,4 +20,6 @@ const Template: Story<RewardsTimerComponent> = (
 })
 
 export const Primary = Template.bind({})
-Primary.args = {}
+Primary.args = {
+  timeframe: 'day'
+}
