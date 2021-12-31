@@ -6,21 +6,26 @@ export default {
   component: RewardsGoal,
   decorators: [
     moduleMetadata({
-      declarations: [RewardsGoal],
+      declarations: [RewardsGoal]
     }),
     componentWrapperDecorator(
       (story) => `
         <div class="m-10 w-full md:w-1/4 mx-auto shadow-md">${story}</div>
       `
     )
-  ],
+  ]
 } as Meta
 
-const Template: Story<RewardsGoal> = (
-  args: RewardsGoal
-) => ({
-  props: args,
+const Template: Story<RewardsGoal> = (args: RewardsGoal) => ({
+  props: args
 })
 
-export const Primary = Template.bind({})
-Primary.args = {}
+export const Default = Template.bind({})
+Default.args = {
+  animate: false
+}
+
+export const GoalHit = Template.bind({})
+GoalHit.args = {
+  animate: true
+}

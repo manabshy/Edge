@@ -1,8 +1,8 @@
 import { RewardsShellComponent } from './rewards-shell.component'
 import { Meta, Story, moduleMetadata } from '@storybook/angular'
 import { RewardsToolbarComponent } from '../components/rewards-toolbar/rewards-toolbar.component'
-import { RewardsChallengeOverviewComponent } from '../components/rewards-challenge-overview/rewards-challenge-overview.component'
-import { RewardsTargetComponent } from '../components/rewards-target/rewards-target.component'
+import { RewardsRowComponent } from '../components/rewards-row/rewards-row.component'
+import { RewardsTaskComponent } from '../components/rewards-task/rewards-task.component'
 import { RewardsTimerComponent } from '../components/rewards-timer/rewards-timer.component'
 import { RewardsGoal } from '../components/rewards-goal/rewards-goal.component'
 import { RewardsBonusBankComponent } from '../components/rewards-bonus-bank/rewards-bonus-bank.component'
@@ -15,90 +15,232 @@ export default {
       declarations: [
         RewardsShellComponent,
         RewardsToolbarComponent,
-        RewardsChallengeOverviewComponent,
-        RewardsTargetComponent,
+        RewardsRowComponent,
+        RewardsTaskComponent,
         RewardsTimerComponent,
         RewardsGoal,
         RewardsBonusBankComponent
-      ],
-    }),
-  ],
+      ]
+    })
+  ]
 } as Meta
 
-const Template: Story<RewardsShellComponent> = (
-  args: RewardsShellComponent
-) => ({
-  props: args,
+const Template: Story<RewardsShellComponent> = (args: RewardsShellComponent) => ({
+  props: args
 })
 
 export const NoProgress = Template.bind({})
 NoProgress.args = {
   vm: {
-    bookViewings: {
-      target: 5,
-      progress: 0,
+    daily: {
+      title: 'day',
+      bookViewings: {
+        target: 5,
+        progress: 0
+      },
+      conductViewings: {
+        target: 3,
+        progress: 0
+      },
+      bookValuation: {
+        target: 1,
+        progress: 0
+      },
+      bonusAmount: 50
     },
-    conductViewings: {
-      target: 3,
-      progress: 0,
+    weekly: {
+      title: 'week',
+      bookViewings: {
+        target: 20,
+        progress: 0
+      },
+      conductViewings: {
+        target: 12,
+        progress: 0
+      },
+      bookValuation: {
+        target: 4,
+        progress: 0
+      },
+      bonusAmount: 150
     },
-    bookValuation: {
-      target: 1,
-      progress: 0,
-    },
-  },
+    monthly: {
+      title: 'month',
+      bookViewings: {
+        target: 50,
+        progress: 0
+      },
+      conductViewings: {
+        target: 30,
+        progress: 0
+      },
+      bookValuation: {
+        target: 10,
+        progress: 0
+      },
+      bonusAmount: 1000
+    }
+  }
 }
 
 export const PartialProgress = Template.bind({})
 PartialProgress.args = {
   vm: {
-    bookViewings: {
-      target: 5,
-      progress: 2,
+    daily: {
+      title: 'day',
+      bookViewings: {
+        target: 5,
+        progress: 2
+      },
+      conductViewings: {
+        target: 3,
+        progress: 1
+      },
+      bookValuation: {
+        target: 1,
+        progress: 0
+      },
+      bonusAmount: 50
     },
-    conductViewings: {
-      target: 3,
-      progress: 1,
+    weekly: {
+      title: 'week',
+      bookViewings: {
+        target: 20,
+        progress: 0
+      },
+      conductViewings: {
+        target: 12,
+        progress: 0
+      },
+      bookValuation: {
+        target: 4,
+        progress: 0
+      },
+      bonusAmount: 150
     },
-    bookValuation: {
-      target: 1,
-      progress: 0,
-    },
-  },
+    monthly: {
+      title: 'month',
+      bookViewings: {
+        target: 50,
+        progress: 0
+      },
+      conductViewings: {
+        target: 30,
+        progress: 0
+      },
+      bookValuation: {
+        target: 10,
+        progress: 0
+      },
+      bonusAmount: 1000
+    }
+  }
 }
 
 export const PartiallyCompleted = Template.bind({})
 PartiallyCompleted.args = {
   vm: {
-    bookViewings: {
-      target: 5,
-      progress: 5,
+    daily: {
+      title: 'day',
+      bookViewings: {
+        target: 5,
+        progress: 5
+      },
+      conductViewings: {
+        target: 3,
+        progress: 2
+      },
+      bookValuation: {
+        target: 1,
+        progress: 0
+      },
+      bonusAmount: 50
     },
-    conductViewings: {
-      target: 3,
-      progress: 2,
+    weekly: {
+      title: 'week',
+      bookViewings: {
+        target: 20,
+        progress: 0
+      },
+      conductViewings: {
+        target: 12,
+        progress: 0
+      },
+      bookValuation: {
+        target: 4,
+        progress: 0
+      },
+      bonusAmount: 150
     },
-    bookValuation: {
-      target: 1,
-      progress: 0,
-    },
-  },
+    monthly: {
+      title: 'month',
+      bookViewings: {
+        target: 50,
+        progress: 0
+      },
+      conductViewings: {
+        target: 30,
+        progress: 0
+      },
+      bookValuation: {
+        target: 10,
+        progress: 0
+      },
+      bonusAmount: 1000
+    }
+  }
 }
 
 export const FullyCompleted = Template.bind({})
 FullyCompleted.args = {
   vm: {
-    bookViewings: {
-      target: 5,
-      progress: 5,
+    daily: {
+      title: 'day',
+      bookViewings: {
+        target: 5,
+        progress: 5
+      },
+      conductViewings: {
+        target: 3,
+        progress: 3
+      },
+      bookValuation: {
+        target: 1,
+        progress: 1
+      },
+      bonusAmount: 50
     },
-    conductViewings: {
-      target: 3,
-      progress: 3,
+    weekly: {
+      title: 'week',
+      bookViewings: {
+        target: 20,
+        progress: 0
+      },
+      conductViewings: {
+        target: 12,
+        progress: 0
+      },
+      bookValuation: {
+        target: 4,
+        progress: 0
+      },
+      bonusAmount: 150
     },
-    bookValuation: {
-      target: 1,
-      progress: 1,
-    },
-  },
+    monthly: {
+      title: 'month',
+      bookViewings: {
+        target: 50,
+        progress: 0
+      },
+      conductViewings: {
+        target: 30,
+        progress: 0
+      },
+      bookValuation: {
+        target: 10,
+        progress: 0
+      },
+      bonusAmount: 1000
+    }
+  }
 }
