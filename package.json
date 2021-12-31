@@ -23,7 +23,7 @@
     "build-storybook": "npm run docs:json && build-storybook",
     "rmrf": "rimraf node_modules",
     "nx:affected": "nx affected --target=test",
-    "chromatic": "chromatic --exit-zero-on-changes --allow-console-errors"
+    "chromatic": "chromatic --exit-zero-on-changes --allow-console-errors --project-token c163955510a4"
   },
   "private": true,
   "dependencies": {
