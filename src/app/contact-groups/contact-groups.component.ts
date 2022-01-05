@@ -13,6 +13,9 @@ import { Observable, of, EMPTY } from 'rxjs'
 import { distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators'
 import { PeopleService } from '../core/services/people.service'
 import { CompanyService } from '../company/shared/company.service'
+import { Store } from "@ngrx/store";
+import { State } from '../shared/state'
+import { ContactGroupsPageActions } from './actions'
 
 const PAGE_SIZE = 20
 @Component({
@@ -41,6 +44,7 @@ export class ContactGroupsComponent implements OnInit {
   suggestedTerm: any
 
   constructor(
+    private store: Store<State>,
     private contactGroupService: ContactGroupsService,
     private companyService: CompanyService,
     private route: ActivatedRoute,
@@ -111,6 +115,9 @@ export class ContactGroupsComponent implements OnInit {
     this.suggestedTerm
       ? (this.searchTerm = this.suggestedTerm)
       : (this.searchTerm = this.contactFinderForm.get('searchTerm').value)
+    console.log('dispatch action');
+    this.store.dispatch(ContactGroupsPageActions.enter());
+
     this.getNextContactGroupsPage(this.page)
     if (submit) {
       this.sharedService.scrollElIntoView('list-group')

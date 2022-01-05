@@ -9,7 +9,7 @@ import { ContactGroupsApiEffects } from './contact-groups-api.effects'
 
 @NgModule({
   imports: [CommonModule, VendorsModule, ContactGroupsRoutingModule, ContactGroupsComponentsModule,
-    EffectsModule.forFeature([ContactGroupsApiEffects])
+    // EffectsModule.forFeature([ContactGroupsApiEffects])
   ]
 })
 export class ContactGroupsModule {}
