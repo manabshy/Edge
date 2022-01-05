@@ -72,7 +72,7 @@ export class ValuationFacadeService {
   // grabs the default compliance documents for all entities in a contactGroup and updates the local valuation model
   private loadContactGroupComplianceDocumentsIntoStore$(contactGroupId): Observable<any> {
     return this.getPeopleDocsForValuation(contactGroupId, 0).pipe(
-      mergeMap((complianceDocuments) => {
+      mergeMap((complianceDocuments:any) => {
         const personDocuments = complianceDocuments.filter((doc) => doc.personId)
         const companyDocuments = complianceDocuments.filter((doc) => doc.companyId)
         personDocuments.forEach((doc) => {

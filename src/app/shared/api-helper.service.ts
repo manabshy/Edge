@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ValuationRequestOption, ValuersAvailabilityOption } from '../valuations/shared/valuation'
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper'
-import { InstructionRequestOption } from '../properties/instructions/instructions.interfaces'
+import { InstructionRequestOption, InstructionsTableType } from '../properties/instructions/instructions.interfaces'
 
 @Injectable({
   providedIn: 'root'
@@ -44,7 +44,7 @@ export class ApiHelperService {
         date: requestOption.date ? requestOption.date.toString() : '',
         status: requestOption.status.toString(),
         valuerId: requestOption.valuerId.toString(),
-        officeId: requestOption.officeId.toString(),
+        officeId: requestOption.officeId.toString()
       }
     })
     return options
@@ -57,6 +57,9 @@ export class ApiHelperService {
     if (requestOption.pageSize == null) {
       requestOption.pageSize = 20
     }
+    if (requestOption.departmentType === InstructionsTableType.SALES_AND_LETTINGS) {
+      requestOption.departmentType = ''
+    }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper(),
       fromObject: {
@@ -67,7 +70,7 @@ export class ApiHelperService {
         dateFrom: requestOption.dateFrom ? requestOption.dateFrom.toString() : '',
         pageSize: requestOption.pageSize.toString(),
         page: requestOption.page.toString(),
-        valuerId: requestOption.valuerId ? requestOption.valuerId.toString() : '',
+        listerId: requestOption.listerId ? requestOption.listerId.toString() : '',
         officeId: requestOption.officeId ? requestOption.officeId.toString() : '',
         orderBy: requestOption.orderBy.toString()
       }

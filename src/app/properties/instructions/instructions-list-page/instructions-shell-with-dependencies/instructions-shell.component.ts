@@ -1,6 +1,9 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 import { Observable } from 'rxjs'
-import {  InstructionsStoreState, InstructionsTableType } from '../../instructions.interfaces'
+import { StaffMemberService } from 'src/app/core/services/staff-member.service'
+import { StaffMember } from 'src/app/shared/models/staff-member'
+import { InstructionsStoreState, InstructionsTableType } from '../../instructions.interfaces'
 import { InstructionsStore } from '../../instructions.store'
 
 @Component({
@@ -8,39 +11,57 @@ import { InstructionsStore } from '../../instructions.store'
   template: `
     <app-pure-instructions-list-page-shell
       [vm]="vm$ | async"
-      (onGetInstructions)="store.getInstructions($event)"
-      (onDepartmentChanged)="store.onDepartmentChanged($event)"
+      [currentStaffMember]="currentStaffMember"
+      (onGetInstructions)="store.fetchInstructions($event)"
       (onNavigateToInstruction)="onNavigateToInstruction($event)"
       (onSortClicked)="onSortClicked($event)"
+      (onScrollDown)="store.fetchNextPage()"
+      (onSearchModelChanges)="updateSearchModel($event)"
     ></app-pure-instructions-list-page-shell>
   `,
   providers: [InstructionsStore]
 })
-export class InstructionsShellComponent {
+export class InstructionsShellComponent implements OnInit {
   vm$: Observable<InstructionsStoreState>
+  currentStaffMember: StaffMember
 
-  constructor(public store: InstructionsStore) {
+  constructor(
+    public store: InstructionsStore,
+    private staffMemberService: StaffMemberService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {
     this.vm$ = this.store.instructionsVm$
 
-    this.loadDefaultPageData()
+    this.store.fetchInstructions({
+      departmentType: InstructionsTableType.SALES_AND_LETTINGS
+    })
   }
 
-  loadDefaultPageData() {
-    // set default search criteria for user and load into UI
-    const initialSearchCriteria = {
-      searchTerm: '',
-      departmentType: InstructionsTableType.SALES_AND_LETTINGS,
-      status: ['let']
-    }
-    this.store.getInstructions(initialSearchCriteria)
+  ngOnInit() {
+    this.getCurrentStaffMember()
   }
 
-  onNavigateToInstruction(instruction) {
-    console.log('onNavigateToInstruction TODO: ', instruction)
+  onNavigateToInstruction(val: any) {
+    // TODO wire this up when detail page built
+    // this.router.navigate(['detail', val?.instructionId], { relativeTo: this.activatedRoute })
   }
 
   onSortClicked(columnName) {
-    console.log('onSortClicked TODO: ', columnName)
     this.store.onSortColumnClick(columnName)
+    this.store.fetchInstructions()
+  }
+
+  updateSearchModel(ev) {
+    this.store.updateSearchModel(ev)
+  }
+
+  private getCurrentStaffMember() {
+    this.staffMemberService
+      .getCurrentStaffMember()
+      .toPromise()
+      .then((res) => {
+        this.currentStaffMember = res
+      })
   }
 }

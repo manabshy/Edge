@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core'
+import { StaffMember } from 'src/app/shared/models/staff-member'
 import { InstructionsStoreState } from '../../instructions.interfaces'
 
 @Component({
@@ -11,24 +12,27 @@ import { InstructionsStoreState } from '../../instructions.interfaces'
         [listerOptions]="vm.listersForSelect"
         [statusOptions]="vm.statusesForSelect"
         [officeOptions]="vm.officesForSelect"
+        [currentStaffMember]="currentStaffMember"
         (onGetInstructions)="onGetInstructions.emit($event)"
-        (onDepartmentChanged)="onDepartmentChanged.emit($event)"
+        (onSearchModelChanges)="onSearchModelChanges.emit($event)"
       ></app-instructions-search>
 
-      <app-instructions-table
-        [tableType]="vm.searchModel.departmentType"
+      <app-instructions-list
+        [searchModel]="vm.searchModel"
         [tableData]="vm.instructions"
-        [orderBy]="vm.searchModel.orderBy"
         (onNavigateToInstruction)="onNavigateToInstruction.emit($event)"
         (onSortClicked)="onSortClicked.emit($event)"
-      ></app-instructions-table>
+        (onScrollDown)="onScrollDown.emit($event)"
+      ></app-instructions-list>
     </div>
   `
 })
 export class PureInstructionsListPageShellComponent {
   @Input() vm: InstructionsStoreState
+  @Input() currentStaffMember: StaffMember
   @Output() onNavigateToInstruction: EventEmitter<any> = new EventEmitter()
   @Output() onGetInstructions: EventEmitter<any> = new EventEmitter()
-  @Output() onDepartmentChanged: EventEmitter<any> = new EventEmitter()
+  @Output() onSearchModelChanges: EventEmitter<any> = new EventEmitter()
   @Output() onSortClicked: EventEmitter<any> = new EventEmitter()
+  @Output() onScrollDown: EventEmitter<any> = new EventEmitter()
 }

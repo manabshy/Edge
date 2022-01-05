@@ -1,30 +1,55 @@
 import { BaseRequestOption } from 'src/app/shared/models/base-request-option'
 
 export enum InstructionViewingAndMarketingStatus {
-  not_ready = 'Not Ready',
+  notReady = 'NotReady',
   ready = 'Ready',
   commenced = 'Commenced',
   stopped = 'Stopped'
 }
 
-export enum InstructionStatus {
-  let = 'Let',
+
+export const InstructionStatusForSalesAndLettings = {
+  withdrawn: 'Withdrawn',
+  instructed: 'Instructed',
+  underOffer: 'Under Offer',
+  exchanged: 'Exchanged'
+}
+
+export const InstructionStatusForSales = {
+  ...InstructionStatusForSalesAndLettings,
+  underOfferOtherAgent: 'Under Offer Other Agent',
+  completed: 'Completed'
+}
+
+export const InstructionStatusForLettings = {
+  ...InstructionStatusForSalesAndLettings,
+  let: 'Let',
+  end: 'End'
+}
+
+export enum InstructionStatusForSalesAndLettingsEnum {
+  // Both
   withdrawn = 'Withdrawn',
   instructed = 'Instructed',
   underOffer = 'Under Offer',
-  underOfferOtherAgent = 'Under Offer Other Agent',
-  end = 'End',
   exchanged = 'Exchanged',
-  tom = 'TOM',
+  // Sales
+  underOfferOtherAgent = 'Under Offer Other Agent',
   completed = 'Completed',
-  notSet = 'Not Set',
-  notOnMarket = 'Not On Market',
-  valued = 'Valued',
-  lapsed = 'Lapsed'
+  // Lettings
+  let = 'Let',
+  end = 'End'
+
+  // Not in use right now - maybe later!
+  // notSet = 'Not Set',
+  // notOnMarket = 'Not On Market',
+  // tom = 'TOM', // temporarily off market
+  // valued = 'Valued',
+  // lapsed = 'Lapsed'
 }
 
 export interface InstructionTableCell {
-  status: InstructionStatus
+  status: InstructionStatusForSalesAndLettingsEnum
   address: string
   owner: string
   instructionDate: string
@@ -57,10 +82,11 @@ export enum InstructionsTableType {
 }
 
 export interface InstructionRequestOption extends BaseRequestOption {
+  status?: string[]
   salesStatus?: string[]
   lettingsStatus?: string[]
   dateFrom?: string
-  valuerId?: number[]
+  listerId?: number[]
   officeId?: number[]
   departmentType: string
   orderBy: string
@@ -73,5 +99,8 @@ export enum SortableColumnsForInstructions {
   InstructionLister = 'lister',
   VisibleOnWebsites = 'visibleOnWebsites',
   SearchableOnWebsite = 'searchableOnWebsite',
-  InstructionDate = 'instructionDate'
+  InstructionDate = 'instructionDate',
+  LongLetPrice = 'longLetPrice',
+  ShortLetPrice = 'shortLetPrice',
+  MarketingPrice = 'marketingPrice'
 }
