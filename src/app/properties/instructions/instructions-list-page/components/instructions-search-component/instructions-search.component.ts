@@ -2,9 +2,34 @@ import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, SimpleChange
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { EMPTY, Observable, Subscription } from 'rxjs'
 import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators'
-import { InstructionStatus, InstructionsTableType } from '../../../instructions.interfaces'
+import { InstructionStatusForSalesAndLettingsEnum, InstructionsTableType } from '../../../instructions.interfaces'
 import { format } from 'date-fns'
 import { InstructionsService } from '../../../instructions.service'
+import { RoleName, StaffMember } from 'src/app/shared/models/staff-member'
+import {
+  statusesForSalesAndLettingsSearch,
+  statusesForSalesSearch,
+  statusesForLettingsSearch
+} from '../../../instructions.store.helper-functions'
+
+export interface InstructionsSearchModel {
+  searchTerm: string
+  dateFrom: string
+  status: string
+  departmentType: string
+  orderBy: string
+}
+
+export interface InstructionsSearchStats {
+  queryCount: boolean
+  pageLength: number
+  queryResultCount: number
+}
+
+export interface InstructionsSearchDropdowns {
+  id: string
+  valude: string
+}
 
 @Component({
   selector: 'app-instructions-search',
@@ -96,10 +121,13 @@ import { InstructionsService } from '../../../instructions.service'
           ></app-generic-multi-select-control>
         </fieldset>
 
+        <fieldset class="mb-0 w-full">Sort order {{ searchModel.orderBy }}</fieldset>
+
         <div class="flex">
           <button class="btn btn--info" id="btnSearch" (click)="getInstructions()" data-cy="searchInstructions">
             Search
           </button>
+
           <div class="flex ml-2" *ngIf="searchStats.queryCount">
             <span class="font-extrabold !important mt-2">
               {{ searchStats.pageLength }} of {{ searchStats.queryResultCount }}
@@ -107,31 +135,27 @@ import { InstructionsService } from '../../../instructions.service'
           </div>
         </div>
       </form>
-      <!-- UNCOMMENT TO SEE WHAT THE SEARCH MODEL LOOKS LIKE (handy for debugging) 
-      <div>
-        Search model:
-        <pre>
-          {{ searchModel | json }}
-        </pre
-        >
-      </div>
-      -->
+      <!--  <div>
+        {{ searchFormModel | json }}
+      </div> -->
     </div>
   `
 })
-export class InstructionsSearchComponent implements OnInit, OnDestroy {
-  @Input() searchModel: any
-  @Input() searchStats: any
-  @Input() listerOptions: any[]
-  @Input() statusOptions: any[]
-  @Input() officeOptions: any[]
+export class InstructionsSearchComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() searchModel: InstructionsSearchModel
+  @Input() searchStats: InstructionsSearchStats
+  @Input() listerOptions: InstructionsSearchDropdowns[]
+  @Input() statusOptions: InstructionsSearchDropdowns[]
+  @Input() officeOptions: InstructionsSearchDropdowns[]
+  @Input() currentStaffMember: StaffMember
+
   @Output() onGetInstructions: EventEmitter<any> = new EventEmitter()
   @Output() onDepartmentChanged: EventEmitter<any> = new EventEmitter()
   @Output() onSearchModelChanges: EventEmitter<any> = new EventEmitter()
 
-  instructionStatus = InstructionStatus
+  InstructionStatusForSalesAndLettingsEnum = InstructionStatusForSalesAndLettingsEnum
 
-  // dropdown options. All others passed in via Input
+  // dropdown options. All others passed in via an @Input
   departmentOptions: any[] = [
     {
       value: 'Lettings',
@@ -152,8 +176,10 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
     status: '',
     listerId: '',
     officeId: '',
-    departmentType: ''
+    departmentType: '',
+    orderBy: ''
   }
+
   selectControlModels = {
     status: [],
     listerId: [],
@@ -163,24 +189,45 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
 
   queryResultCount: number
 
+  /***
+   * updates the model when dropdown values change
+   */
   selectionControlChange(fieldId, ev) {
-    // console.log('selectionControlChange: ', fieldId, ev)
     this.instructionFinderForm.patchValue({
       [fieldId]: ev
     })
     this.selectControlModels[fieldId] = ev
-    // if (fieldId === 'departmentTypeArr') {
-    //   // controls the show/hide of columns in the list component
-    //   const department =
-    //     ev.length === 2
-    //       ? InstructionsTableType.SALES_AND_LETTINGS
-    //       : ev[0] === InstructionsTableType.SALES
-    //       ? InstructionsTableType.SALES
-    //       : InstructionsTableType.LETTINGS
-    //   this.instructionFinderForm.patchValue({
-    //     departmentType: department
-    //   })
-    // }
+    if (fieldId == 'departmentTypeArr') {
+      this.statusOptions = this.setStatusOptionsForDepartmentType()
+    }
+  }
+
+  private setStatusOptionsForDepartmentType() {
+    switch (this.currentDepartmentValue()) {
+      case InstructionsTableType.SALES_AND_LETTINGS:
+        console.log('setStatusOpstions for sales and lettings')
+        return this.setStatusesForSalesAndLettings()
+        
+        case InstructionsTableType.SALES:
+        console.log('setStatusOpstions for sales')
+        return this.setStatusesForSales()
+        
+        case InstructionsTableType.LETTINGS:
+        console.log('setStatusOpstions for lettings')
+        return this.setStatusesForLettings()
+    }
+  }
+
+  private setStatusesForSales() {
+    return statusesForSalesSearch()
+  }
+
+  private setStatusesForLettings() {
+    return statusesForLettingsSearch()
+  }
+
+  private setStatusesForSalesAndLettings() {
+    return statusesForSalesAndLettingsSearch()
   }
 
   constructor(private fb: FormBuilder, private _instructionSvc: InstructionsService) {}
@@ -192,19 +239,20 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
       status: [this.searchModel.status, Validators.nullValidator],
       listerId: [0, Validators.nullValidator],
       officeId: [0, Validators.nullValidator],
-      departmentType: [this.searchModel.departmentType, Validators.nullValidator]
+      departmentType: [this.searchModel.departmentType, Validators.nullValidator],
+      orderBy: [this.searchModel.orderBy, Validators.nullValidator]
     })
 
     this.formSubscription = this.instructionFinderForm.valueChanges
       .pipe(
         filter((formData) => !!formData),
         debounceTime(300),
-        map((formData) => {
+        map((formData: any) => {
           this.searchFormModel = {
             ...formData,
             dateFrom: formData.dateFrom ? format(formData.dateFrom, 'yyyy-MM-dd') : '',
             ...this.selectControlModels
-          }          
+          }
           this.onSearchModelChanges.emit(this.searchFormModel)
         })
       )
@@ -215,20 +263,112 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy {
     this.formSubscription.unsubscribe()
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.currentStaffMember && !changes.currentStaffMember.firstChange) {
+      this.currentStaffMember = changes.currentStaffMember.currentValue
+      this.setInitialFilters()
+    }
+  }
+
+  private currentDepartmentValue() {
+    return this.selectControlModels.departmentTypeArr.length === 2
+      ? InstructionsTableType.SALES_AND_LETTINGS
+      : this.selectControlModels.departmentTypeArr[0] === InstructionsTableType.SALES
+      ? InstructionsTableType.SALES
+      : InstructionsTableType.LETTINGS
+  }
+
   getInstructions() {
     this.onGetInstructions.emit({
-      departmentType:
-        this.selectControlModels.departmentTypeArr.length === 2
-          ? InstructionsTableType.SALES_AND_LETTINGS
-          : this.selectControlModels.departmentTypeArr[0] === InstructionsTableType.SALES
-          ? InstructionsTableType.SALES
-          : InstructionsTableType.LETTINGS
+      departmentType: this.currentDepartmentValue()
     })
+  }
+
+  /***
+   * sets initial values for dropdowns in the form
+   */
+  private setInitialFilters() {
+    this.setInitialStatusId()
+    this.setInitialListerId()
+    this.setInitialOfficeId()
+    this.setInitialDepartmentId()
+  }
+
+  /***
+   * sets the initial status dropdown value
+   */
+  private setInitialStatusId() {
+    if (this.isManager() || this.isBroker() || this.isOfficeManager()) {
+      this.selectControlModels.status = ['instructed']
+    } else {
+      this.selectControlModels.status = []
+    }
+  }
+
+  /***
+   * sets the initial lister dropdown value
+   */
+  private setInitialListerId() {
+    if (this.currentStaffMember.roles && this.currentStaffMember.roles.length) {
+      if (this.isManager() || this.isBroker()) {
+        this.selectControlModels.listerId = [this.currentStaffMember.staffMemberId]
+      } else {
+        this.selectControlModels.listerId = []
+      }
+    }
+  }
+
+  /***
+   * sets the initial department (Sales/Lettings) dropdown value
+   */
+  private setInitialDepartmentId() {
+    if (this.currentStaffMember.roles && this.currentStaffMember.roles.length) {
+      if (this.isManager() || this.isBroker()) {
+        this.selectControlModels.departmentTypeArr = [InstructionsTableType.LETTINGS]
+      } else {
+        this.selectControlModels.departmentTypeArr = [InstructionsTableType.SALES]
+      }
+    }
+  }
+
+  private isManager(): boolean {
+    if (this.currentStaffMember.roles.findIndex((x) => x.roleName === RoleName.Manager) > -1) {
+      return true
+    }
+    return false
+  }
+
+  private isBroker(): boolean {
+    if (this.currentStaffMember.roles.findIndex((x) => x.roleName === RoleName.Broker) > -1) {
+      return true
+    }
+    return false
+  }
+
+  private isOfficeManager(): boolean {
+    if (this.currentStaffMember.roles.findIndex((x) => x.roleName === RoleName.OfficeManager) > -1) {
+      return true
+    }
+    return false
+  }
+
+  /***
+   * sets the initial office dropdown value
+   */
+  private setInitialOfficeId() {
+    if (this.isOfficeManager()) {
+      this.selectControlModels.officeId = [this.currentStaffMember.officeId]
+    } else {
+      this.selectControlModels.officeId = []
+    }
   }
 
   suggestionSelected(e) {}
 
-  // TODO move this out of here up into instructions-shell-component
+  /***
+   * drives the suggestions dropdown
+   // TODO move this out of here up into instructions-shell-component in order to keep dependency injection in shell component
+   */
   searchSuggestions$ = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),

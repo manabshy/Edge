@@ -9,21 +9,21 @@ import { Valuation, ValuationStatusEnum } from '../../../shared/valuation'
         <table class="table-fixed border bg-white">
           <thead class="sticky top-14 bg-white z-10">
             <tr>
-              <th class="w-24">Status</th>
-              <th>Address</th>
-              <th>Owner</th>
-              <th class="w-24">Valuation Date</th>
-              <th class="w-40">Valuer</th>
-              <th class="w-24">Sale</th>
-              <th class="w-24">Long Let</th>
-              <th class="w-24">Short Let</th>
+              <th class="md:w-24 cursor-not-allowed">Status</th>
+              <th class="cursor-not-allowed">Address</th>
+              <th class="cursor-not-allowed">Owner</th>
+              <th class="md:w-24 cursor-not-allowed">Valuation Date</th>
+              <th class="md:w-40 cursor-not-allowed">Valuer</th>
+              <th class="md:w-24 cursor-not-allowed">Sale</th>
+              <th class="md:w-24 cursor-not-allowed">Long Let</th>
+              <th class="md:w-24 cursor-not-allowed">Short Let</th>
             </tr>
           </thead>
 
           <tbody>
             <tr
               *ngFor="let val of valuations"
-              (click)="onNavigateTo.emit(val)"
+              (click)="onNavigateToValuation.emit(val)"
               data-cy="valuationList"
               class="cursor-pointer"
             >
@@ -102,7 +102,7 @@ export class ValuationsListComponent  {
   @Input() isMessageVisible: boolean
 
   @Output() onScrollDown: EventEmitter<any> = new EventEmitter()
-  @Output() onNavigateTo: EventEmitter<any> = new EventEmitter()
+  @Output() onNavigateToValuation: EventEmitter<any> = new EventEmitter()
 
  
   getStatusColor(valuation: Valuation) {

@@ -23,7 +23,7 @@ import { Valuation } from '../../shared/valuation'
         [valuations]="valuations"
         [bottomReached]="bottomReached"
         (onScrollDown)="onScrollDown.emit($event)"
-        (onNavigateTo)="onNavigateTo.emit($event)"
+        (onNavigateToValuation)="onNavigateTo.emit($event)"
       ></app-valuations-list>
     </div>
   `

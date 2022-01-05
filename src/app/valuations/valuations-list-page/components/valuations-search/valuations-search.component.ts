@@ -89,11 +89,10 @@ import { RoleName, StaffMember } from 'src/app/shared/models/staff-member'
             </fieldset>
 
             <div class="flex">
-              <fieldset class="mr-2">
-                <button class="btn btn--info" id="btnSearch" (click)="onGetValuations.emit()" data-cy="searchVal">
-                  Search
-                </button>
-              </fieldset>
+              <button class="btn btn--info" id="btnSearch" (click)="onGetValuations.emit()" data-cy="searchVal">
+                Search
+              </button>
+
               <div class="flex ml-2" *ngIf="searchStats.queryCount">
                 <span class="font-extrabold !important mt-2">
                   {{ searchStats.pageLength }} of {{ searchStats.queryResultCount }}
@@ -104,36 +103,19 @@ import { RoleName, StaffMember } from 'src/app/shared/models/staff-member'
         </form>
       </div>
 
-      <div class="card mt-4">
-        <div class="card__header">Actions</div>
-        <div class="card__body card__body--list">
-          <ol class="list list--divider list--hover">
-            <li>
-              <a
-                class="overall"
-                [routerLink]="['detail', 0, 'edit']"
-                [queryParams]="{ isNewValuation: true }"
-                data-cy="newVal"
-              ></a>
-              <svg
-                aria-hidden="true"
-                width="64"
-                height="64"
-                viewBox="0 0 64 64"
-                class="icon icon--s icon--fill-positive icon--onLeft"
-              >
-                <path
-                  d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"
-                />
-                <path
-                  class="plus-vertical"
-                  d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"
-                />
-              </svg>
-              Create Valuation
-            </li>
-          </ol>
-        </div>
+      <div class="card border-2 border-gray-300 rounded-md mt-4 pt-3 pb-4">
+        <h3 class="pt-2 pl-3 font-medium text-sm -mb-1">Actions</h3>
+        <nav>
+          <a
+            class="block py-2 px-4 no-underline hover:text-blue-400"
+            [routerLink]="['detail', 0, 'edit']"
+            [queryParams]="{ isNewValuation: true }"
+            data-cy="newVal"
+          >
+            <i class="fa fa-plus text-green-600"></i>
+            Create Valuation
+          </a>
+        </nav>
       </div>
     </div>
   `
@@ -169,7 +151,6 @@ export class ValuationsSearchComponent implements OnInit, OnDestroy, OnChanges {
   queryResultCount: number
 
   selectionControlChange(fieldId, ev) {
-    console.log('selectionControlChange: ', fieldId, ev)
     this.valuationFinderForm.patchValue({
       [fieldId]: ev
     })
@@ -185,7 +166,7 @@ export class ValuationsSearchComponent implements OnInit, OnDestroy, OnChanges {
       .pipe(
         filter((formData) => !!formData),
         debounceTime(300),
-        map((formData) => {
+        map((formData: any) => {
           this.searchFormModel = {
             ...formData,
             date: formData.date ? format(formData.date, 'yyyy-MM-dd') : '',
@@ -203,7 +184,7 @@ export class ValuationsSearchComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log('ngOnChanges: ', changes)
-    if (changes.currentStaffMember && !changes.currentStaffMember.isFirstChange) {
+    if (changes.currentStaffMember && !changes.currentStaffMember.firstChange) {
       this.currentStaffMember = changes.currentStaffMember.currentValue
       this.setInitialFilters()
     }

@@ -1,19 +1,36 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { Observable, of } from 'rxjs'
-import { map, tap } from 'rxjs/operators'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 import { AppConstants } from 'src/app/core/shared/app-constants'
 import { ApiHelperService } from 'src/app/shared/api-helper.service'
 import { StaffMemberService } from 'src/app/core/services/staff-member.service'
 import { OfficeService } from 'src/app/core/services/office.service'
-import { InstructionRequestOption, InstructionsTableType, InstructionStatus } from './instructions.interfaces'
-import { StorageMap } from '@ngx-pwa/local-storage'
+import {
+  InstructionRequestOption,
+  InstructionsTableType,
+  InstructionStatusForSalesAndLettingsEnum
+} from './instructions.interfaces'
+import { statusesForSalesAndLettingsSearch } from './instructions.store.helper-functions'
+
+export interface GetInstructionsApiResponse {
+  instructionLister: string
+  instructionStatus: string
+  propertyAddress: string
+  propertyEventId: string
+  propertyOwner: string
+  viewingStatus: string
+  marketingStatus: string
+  instructionDate: Date
+}
+
+export interface InstructionsSearchSuggestionsResponse {}
 
 @Injectable({
   providedIn: 'root'
 })
 export class InstructionsService {
-  instructionStatus = InstructionStatus
+  InstructionStatusForSalesAndLettingsEnum = InstructionStatusForSalesAndLettingsEnum
 
   selectControlOptions = {
     statusesForSelect: [],
@@ -24,13 +41,13 @@ export class InstructionsService {
   constructor(
     private http: HttpClient,
     private helperSvc: ApiHelperService,
-    private storage: StorageMap,
+
     private staffMemberService: StaffMemberService,
     private officeService: OfficeService
   ) {}
 
   async getSelectControlOptions() {
-    this.getStatuses()
+    this.selectControlOptions.statusesForSelect = statusesForSalesAndLettingsSearch()
     await this.getOffices()
     await this.getListers()
     return await Promise.resolve(this.selectControlOptions)
@@ -41,8 +58,8 @@ export class InstructionsService {
     const url = `${AppConstants.baseInstructionUrl}/search`
 
     return this.http.get<any>(url, { params: options }).pipe(
-      map((response) =>
-        response.result.map((i) => {
+      map((response: any) =>
+        response.result.map((i: GetInstructionsApiResponse) => {
           return {
             ...i,
             instructionDate: new Date(i.instructionDate),
@@ -63,23 +80,15 @@ export class InstructionsService {
     if (departmentType === InstructionsTableType.SALES_AND_LETTINGS) {
       departmentType = ''
     }
-    console.log('departmentType: ', departmentType)
+    console.log('getInstructionsSuggestions searchTerm: ', searchTerm)
+    console.log('getInstructionsSuggestions departmentType: ', departmentType)
     const url = `${AppConstants.baseInstructionUrl}/suggestions?SearchTerm=${searchTerm}&DepartmentType=${departmentType}`
 
     return this.http
       .get<any>(url, {
         headers: { ignoreLoadingBar: '' }
       })
-      .pipe(map((response) => response.result))
-  }
-
-  private getStatuses() {
-    this.selectControlOptions.statusesForSelect = Object.keys(this.instructionStatus).map((statusVal, ix) => {
-      return {
-        id: statusVal,
-        value: this.instructionStatus[statusVal]
-      }
-    })
+      .pipe(map((response: any) => response.result))
   }
 
   private getOffices() {

@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core'
 import {
   InstructionViewingAndMarketingStatus,
-  InstructionStatus,
+  InstructionStatusForSalesAndLettingsEnum,
   InstructionTableCell,
   InstructionsTableType,
   SortableColumnsForInstructions
@@ -24,7 +24,7 @@ import {
                 <app-table-col-sort [orderBy]="searchModel.orderBy" [columnId]="'PropertyAddress'"></app-table-col-sort>
               </th>
               <th>
-                <span class="mr-1">Owner</span>
+                <span class="mr-1 cursor-not-allowed">Owner</span>
               </th>
               <th (click)="onSortClicked.emit('instructionDate')" class="w-24 cursor-pointer">
                 <span class="mr-1">Instruction Date</span>
@@ -35,7 +35,7 @@ import {
                 <app-table-col-sort [orderBy]="searchModel.orderBy" [columnId]="'InstructionLister'"></app-table-col-sort>
               </th>
               <th
-                (click)="onSortClicked.emit('longLet')"
+                (click)="onSortClicked.emit('longLetPrice')"
                 class="cursor-pointer w-24"
                 *ngIf="
                   searchModel.departmentType === instructionsTableType.LETTINGS || searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
@@ -45,7 +45,7 @@ import {
                 <app-table-col-sort [orderBy]="searchModel.orderBy" [columnId]="'LongLetPrice'"></app-table-col-sort>
               </th>
               <th
-                (click)="onSortClicked.emit('shortLet')"
+                (click)="onSortClicked.emit('shortLetPrice')"
                 class="cursor-pointer w-24"
                 *ngIf="
                 searchModel.departmentType === instructionsTableType.LETTINGS || searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
@@ -64,8 +64,8 @@ import {
                 <span class="mr-1">Marketing Price</span>
                 <app-table-col-sort [orderBy]="searchModel.orderBy" [columnId]="'MarketingPrice'"></app-table-col-sort>
               </th>
-              <th (click)="onSortClicked.emit('viewingStatus')" class="w-20 cursor-pointer">Viewing</th>
-              <th (click)="onSortClicked.emit('marketingStatus')" class="w-20 cursor-pointer">Marketing</th>
+              <th class="w-16">Viewing</th>
+              <th class="w-16">Marketing</th>
             </tr>
           </thead>
 
@@ -74,7 +74,7 @@ import {
               *ngFor="let row of tableData"
               (click)="onNavigateToInstruction.emit(row)"
               data-cy="instructionsList"
-              class="cursor-pointer even:bg-gray-50"
+              class="cursor-default even:bg-gray-50"
             >
               <td data-title="Status">
                 <span class="cell-content">
@@ -178,7 +178,7 @@ export class InstructionsListComponent {
   @Output() onSortClicked: EventEmitter<any> = new EventEmitter()
   @Output() onScrollDown: EventEmitter<any> = new EventEmitter()
   @Output() onNavigateToInstruction: EventEmitter<any> = new EventEmitter()
-
+  
   page: number
   instructionsTableType = InstructionsTableType
   sortableColumnHeaders = SortableColumnsForInstructions
@@ -201,30 +201,28 @@ export class InstructionsListComponent {
 
   setStatusColour(status) {
     switch (status) {
-      case InstructionStatus.let:
-      case InstructionStatus.completed:
+      case InstructionStatusForSalesAndLettingsEnum.let:
+      case InstructionStatusForSalesAndLettingsEnum.completed:
         return 'bg-green-400'
 
-      case InstructionStatus.withdrawn:
+      case InstructionStatusForSalesAndLettingsEnum.withdrawn:
         return 'bg-red-400'
 
-      case InstructionStatus.instructed:
+      case InstructionStatusForSalesAndLettingsEnum.instructed:
         return 'bg-gray-700'
 
-      case InstructionStatus.underOffer:
+      case InstructionStatusForSalesAndLettingsEnum.underOffer:
         return 'bg-blue-400'
 
-      case InstructionStatus.underOfferOtherAgent:
+      case InstructionStatusForSalesAndLettingsEnum.underOfferOtherAgent:
         return 'bg-blue-200'
 
-      case InstructionStatus.end:
-        return 'bg-yellow-400'
+      // case InstructionStatusForSalesAndLettingsEnum.end:
+      //   return 'bg-yellow-400'
 
-      case InstructionStatus.exchanged:
+      case InstructionStatusForSalesAndLettingsEnum.exchanged:
         return 'bg-pink-400'
 
-      case InstructionStatus.tom:
-        return 'bg-pink-700'
     }
   }
 }

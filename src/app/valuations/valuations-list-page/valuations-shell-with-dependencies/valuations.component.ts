@@ -68,13 +68,11 @@ export class ValuationsShellComponent extends BaseComponent implements OnInit {
   }
 
   onSearchModelChanges(ev) {
-    console.log('onSearchModelChanges: ', ev)
     this.searchModel = {
       ...this.searchModel,
       ...ev,
       page: 1 // first page of new search
     }
-    console.log('merged searchModel: ', this.searchModel)
   }
 
   onScrollDown() {
@@ -113,7 +111,7 @@ export class ValuationsShellComponent extends BaseComponent implements OnInit {
       .getValuations(this.searchModel)
       .pipe(
         distinctUntilChanged(),
-        map((results) => {
+        map((results: any) => {
           return results.map((result) => {
             return {
               ...result,

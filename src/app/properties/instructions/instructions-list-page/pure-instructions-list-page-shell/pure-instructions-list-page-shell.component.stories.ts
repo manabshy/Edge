@@ -8,7 +8,7 @@ import { APP_INITIALIZER } from '@angular/core'
 import { VendorsModule } from 'src/app/shared/vendors.module'
 import { InstructionsSearchComponent } from '../components/instructions-search-component/instructions-search.component'
 import { InstructionsListComponent } from '../components/instructions-list-component/instructions-list.component'
-import { LettingsTable } from '../components/instructions-list-component/instructions-list.component.stories'
+import { LettingsInstructionsTable } from '../components/instructions-list-component/instructions-list.component.stories'
 
 export default {
   title: 'Properties/Instructions/InstructionsListPage',
@@ -51,6 +51,6 @@ export const InstructionsShell = InstructionShell.bind({})
 InstructionsShell.args = {
   vm: {
     tableType: 'LETTINGS',
-    tableData: LettingsTable.args.tableData
+    tableData: LettingsInstructionsTable.args.tableData
   }
 }

@@ -70,8 +70,8 @@ export class ApiHelperService {
         dateFrom: requestOption.dateFrom ? requestOption.dateFrom.toString() : '',
         pageSize: requestOption.pageSize.toString(),
         page: requestOption.page.toString(),
-        listerId: requestOption.listerId ? requestOption.listerId.toString() : '', // TODO handle array
-        officeId: requestOption.officeId ? requestOption.officeId.toString() : '', // TODO handle array
+        listerId: requestOption.listerId ? requestOption.listerId.toString() : '',
+        officeId: requestOption.officeId ? requestOption.officeId.toString() : '',
         orderBy: requestOption.orderBy.toString()
       }
     })

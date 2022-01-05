@@ -7,24 +7,49 @@ export enum InstructionViewingAndMarketingStatus {
   stopped = 'Stopped'
 }
 
-export enum InstructionStatus {
-  let = 'Let',
+
+export const InstructionStatusForSalesAndLettings = {
+  withdrawn: 'Withdrawn',
+  instructed: 'Instructed',
+  underOffer: 'Under Offer',
+  exchanged: 'Exchanged'
+}
+
+export const InstructionStatusForSales = {
+  ...InstructionStatusForSalesAndLettings,
+  underOfferOtherAgent: 'Under Offer Other Agent',
+  completed: 'Completed'
+}
+
+export const InstructionStatusForLettings = {
+  ...InstructionStatusForSalesAndLettings,
+  let: 'Let',
+  end: 'End'
+}
+
+export enum InstructionStatusForSalesAndLettingsEnum {
+  // Both
   withdrawn = 'Withdrawn',
   instructed = 'Instructed',
   underOffer = 'Under Offer',
-  underOfferOtherAgent = 'Under Offer Other Agent',
-  end = 'End',
   exchanged = 'Exchanged',
-  tom = 'TOM',
+  // Sales
+  underOfferOtherAgent = 'Under Offer Other Agent',
   completed = 'Completed',
-  notSet = 'Not Set',
-  notOnMarket = 'Not On Market',
-  valued = 'Valued',
-  lapsed = 'Lapsed'
+  // Lettings
+  let = 'Let',
+  end = 'End'
+
+  // Not in use right now - maybe later!
+  // notSet = 'Not Set',
+  // notOnMarket = 'Not On Market',
+  // tom = 'TOM', // temporarily off market
+  // valued = 'Valued',
+  // lapsed = 'Lapsed'
 }
 
 export interface InstructionTableCell {
-  status: InstructionStatus
+  status: InstructionStatusForSalesAndLettingsEnum
   address: string
   owner: string
   instructionDate: string
@@ -48,7 +73,6 @@ export interface InstructionsStoreState {
   officesForSelect: any[]
   statusesForSelect: any[]
   searchModel: InstructionRequestOption
-  
 }
 
 export enum InstructionsTableType {
@@ -78,5 +102,5 @@ export enum SortableColumnsForInstructions {
   InstructionDate = 'instructionDate',
   LongLetPrice = 'longLetPrice',
   ShortLetPrice = 'shortLetPrice',
-  MarketingPrice = 'marketingPrice',
+  MarketingPrice = 'marketingPrice'
 }
