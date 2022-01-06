@@ -1,7 +1,7 @@
-import { version } from '../../package.json'
+// import { version } from '../../package.json'
 
 export const environment = {
-  version,
+  // version,
   production: true,
   hmr: false,
   clientId: '03d5d394-2418-42fa-a345-556b8d7ffcdb',
@@ -9,4 +9,4 @@ export const environment = {
   baseUrl: '',
   baseRedirectUri: '',
   endpointUrl: ''
-};
+}
