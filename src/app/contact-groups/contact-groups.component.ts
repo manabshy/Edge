@@ -16,6 +16,7 @@ import { CompanyService } from '../company/shared/company.service'
 import { Store } from "@ngrx/store";
 import { State } from '../shared/state'
 import { ContactGroupsPageActions } from './actions'
+import { ContactGroupsApiActions } from './actions'
 
 const PAGE_SIZE = 20
 @Component({
@@ -56,6 +57,7 @@ export class ContactGroupsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.store.dispatch(ContactGroupsPageActions.init());
     this.sharedService.setTitle('Contact Centre')
     this.contactFinderForm = this.fb.group({
       searchTerm: ['']
@@ -116,8 +118,7 @@ export class ContactGroupsComponent implements OnInit {
       ? (this.searchTerm = this.suggestedTerm)
       : (this.searchTerm = this.contactFinderForm.get('searchTerm').value)
     console.log('dispatch action');
-    this.store.dispatch(ContactGroupsPageActions.enter());
-
+    this.store.dispatch(ContactGroupsApiActions.searchContactGroups({searchTerm:this.searchTerm}));
     this.getNextContactGroupsPage(this.page)
     if (submit) {
       this.sharedService.scrollElIntoView('list-group')
