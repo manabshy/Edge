@@ -3,9 +3,9 @@ import { Component, Input } from '@angular/core'
 @Component({
   selector: 'app-menu',
   template: `
-    <button class="w-10 h-10 bg-white rounded-full" (click)="menu.toggle($event)">
+    <button class="w-10 h-10 bg-transparent rounded-full" (click)="menu.toggle($event)">
       <ng-template [ngIf]="icn" [ngIfElse]="noIcn">
-        <i class="fa fa-chevron-down"></i>
+        <i class="fa fa-chevron-down" [ngClass]="iconColorClass"></i>
       </ng-template>
       <ng-template #noIcn>
         <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
@@ -21,4 +21,5 @@ import { Component, Input } from '@angular/core'
 export class MenuComponent {
   @Input() menuItems: any[]
   @Input() icn?: string
+  @Input() iconColorClass?: string = 'text-white'
 }
