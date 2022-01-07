@@ -32,6 +32,43 @@ export class AppComponent extends BaseComponent implements OnInit {
   listInfo: any
   locale = 'en-gb'
 
+  // Side nav config
+  dashboardPages = [
+    {
+      url: '',
+      name: 'Calendar'
+    }
+  ]
+  contactPages = [
+    {
+      url: 'contact-centre',
+      name: 'Contact centre'
+    },
+    {
+      url: 'company-centre',
+      name: 'Company centre'
+    },
+    {
+      url: 'leads',
+      name: 'Leads'
+    }
+  ]
+  propertyPages = [
+    {
+      url: 'property-centre',
+      name: 'Property centre'
+    },
+    {
+      url: 'valuations',
+      name: 'Valuations'
+    },
+    {
+      url: 'instructions',
+      name: 'Instructions'
+    }
+  ]
+  // end sidenav config
+  
   loginRequest = {
     scopes: ['User.ReadWrite']
   }
@@ -82,7 +119,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.router.events
       .pipe(filter((e) => e instanceof RoutesRecognized))
       .pipe(
-        pairwise(),
+        pairwise()
         // tap((data) => console.log('events here....', data))
       )
       .subscribe((event: any[] | RoutesRecognized[]) => {
@@ -120,9 +157,9 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.setManifestName()
     this.setImpersonatedAsCurrentUser()
     this.storage.delete('calendarStaffMembers').subscribe() // Remove from localstorage
-    this.signalRService.startConnection();
-    this.signalRService.addRewardsDataListener();
-    
+    this.signalRService.startConnection()
+    this.signalRService.addRewardsDataListener()
+
     this.route.queryParams.subscribe((params) => {
       if (params['docTitle']) {
         this.sharedService.setTitle(params['docTitle'])
@@ -213,5 +250,10 @@ export class AppComponent extends BaseComponent implements OnInit {
       environment.endpointUrl = this.configLoaderService.ApiEndpoint
       environment.baseRedirectUri = this.configLoaderService.AppEndpoint
     }
+  }
+toggleSideBar = false
+  toggleSideNav() {
+    console.log('toggle side nav')
+    this.toggleSideBar = !this.toggleSideBar
   }
 }
