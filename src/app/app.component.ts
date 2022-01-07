@@ -1,7 +1,7 @@
 import { MsalService } from '@azure/msal-angular'
-import { Component, Renderer2, ChangeDetectorRef, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core'
+import { Component, Renderer2, ChangeDetectorRef, OnInit, ViewChild, ElementRef } from '@angular/core'
 import { Router, RoutesRecognized, ActivatedRoute, NavigationEnd } from '@angular/router'
-import { filter, pairwise, takeUntil, tap } from 'rxjs/operators'
+import { filter, pairwise, takeUntil } from 'rxjs/operators'
 import { AppUtils } from './core/shared/utils'
 import { AuthService } from './core/services/auth.service'
 import { SharedService, WedgeError } from './core/services/shared.service'
@@ -33,12 +33,15 @@ export class AppComponent extends BaseComponent implements OnInit {
   locale = 'en-gb'
 
   // Side nav config
+  showDashboardPages = true
   dashboardPages = [
     {
       url: '',
       name: 'Calendar'
     }
   ]
+
+  showContactPages = true
   contactPages = [
     {
       url: 'contact-centre',
@@ -53,6 +56,8 @@ export class AppComponent extends BaseComponent implements OnInit {
       name: 'Leads'
     }
   ]
+
+  showPropertyPages = true
   propertyPages = [
     {
       url: 'property-centre',
@@ -68,7 +73,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     }
   ]
   // end sidenav config
-  
+
   loginRequest = {
     scopes: ['User.ReadWrite']
   }
@@ -244,6 +249,7 @@ export class AppComponent extends BaseComponent implements OnInit {
         break
     }
   }
+
   private setupEnvironmentVariables() {
     if (environment.production) {
       environment.baseUrl = this.configLoaderService.ApiEndpoint
@@ -251,9 +257,10 @@ export class AppComponent extends BaseComponent implements OnInit {
       environment.baseRedirectUri = this.configLoaderService.AppEndpoint
     }
   }
-toggleSideBar = false
+
+  toggleSideBar = false
+
   toggleSideNav() {
-    console.log('toggle side nav')
     this.toggleSideBar = !this.toggleSideBar
   }
 }

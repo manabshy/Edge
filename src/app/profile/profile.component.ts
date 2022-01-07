@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Input } from '@angular/core'
 import { StorageMap } from '@ngx-pwa/local-storage'
 import { MenuItem } from 'primeng/api'
 import { DynamicDialogRef } from 'primeng/dynamicdialog'
@@ -12,6 +12,7 @@ import { StaffMember } from '../shared/models/staff-member'
   templateUrl: './profile.component.html'
 })
 export class ProfileComponent implements OnInit {
+  @Input() iconColorClass?: string = 'text-gray-900'
   currentStaffMember: StaffMember
   navTitle: string
   headerLabel: string
