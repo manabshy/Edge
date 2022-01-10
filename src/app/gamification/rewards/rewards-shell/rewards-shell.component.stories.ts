@@ -30,6 +30,20 @@ const Template: Story<RewardsShellComponent> = (args: RewardsShellComponent) => 
 })
 
 export const NoProgress = Template.bind({})
+vm2: [
+  {
+    name: 'Daily Bonus',
+    timeWindow: 1,
+    bonusDetailCriteria: [
+      {
+        completed : 0,
+        iconId: 3,
+        target: 3
+      }
+    ]
+  }
+]
+
 NoProgress.args = {
   vm: {
     daily: {

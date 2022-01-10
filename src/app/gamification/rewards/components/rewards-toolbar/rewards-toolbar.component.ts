@@ -17,13 +17,13 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
       <div class="flex-1"></div>
 
       <div class="gap-2 md:flex-row flex flex-col relative">
-        <button class="rounded-full h-10 w-10" [ngClass]="bronzeComplete ? 'bg-green-500' : ''">
+        <button *ngIf="bronzeComplete" class="rounded-full h-10 w-10" [ngClass]="bronzeComplete ? 'bg-green-500' : ''">
           <i class="fa text-lg text-yellow-700" [ngClass]="icon"></i>
         </button>
-        <button class="rounded-full h-10 w-10" [ngClass]="silverComplete ? 'bg-green-500' : ''">
+        <button *ngIf="silverComplete" class="rounded-full h-10 w-10" [ngClass]="silverComplete ? 'bg-green-500' : ''">
           <i class="fa text-lg text-gray-500" [ngClass]="icon"></i>
         </button>
-        <button class="rounded-full h-10 w-10" [ngClass]="goldComplete ? 'bg-green-500' : ''">
+        <button *ngIf="goldComplete" class="rounded-full h-10 w-10" [ngClass]="goldComplete ? 'bg-green-500' : ''">
           <i class="fa text-lg text-yellow-300" [ngClass]="icon"></i>
         </button>
         <i class="fa fa-info-circle text-blue-400 text-sm -top-5 absolute right-0"></i>
@@ -31,29 +31,34 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
 
       <div class="flex-1"></div>
 
-      <app-rewards-bonus-bank></app-rewards-bonus-bank>
+      <app-rewards-bonus-bank [connectionStatus$]="connectionStatus$" [swagBag$]="swagBag$"></app-rewards-bonus-bank>
     </div>
   `
 })
 export class RewardsToolbarComponent implements OnInit {
   @Input() icon: string = 'fa-trophy'
+  
+  @Input() swagBag$: any
+  @Input() streak$: any
+  @Input() connectionStatus$: any
+  
   @Output() onIconChange: EventEmitter<string> = new EventEmitter()
 
-  constructor() {}
-  
+  constructor() { }
+
   bronzeComplete = false
   silverComplete = false
   goldComplete = false
-  
+
   ngOnInit(): void {
     this.setStreakColours()
   }
 
-  setStreakColours(){
-    // TODO figure out what streak the user is on
-    this.bronzeComplete = true
-    this.silverComplete = false
-    this.goldComplete = false
+  setStreakColours() {
+    this.streak$.subscribe(data => {
+      this.bronzeComplete = data.currentStreak == 0
+      this.silverComplete = data.currentStreak == 1
+      this.goldComplete = data.currentStreak == 2
+    })
   }
-
 }

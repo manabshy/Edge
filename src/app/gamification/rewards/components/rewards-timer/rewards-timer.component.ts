@@ -4,12 +4,12 @@ import moment from 'moment'
 @Component({
   selector: 'app-rewards-timer',
   template: `
-    <div class="text-center flex flex-col justify-around bg-blue-100 rounded-md p-4">
+    <div class="h-48 text-center flex flex-col justify-around bg-blue-100 rounded-md p-4">
       <div class="flex md:flex-col items-center mx-auto">
         <h1 class="text-6xl font-black text-blue-800">{{ hours }}</h1>
         <h3 class="text-3xl">{{ minutes }}</h3>
       </div>
-      <p class="text-md">left of the {{ timeframe }}</p>
+      <p class="text-md">{{ timeframe }}</p>
     </div>
   `
 })

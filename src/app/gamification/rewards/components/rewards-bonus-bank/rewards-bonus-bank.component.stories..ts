@@ -28,5 +28,5 @@ const Rewards: Story<RewardsBonusBankComponent> = (args: RewardsBonusBankCompone
 
 export const NoSwag = Rewards.bind({})
 NoSwag.args = {
-  data$: of({ rewardAmount: 10 })
+  swagBag$: of({ swagBag: 10 })
 }

@@ -1,78 +1,63 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 
 @Component({
   selector: 'app-rewards-row',
   template: `
     <div class="p-3">
-      <p class="text-xl mb-2">{{ titleString }}</p>
-      <div class="flex items-center justify-between flex-wrap mx-auto gap-1">
-        <app-rewards-timer class="w-full md:w-1/6 mb-1" [timeframe]="vm.title"></app-rewards-timer>
+      <p class="text-xl mb-2">{{ bonus.name }}</p>
+      <div class="flex flex-wrap mx-auto gap-5">
+        <app-rewards-timer class="w-full md:w-1/6 mb-1" [timeframe]="timeframe"></app-rewards-timer>
 
+        <ng-container *ngFor="let bc of bonus.bonusDetailCriteria; let i = index">
         <app-rewards-task
           class="w-full md:w-1/6"
-          [progress]="vm.bookViewings.progress"
-          [target]="vm.bookViewings.target"
-          [action]="'bookViewings'"
+          [progress]="bc.progress"
+          [target]="bc.target"
+          [action]="bc.actionId"
+          [name]="bc.name"
           [animationDelay]="0"
-        ></app-rewards-task>
-
-        <i class="fa fa-plus invisible md:visible"></i>
-
-        <app-rewards-task
-          class="w-full md:w-1/6"
-          [progress]="vm.conductViewings.progress"
-          [target]="vm.conductViewings.target"
-          [action]="'conductViewings'"
-          [animationDelay]="1"
-        ></app-rewards-task>
-
-        <i class="fa fa-plus invisible md:visible"></i>
-
-        <app-rewards-task
-          class="w-full md:w-1/6"
-          [progress]="vm.bookValuation.progress"
-          [target]="vm.bookValuation.target"
-          [action]="'bookValuation'"
-          [animationDelay]="2"
-        ></app-rewards-task>
-
-        <i class="fa fa-equals invisible md:visible"></i>
-
+        >
+        <i *ngIf="i < bonus.bonusDetailCriteria.length" class="fa fa-plus invisible md:visible"></i>
+        </app-rewards-task>
+        </ng-container>
+        
+        <div class="flex-1"></div>
+       
         <app-rewards-goal
           class="w-full md:w-1/6"
-          [bonusAmount]="vm.bonusAmount"
-          [timeframe]="vm.title"
+          [streak$]="streak$"
+          [timeframe]="bonus.title"
           [animate]="goalsHit"
         ></app-rewards-goal>
+
       </div>
     </div>
   `
 })
 export class RewardsRowComponent implements OnInit {
-  @Input() vm: any
-  titleString: string
+  @Input() bonus: any
+  @Input() streak$: any
+
+  timeframe: string
   goalsHit: boolean = false
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
-    switch (this.vm.title) {
-      case 'day':
-        this.titleString = 'Daily'
+    switch (this.bonus.timeWindow) {
+      case 1:
+        this.timeframe = 'left of the day'
         break
 
-      case 'week':
-        this.titleString = 'Weekly'
+      case 30:
+        this.timeframe = 'to archive greatness'
         break
 
-      case 'month':
-        this.titleString = 'Monthly'
+      case 60: //todo
+        this.timeframe = 'to secure your ticket on the slopes'
         break
     }
 
-    this.goalsHit =
-      this.vm.bookViewings.progress >= this.vm.bookViewings.target &&
-      this.vm.conductViewings.progress >= this.vm.conductViewings.target &&
-      this.vm.bookValuation.progress >= this.vm.bookValuation.target
+    this.goalsHit = this.bonus.bonusDetailCriteria.every(bc => bc.progress >= bc.target)
   }
 }
