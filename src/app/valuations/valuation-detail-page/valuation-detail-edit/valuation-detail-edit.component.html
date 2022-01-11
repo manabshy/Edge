@@ -1585,7 +1585,7 @@
   <p-messages severity="warn">
     <ng-template pTemplate>
       <div data-cy="activeValuationMessage">
-        There are active valuations on this property, you can continue with one from the list below or create a new one
+        {{activeValuationMessageString}}
       </div>
     </ng-template>
   </p-messages>
@@ -1642,6 +1642,14 @@
     </ng-template>
   </p-table>
   <ng-template #noValue>-</ng-template>
+  <footer class="footer--modal">
+    <div class="btn--container">
+      <button type="submit" class="btn btn--info" data-cy="createValuation" (click)="createNewValuation()"
+      *ngIf="showCreateNewValuationBtnInActiveValuationDialog">
+        Create New Valuation
+      </button>
+    </div>
+  </footer>
 </p-dialog>
 
 <!-- Appointment Modal -->
