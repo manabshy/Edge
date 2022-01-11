@@ -202,6 +202,7 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
 
     this.formSubscription = this.form.valueChanges.subscribe((data) => {
       this.updateMessage(data)
+      console.log('data: ', data)
       this.onModelChange.emit(data)
     })
 
@@ -213,7 +214,7 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
 
   updateMessage(formData) {
     if (formData.declarableInterest === true || formData.declarableInterest === false) {
-      if (!this.warnUserOfUnsignedToB()) {
+      if (this.warnUserOfUnsignedToB()) {
         if (this.message.type === 'error') {
           this.message.type = 'info'
           this.message.text = ['Ready to save Terms of Business']
@@ -223,8 +224,9 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
         }
       } else {
         if (this.message.type === 'error') {
-          this.message.type = 'warn'
-          this.message.text = ['Waiting on Terms of Business']
+          this.message.type = ''
+          this.message.text = []
+          // this.message.text = ['Waiting on Terms of Business']
         }
       }
     }
@@ -296,11 +298,13 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   warnUserOfUnsignedToB() {
-    return (
+   const shouldWarnUser =  (
       (!this.termsOfBusinessDocumentIsSigned && this.valuationData.valuationStatus == 3) ||
       this.valuationData.valuationStatus == 4 ||
       this.valuationData.valuationStatus == 5
     )
+    console.log('warnUserOfUnsignedToB: ', shouldWarnUser)
+    return shouldWarnUser
   }
 
   buildMessageForView() {

@@ -63,3 +63,28 @@ if running scripts has been disabled by admin persmissions then you may need a w
 - here 4 is the major version, 0 minor, 0 patch - 60 prerelease
 - once all dev is done for a version then bump prerelease to -beta and then drop that flag when it goes to production as simply 4.0.0 (no prerelease tags)
 
+Folder Structure
+Currently the folder structure is a bit messy and could use some restructuring to make it easier to navigate and find things.
+
+- try to follow a similar structure to the side navigation of the application in order to make it a bit clearer where components live.
+
+dashboard
+  - calendar
+  - rewards (to move)
+
+contacts
+  - contact-centre (to move)
+  - company-centre (to move)
+  - leads (to move)
+
+properties
+  - property-centre (to move)
+  - valuations (to move)
+  - instructions (done)
+
+shared
+- tidy up the shared folder and move all components into components folder and make them part of the components.module
+
+Things to do to folder organisation in order to reach a cleaner structure
+- move valuations folder into properties folder 
+- redundant files... there appear to be a lot of component files that aren't being used anywhere in the application. They should be grouped together out of the way or deleted if not going to be used.
