@@ -202,7 +202,6 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
 
     this.formSubscription = this.form.valueChanges.subscribe((data) => {
       this.updateMessage(data)
-      console.log('data: ', data)
       this.onModelChange.emit(data)
     })
 
@@ -244,8 +243,8 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
         )
       }
       if (
-        (this.model.declarableInterest === true || this.model.declarableInterest === false) &&
-        this.message.type === 'error'
+        (this.model.declarableInterest === true || this.model.declarableInterest === false) && this.message.type === 'error' ||
+        (this.model.declarableInterest === true || this.model.declarableInterest === false) && this.message.type === 'warn'
       ) {
         // clears error message about filling out terms of biz if declarableInterest is now answered and the existing message was an error (else it clears the ToB not signed warning message)
         this.message = this.warnUserOfUnsignedToB()
@@ -263,7 +262,7 @@ export class TermsOfBusinessComponent implements OnInit, OnChanges, OnDestroy {
       this.termsOfBusinessDocument = changes.termsOfBusinessDocument.currentValue
       this.termsOfBusinessDocumentIsSigned = this.isTermsOfBusinessSigned()
       this.message.type = 'info'
-      this.message.text = ['Terms of Business uploaded, pending save.']
+      this.message.text = this.termsOfBusinessDocumentIsSigned ? ['Terms of Business uploaded, pending save.'] : []
       if (
         this.valuationData.declarableInterest === null ||
         typeof this.valuationData.declarableInterest == 'undefined'

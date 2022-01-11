@@ -4,7 +4,12 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { StorageMap } from '@ngx-pwa/local-storage'
 import { debounceTime, takeUntil, distinctUntilChanged, map } from 'rxjs/operators'
-import { ContactGroup, ContactNote, PersonSummaryFigures, Signer } from 'src/app/contact-groups/shared/contact-group.interfaces'
+import {
+  ContactGroup,
+  ContactNote,
+  PersonSummaryFigures,
+  Signer
+} from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service'
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service'
@@ -216,7 +221,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   ]
   contactGroupLoading: boolean = true
-
+  activeValuationMessageString: string = ''
+  showCreateNewValuationBtnInActiveValuationDialog: boolean = true
   // previousContactGroupId: number;
   get dataNote() {
     if (this.contactGroup?.contactGroupId) {
@@ -509,7 +515,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       valuationStatusDescription: 'New',
       originId: this.originId | 0,
       originTypeId: 0,
-      declarableInterest: null,
+      // declarableInterest: null,
       eSignSignatureTob: {}
     }
     this._valuationFacadeSvc._valuationData.next(this.valuation)
@@ -1953,6 +1959,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
               x.valuationStatus == ValuationStatusEnum.Valued
           )
           this.isActiveValuationsVisible = this.activeValuations.length > 0 ? true : false
+          const allValuationsAreValued = valuations.every((val) => val.valuationStatus == ValuationStatusEnum.Valued)
+          this.activeValuationMessageString = allValuationsAreValued
+            ? 'There is a valued valuation on this property, you can continue with the one from the list below or create a new one.'
+            : 'There is a booked valuation on this property, you can continue with the one from the list below or cancel it and create a new one.'
+          this.showCreateNewValuationBtnInActiveValuationDialog = allValuationsAreValued
         }
       })
   }
@@ -2860,8 +2871,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     // validation of land register
     //this._valuationFacadeSvc.valuationValidationSubject.next(true);
 
-    const declarableInterest = this._valuationFacadeSvc._valuationData.getValue().declarableInterest
-    if (declarableInterest == null || typeof declarableInterest == 'undefined') {
+    const valuationData = this._valuationFacadeSvc._valuationData.getValue()
+    console.log('checking valuation valid for save. valuationData = ', valuationData)
+    if (valuationData.declarableInterest == null || typeof valuationData.declarableInterest == 'undefined') {
       this.messageService.add({
         severity: 'warn',
         summary: 'Please complete declarable interest',
