@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { RewardsService } from 'src/app/gamification/rewards/rewards.service';
 import { SignalRService } from 'src/app/core/services/signal-r.service';
 import { combineLatest } from 'rxjs';
@@ -22,7 +22,7 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
 
   connectionClosed = false;
 
-  constructor(public signalRService: SignalRService, public rewardsService: RewardsService) {
+  constructor(private cdRef: ChangeDetectorRef, public signalRService: SignalRService, public rewardsService: RewardsService) {
     signalRService.startConnection();
 
     signalRService.hubConnection.onclose((err: Error) => {
@@ -49,6 +49,7 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
       this.signalRService.getBonusesStream$
     ]).subscribe(([api, signalR]) => {
       this.bonus = signalR ? signalR : api;
+      this.cdRef.detectChanges(); 
     });
 
     combineLatest([
@@ -56,6 +57,7 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
       this.signalRService.getStreakStream$
     ]).subscribe(([api, signalR]) => {
       this.streak = signalR ? signalR : api;
+      this.cdRef.detectChanges(); 
     });
 
     combineLatest([
@@ -63,6 +65,7 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
       this.signalRService.getSwagBagStream$
     ]).subscribe(([api, signalR]) => {
       this.swagBag = signalR ? signalR : api;
+      this.cdRef.detectChanges(); 
     });
   }
 }
