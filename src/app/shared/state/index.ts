@@ -8,3 +8,13 @@ export interface State {
 export const reducers: ActionReducerMap<State> = {
   contactGroups: fromContactGroups.reducer,
 };
+
+
+/**
+ * ContactGroup Selectors
+ */
+export const selectContactGroupsState = (state: State) => state.contactGroups;
+export const selectAllContactGroups = createSelector(
+  selectContactGroupsState,
+  fromContactGroups.selectAll
+);

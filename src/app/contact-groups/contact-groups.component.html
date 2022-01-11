@@ -93,7 +93,7 @@
   </div>
 
   <div class="row__item">
-    <app-contact-groups-list class="appWrapper" [originalContactGroups]='contactGroups' [pageNumber]="page"
+    <app-contact-groups-list class="appWrapper" [originalContactGroups]='contactGroups$|async' [pageNumber]="page"
       [searchTerm]='contactFinderForm.value.searchTerm' [bottomReached]="bottomReached" *ngIf="!isHintVisible">
     </app-contact-groups-list>
 

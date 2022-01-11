@@ -78,7 +78,7 @@ import { appEmailIcon } from './svg/email'
 //NgRx Store
 import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
-
+import { reducers } from './shared/state'
 export const protectedResourceMap: Map<string, Array<string>> = new Map([
   [
     'http://localhost:57211/v10',
@@ -239,7 +239,7 @@ const externalModulesExports = [
     SvgIconsModule.forRoot({
       icons: [appPaperclipIcon, appEmailIcon]
     }),
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot(reducers, {}),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode

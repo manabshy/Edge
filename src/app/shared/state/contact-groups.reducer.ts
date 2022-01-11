@@ -37,8 +37,5 @@ export function reducer(state: State | undefined, action: Action) {
   return contactGroupsReducer(state, action);
 }
 
-export const selectAll = (state: State) => state.collection;
-export const selectActiveBook = createSelector(
-  selectAll,
-  (books, activeBookId) => books.find(book => book.id === activeBookId) || null
-);
+
+export const selectAll = (state: State) => state?.collection;

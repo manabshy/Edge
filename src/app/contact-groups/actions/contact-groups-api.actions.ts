@@ -7,6 +7,6 @@ export const searchContactGroups= createAction(
 );
 export const contactGroupsLoaded = createAction(
   "Contact Groups Search API] Contract Groups Loaded Success",
-  props<{ groups: Array<any> }>()
+  props<{ groups: Array<ContactGroupAutoCompleteResult> }>()
 );
 
