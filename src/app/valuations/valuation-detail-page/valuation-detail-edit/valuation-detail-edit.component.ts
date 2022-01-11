@@ -1959,11 +1959,22 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
               x.valuationStatus == ValuationStatusEnum.Valued
           )
           this.isActiveValuationsVisible = this.activeValuations.length > 0 ? true : false
-          const allValuationsAreValued = valuations.every((val) => val.valuationStatus == ValuationStatusEnum.Valued)
-          this.activeValuationMessageString = allValuationsAreValued
-            ? 'There is a valued valuation on this property, you can continue with the one from the list below or create a new one.'
-            : 'There is a booked valuation on this property, you can continue with the one from the list below or cancel it and create a new one.'
-          this.showCreateNewValuationBtnInActiveValuationDialog = allValuationsAreValued
+
+          if (this.isActiveValuationsVisible) {
+            const thereIsABookedValuation = this.activeValuations.find(
+              (val) => val.valuationStatus == ValuationStatusEnum.Booked
+            )
+
+            this.activeValuationMessageString = thereIsABookedValuation
+              ? 'There is a booked valuation on this property, you can continue with the one from the list below or cancel it and create a new one.'
+              : 'There is a valued valuation on this property, you can continue with the one from the list below or create a new one.'
+            if (thereIsABookedValuation) {
+              // There can only be 1 active valuation at a time for a property.
+              this.showCreateNewValuationBtnInActiveValuationDialog = false
+            } else {
+              this.showCreateNewValuationBtnInActiveValuationDialog = true
+            }
+          }
         }
       })
   }
