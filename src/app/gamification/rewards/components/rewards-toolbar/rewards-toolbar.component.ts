@@ -31,16 +31,16 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
 
       <div class="flex-1"></div>
 
-      <app-rewards-bonus-bank [connectionStatus$]="connectionStatus$" [swagBag$]="swagBag$"></app-rewards-bonus-bank>
+      <app-rewards-bonus-bank [connectionStatus]="connectionStatus" [swagBag]="swagBag"></app-rewards-bonus-bank>
     </div>
   `
 })
 export class RewardsToolbarComponent implements OnInit {
   @Input() icon: string = 'fa-trophy'
   
-  @Input() swagBag$: any
-  @Input() streak$: any
-  @Input() connectionStatus$: any
+  @Input() swagBag: any
+  @Input() streak: any
+  @Input() connectionStatus: any
   
   @Output() onIconChange: EventEmitter<string> = new EventEmitter()
 
@@ -55,10 +55,8 @@ export class RewardsToolbarComponent implements OnInit {
   }
 
   setStreakColours() {
-    this.streak$.subscribe(data => {
-      this.bronzeComplete = data.currentStreak == 0
-      this.silverComplete = data.currentStreak == 1
-      this.goldComplete = data.currentStreak == 2
-    })
+      this.bronzeComplete = this.streak.currentStreak == 0
+      this.silverComplete = this.streak.currentStreak == 1
+      this.goldComplete = this.streak.currentStreak == 2
   }
 }

@@ -33,6 +33,7 @@ export interface BonusDetail {
 })
 export class RewardsService {
  
+  isLoaded = false;
   constructor(private http: HttpClient) {  }
  
   getSwagBag(): Observable<SwagBag | any> {
@@ -48,7 +49,7 @@ export class RewardsService {
     const url = `${AppConstants.baseRewardsUrl}/board/streak`
     return this.http.get<any>(url).pipe(
       map((response) => {
-        return response.result
+          return response.result
       })
     )
   }

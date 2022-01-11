@@ -1,42 +1,36 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { RewardsService } from 'src/app/gamification/rewards/rewards.service';
 import { SignalRService } from 'src/app/core/services/signal-r.service';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs'
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-rewards-shell',
   template: `
-    <div class="">
-      <app-rewards-toolbar [connectionStatus$]="signalRService.connectionStatus$"  [swagBag$]="swagBag$" [streak$]="streak$"></app-rewards-toolbar>
-      <ng-container *ngFor="let b of bonus$ | async">
-        <app-rewards-row [streak$]="streak$" [bonus]="b"></app-rewards-row>
+    <div *ngIf="streak && bonus && swagBag" class="">
+      <app-rewards-toolbar [connectionStatus]="connectionStatus"  [swagBag]="swagBag" [streak]="streak"></app-rewards-toolbar>
+      <ng-container *ngFor="let b of bonus">
+        <app-rewards-row [streak]="streak" [bonus]="b"></app-rewards-row>
       </ng-container>
     </div>
   `
 })
 export class RewardsShellComponent implements OnInit, OnDestroy {
-  swagBag$: any;
-  streak$: any;
-  bonus$: any;
+  swagBag: any;
+  streak: any;
+  bonus: any;
+  connectionStatus : any;
 
-  public hasConnectionProblemBefore = false;
-  private connectionClosed = false;
-
-  private $: BehaviorSubject<any> = new BehaviorSubject(null);;
-
-  private onReconnectionSwagBagStream: BehaviorSubject<any> = new BehaviorSubject(null);
-  public onReconnectionSwagBagStream$ = this.onReconnectionSwagBagStream.asObservable();
+  connectionClosed = false;
 
   constructor(public signalRService: SignalRService, public rewardsService: RewardsService) {
     signalRService.startConnection();
 
     signalRService.hubConnection.onclose((err: Error) => {
-      if(!this.connectionClosed) {
+      if (!this.connectionClosed) {
         signalRService.hubConnectionOnclose(err);
       }
     });
-   }
+  }
 
 
   ngOnDestroy(): void {
@@ -46,29 +40,30 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.swagBag$ = combineLatest([
-      this.rewardsService.getSwagBag(),
-      this.signalRService.getSwagBagStream$,
-    ]).pipe(
-      map(([api, signalR]) => {
-        return signalR ? signalR : api;
-      }));
+    this.signalRService.connectionStatus$.subscribe(status => {
+      this.connectionStatus = status;
+    });
 
-    this.streak$ = combineLatest([
-      this.rewardsService.getStreak(),
-      this.signalRService.getStreakStream$
-    ]).pipe(
-      map(([api, signalR]) => {
-        return signalR ? signalR : api;
-      }));
-
-    this.bonus$ = combineLatest([
+    combineLatest([
       this.rewardsService.getBonuses(),
       this.signalRService.getBonusesStream$
-    ]).pipe(
-      map(([api, signalR]) => {
-        return signalR ? signalR : api;
-      }));
+    ]).subscribe(([api, signalR]) => {
+      this.bonus = signalR ? signalR : api;
+    });
+
+    combineLatest([
+      this.rewardsService.getStreak(),
+      this.signalRService.getStreakStream$
+    ]).subscribe(([api, signalR]) => {
+      this.streak = signalR ? signalR : api;
+    });
+
+    combineLatest([
+      this.rewardsService.getSwagBag(),
+      this.signalRService.getSwagBagStream$
+    ]).subscribe(([api, signalR]) => {
+      this.swagBag = signalR ? signalR : api;
+    });
   }
 }
 

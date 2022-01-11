@@ -25,7 +25,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
        
         <app-rewards-goal
           class="w-full md:w-1/6"
-          [streak$]="streak$"
+          [streak]="streak"
           [timeframe]="bonus.title"
           [animate]="goalsHit"
         ></app-rewards-goal>
@@ -36,7 +36,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 })
 export class RewardsRowComponent implements OnInit, OnChanges {
   @Input() bonus: any
-  @Input() streak$: any
+  @Input() streak: any
 
   timeframe: string
   goalsHit: boolean = false
