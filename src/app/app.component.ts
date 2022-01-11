@@ -162,8 +162,6 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.setManifestName()
     this.setImpersonatedAsCurrentUser()
     this.storage.delete('calendarStaffMembers').subscribe() // Remove from localstorage
-    this.signalRService.startConnection()
-    this.signalRService.addRewardsDataListener()
 
     this.route.queryParams.subscribe((params) => {
       if (params['docTitle']) {

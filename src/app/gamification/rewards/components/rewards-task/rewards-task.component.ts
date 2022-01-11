@@ -38,7 +38,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
 }
 `],
   template: `
-    <div class="p-0 flex flex-col border border-gray-300 rounded-md h-48" >
+    <div class="p-0 flex flex-col border-2 border-gray-300 rounded-md h-48" >
       <div *ngIf="targetReached; else default">
       <div class="h-4 bg-white w-full">test</div>
       <div [ngClass]="bgColor">
@@ -58,7 +58,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
                 {{ nameStringArray[1] }}
               </p>
               <div class="my-2">
-                <img src="{{'/assets/gamification-icons/' + (action | lowercase)  + '-icn.jpg'}}" class="w-28 h-20 mx-auto border-0" />
+                <img src="{{'/assets/gamification-icons/' + (action)  + '-icn.jpg'}}" class="w-28 h-20 mx-auto border-0" />
               </div>
           <div class="w-full relative bg-green-200 h-5 rounded-full">
           <p class="text-center text-sm z-10 relative">{{ progress }}</p>

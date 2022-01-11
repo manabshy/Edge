@@ -25,6 +25,6 @@ export class SharedRewardsComponent {
   // comment this out if using storybook 
   constructor(private signalRService: SignalRService) {
     // this.data$ =  of({ rewardAmount: 911 })
-    this.data$ = this.signalRService.messageStream$
+   // this.data$ = this.signalRService.messageStream$
   }
 }

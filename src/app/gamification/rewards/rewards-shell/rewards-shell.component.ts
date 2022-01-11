@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { RewardsService } from 'src/app/gamification/rewards/rewards.service';
 import { SignalRService } from 'src/app/core/services/signal-r.service';
-import { combineLatest } from 'rxjs';
+import { combineLatest, takeUntil } from 'rxjs';
+import { BaseComponent } from 'src/app/shared/models/base-component';
 
 @Component({
   selector: 'app-rewards-shell',
@@ -14,7 +15,7 @@ import { combineLatest } from 'rxjs';
     </div>
   `
 })
-export class RewardsShellComponent implements OnInit, OnDestroy {
+export class RewardsShellComponent extends BaseComponent implements OnInit, OnDestroy {
   swagBag: any;
   streak: any;
   bonus: any;
@@ -23,6 +24,8 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
   connectionClosed = false;
 
   constructor(private cdRef: ChangeDetectorRef, public signalRService: SignalRService, public rewardsService: RewardsService) {
+    super();
+
     signalRService.startConnection();
 
     signalRService.hubConnection.onclose((err: Error) => {
@@ -47,7 +50,7 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
     combineLatest([
       this.rewardsService.getBonuses(),
       this.signalRService.getBonusesStream$
-    ]).subscribe(([api, signalR]) => {
+    ]).pipe(takeUntil(this.ngUnsubscribe)).subscribe(([api, signalR]) => {
       this.bonus = signalR ? signalR : api;
       this.cdRef.detectChanges(); 
     });
@@ -55,7 +58,7 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
     combineLatest([
       this.rewardsService.getStreak(),
       this.signalRService.getStreakStream$
-    ]).subscribe(([api, signalR]) => {
+    ]).pipe(takeUntil(this.ngUnsubscribe)).subscribe(([api, signalR]) => {
       this.streak = signalR ? signalR : api;
       this.cdRef.detectChanges(); 
     });
@@ -63,7 +66,7 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
     combineLatest([
       this.rewardsService.getSwagBag(),
       this.signalRService.getSwagBagStream$
-    ]).subscribe(([api, signalR]) => {
+    ]).pipe(takeUntil(this.ngUnsubscribe)).subscribe(([api, signalR]) => {
       this.swagBag = signalR ? signalR : api;
       this.cdRef.detectChanges(); 
     });
