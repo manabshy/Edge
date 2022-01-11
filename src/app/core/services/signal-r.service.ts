@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import * as signalR from "@aspnet/signalr";
 import { BehaviorSubject, Subject } from 'rxjs';
 import { StaffMember } from 'src/app/shared/models/staff-member';
@@ -24,26 +24,27 @@ export class SignalRService {
 
   private currentStaffMember: StaffMember;
 
-  private hubConnection: signalR.HubConnection;
+  public hubConnection: signalR.HubConnection;
   numOfRetries = 10;
   timeOut = 1 * 60 * 1000;
-  isConnectionLost = true;
+  public isConnectionLost = true;
 
 
   constructor(private staffMemberService: StaffMemberService) {
-    this.startConnection();
     this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data);
+  }
+
+
+  public hubConnectionOnclose = (error: any) => {
+    this.isConnectionLost = true;
+    this.setConnectionStatus(this.isConnectionLost);
+    this.reconnect();
   }
 
   public startConnection = () => {
     const url = `${AppConstants.baseRewardsHubUrl}`;
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(url)
-      .configureLogging({
-        log(logLevel, message) {
-          console.log(new Date().toISOString() + ': my message ' + message);
-        }
-      })
       .build();
 
     this.hubConnection
@@ -60,17 +61,10 @@ export class SignalRService {
       });
 
 
+
     this.addGetBonusListener();
     this.addStreakDataListener();
     this.addSwagBagDataListener();
-
-    this.hubConnection.onclose((err: Error) => {
-      console.log('connection closed', { err });
-
-      this.isConnectionLost = true;
-      this.setConnectionStatus(this.isConnectionLost);
-      this.reconnect();
-    });
   }
 
   public reconnect() {
@@ -89,7 +83,7 @@ export class SignalRService {
     this.hubConnection.stop();
   }
 
-  private setConnectionStatus(status: boolean) {
+  public setConnectionStatus(status: boolean) {
     this.connectionStatusSubject.next(status);
   }
 

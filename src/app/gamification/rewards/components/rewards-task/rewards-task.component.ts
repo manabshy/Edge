@@ -38,15 +38,18 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
 }
 `],
   template: `
-    <div class="p-2 flex flex-col border border-gray-300 rounded-md h-48" [ngClass]="bgColor">
-      <ng-container *ngIf="targetReached; else default">
-        <p class="font-bold px-2 text-center text-sm mb-2">SMASHED IT - and you rolled a 5</p>
+    <div class="p-0 flex flex-col border border-gray-300 rounded-md h-48" >
+      <div *ngIf="targetReached; else default">
+      <div class="h-4 bg-white w-full">test</div>
+      <div [ngClass]="bgColor">
+      <p class="font-bold px-2 text-center text-sm mb-2">SMASHED IT - and you rolled a 5</p>
         <img
           class="w-32 mx-auto border-0 animate__animated"
           [ngClass]="animationClass"
           src="/assets/gamification-icons/dice.jpg"
         />
-      </ng-container>
+      </div>
+      </div>
       <ng-template #default>
         <div class="flex flex-col justify-between flex-1">
         <p *ngIf="nameStringArray.length === 2" class="text-blue-900 text-center">

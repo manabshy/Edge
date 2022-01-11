@@ -34,7 +34,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
     </div>
   `
 })
-export class RewardsRowComponent implements OnInit {
+export class RewardsRowComponent implements OnInit, OnChanges {
   @Input() bonus: any
   @Input() streak$: any
 
@@ -42,6 +42,10 @@ export class RewardsRowComponent implements OnInit {
   goalsHit: boolean = false
 
   constructor() { }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.goalsHit = changes.bonus.currentValue.bonusDetailCriteria.every(bc => bc.progress >= bc.target)
+  }
 
   ngOnInit(): void {
     switch (this.bonus.timeWindow) {
