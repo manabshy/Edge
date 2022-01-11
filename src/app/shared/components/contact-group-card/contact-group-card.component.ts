@@ -4,7 +4,7 @@ import { StorageMap } from '@ngx-pwa/local-storage'
 import { MenuItem, MessageService, PrimeNGConfig } from 'primeng/api'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { ContactGroup, ContactNote, Signer } from 'src/app/contact-groups/shared/contact-group'
+import { ContactGroup, ContactNote, Signer } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service'
 import { SharedService } from 'src/app/core/services/shared.service'
@@ -37,6 +37,7 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
   @Input() showEmailModal = false
   @Input() showValuationActions = true
   @Input() adminContact: Signer
+  @Input() loading: boolean
   @Output() onPowerOfAttorneyChange: EventEmitter<any> = new EventEmitter()
 
   contactReferrals: Referral[] = []
@@ -127,7 +128,7 @@ export class ContactGroupCardComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("contact groups in the card", changes);
+    // console.log("contact groups in the card", changes);
 
     this.numOfPeople = this.contactGroup?.contactPeople?.length
     this.numOfPeople > 1 ? (this.showAdditionalPeople = true) : (this.showAdditionalPeople = false)

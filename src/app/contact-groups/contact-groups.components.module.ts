@@ -10,6 +10,7 @@ import { ContactGroupsDetailNotesComponent } from './contact-groups-detail-notes
 import { ContactGroupsComponent } from './contact-groups.component'
 import { ContactDuplicateCheckerComponent } from './shared/contact-duplicate-checker/contact-duplicate-checker.component'
 import { ContactSearchComponent } from './shared/contact-search/contact-search.component'
+import { EmptyContactGroupPlaceholderComponent } from './shared/placeholders/empty-contact-group.component'
 
 const components = [
   ContactGroupsComponent,
@@ -19,7 +20,8 @@ const components = [
   ContactGroupsDetailEditComponent,
   ContactGroupsDetailNotesComponent,
   ContactDuplicateCheckerComponent,
-  ContactSearchComponent
+  ContactSearchComponent,
+  EmptyContactGroupPlaceholderComponent
 ]
 
 @NgModule({

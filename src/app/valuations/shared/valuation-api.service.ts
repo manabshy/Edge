@@ -24,7 +24,6 @@ export class ValuationApiService {
   constructor(private http: HttpClient, private helperSvc: ValuationApiHelperService) {}
 
   getValuations(request: ValuationRequestOption): Observable<Valuation[] | any> {
-    console.log('request for valuations query: ', request)
     const options = this.helperSvc.setQueryParams(request)
     const url = `${AppConstants.baseValuationUrl}/search`
     return this.http
@@ -80,7 +79,7 @@ export class ValuationApiService {
     const url = `${AppConstants.baseValuationUrl}/${valuationEventId}/esign/${eSignTypeId}`
     return this.http.post<any>(url, eSignTypeId).pipe(
       map((response) => response.result),
-      tap((data) => console.log('eSign triggered'))
+      // tap((data) => console.log('eSign triggered'))
     )
   }
 
@@ -88,7 +87,7 @@ export class ValuationApiService {
     const url = `${AppConstants.baseValuationUrl}`
     return this.http.post<any>(url, valuation).pipe(
       map((response) => response.result),
-      tap((data) => console.log('added valuation', JSON.stringify(data)))
+      // tap((data) => console.log('added valuation', JSON.stringify(data)))
     )
   }
 
@@ -96,7 +95,7 @@ export class ValuationApiService {
     const url = `${AppConstants.baseValuationUrl}/${cancelVm.valuationEventId}/cancel`
     return this.http.put<any>(url, cancelVm).pipe(
       map((response) => response.result),
-      tap((data) => console.log('cancel valuation', JSON.stringify(data)))
+      // tap((data) => console.log('cancel valuation', JSON.stringify(data)))
     )
   }
 
@@ -109,7 +108,7 @@ export class ValuationApiService {
     const url = `${AppConstants.baseValuationUrl}/${valuation.valuationEventId}`
     return this.http.put<any>(url, valuation).pipe(
       map((response) => response.result),
-      tap((data) => console.log('added valuation', JSON.stringify(data)))
+      // tap((data) => console.log('added valuation', JSON.stringify(data)))
     )
   }
 
@@ -117,7 +116,7 @@ export class ValuationApiService {
     const url = `${AppConstants.baseValuationUrl}/${valuationNote.valuationEventId}/note`
     return this.http.post<any>(url, valuationNote).pipe(
       map((response) => response.result),
-      tap((data) => console.log('added valuation note', JSON.stringify(data)))
+      // tap((data) => console.log('added valuation note', JSON.stringify(data)))
     )
   }
 
@@ -161,7 +160,7 @@ export class ValuationApiService {
     const url = `${AppConstants.baseValuationUrl}/${instruction.valuationEventId}/instruct`
     return this.http.post<any>(url, instruction).pipe(
       map((response) => response),
-      tap((data) => console.log('added instruction', JSON.stringify(data)))
+      // tap((data) => console.log('added instruction', JSON.stringify(data)))
     )
   }
 }

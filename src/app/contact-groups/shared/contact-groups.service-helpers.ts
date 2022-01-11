@@ -1,4 +1,4 @@
-import { PeopleAutoCompleteResult } from './contact-group'
+import { PeopleAutoCompleteResult } from './contact-group.interfaces'
 
 export const buildMatchedPeople = (person: any, potentialDuplicatePeople) => {
   const matches: PeopleAutoCompleteResult[] = []

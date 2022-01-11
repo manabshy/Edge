@@ -6,8 +6,8 @@
 
 import { Injectable, Injector } from '@angular/core'
 import { Router } from '@angular/router'
-import { BehaviorSubject, Observable, Subject } from 'rxjs'
-import { filter, map, mergeMap, take, tap } from 'rxjs/operators'
+import { BehaviorSubject, Observable, Subject, of, combineLatest } from 'rxjs'
+import { filter, mergeMap, take, tap } from 'rxjs/operators'
 import {
   Valuation,
   ValuationRequestOption,
@@ -26,9 +26,8 @@ import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-grou
 import { FileService } from 'src/app/core/services/file.service'
 import { PeopleService } from 'src/app/core/services/people.service'
 import { CompanyService } from 'src/app/company/shared/company.service'
-import { ContactGroup } from 'src/app/contact-groups/shared/contact-group'
+import { ContactGroup } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { InfoService } from 'src/app/core/services/info.service'
-import { Console } from 'console'
 
 @Injectable({
   providedIn: 'root'
@@ -37,8 +36,10 @@ export class ValuationFacadeService {
   private valuationPageNumberSubject = new Subject<number>()
   valuationPageNumberChanges$ = this.valuationPageNumberSubject.asObservable()
 
-  contactGroupBs = new BehaviorSubject(null)
-  public readonly contactGroup$: Observable<ContactGroup> = this.contactGroupBs.asObservable()
+  _contactGroupBs = new BehaviorSubject(null)
+  public readonly contactGroup$: Observable<ContactGroup> = this._contactGroupBs
+    .asObservable()
+    // .pipe(tap((data) => console.log('contact group data is changing to ', data)))
 
   valuationValidationSubject = new Subject<boolean>()
   valuationValidation$ = this.valuationValidationSubject.asObservable()
@@ -52,6 +53,39 @@ export class ValuationFacadeService {
 
   private readonly _valuationPricingInfo: BehaviorSubject<ValuationPricingInfo> = new BehaviorSubject({})
   public readonly valuationPricingInfo$ = this._valuationPricingInfo.asObservable()
+
+  private _lastKnownOwnerChanged: BehaviorSubject<any> = new BehaviorSubject(null)
+  public lastKnownOwnerChanged$: Observable<any> = this._lastKnownOwnerChanged.asObservable()
+
+  changeLastKnownOwner(contactGroupId):void {
+    this.loadContactGroupComplianceDocumentsIntoStore$(contactGroupId)
+      .pipe(take(1))
+      .subscribe(()=>{},()=>{},() => {
+        console.log('🧍🧍🧍 lastKnownOwnerChanged, default documents for the contact group have been loaded to valuationData$ model: ')
+        this._lastKnownOwnerChanged.next({
+          valuationData: this._valuationData.getValue(),
+          contactGroupData: this._contactGroupBs.getValue()
+        })
+      })
+  }
+
+  // grabs the default compliance documents for all entities in a contactGroup and updates the local valuation model
+  private loadContactGroupComplianceDocumentsIntoStore$(contactGroupId): Observable<any> {
+    return this.getPeopleDocsForValuation(contactGroupId, 0).pipe(
+      mergeMap((complianceDocuments) => {
+        const personDocuments = complianceDocuments.filter((doc) => doc.personId)
+        const companyDocuments = complianceDocuments.filter((doc) => doc.companyId)
+        personDocuments.forEach((doc) => {
+          doc.position = doc.position ? doc.position : ''
+        })
+        companyDocuments.forEach((doc) => {
+          doc.position = doc.position ? doc.position : ''
+        })
+        this.updateLocalValuation({ personDocuments, companyDocuments })
+        return of({ personDocuments, companyDocuments })
+      })
+    )
+  }
 
   private _infoService: InfoService
   public get infoService(): InfoService {
@@ -71,6 +105,24 @@ export class ValuationFacadeService {
     private injector: Injector
   ) {
     // console.log(' FACADE SERVICE INSTANTIATING =========== ')
+  }
+
+  /**
+   * updateLocalValuation
+   * @description merges incoming data object into service level model and emits updated valuation object to subscribers
+   * @param data {} - containing the properties to update
+   */
+  public updateLocalValuation(data) {
+    // console.log('updateLocalValuation: ', data)
+    const valuationData = this._valuationData.getValue()
+    const updatedValuationData = { ...valuationData, ...data }
+    this._valuationData.next(updatedValuationData)
+    return updatedValuationData
+  }
+
+  public updateLocalContactGroup(contactGroupData) {
+    // console.log('updateLocalContactGroup: contactGroupData', contactGroupData)
+    this._contactGroupBs.next(contactGroupData)
   }
 
   getDropDownInfo() {
@@ -120,14 +172,14 @@ export class ValuationFacadeService {
 
   // TERMS OF BUSINESS CARD
   public termsOfBusinessFileUploaded(data) {
-    console.log('WIP: termsOfBusinessFileUploaded: ', data)
+    // console.log('WIP: termsOfBusinessFileUploaded: ', data)
 
     return this.saveFileTemp(data.file)
       .pipe(
         take(1),
         tap((res) => {
           try {
-            console.log('upload ToB file res: ', res)
+            // console.log('upload ToB file res: ', res)
             const valuationData = this._valuationData.getValue()
 
             let eSignSignatureTob = {
@@ -149,9 +201,7 @@ export class ValuationFacadeService {
                 signedOn: new Date()
               }
             }
-            const updatedValuationData = { ...valuationData, eSignSignatureTob }
-            console.log('updatedValuationData: ', updatedValuationData)
-            this._valuationData.next(updatedValuationData)
+            this.updateLocalValuation({ eSignSignatureTob })
             return 'that worked'
           } catch (e) {
             console.log('tap error: ', e)
@@ -179,23 +229,14 @@ export class ValuationFacadeService {
           return this._apiSvc.resendToBLink(valuationData.valuationEventId)
         }),
         tap((res): any => {
-          // TODO tidy up model refresh once confirmed
           const updatedToBDoc = valuationDataClosure.eSignSignatureTob ? valuationDataClosure.eSignSignatureTob : {}
           updatedToBDoc.dateRequestSent = new Date()
-          const newValuationValue = { ...valuationDataClosure, eSignSignatureTob: updatedToBDoc }
-          this._valuationData.next(newValuationValue)
+          this.updateLocalValuation({ eSignSignatureTob: updatedToBDoc })
         })
       )
       .subscribe((res) => {
         console.log('resend tob done.')
       })
-  }
-
-  public updateLocalModel(data) {
-    console.log('updateLocalModel: ', data)
-    const valuationData = this._valuationData.getValue()
-    const updatedValuationData = { ...valuationData, ...data }
-    this._valuationData.next(updatedValuationData)
   }
 
   // LAND REGISTRY CARD
@@ -209,7 +250,19 @@ export class ValuationFacadeService {
         backToOrigin: true,
         isNewPersonalContact: true,
         newPerson: JSON.stringify(newPerson),
-        emailPhoneRequired: false
+        emailPhoneRequired: false,
+        addNewEntityToComplianceChecks: true
+      }
+    })
+  }
+
+  public navigateToNewCompanyScreen(newCompany) {
+    this._router.navigate(['/company-centre/detail/0/edit'], {
+      queryParams: {
+        isNewCompany: true,
+        companyName: newCompany.companyName,
+        backToOrigin: true,
+        addNewEntityToComplianceChecks: true
       }
     })
   }
@@ -224,11 +277,10 @@ export class ValuationFacadeService {
   public getContactGroupById(contactGroupId) {
     return this._contactGroupsSvc.getContactGroupById(contactGroupId).pipe(
       tap((contactGroupData) => {
-        this.contactGroupBs.next(contactGroupData)
+        this.updateLocalContactGroup(contactGroupData)
       })
     )
   }
-  public newPerson$ = this._contactGroupsSvc.newPerson$
 
   /**
    * @function passComplianceChecksForValution
@@ -259,6 +311,14 @@ export class ValuationFacadeService {
           customPassedDate: new Date(),
           isPassed: true
         })
+      }),
+      tap((res) => {
+        this.updateLocalValuation({
+          complianceCheck: {
+            compliancePassedBy: res.compliancePassedByFullName,
+            compliancePassedDate: res.compliancePassedDate
+          }
+        })
       })
     )
   }
@@ -272,43 +332,6 @@ export class ValuationFacadeService {
 
   public getPeopleDocsForValuation(contactGroupId: number, valuationEventId: number) {
     return this._peopleSvc.getPeopleDocsForValuation(contactGroupId, valuationEventId)
-  }
-
-  /***
-   * @function updatePersonDocuments
-   * @param personDocuments {object[]} - array of entities and their docs ready to save to API
-   * @description emits and updated value for the valuationData in the store having updated the personDocuments array in the valuationData
-   **/
-  public updatePersonDocuments(personDocuments) {
-    // console.log('🏃🏃🏃🏃 updatePersonDocuments running', personDocuments)
-    return this.valuationData$.pipe(
-      take(1),
-      map((valuationData) => {
-        console.log('🏆 updatePersonDocuments: this._valuationData.next ', valuationData)
-        this._valuationData.next({ ...valuationData, personDocuments })
-      })
-    )
-  }
-
-  /***
-   * updateCompanyAndPersonDocuments
-   * @description updates the company and person documents for the current valuationData in the service and pushes out a new valuationData value to subscribers
-   */
-  public updateCompanyAndPersonDocuments(savePayload) {
-    // console.log('🏃🏃🏃🏃 updateCompanyDocuments running', savePayload)
-    return this.valuationData$.pipe(
-      take(1),
-      map((valuationData) => {
-        // console.log('🏆 updateCompanyDocuments: this._valuationData.next ', valuationData)
-        const updatedValuationData = {
-          ...valuationData,
-          companyDocuments: savePayload.companyDocuments,
-          personDocuments: savePayload.personDocuments
-        }
-        // console.log('setting valuation data to : ', updatedValuationData)
-        this._valuationData.next(updatedValuationData)
-      })
-    )
   }
 
   public unfreezePeopleDocsForValuation = (contactGroupId: number, valuationEventId: number) => {
@@ -358,12 +381,57 @@ export class ValuationFacadeService {
   }
 
   public togglePowerOfAttorney(adminContact) {
+    // console.log('togglePowerOfAttorney: ', adminContact)
     if (!adminContact.isPowerOfAttorney) {
-      this.getAllPersonDocs(adminContact.id).subscribe((data) => {
-        this._isPowerOfAttorneyChanged.next({ action: 'add', admin: data })
-      })
+      // ON ADD POWER OF ATTORNEY
+      let adminDocumentsClosure
+      combineLatest([this.valuationData$, this.getAllPersonDocs(adminContact.id)])
+        .pipe(
+          take(1),
+          mergeMap(([valuationData, adminContact]) => {
+            // console.log('valuationData: ', valuationData)
+            // console.log('adminContact: ', adminContact)
+            adminDocumentsClosure = adminContact
+            if (valuationData.complianceCheck?.compliancePassedDate) {
+              // console.log(
+              //   'valuation is frozen, fetch default docs for contact group to load into compliace checks card'
+              // )
+              return this.loadContactGroupComplianceDocumentsIntoStore$(this._contactGroupBs.getValue().contactGroupId)
+            } else {
+              // console.log('valuation isnt frozen, only return admin contact documents to add to the store')
+              return of({
+                adminContact,
+                isFrozen: false
+              })
+            }
+          })
+        )
+        .subscribe((data) => {
+          console.log('back with all people docs for this contact group ', data)
+          if (data.personDocuments) {
+            data.documents = data.personDocuments.concat(data.companyDocuments)
+            data.adminContact = adminDocumentsClosure
+            data.isFrozen = true
+          }
+          this._isPowerOfAttorneyChanged.next({
+            action: 'add',
+            admin: data.adminContact,
+            allDocuments: data.documents,
+            isFrozen: data.isFrozen
+          })
+        })
     } else {
-      this._isPowerOfAttorneyChanged.next({ action: 'remove', id: adminContact.id })
+      // ON REMOVE POWER OF ATTORNEY
+      const valuation = this._valuationData.getValue()
+      const isFrozen = valuation.complianceCheck?.compliancePassedDate
+      this._isPowerOfAttorneyChanged.next({
+        action: 'remove',
+        id: adminContact.id,
+        isFrozen: !!isFrozen,
+        valuationEventId: valuation.valuationEventId,
+        contactGroupId: this._contactGroupBs.getValue().contactGroupId,
+        companyOrContact: this._contactGroupBs.getValue().companyId ? 'company' : 'contact'
+      })
     }
   }
 

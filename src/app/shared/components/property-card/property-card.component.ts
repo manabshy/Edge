@@ -29,7 +29,7 @@ export class PropertyCardComponent implements OnInit, OnChanges {
   @Output() showPhotos = new EventEmitter<boolean>()
   @Output() showMap = new EventEmitter<boolean>()
   @Output() changeProperty = new EventEmitter<boolean>()
-  @Output() changeLastknownOwner = new EventEmitter<boolean>()
+  @Output() changeLastKnownOwner = new EventEmitter<boolean>()
 
   constructor(private router: Router, private storage: StorageMap) {}
 

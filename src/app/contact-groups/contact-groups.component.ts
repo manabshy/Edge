@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { ContactGroupsService } from './shared/contact-groups.service'
-import { ContactGroupAutoCompleteResult } from './shared/contact-group'
+import { ContactGroupAutoCompleteResult } from './shared/contact-group.interfaces'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AppUtils } from '../core/shared/utils'
 import { FormGroup, FormBuilder } from '@angular/forms'
@@ -12,6 +12,7 @@ import * as _ from 'lodash'
 import { Observable, of, EMPTY } from 'rxjs'
 import { distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators'
 import { PeopleService } from '../core/services/people.service'
+import { CompanyService } from '../company/shared/company.service'
 
 const PAGE_SIZE = 20
 @Component({
@@ -41,6 +42,7 @@ export class ContactGroupsComponent implements OnInit {
 
   constructor(
     private contactGroupService: ContactGroupsService,
+    private companyService: CompanyService,
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
@@ -194,18 +196,16 @@ export class ContactGroupsComponent implements OnInit {
   }
 
   navigateToNewGroup(contactType: string) {
-    if (contactType === 'new') {
-      // TODO db remove before Nov release
+    localStorage.removeItem('contactPeople')
+    localStorage.removeItem('newCompany')
+    this.contactGroupService.removeAddedPerson()
+    this.companyService.companyChanged(null)
+    if (contactType === 'personal') {
       this.router.navigate(['detail', 0, 'people', 0], {
-        queryParams: { showDuplicateChecker: true, emailPhoneRequired: true },
+        queryParams: { showDuplicateChecker: true, emailPhoneRequired: true, isNewPersonalContact: true },
         relativeTo: this.route
       })
-    } else if (contactType === 'personal') {
-      this.router.navigate(['detail', 0, 'people', 0], {
-        queryParams: { isNewPersonalContact: true },
-        relativeTo: this.route
-      })
-    } else {
+    } else if (contactType === 'company') {
       this.router.navigate(['detail', 0, 'people', 0], {
         queryParams: { isNewCompanyContact: true },
         relativeTo: this.route

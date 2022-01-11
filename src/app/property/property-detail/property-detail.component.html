@@ -1,23 +1,35 @@
 <div class="row">
   <div class="row__item row__item--aside">
     <div class="wrapper--sticky">
-      <app-property-card [propertyDetails]="propertyDetails" (showPhotos)="showPhotosModal()" (showMap)="showMapModal()"></app-property-card>
-      <app-sidenav-item class="appWrapper" [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals" [scrollToItem]="mainRowItem" (selectedItem)="getSelectedItem($event)"></app-sidenav-item>
-      <app-additional-info class="appWrapper" [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info>
+      <app-property-card [propertyDetails]="propertyDetails" (showPhotos)="showPhotosModal()"
+        (showMap)="showMapModal()"></app-property-card>
+      <app-sidenav-item class="appWrapper" [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals"
+        [scrollToItem]="mainRowItem" (selectedItem)="getSelectedItem($event)"></app-sidenav-item>
+      <app-additional-info class="appWrapper"
+        [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info>
     </div>
   </div>
 
   <div #mainRowItem class="row__item">
     <ng-container [ngSwitch]="moreInfo">
-      <app-contact-groups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo" [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.instructions?.inactive"></app-contact-groups-detail-instructions>
-      <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo" [closedCounter]="summaryTotals?.valuations?.inactive" [propertyId]="propertyDetails?.propertyId"></app-shared-valuation-list>
-      <app-contact-groups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo" [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.offers?.inactive"></app-contact-groups-detail-offers>
-      <app-notes *ngSwitchCase="'notes'" [propertyNotes]="propertyNotes" [pageNumber]="page" [bottomReached]="bottomReached"></app-notes>
+      <app-contact-groups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
+        [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.instructions?.inactive">
+      </app-contact-groups-detail-instructions>
+      <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo"
+        [closedCounter]="summaryTotals?.valuations?.inactive" [propertyId]="propertyDetails?.propertyId">
+      </app-shared-valuation-list>
+      <app-contact-groups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo"
+        [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.offers?.inactive">
+      </app-contact-groups-detail-offers>
+      <app-notes *ngSwitchCase="'notes'" [showNoteFilter]="false" [propertyNotes]="propertyNotes" [pageNumber]="page"
+        [bottomReached]="bottomReached"></app-notes>
     </ng-container>
   </div>
 </div>
 <!-- Property Photos Modal -->
-<app-property-detail-photos [propertyId]="propertyDetails?.propertyId" [showPhotos]="showPhotos" (photosClosed)="hidePhotosModal()"></app-property-detail-photos>
+<app-property-detail-photos [propertyId]="propertyDetails?.propertyId" [showPhotos]="showPhotos"
+  (photosClosed)="hidePhotosModal()"></app-property-detail-photos>
 
 <!-- Property Map Modal -->
-<app-property-detail-map [propertyMap]="propertyDetails?.map" [showMap]="showMap" (mapClosed)="showMap=false"></app-property-detail-map>
+<app-property-detail-map [propertyMap]="propertyDetails?.map" [showMap]="showMap" (mapClosed)="showMap=false">
+</app-property-detail-map>

@@ -12,7 +12,7 @@ import {
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { StorageMap } from '@ngx-pwa/local-storage'
 import { NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop'
-import { ContactGroup } from 'src/app/contact-groups/shared/contact-group'
+import { ContactGroup } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { StaffMemberService } from 'src/app/core/services/staff-member.service'
 import { Email, Person } from '../../models/person'
 import { Office, StaffMember } from '../../models/staff-member'

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Company } from 'src/app/contact-groups/shared/contact-group'
+import { Company } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { BehaviorSubject, Observable, Subject } from 'rxjs'
 import { AppConstants } from 'src/app/core/shared/app-constants'
 import { map, tap } from 'rxjs/operators'
@@ -13,6 +13,8 @@ export class CompanyService {
   private newCompanySubject = new BehaviorSubject<Company | null>(null)
   companyPageChanges$ = this.companyPageChangeSubject.asObservable()
   newCompanyChanges$ = this.newCompanySubject.asObservable()
+
+  newCompanyContactGroupIsSavedBs = new BehaviorSubject(false)
 
   constructor(private http: HttpClient) {}
 
@@ -30,7 +32,7 @@ export class CompanyService {
    * @param {object} company - TODO
    * @description TODO
    */
-  public companyChanged(company: Company) {
+  public companyChanged(company) {
     this.newCompanySubject.next(company)
   }
 
@@ -88,7 +90,7 @@ export class CompanyService {
    * @param {number} valuationEventId - ID of the valuation documents are attached to
    * @description freezes documents for a company linked to a specific valuation
    */
-   freezeCompanyDocsForValuation(people, contactGroupId: number, valuationEventId: number): Observable<any> {
+  freezeCompanyDocsForValuation(people, contactGroupId: number, valuationEventId: number): Observable<any> {
     const url = `${AppConstants.baseCompanyDocumentUrl}/${contactGroupId}/${valuationEventId}`
     return this.http.post<any>(url, people).pipe(map((response) => response.result))
   }

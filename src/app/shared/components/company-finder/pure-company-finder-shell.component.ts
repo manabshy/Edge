@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef } from '@angular/core'
-import { Company, CompanyAutoCompleteResult } from 'src/app/contact-groups/shared/contact-group'
+import { Company, CompanyAutoCompleteResult } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { debounceTime } from 'rxjs/operators'
 
@@ -93,8 +93,6 @@ export class PureCompanyFinderShellComponent implements OnInit {
   }
 
   enterDetailsManually(isNewCompany?: boolean) {
-    console.log({ isNewCompany })
-    console.log(this.companyNameControl.value)
     this.onManualEntry.emit({ isNewCompany, companyName: this.companyNameControl.value })
   }
 

@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, NgZone, OnInit } from '@angular/core'
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service'
 import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
-import { Company, Signer } from 'src/app/contact-groups/shared/contact-group'
+import { Company, Signer } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { CompanyService } from '../shared/company.service'
 import { debounceTime } from 'rxjs/operators'
 import { WedgeValidators } from 'src/app/shared/wedge-validators'
@@ -41,6 +41,7 @@ export class CompanyEditComponent implements OnInit {
   isManualEntry = false
   isSignerVisible = false
   backToOrigin = false
+  addNewEntityToComplianceChecks: boolean = false
 
   constructor(
     private contactGroupService: ContactGroupsService,
@@ -51,7 +52,8 @@ export class CompanyEditComponent implements OnInit {
     private _location: Location,
     private route: ActivatedRoute,
     private _router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private zone: NgZone
   ) {}
 
   ngOnInit() {
@@ -69,6 +71,7 @@ export class CompanyEditComponent implements OnInit {
 
     this.route.params.subscribe((params) => (this.companyId = this.companyId || +params['id'] || 0))
     this.route.queryParams.subscribe((params) => {
+      console.log('subscribed to params: ', params)
       this.isNewCompany = this.companyId ? false : params['isNewCompany']
       this.isEditingSelectedCompany = params['isEditingSelectedCompany'] || false
       this.backToOrigin = params['backToOrigin'] || false
@@ -78,15 +81,14 @@ export class CompanyEditComponent implements OnInit {
       }
       this.isManualEntry = params['isManualEntry'] === 'true'
       if (this.isManualEntry) this.showCompanyFinder = false
+      this.addNewEntityToComplianceChecks = params['addNewEntityToComplianceChecks'] === 'true' ? true : false
     })
     this.setupCompanyForm(this.companyName)
     const id = this.isNewCompany ? 0 : this.companyId
     if (id) {
       this.getCompanyDetails(id)
     }
-    // if (AppUtils.newSignerId) {
-    //   this.getSignerDetails(AppUtils.newSignerId);
-    // }
+
     this.getSignerDetails()
     this.companyForm.valueChanges
       .pipe(debounceTime(400))
@@ -119,13 +121,11 @@ export class CompanyEditComponent implements OnInit {
       if (data) {
         this.signer = data
         this.isCreatingNewSigner = false
-        console.log({ data }, 'new signer shoud be here')
       }
     })
   }
 
   displayCompanyDetails(company: Company) {
-    console.log('aml completed date', this.sharedService.ISOToDate(company.amlCompletedDate))
     if (this.companyForm) {
       this.companyForm.reset()
     }
@@ -146,6 +146,7 @@ export class CompanyEditComponent implements OnInit {
     })
     this.existingSigner = company.signer
   }
+
   populateNewCompanyDetails() {
     if (this.companyForm) {
       this.companyForm.reset()
@@ -239,19 +240,18 @@ export class CompanyEditComponent implements OnInit {
     this.companyForm.markAsDirty()
   }
 
-  setManualEntryFlag() {
+  setManualEntryFlag(ev) {
     this.showCompanyFinder = false
     this.isManualEntry = true
+    this.getCompanyName(ev.companyName)
   }
 
   navigateToCompany(company: Company) {
     this.companyDetails = null
     let url = this._router.url
-
     if (url.indexOf('?') >= 0) {
       url = url.substring(0, url.indexOf('?'))
     }
-
     url = url.replace('detail/0', 'detail/' + this.companyId)
     url = url.replace('detail/' + this.companyId, 'detail/' + company.companyId)
     this._location.replaceState(url)
@@ -288,7 +288,7 @@ export class CompanyEditComponent implements OnInit {
     }
     this.isSubmitting = true
     if (this.isNewCompany) {
-      console.log('add company', company)
+      console.log('adding new company', company)
       this.companyService.addCompany(company).subscribe(
         (res) => this.onSaveComplete(res.result),
         (error: WedgeError) => {
@@ -308,20 +308,24 @@ export class CompanyEditComponent implements OnInit {
   onSaveComplete(company?: Company) {
     this.companyForm.markAsPristine()
     this.isSubmitting = false
-    // this.toastr.success('Company successfully saved');
     this.messageService.add({ severity: 'success', summary: 'Company successfully saved', closable: false })
     if (this.backToOrigin) {
-      this.companyService.companyChanged(company)
+      const payload: any = { ...company }
+      payload.addNewEntityToComplianceChecks = this.addNewEntityToComplianceChecks
+      this.companyService.companyChanged(payload)
       this.sharedService.back()
+      return
     }
     if (this.isEditingSelectedCompany && company) {
       AppUtils.holdingSelectedCompany = company
       console.log(AppUtils.holdingSelectedCompany)
       this.sharedService.back()
+      return
     }
-
+    console.log('navigating to new company detail page: ', company.companyId)
     this._router.navigate(['company-centre/detail', company.companyId])
-    console.log('complete')
+    this._location.replaceState('company-centre/detail/' + company.companyId)
+    window.location.reload()
   }
 
   canDeactivate(): boolean {

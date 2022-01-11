@@ -28,7 +28,6 @@ export class ValuationApiHelperService {
   }
 
   public setQueryParams(requestOption: ValuationRequestOption) {
-    console.log('requestOption.status: ', requestOption.status)
     if (!requestOption.page) {
       requestOption.page = 1
     }

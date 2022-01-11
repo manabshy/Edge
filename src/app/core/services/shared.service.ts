@@ -1,4 +1,4 @@
-import { Signer } from './../../contact-groups/shared/contact-group'
+import { Signer } from '../../contact-groups/shared/contact-group.interfaces'
 import { Injectable, ElementRef } from '@angular/core'
 import { AppUtils, RequestOption } from '../shared/utils'
 import dayjs from 'dayjs'
@@ -13,7 +13,7 @@ import { Title } from '@angular/platform-browser'
 import { AbstractControl, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { StorageMap } from '@ngx-pwa/local-storage'
-import { ContactGroup } from 'src/app/contact-groups/shared/contact-group'
+import { ContactGroup } from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { ValidationMessages, FormErrors } from '../shared/app-constants'
 import { Valuation, ValuationStatusEnum, ValuationTypeEnum } from 'src/app/valuations/shared/valuation'
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
@@ -47,19 +47,12 @@ export class SharedService {
     private _location: Location,
     private _router: Router,
     private titleService: Title,
-    private storage: StorageMap,
     private dialogService: DialogService,
     private modalService: BsModalService,
     private currencyPipe: CurrencyPipe
   ) {}
 
   transformCurrency(value: any): any {
-    // if (
-    //   value &&
-    //   value.toString().length > 0 &&
-    //   value.toString().indexOf("£") > -1
-    // )
-    //   return value;
     if (value) {
       let numberValue = this.convertStringToNumber(value.toString())
       return this.currencyPipe.transform(numberValue, 'GBP', 'symbol', '1.0-0')

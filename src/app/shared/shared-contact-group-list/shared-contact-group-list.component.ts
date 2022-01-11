@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BasicContactGroup, ContactGroup } from 'src/app/contact-groups/shared/contact-group';
+import { BasicContactGroup, ContactGroup } from 'src/app/contact-groups/shared/contact-group.interfaces';
 
 @Component({
   selector: 'app-shared-contact-group-list',

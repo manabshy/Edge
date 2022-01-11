@@ -4,7 +4,7 @@
 
     <ng-container *ngIf="companyDetails || isManualEntry; else redactedCards">
       <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" autocompleteOff>
-        <fieldset class="mb-3" *ngIf="companyDetails?.companyName || isManualEntry">
+        <fieldset class="my-3" *ngIf="companyDetails?.companyName || isManualEntry">
           <label for="companyType">Company Name</label>
           <input type="text" id="companyName" class="form-control p-2" formControlName="companyName" />
         </fieldset>
@@ -153,6 +153,9 @@
         </footer>
       </form>
     </ng-container>
+
+    <!-- <span>isNewCompany {{ isNewCompany }}</span>
+    <span>companyDetails {{ companyDetails }}</span> -->
 
     <ng-template #redactedCards>
       <div class="wrapper--redacted" *ngIf="isNewCompany && !companyDetails">
@@ -320,7 +323,7 @@
     [companyNameError]="formErrors.companyName"
     (companyName)="getCompanyName($event)"
     (selectedCompanyDetails)="navigateToCompany($event)"
-    (onManualEntry)="setManualEntryFlag()"
+    (onManualEntry)="setManualEntryFlag($event)"
   ></app-company-finder>
 </p-dialog>
 

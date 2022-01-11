@@ -31,8 +31,8 @@ export class AddressService {
     return this.http.get<AddressAutoCompleteData>(`${AppConstants.addressCaptureBaseUrl}/Find/v1.10/json3.ws`, options)
     .pipe(
       // map(response => response.items),
-      tap(data => console.log('address here', JSON.stringify(data))),
-      tap(data => console.log('address here', data)),
+      // tap(data => console.log('address here', JSON.stringify(data))),
+      // tap(data => console.log('address here', data)),
       );
   }
   getAddress(id: string): Observable<any> {
@@ -47,7 +47,7 @@ export class AddressService {
     return this.http.get<any>(`${AppConstants.addressCaptureBaseUrl}/Retrieve/v1.10/json3.ws`, options)
     .pipe(
       // map(response => response.items),
-      tap(data => console.log('retrieve address here', data)),
+      // tap(data => console.log('retrieve address here', data)),
       );
   }
 }

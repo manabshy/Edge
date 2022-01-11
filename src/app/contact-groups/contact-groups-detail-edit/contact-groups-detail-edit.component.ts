@@ -26,8 +26,8 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   @Output() addedPersonId = new EventEmitter<number>()
   @Output() hideCanvas = new EventEmitter<boolean>()
   @Output() backToFinder = new EventEmitter<boolean>()
-  // @Input() basicPerson: BasicPerson;
   @Input() isCompanyContactGroup = false
+
   basicPerson: BasicPerson
   prefToggleStatus = false
   countries: InfoDetail[] = []
@@ -36,14 +36,13 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   telephoneTypes: Record<number, string>
   listInfo: DropdownListInfo
   titleSelected = 1
-  // defaultCountryCode = 232;
   telephoneTypeSelected = 1
   todaysDate = new Date()
   retrievedAddresses: AddressAutoCompleteData
   personDetails: Person
   personForm: FormGroup
   personId: number
-  newPersonId: number
+  newPersonId: number = null
   id: number
   groupPersonId: number
   isNewContactGroup = false
@@ -72,6 +71,8 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   warningStatus: number
   emailPhoneRequired: boolean = true
   private subs = new SubSink()
+  addNewEntityToComplianceChecks: boolean = false
+
   // get showPostCode(): boolean {
   //   return this.address.get('countryId').value === this.defaultCountryCode;
   // }
@@ -107,6 +108,7 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   }
 
   public keepOriginalOrder = (a) => a.key
+
   constructor(
     public sharedService: SharedService,
     private messageService: MessageService,
@@ -117,18 +119,19 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    console.log('ContactGroupsDetailEditComponent init')
     this.subs.sink = this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data
       }
-      // console.log("current user info here....", data);
+      // console.log("current user info here....", data)
     })
 
     this.subs.sink = this.storage.get('info').subscribe((data: DropdownListInfo) => {
       if (data) {
         this.listInfo = data
         this.setDropdownLists()
-        // console.log("app info in contact edit ....", data);
+        // console.log("app info in contact edit ....", data)
       }
     })
 
@@ -140,7 +143,10 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
       if (newPerson) {
         this.basicPerson = JSON.parse(newPerson) as BasicPerson
       }
-      this.emailPhoneRequired = JSON.parse(params['emailPhoneRequired'])
+      if(params['emailPhoneRequired']){
+        this.emailPhoneRequired = JSON.parse(params['emailPhoneRequired'])
+      }
+      this.addNewEntityToComplianceChecks = params['addNewEntityToComplianceChecks'] === 'true' ? true : false
     })
     this.setupEditForm()
     const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId
@@ -155,7 +161,6 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
       this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false })
       this.logValidationErrors(this.personForm, false)
     })
-
     this.subs.sink = this.warningStatusIdControl.valueChanges.subscribe(() => this.togglePersonWarnings())
   }
 
@@ -570,6 +575,7 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   }
 
   savePerson(otherPersonToAdd) {
+    console.log('savePerson... saving')
     this.errorMessage = null
     this.removeOthers()
     this.logValidationErrors(this.personForm, true, true)
@@ -587,7 +593,9 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
         }
         if (!this.basicPerson) {
           this.subs.sink = this.contactGroupService.updatePerson(person).subscribe(
-            (res) => this.onSaveComplete(res.result, otherPersonToAdd),
+            (res) =>{
+              this.onSaveComplete(res.result, otherPersonToAdd)
+              },
             (error: WedgeError) => {
               this.isSubmitting = false
               this.isSubmittingAndAdd = false
@@ -634,8 +642,11 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
       })
     }
     if (this.newPersonId) {
-      this.contactGroupService.getAddedPerson(person)
-      this.addNewPerson(this.newPersonId)
+      const payload: any = { ...person }
+      payload.addNewEntityToComplianceChecks = this.addNewEntityToComplianceChecks
+      this.contactGroupService.getAddedPerson(payload)
+      console.log('addedPersonId: ', this.newPersonId)
+      this.addedPersonId.emit(this.newPersonId)
       const personEmitter = {
         person: person,
         otherPersonToAdd: otherPersonToAdd
@@ -651,10 +662,6 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  addNewPerson(id: number) {
-    this.addedPersonId.emit(id)
-  }
-
   makeCanvasInvisible(close: boolean) {
     this.hideCanvas.emit(close)
   }
@@ -667,6 +674,8 @@ export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    console.log('destroy ContactGroupsDetailEditComponent component now')
+
     this.subs.unsubscribe()
   }
 }

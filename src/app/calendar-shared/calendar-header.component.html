@@ -3,7 +3,7 @@
     <form [formGroup]="diaryHeaderForm">
 
       <ol class="calNav">
-        <li class="calNav__search">
+        <li class="max-w-xs calNav__search">
           <!-- Change staff member -->
           <!-- <ng-select placeholder="Select Staff Member" [items]="staffMembers" [clearable]="false" bindLabel="fullName"
             bindValue="staffMemberId" groupBy="category" (change)="onStaffMemberChange($event)"
@@ -23,7 +23,7 @@
           <!-- Btn - Change view -->
           <!-- <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container> -->
         </li>
-        <li class="calNav__range">
+        <li class="md:justify-start md:ml-96 calNav__range">
           <!-- Btn - Previous -->
           <button type="button" class="btn btn--none btn--onLeft" mwlCalendarPreviousView [daysInWeek]="daysInWeek"
             [view]="fakeView" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
@@ -51,7 +51,7 @@
               </li>
               <li (click)="$event.stopPropagation()">
                 <label class="small" for="dateFrom">Go to Date</label>
-                <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm p-2"
+                <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="p-2 form-control form-control-sm"
                   [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
                   bsDatepicker #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker'
                   (bsValueChange)="onDateChange($event)" formControlName="dateFilter">
@@ -91,7 +91,8 @@
             </svg>
           </button>
         </li>
-        <li class="calNav__add">
+        <!-- removed for release -->
+        <!-- <li class="calNav__add">
           <a class="btn btn--positive" [routerLink]="['/diary/edit', 0]" [queryParams]="{isNewEvent: true}"
             *ngIf="!myCalendarOnly" aria-label="Add event"><svg aria-hidden="true" width="64" height="64"
               viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
@@ -101,7 +102,7 @@
                 d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z">
               </path>
             </svg>Create Event</a>
-        </li>
+        </li> -->
       </ol>
 
       <!-- Btn - This Week -->
@@ -193,7 +194,7 @@
     <div class="col-auto d-none d-sm-block order-md-3">
       <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container>
     </div>
-    <div class="col-md order-md-2 mt-1 mt-md-0">
+    <div class="mt-1 col-md order-md-2 mt-md-0">
       <div class="row justify-content-end">
         <div class="col-auto pr-0" *ngIf="isShowMeVisible">
           <button type="button" class="btn btn-sm btn-light" (click)="getCurrentStaffMemberCalendar()">Show
@@ -240,7 +241,7 @@
           <ng-container *ngTemplateOutlet="goToButton"></ng-container>
         </div>
         <div class="col-auto px-sm-0">
-          <button type="button" class="btn btn-sm btn-light mr-1" mwlCalendarPreviousView [daysInWeek]="daysInWeek"
+          <button type="button" class="mr-1 btn btn-sm btn-light" mwlCalendarPreviousView [daysInWeek]="daysInWeek"
             [view]="fakeView" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
             <i class="fas fa-chevron-left fa-fw"></i>
             <span class="sr-only">Previous</span>
@@ -286,7 +287,7 @@
     <div class="col-auto d-none d-sm-block order-md-3">
       <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container>
     </div>
-    <div class="col-md order-md-2 mt-1 mt-md-0">
+    <div class="mt-1 col-md order-md-2 mt-md-0">
       <div class="row justify-content-end">
         <div class="col-auto pr-0" *ngIf="isShowMeVisible">
           <button type="button" class="btn btn-sm btn-light" (click)="getCurrentStaffMemberCalendar()">Show

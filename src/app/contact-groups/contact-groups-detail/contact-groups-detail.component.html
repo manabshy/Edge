@@ -36,8 +36,9 @@
       <app-shared-lead-register *ngSwitchCase="'leads'" [moreInfo]="moreInfo"
         [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.leads?.inactive">
       </app-shared-lead-register>
-      <app-notes *ngSwitchCase="'notes'" [personNotes]="personNotes" [noteData]="dataNote" [pageNumber]="page"
-        [bottomReached]="bottomReached" (showMyNotes)="setShowMyNotesFlag($event)">
+      <app-notes *ngSwitchCase="'notes'" [showNoteFilter]="true" [personNotes]="personNotes" [noteData]="dataNote"
+        [pageNumber]="page" [bottomReached]="bottomReached" (filterNotes)="filterNotes($event)"
+        (showMyNotes)="setShowMyNotesFlag($event)">
       </app-notes>
       <app-shared-contact-group-list *ngSwitchCase="'contactGroups'" [contactGroups]="searchedPersonContactGroups"
         [personId]="searchedPersonDetails?.personId"></app-shared-contact-group-list>
