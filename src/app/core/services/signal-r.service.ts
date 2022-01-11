@@ -90,27 +90,38 @@ export class SignalRService {
 
   public addGetBonusListener = () => {
     this.hubConnection.on('get-bonuses', (data) => {
+      console.log('get-bonuses', data);
+      console.log('staffMemberId', this.currentStaffMember.staffMemberId);
+
       if (data.staffMemberId != this.currentStaffMember.staffMemberId)
         return;
 
+        console.log('get-bonuses content', data.content);
       this.getBonusesStream.next(data.content);
     });
   }
 
   public addStreakDataListener = () => {
     this.hubConnection.on('get-streak', (data) => {
+      console.log('get-streak', data);
+      console.log('staffMemberId', this.currentStaffMember.staffMemberId);
+
       if (data.staffMemberId != this.currentStaffMember.staffMemberId)
         return;
 
+      console.log('get-streak content', data.content);
       this.getStreakStream.next(data.content);
     });
   }
 
   public addSwagBagDataListener = () => {
     this.hubConnection.on('get-swag-bag', (data) => {
+      console.log('get-swag-bag', data);
+      console.log('staffMemberId', this.currentStaffMember.staffMemberId);
       if (data.staffMemberId != this.currentStaffMember.staffMemberId)
         return;
 
+      console.log('get-swag-bag content', data.content);
       this.getSwagBagStream.next(data.content);
     });
   }
