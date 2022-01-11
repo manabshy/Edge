@@ -11,9 +11,9 @@
     "polyfills.ts"
   ],
   "include": [
-    "app/**/*.d.ts"
+    "app/**/*.d.ts",
+    "**/*.stories.*"
   ],
   "exclude": [
-    "**/*.stories.*"
   ]
 }

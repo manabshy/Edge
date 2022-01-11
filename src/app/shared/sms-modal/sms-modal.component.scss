@@ -18,13 +18,11 @@
         width: 100%;
         border-bottom: none;
         margin: 0;
-        @include border-top-radius($input-border-radius);
     }
 
     &-footer {
         padding-left: $input-padding-x;
         border-top: none;
-        @include border-bottom-radius($input-border-radius);
 
         label {
             width: 4.75rem;
@@ -32,16 +30,12 @@
 
         .form-control {
             border-right: none;
-            @include border-right-radius(0);
-            @include border-bottom-radius(0);
         }
 
         .form-row:not(:first-child){
             .form-control {
                 border-top: none;
                 border-bottom: none;
-                @include border-top-radius(0);
-                @include border-bottom-right-radius($input-border-radius);
             }
         }
     }
@@ -49,7 +43,6 @@
     textarea {
         border-top: none;
         border-bottom: none;
-        @include border-radius(0);
     }
 
     &.is-invalid {

@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
-import { ValuationsComponent } from './valuation-list-page/valuations.component'
+import { ValuationsShellComponent } from './valuations-list-page/valuations-shell-with-dependencies/valuations.component'
 import { ValuationDetailEditComponent } from './valuation-detail-page/valuation-detail-edit/valuation-detail-edit.component'
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard'
 
 const routes: Routes = [
   {
     path: '',
-    component: ValuationsComponent,
+    component: ValuationsShellComponent,
     data: { shouldDetach: true, title: 'Valuations' }
   },
   {

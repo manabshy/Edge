@@ -14,7 +14,7 @@ if ('serviceWorker' in navigator && environment.production) {
   navigator.serviceWorker.register('./ngsw-worker.js')
 }
 
-console.log('hello from Wedge v: ', environment.version)
+// console.log('hello from Wedge v: ', environment.version)
 if (environment.hmr) {
   if (module['hot']) {
     hmrBootstrap(module, bootstrap)

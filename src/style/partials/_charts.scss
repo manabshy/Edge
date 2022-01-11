@@ -20,7 +20,7 @@
 
     @for $i from 0 through 100  {
         .bar#{$i}       {
-            &:after             { width:round(percentage($i/100)); }
+            &:after             { width:round(percentage(calc($i/100))); }
         }
     }
 
