@@ -1,7 +1,7 @@
 import { MsalService } from '@azure/msal-angular'
-import { Component, Renderer2, ChangeDetectorRef, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core'
+import { Component, Renderer2, ChangeDetectorRef, OnInit, ViewChild, ElementRef } from '@angular/core'
 import { Router, RoutesRecognized, ActivatedRoute, NavigationEnd } from '@angular/router'
-import { filter, pairwise, takeUntil, tap } from 'rxjs/operators'
+import { filter, pairwise, takeUntil } from 'rxjs/operators'
 import { AppUtils } from './core/shared/utils'
 import { AuthService } from './core/services/auth.service'
 import { SharedService, WedgeError } from './core/services/shared.service'
@@ -31,6 +31,48 @@ export class AppComponent extends BaseComponent implements OnInit {
   currentStaffMember: StaffMember
   listInfo: any
   locale = 'en-gb'
+
+  // Side nav config
+  showDashboardPages = true
+  dashboardPages = [
+    {
+      url: '',
+      name: 'Calendar'
+    }
+  ]
+
+  showContactPages = true
+  contactPages = [
+    {
+      url: 'contact-centre',
+      name: 'Contact centre'
+    },
+    {
+      url: 'company-centre',
+      name: 'Company centre'
+    },
+    {
+      url: 'leads',
+      name: 'Leads'
+    }
+  ]
+
+  showPropertyPages = true
+  propertyPages = [
+    {
+      url: 'property-centre',
+      name: 'Property centre'
+    },
+    {
+      url: 'valuations',
+      name: 'Valuations'
+    },
+    {
+      url: 'instructions',
+      name: 'Instructions'
+    }
+  ]
+  // end sidenav config
 
   loginRequest = {
     scopes: ['User.ReadWrite']
@@ -82,7 +124,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.router.events
       .pipe(filter((e) => e instanceof RoutesRecognized))
       .pipe(
-        pairwise(),
+        pairwise()
         // tap((data) => console.log('events here....', data))
       )
       .subscribe((event: any[] | RoutesRecognized[]) => {
@@ -120,9 +162,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.setManifestName()
     this.setImpersonatedAsCurrentUser()
     this.storage.delete('calendarStaffMembers').subscribe() // Remove from localstorage
-    this.signalRService.startConnection();
-    this.signalRService.addRewardsDataListener();
-    
+
     this.route.queryParams.subscribe((params) => {
       if (params['docTitle']) {
         this.sharedService.setTitle(params['docTitle'])
@@ -207,11 +247,18 @@ export class AppComponent extends BaseComponent implements OnInit {
         break
     }
   }
+
   private setupEnvironmentVariables() {
     if (environment.production) {
       environment.baseUrl = this.configLoaderService.ApiEndpoint
       environment.endpointUrl = this.configLoaderService.ApiEndpoint
       environment.baseRedirectUri = this.configLoaderService.AppEndpoint
     }
+  }
+
+  toggleSideBar = false
+
+  toggleSideNav() {
+    this.toggleSideBar = !this.toggleSideBar
   }
 }

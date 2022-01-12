@@ -10,7 +10,7 @@ export class AppConstants {
   public static get leaderboardRankingBaseUrl(): string {
     return `${environment.baseUrl}/leaderboard`
   }
-  public static get baseUrl(): string {
+  public static get staffMemberBaseUrl(): string {
     return `${environment.baseUrl}/staffmembers`
   }
   public static get baseDashboardUrl(): string {
@@ -69,6 +69,9 @@ export class AppConstants {
   }
   public static get redirectUri(): string {
     return `${environment.baseRedirectUri}/auth-callback`
+  }
+  public static get baseRewardsUrl(): string {
+    return `${environment.baseUrl}/rewards`
   }
   public static get postLogoutRedirectUri(): string {
     return `${environment.baseRedirectUri}`

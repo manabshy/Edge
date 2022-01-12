@@ -38,6 +38,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { ImpersonateMemberComponent } from './impersonate-member/impersonate-member.component'
 import { ConfigsLoaderService } from './configs-loader.service'
 import { GlobalErrorHandlerService } from './core/services/global-error-handler.service'
+import { RewardsModule } from './gamification/rewards/rewards.module'
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead'

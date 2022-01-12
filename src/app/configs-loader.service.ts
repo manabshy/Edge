@@ -11,6 +11,8 @@ export class ConfigsLoaderService {
     this.httpClient = new HttpClient(handler);
   }
   get ApiEndpoint() {
+    const apiEndpoint = this.configs.apiEndpoint;
+    console.log('ApiEndpoint requested', apiEndpoint);
     return this.configs.apiEndpoint;
   }
 

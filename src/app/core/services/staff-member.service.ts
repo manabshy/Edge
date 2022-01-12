@@ -56,7 +56,8 @@ export class StaffMemberService {
   }
 
   private requestCurrentStaffMember(): Observable<StaffMember> {
-    return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/currentUser`).pipe(
+    console.log('requesting current staff member',`${AppConstants.staffMemberBaseUrl}/currentUser`);
+    return this.http.get<StaffMemberResult>(`${AppConstants.staffMemberBaseUrl}/currentUser`).pipe(
       map((response) => response.result),
       tap((data) => {
         if (data) {
@@ -110,7 +111,7 @@ export class StaffMemberService {
   }
 
   requestActiveStaffMembers() {
-    return this.http.get<StaffMemberListResult | any>(`${AppConstants.baseUrl}/active`).pipe(
+    return this.http.get<StaffMemberListResult | any>(`${AppConstants.staffMemberBaseUrl}/active`).pipe(
       map((response) => response),
       tap((data) => {
         if (data) {
@@ -130,7 +131,7 @@ export class StaffMemberService {
   }
 
   requestAllStaffMembers() {
-    return this.http.get<StaffMemberListResult | any>(`${AppConstants.baseUrl}/all`).pipe(
+    return this.http.get<StaffMemberListResult | any>(`${AppConstants.staffMemberBaseUrl}/all`).pipe(
       map((response) => response),
       tap((data) => {
         if (data) {
@@ -165,7 +166,7 @@ export class StaffMemberService {
   }
 
   getValuers(): Observable<StaffMember[]> {
-    return this.http.get<any>(`${AppConstants.baseUrl}/listers`).pipe(
+    return this.http.get<any>(`${AppConstants.staffMemberBaseUrl}/listers`).pipe(
       map((response) => response.result),
       tap((data) => {
         if (data) {
@@ -268,7 +269,7 @@ export class StaffMemberService {
   }
 
   getValuationAttendees(): Observable<BaseStaffMember[]> {
-    return this.http.get<any>(`${AppConstants.baseUrl}/attendees`).pipe(
+    return this.http.get<any>(`${AppConstants.staffMemberBaseUrl}/attendees`).pipe(
       map((response) => response.result),
       tap((data) => {
         if (data) {
@@ -281,7 +282,7 @@ export class StaffMemberService {
   getStaffMemberSuggestions(searchTerm): Observable<any> {
     // console.log('search Term:', searchTerm)
     return this.http
-      .get<StaffMemberResult>(`${AppConstants.baseUrl}/suggestions?SearchTerm=${searchTerm}`, {
+      .get<StaffMemberResult>(`${AppConstants.staffMemberBaseUrl}/suggestions?SearchTerm=${searchTerm}`, {
         headers: { ignoreLoadingBar: '' }
       })
       .pipe(
@@ -295,7 +296,7 @@ export class StaffMemberService {
   }
 
   getStaffMembersForCalendar(): Observable<BaseStaffMember[]> {
-    return this.http.get<any>(`${AppConstants.baseUrl}/calendars`).pipe(
+    return this.http.get<any>(`${AppConstants.staffMemberBaseUrl}/calendars`).pipe(
       map((response) => response.result),
       tap((data) => {
         if (data && data.length) {
@@ -321,7 +322,7 @@ export class StaffMemberService {
   }
 
   requestStaffMemberSignature(): Observable<string> {
-    return this.http.get<any>(`${AppConstants.baseUrl}/current/signature`).pipe(
+    return this.http.get<any>(`${AppConstants.staffMemberBaseUrl}/current/signature`).pipe(
       map((response) => response.result),
       map((x) => {
         if (x) {

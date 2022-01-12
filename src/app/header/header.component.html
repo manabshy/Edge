@@ -1,18 +1,20 @@
 <div class="ml-2 px-4 bg-white h-14 items-center border flex flex-row justify-between shadow-sm">
-  <ng-container *ngIf="headerLabel; else labelFromRoute">{{ headerLabel }}</ng-container>
+    <ng-container *ngIf="headerLabel; else labelFromRoute">{{ headerLabel }}</ng-container>
 
-  <div class="flex-1">
-    <ng-template #labelFromRoute>
-      <span class="text-base font-bold">
+    <div class="flex-1">
+        <ng-template #labelFromRoute>
+            <span class="text-base font-bold">
         {{ navTitle }}
       </span>
-      <span class="flex"></span>
-      <ng-container *ngIf="showMenuEditItem && filteredItems">
-        <app-menu [menuItems]="filteredItems"></app-menu>
-      </ng-container>
-    </ng-template>
-  </div>
+            <span class="flex"></span>
+            <ng-container *ngIf="showMenuEditItem && filteredItems">
+                <app-menu [menuItems]="filteredItems"></app-menu>
+            </ng-container>
+        </ng-template>
+    </div>
 
-  <app-shared-rewards></app-shared-rewards>
-  <app-profile></app-profile>
+    <div class="hidden lg:block xl:block">
+        <app-shared-rewards></app-shared-rewards>
+        <app-profile></app-profile>
+    </div>
 </div>

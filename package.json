@@ -1,6 +1,6 @@
 {
   "name": "wedge",
-  "version": "4.1.0-0",
+  "version": "4.1.0-1",
   "scripts": {
     "ng": "nx",
     "start": "ng s --hmr",
@@ -8,6 +8,7 @@
     "start:dev": "ng s --hmr -c=dev",
     "start:test": "ng s --hmr -c=test",
     "build": "ng build",
+    "build:prod": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build --prod",
     "build:stats": "ng build --stats-json --source-map=false",
     "test": "ng test",
     "lint": "ng lint",
@@ -23,7 +24,7 @@
     "build-storybook": "npm run docs:json && build-storybook",
     "rmrf": "rimraf node_modules",
     "nx:affected": "nx affected --target=test",
-    "chromatic": "chromatic --exit-zero-on-changes --allow-console-errors"
+    "chromatic": "chromatic --exit-zero-on-changes --allow-console-errors --project-token c163955510a4"
   },
   "private": true,
   "dependencies": {
@@ -91,7 +92,8 @@
     "quill": "^1.3.7",
     "save": "^2.4.0",
     "script-runner": "^0.1.8",
-    "subsink": "^1.0.2"
+    "subsink": "^1.0.2",
+    "tailwindcss": "^2.2.19"
   },
   "devDependencies": {
     "@angular/cli": "^13.1.2",
