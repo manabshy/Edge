@@ -22,7 +22,6 @@ export class SignalRService {
   private connectionStatusSubject = new Subject<boolean>();
   public connectionStatus$ = this.connectionStatusSubject.asObservable();
 
-  private currentStaffMember: StaffMember;
 
   public hubConnection: signalR.HubConnection;
   numOfRetries = 10;
@@ -30,9 +29,9 @@ export class SignalRService {
   public isConnectionLost = true;
 
 
-  constructor(private staffMemberService: StaffMemberService) {
-    this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data);
-  }
+  constructor(private staffMemberService: StaffMemberService) { 
+   
+   }
 
 
   public hubConnectionOnclose = (error: any) => {
@@ -42,6 +41,16 @@ export class SignalRService {
   }
 
   public startConnection = () => {
+
+    this.staffMemberService.getCurrentStaffMember().subscribe(staffMember => {
+      if(staffMember) {
+
+        this.addGetBonusListener(staffMember);
+        this.addStreakDataListener(staffMember);
+        this.addSwagBagDataListener(staffMember);
+      }
+    });
+
     const url = `${AppConstants.baseRewardsHubUrl}`;
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(url)
@@ -62,9 +71,7 @@ export class SignalRService {
 
 
 
-    this.addGetBonusListener();
-    this.addStreakDataListener();
-    this.addSwagBagDataListener();
+
   }
 
   public reconnect() {
@@ -88,12 +95,10 @@ export class SignalRService {
   }
 
 
-  public addGetBonusListener = () => {
+  public addGetBonusListener = (currentStaffMember) => {
     this.hubConnection.on('get-bonuses', (data) => {
-      console.log('get-bonuses', data);
-      console.log('staffMemberId', this.currentStaffMember.staffMemberId);
 
-      if (data.staffMemberId != this.currentStaffMember.staffMemberId)
+      if (data.staffMemberId != currentStaffMember.staffMemberId)
         return;
 
         console.log('get-bonuses content', data.content);
@@ -101,12 +106,12 @@ export class SignalRService {
     });
   }
 
-  public addStreakDataListener = () => {
+  public addStreakDataListener = (currentStaffMember) => {
     this.hubConnection.on('get-streak', (data) => {
       console.log('get-streak', data);
-      console.log('staffMemberId', this.currentStaffMember.staffMemberId);
+      console.log('staffMemberId', currentStaffMember.staffMemberId);
 
-      if (data.staffMemberId != this.currentStaffMember.staffMemberId)
+      if (data.staffMemberId != currentStaffMember.staffMemberId)
         return;
 
       console.log('get-streak content', data.content);
@@ -114,11 +119,11 @@ export class SignalRService {
     });
   }
 
-  public addSwagBagDataListener = () => {
+  public addSwagBagDataListener = (currentStaffMember) => {
     this.hubConnection.on('get-swag-bag', (data) => {
       console.log('get-swag-bag', data);
-      console.log('staffMemberId', this.currentStaffMember.staffMemberId);
-      if (data.staffMemberId != this.currentStaffMember.staffMemberId)
+      console.log('staffMemberId', currentStaffMember.staffMemberId);
+      if (data.staffMemberId != currentStaffMember.staffMemberId)
         return;
 
       console.log('get-swag-bag content', data.content);
