@@ -23,7 +23,6 @@ export class RewardsShellComponent extends BaseComponent implements OnInit, OnDe
   streak: any;
   bonus: any;
   connectionStatus: any;
-  currentStaffMember: any;
   connectionClosed = false;
 
   constructor(
@@ -46,11 +45,10 @@ export class RewardsShellComponent extends BaseComponent implements OnInit, OnDe
   }
 
   prepareSignalR(signalRService, currentStaffMember) {
-    this.currentStaffMember = currentStaffMember;
-    signalRService.startConnection(this.currentStaffMember);
+    signalRService.startConnection(currentStaffMember);
     signalRService.hubConnection.onclose((err: Error) => {
       if (!this.connectionClosed) {
-        signalRService.hubConnectionOnclose(err, this.currentStaffMember);
+        signalRService.hubConnectionOnclose(err, currentStaffMember);
       }
     })
   }
