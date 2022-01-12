@@ -25,7 +25,7 @@ export class DashboardService {
     role: string,
     period?: string
   ): Observable<Dashboard> {
-    const url = `${AppConstants.baseUrl}/dashboard?period=${period}&role=${role}&staffMemberId=${staffMemberId}`;
+    const url = `${AppConstants.staffMemberBaseUrl}/dashboard?period=${period}&role=${role}&staffMemberId=${staffMemberId}`;
     return this.http
       .get<DashboardResult>(url)
       .pipe(map((response) => response.result));
@@ -36,7 +36,7 @@ export class DashboardService {
     role: string,
     period?: string
   ): Observable<Dashboard[]> {
-    const url = `${AppConstants.baseUrl}/teammembers/dashboard?period=${period}&role=${role}&staffMemberId=${staffMemberId}`;
+    const url = `${AppConstants.staffMemberBaseUrl}/teammembers/dashboard?period=${period}&role=${role}&staffMemberId=${staffMemberId}`;
     return this.http
       .get<TeamDashboardResult>(url)
       .pipe(map((response) => response.result));
@@ -92,7 +92,7 @@ export class DashboardService {
     staffMemberId: number,
     role: string
   ): Observable<ApplicantResult> {
-    const url = `${AppConstants.baseUrl}/dashboard/applicants?role=${role}&staffMemberId=${staffMemberId}`;
+    const url = `${AppConstants.staffMemberBaseUrl}/dashboard/applicants?role=${role}&staffMemberId=${staffMemberId}`;
     return this.http.get<ApplicantResult>(url);
   }
 
@@ -109,7 +109,7 @@ export class DashboardService {
     pageSize: number = 10
   ): Observable<any> {
     // tslint:disable-next-line:max-line-length
-    const url = `${AppConstants.baseUrl}/dashboard/${endpoint}?period=${period}&role=${role}&staffMemberId=${staffMemberId}&pageSize=${pageSize}`;
+    const url = `${AppConstants.staffMemberBaseUrl}/dashboard/${endpoint}?period=${period}&role=${role}&staffMemberId=${staffMemberId}&pageSize=${pageSize}`;
     return this.http.get<any>(url).pipe(map((response) => response.result));
   }
 }

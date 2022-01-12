@@ -10,7 +10,7 @@ export class AppConstants {
   public static get leaderboardRankingBaseUrl(): string {
     return `${environment.baseUrl}/leaderboard`
   }
-  public static get baseUrl(): string {
+  public static get staffMemberBaseUrl(): string {
     return `${environment.baseUrl}/staffmembers`
   }
   public static get baseDashboardUrl(): string {
