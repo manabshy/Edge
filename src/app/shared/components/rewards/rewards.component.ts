@@ -5,7 +5,7 @@ import { of } from 'rxjs'
 @Component({
   selector: 'app-shared-rewards',
   template: `
-    <ng-container *ngIf="data$ | async as d">
+    <ng-container *ngIf="data as d">
       <div class="flex flex-row w-40 items-center">
       <!-- TODO add money bag icon here when available -->
         <span class="text-sm w-12  font-bold leading-4">Your total</span>
@@ -20,11 +20,8 @@ import { of } from 'rxjs'
   `
 })
 export class SharedRewardsComponent {
-  @Input() data$: any
+  @Input() data: any
 
   // comment this out if using storybook 
-  constructor(private signalRService: SignalRService) {
-    // this.data$ =  of({ rewardAmount: 911 })
-   // this.data$ = this.signalRService.messageStream$
-  }
+  constructor() {  }
 }

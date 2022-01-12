@@ -56,6 +56,7 @@ export class StaffMemberService {
   }
 
   private requestCurrentStaffMember(): Observable<StaffMember> {
+    console.log('requesting current staff member',`${AppConstants.baseUrl}/currentUser`);
     return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/currentUser`).pipe(
       map((response) => response.result),
       tap((data) => {
