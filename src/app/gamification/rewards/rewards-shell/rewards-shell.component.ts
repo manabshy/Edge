@@ -3,6 +3,9 @@ import { RewardsService } from 'src/app/gamification/rewards/rewards.service';
 import { SignalRService } from 'src/app/core/services/signal-r.service';
 import { combineLatest, takeUntil } from 'rxjs';
 import { BaseComponent } from 'src/app/shared/models/base-component';
+import { StaffMemberService } from 'src/app/core/services/staff-member.service';
+import { StaffMember } from 'src/app/shared/models/staff-member';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-rewards-shell',
@@ -19,22 +22,38 @@ export class RewardsShellComponent extends BaseComponent implements OnInit, OnDe
   swagBag: any;
   streak: any;
   bonus: any;
-  connectionStatus : any;
-
+  connectionStatus: any;
+  currentStaffMember: any;
   connectionClosed = false;
 
-  constructor(private cdRef: ChangeDetectorRef, public signalRService: SignalRService, public rewardsService: RewardsService) {
+  constructor(
+    private staffMemberService: StaffMemberService,
+    private storage: StorageMap,
+    private cdRef: ChangeDetectorRef,
+    private signalRService: SignalRService,
+    private rewardsService: RewardsService) {
     super();
 
-    signalRService.startConnection();
-
-    signalRService.hubConnection.onclose((err: Error) => {
-      if (!this.connectionClosed) {
-        signalRService.hubConnectionOnclose(err);
+    this.storage.get('currentUser').subscribe((data: StaffMember) => {
+      if (data) {
+        this.prepareSignalR(signalRService, data);
+      } else {
+        this.staffMemberService.getCurrentStaffMember().subscribe((data) => {
+          this.prepareSignalR(signalRService, data);
+        });
       }
-    });
+    })
   }
 
+  prepareSignalR(signalRService, currentStaffMember) {
+    this.currentStaffMember = currentStaffMember;
+    signalRService.startConnection(this.currentStaffMember);
+    signalRService.hubConnection.onclose((err: Error) => {
+      if (!this.connectionClosed) {
+        signalRService.hubConnectionOnclose(err, this.currentStaffMember);
+      }
+    })
+  }
 
   ngOnDestroy(): void {
     this.connectionClosed = true;
@@ -52,7 +71,7 @@ export class RewardsShellComponent extends BaseComponent implements OnInit, OnDe
       this.signalRService.getBonusesStream$
     ]).pipe(takeUntil(this.ngUnsubscribe)).subscribe(([api, signalR]) => {
       this.bonus = signalR ? signalR : api;
-      this.cdRef.detectChanges(); 
+      this.cdRef.detectChanges();
     });
 
     combineLatest([
@@ -60,7 +79,7 @@ export class RewardsShellComponent extends BaseComponent implements OnInit, OnDe
       this.signalRService.getStreakStream$
     ]).pipe(takeUntil(this.ngUnsubscribe)).subscribe(([api, signalR]) => {
       this.streak = signalR ? signalR : api;
-      this.cdRef.detectChanges(); 
+      this.cdRef.detectChanges();
     });
 
     combineLatest([
@@ -68,7 +87,7 @@ export class RewardsShellComponent extends BaseComponent implements OnInit, OnDe
       this.signalRService.getSwagBagStream$
     ]).pipe(takeUntil(this.ngUnsubscribe)).subscribe(([api, signalR]) => {
       this.swagBag = signalR ? signalR : api;
-      this.cdRef.detectChanges(); 
+      this.cdRef.detectChanges();
     });
   }
 }
