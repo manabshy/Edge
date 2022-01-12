@@ -19,39 +19,4 @@ export class ContactGroupsApiEffects {
       })
     )
   );
-
-  // createBook$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(ContactGroupsPageActions.createBook),
-  //     concatMap(action =>
-  //       this.ContactGroupsService
-  //         .create(action.book)
-  //         .pipe(map(book => ContactGroupsApiActions.bookCreated({ book })))
-  //     )
-  //   )
-  // );
-
-  // updateBook$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(ContactGroupsPageActions.updateBook),
-  //     concatMap(action =>
-  //       this.ContactGroupsService
-  //         .update(action.bookId, action.changes)
-  //         .pipe(map(book => ContactGroupsApiActions.bookUpdated({ book })))
-  //     )
-  //   )
-  // );
-
-  // deleteBook$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(ContactGroupsPageActions.deleteBook),
-  //     mergeMap(action =>
-  //       this.ContactGroupsService
-  //         .delete(action.bookId)
-  //         .pipe(
-  //           map(() => ContactGroupsApiActions.bookDeleted({ bookId: action.bookId }))
-  //         )
-  //     )
-  //   )
-  // );
 }

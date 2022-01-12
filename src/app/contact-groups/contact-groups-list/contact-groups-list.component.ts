@@ -25,8 +25,6 @@ export class ContactGroupsListComponent implements OnInit, OnChanges {
   constructor(private contactGroupService: ContactGroupsService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
-
-    console.log('c:',this.originalContactGroups);
   }
 
   ngOnChanges() {
@@ -40,7 +38,6 @@ export class ContactGroupsListComponent implements OnInit, OnChanges {
         this.itemIntoView(this.groupsLength);
       });
     }
-    console.log('changes:',this.originalContactGroups)
   }
 
   itemIntoView(index: number) {

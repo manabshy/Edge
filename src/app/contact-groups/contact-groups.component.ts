@@ -127,45 +127,6 @@ export class ContactGroupsComponent implements OnInit {
 
   getNextContactGroupsPage(page: number) {
     this.contactGroups$ = this.store.select(selectAllContactGroups);
-    // this.contactGroupService.getAutocompleteContactGroups(this.searchTerm, PAGE_SIZE, page).subscribe(
-    //   (result) => {
-    //     if (this.searchTerm && this.searchTerm.length) {
-    //       if (result && !result.length) {
-    //         this.isMessageVisible = true
-    //         this.bottomReached = true
-    //         this.getDifferentSearchSuggestions(this.searchTerm)
-    //         return
-    //       } else {
-    //         this.isMessageVisible = false
-    //       }
-    //     } else {
-    //       this.isMessageVisible = false
-    //     }
-
-    //     if (result) {
-    //       if (page === 1) {
-    //         this.contactGroups = result
-    //       } else {
-    //         this.contactGroups = _.concat(this.contactGroups, result)
-    //       }
-    //       if (this.contactGroups && this.contactGroups.length) {
-    //         this.contactGroups.forEach((x) => {
-    //           if (x.warningStatusId !== 1) {
-    //             x.warningStatus = this.sharedService.showWarning(
-    //               x.warningStatusId,
-    //               this.warnings,
-    //               x.warningStatusComment
-    //             )
-    //           }
-    //         })
-    //       }
-    //     }
-    //   },
-    //   (error) => {
-    //     this.contactGroups = []
-    //     this.isHintVisible = true
-    //   }
-    // )
   }
 
   getDifferentSearchSuggestions(searchTerm: string) {
