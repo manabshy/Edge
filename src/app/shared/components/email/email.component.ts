@@ -129,7 +129,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
     private propertyService: PropertyService,
     private validationService: ValidationService,
     private emailService: EmailService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getCurrentUserInfo()
@@ -185,6 +185,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
       recipientEmail: ['', Validators.required],
       ccInternalEmail: [''],
       ccExternalEmail: [''],
+      senderDisplayName: [''],
       // ccExternalEmail: ['', [Validators.pattern(AppConstants.emailPattern)]],
       subject: ['', [Validators.required]],
       body: ['', Validators.required]
@@ -251,11 +252,11 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
           .getOffices()
           .pipe(
             (map((response) => response as ResultData),
-            tap((res) => {
-              if (res) {
-                this.offices = res.result
-              }
-            }))
+              tap((res) => {
+                if (res) {
+                  this.offices = res.result
+                }
+              }))
           )
           .subscribe() // Remove subscripton
       }
@@ -484,7 +485,9 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
       return
     }
     if (this.emailForm.dirty) {
+
       const email = { ...this.emailForm.value } as BaseEmail
+      email.senderDisplayName = this.currentStaffMember?.fullName || ''
       if (this.person) {
         const recipientEmail = []
         recipientEmail.push({

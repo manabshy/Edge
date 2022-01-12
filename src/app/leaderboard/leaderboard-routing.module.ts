@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { PipelineComponent } from './pipeline/pipeline.component';
 import { InstructionsComponent } from './instructions/instructions.component';
 import { ExchangesComponent } from './exchanges/exchanges.component';
-import { PipeResolver } from '@angular/compiler';
+// import { PipeResolver } from '@angular/compiler';
 import { LeaderboardComponent } from './leaderboard.component';
 import { AuthGuardService } from '../core/services/auth-guard.service';
 import { MsalGuard } from '@azure/msal-angular';
