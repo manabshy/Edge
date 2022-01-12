@@ -6,7 +6,8 @@ import { combineLatest } from 'rxjs';
 @Component({
   selector: 'app-rewards-shell',
   template: `
-    <div *ngIf="streak && bonus && swagBag" class="">
+    <app-rewards-welcome class="animate__animated animate__fadeOut" *ngIf="showWelcome" (onSave)="saveUserRewardsIcon($event)"></app-rewards-welcome>
+    <div *ngIf="streak && bonus && swagBag && !showWelcome" class="">
       <app-rewards-toolbar [connectionStatus]="connectionStatus"  [swagBag]="swagBag" [streak]="streak"></app-rewards-toolbar>
       <ng-container *ngFor="let b of bonus">
         <app-rewards-row [streak]="streak" [bonus]="b"></app-rewards-row>
@@ -19,7 +20,7 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
   streak: any;
   bonus: any;
   connectionStatus : any;
-
+  showWelcome = true
   connectionClosed = false;
 
   constructor(public signalRService: SignalRService, public rewardsService: RewardsService) {
@@ -64,6 +65,11 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
     ]).subscribe(([api, signalR]) => {
       this.swagBag = signalR ? signalR : api;
     });
+  }
+
+  saveUserRewardsIcon(icon){
+    console.log('saveUserRewardsIcon($event)', icon)
+    this.showWelcome = false
   }
 }
 
