@@ -192,7 +192,7 @@ export class ValuationsShellComponent extends BaseComponent implements OnInit {
         this.staffMemberService
           .getActiveStaffMembers()
           .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe((result) => {
+          .subscribe((result: any) => {
             this.valuers = result.result
             this.setValuersForSelectControl()
           })

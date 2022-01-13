@@ -69,7 +69,7 @@ import { RoleName, StaffMember } from 'src/app/shared/models/staff-member'
                 *ngIf="officeOptions.length"
                 [label]="'Valuer'"
                 [placeholder]="'Select staff member'"
-                [options]="valuersForSelect"
+                [options]="valuerOptions"
                 [cyProp]="'valuerId'"
                 (onSelectionChange)="selectionControlChange('valuerId', $event)"
                 [model]="selectControlModels.valuerId"
@@ -188,6 +188,9 @@ export class ValuationsSearchComponent implements OnInit, OnDestroy, OnChanges {
       this.currentStaffMember = changes.currentStaffMember.currentValue
       this.setInitialFilters()
     }
+    // if (changes.valuerOptions && !changes.valuerOptions.firstChange) {
+    //   this.valuerOptions = changes.valuerOptions.currentValue
+    // }
   }
 
   suggestionSelected(e) {
