@@ -6,7 +6,7 @@
 .aside {
   background-color: #0a1a4a;
   color: #848ca4;
-  // width: 100vw;
+  width: 100vw;
   height: 100vh;
   font-size: 17px;
   line-height: 21px;
@@ -14,7 +14,7 @@
   flex-direction: column;
   position: fixed;
   top: 0;
-  // left: -100vw;
+  left: -100vw;
   z-index: 20;
   .logo {
     margin: 0 20px;
@@ -80,7 +80,7 @@
           background-color: #4da685;
           border-radius: 10px;
           position: absolute;
-          top: 7px;
+          top: 12px;
           left: 10px;
         }
       }
@@ -175,7 +175,7 @@ This applies from 992px onwards
 @media (min-width: 992px) {
   .aside {
     left: 0;
-    // width: 220px;
+    width: 220px;
     font-size: 13px;
     .logo .icon {
       display: block;
@@ -188,7 +188,7 @@ This applies from 992px onwards
           &:before {
             width: 4px;
             height: 4px;
-            top: 8px;
+            top: 12px;
             left: 13px;
           }
         }

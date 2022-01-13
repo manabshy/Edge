@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment'
   styleUrls: ['./mainmenu.component.scss']
 })
 export class MainmenuComponent implements OnInit {
-  appVersion = 'X'
+  appVersion:string = environment.version
   navbarCollapsed = false
   isLoggedIn: boolean
   currentStaffMember: StaffMember
@@ -38,6 +38,52 @@ export class MainmenuComponent implements OnInit {
     }
   }
 
+    // Side nav config
+    showDashboardPages = true
+    dashboardPages = [
+      {
+        url: '',
+        name: 'Calendar'
+      },
+      {
+        url: 'rewards',
+        name: 'Rewards'
+      }
+    ]
+  
+    showContactPages = true
+    contactPages = [
+      {
+        url: 'contact-centre',
+        name: 'Contact centre'
+      },
+      {
+        url: 'company-centre',
+        name: 'Company centre'
+      },
+      {
+        url: 'leads',
+        name: 'Leads'
+      }
+    ]
+  
+    showPropertyPages = true
+    propertyPages = [
+      {
+        url: 'property-centre',
+        name: 'Property centre'
+      },
+      {
+        url: 'valuations',
+        name: 'Valuations'
+      },
+      {
+        url: 'instructions',
+        name: 'Instructions'
+      }
+    ]
+    // end sidenav config
+  
   constructor(
     public router: Router,
     public _location: Location,
