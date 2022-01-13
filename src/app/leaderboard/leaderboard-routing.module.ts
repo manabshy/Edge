@@ -16,7 +16,6 @@ const routes: Routes = [
       { path: 'instructions', component: InstructionsComponent },
       { path: 'pipeline', component: PipelineComponent },
       { path: 'exchanges', component: ExchangesComponent }
-      // { path: 'pipeline', component: PipelineComponent, resolve: {pipelineResolver: PipeResolver} },
     ]
   }
 ]
