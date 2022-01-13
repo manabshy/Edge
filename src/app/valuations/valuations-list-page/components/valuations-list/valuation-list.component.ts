@@ -25,7 +25,7 @@ import { Valuation, ValuationStatusEnum } from '../../../shared/valuation'
               *ngFor="let val of valuations"
               (click)="onNavigateToValuation.emit(val)"
               data-cy="valuationList"
-              class="cursor-pointer"
+              class="cursor-pointer even:bg-gray-50"
             >
               <td data-title="Status">
                 <span class="cell-content">
