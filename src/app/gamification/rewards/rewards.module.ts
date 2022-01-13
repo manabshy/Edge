@@ -9,6 +9,7 @@ import { RewardsTaskComponent } from './components/rewards-task/rewards-task.com
 import { RewardsGoal } from './components/rewards-goal/rewards-goal.component'
 import { RewardsRoutingModule } from './rewards-routing.module'
 import { RewardsBonusBankComponent } from './components/rewards-bonus-bank/rewards-bonus-bank.component'
+import { RewardsWelcomeComponent } from './components/rewards-welcome/rewards-welcome.component'
 
 const components = [
   RewardsShellComponent,
@@ -17,7 +18,8 @@ const components = [
   RewardsRowComponent,
   RewardsTaskComponent,
   RewardsGoal,
-  RewardsBonusBankComponent
+  RewardsBonusBankComponent,
+  RewardsWelcomeComponent
 ]
 
 @NgModule({

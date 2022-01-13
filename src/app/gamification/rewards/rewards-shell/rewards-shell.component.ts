@@ -9,7 +9,8 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 @Component({
   selector: 'app-rewards-shell',
   template: `
-    <div *ngIf="streak && bonus && swagBag" class="">
+    <app-rewards-welcome class="animate__animated animate__fadeOut" *ngIf="showWelcome" (onSave)="saveUserRewardsIcon($event)"></app-rewards-welcome>
+    <div *ngIf="streak && bonus && swagBag && !showWelcome" class="">
       <app-rewards-toolbar [isConnectionLost]="isConnectionLost"  [swagBag]="swagBag" [streak]="streak"></app-rewards-toolbar>
       <ng-container *ngFor="let b of bonus">
         <app-rewards-row [streak]="streak" [bonus]="b"></app-rewards-row>
@@ -23,8 +24,8 @@ export class RewardsShellComponent  implements OnInit, OnDestroy {
   swagBag: any;
   streak: any;
   bonus: any;
-  
-  isConnectionLost: any;
+  isConnectionLost : any;
+  showWelcome = true
   connectionClosed = false;
 
   constructor(
@@ -97,6 +98,11 @@ export class RewardsShellComponent  implements OnInit, OnDestroy {
       this.swagBag = data;
       this.cdRef.detectChanges();
     });
+  }
+
+  saveUserRewardsIcon(icon){
+    console.log('saveUserRewardsIcon($event)', icon)
+    this.showWelcome = false
   }
 }
 

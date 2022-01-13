@@ -1,6 +1,7 @@
-const { version: appVersion } = require('../../package.json')
+import packageJson from '../../package.json'
+
 export const environment = {
-  version: appVersion,
+  version: packageJson.version,
   production: false,
   hmr: true,
   clientId: '03d5d394-2418-42fa-a345-556b8d7ffcdb',
