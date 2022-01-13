@@ -1,76 +1,104 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
-import { RewardsService } from 'src/app/gamification/rewards/rewards.service';
-import { SignalRService } from 'src/app/core/services/signal-r.service';
-import { combineLatest } from 'rxjs';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { RewardsService } from 'src/app/gamification/rewards/rewards.service'
+import { SignalRService } from 'src/app/core/services/signal-r.service'
+import { combineLatest } from 'rxjs'
+import { BaseComponent } from 'src/app/shared/models/base-component'
+import { StaffMemberService } from 'src/app/core/services/staff-member.service'
+import { StaffMember } from 'src/app/shared/models/staff-member'
+import { StorageMap } from '@ngx-pwa/local-storage'
+import { takeUntil } from 'rxjs/operators'
 
 @Component({
   selector: 'app-rewards-shell',
   template: `
-    <app-rewards-welcome class="animate__animated animate__fadeOut" *ngIf="showWelcome" (onSave)="saveUserRewardsIcon($event)"></app-rewards-welcome>
+    <app-rewards-welcome
+      class="animate__animated animate__fadeOut"
+      *ngIf="showWelcome"
+      (onSave)="saveUserRewardsIcon($event)"
+    ></app-rewards-welcome>
     <div *ngIf="streak && bonus && swagBag && !showWelcome" class="">
-      <app-rewards-toolbar [connectionStatus]="connectionStatus"  [swagBag]="swagBag" [streak]="streak"></app-rewards-toolbar>
+      <app-rewards-toolbar
+        [connectionStatus]="connectionStatus"
+        [swagBag]="swagBag"
+        [streak]="streak"
+      ></app-rewards-toolbar>
       <ng-container *ngFor="let b of bonus">
         <app-rewards-row [streak]="streak" [bonus]="b"></app-rewards-row>
       </ng-container>
     </div>
   `
 })
-export class RewardsShellComponent implements OnInit, OnDestroy {
-  swagBag: any;
-  streak: any;
-  bonus: any;
-  connectionStatus : any;
+export class RewardsShellComponent extends BaseComponent implements OnInit, OnDestroy {
+  swagBag: any
+  streak: any
+  bonus: any
+  connectionStatus: any
   showWelcome = true
-  connectionClosed = false;
+  connectionClosed = false
 
-  constructor(public signalRService: SignalRService, public rewardsService: RewardsService) {
-    signalRService.startConnection();
+  constructor(
+    private staffMemberService: StaffMemberService,
+    private storage: StorageMap,
+    private cdRef: ChangeDetectorRef,
+    private signalRService: SignalRService,
+    private rewardsService: RewardsService
+  ) {
+    super()
 
-    signalRService.hubConnection.onclose((err: Error) => {
-      if (!this.connectionClosed) {
-        signalRService.hubConnectionOnclose(err);
+    this.storage.get('currentUser').subscribe((data: StaffMember) => {
+      if (data) {
+        this.prepareSignalR(signalRService, data)
+      } else {
+        this.staffMemberService.getCurrentStaffMember().subscribe((data) => {
+          this.prepareSignalR(signalRService, data)
+        })
       }
-    });
+    })
   }
 
+  prepareSignalR(signalRService, currentStaffMember) {
+    signalRService.startConnection(currentStaffMember)
+    signalRService.hubConnection.onclose((err: Error) => {
+      if (!this.connectionClosed) {
+        signalRService.hubConnectionOnclose(err, currentStaffMember)
+      }
+    })
+  }
 
   ngOnDestroy(): void {
-    this.connectionClosed = true;
-    this.signalRService.disconnect();
+    this.connectionClosed = true
+    this.signalRService.disconnect()
   }
 
   ngOnInit(): void {
+    this.signalRService.connectionStatus$.subscribe((status) => {
+      this.connectionStatus = status
+    })
 
-    this.signalRService.connectionStatus$.subscribe(status => {
-      this.connectionStatus = status;
-    });
+    combineLatest([this.rewardsService.getBonuses(), this.signalRService.getBonusesStream$])
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(([api, signalR]) => {
+        this.bonus = signalR ? signalR : api
+        this.cdRef.detectChanges()
+      })
 
-    combineLatest([
-      this.rewardsService.getBonuses(),
-      this.signalRService.getBonusesStream$
-    ]).subscribe(([api, signalR]) => {
-      this.bonus = signalR ? signalR : api;
-    });
+    combineLatest([this.rewardsService.getStreak(), this.signalRService.getStreakStream$])
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(([api, signalR]) => {
+        this.streak = signalR ? signalR : api
+        this.cdRef.detectChanges()
+      })
 
-    combineLatest([
-      this.rewardsService.getStreak(),
-      this.signalRService.getStreakStream$
-    ]).subscribe(([api, signalR]) => {
-      this.streak = signalR ? signalR : api;
-    });
-
-    combineLatest([
-      this.rewardsService.getSwagBag(),
-      this.signalRService.getSwagBagStream$
-    ]).subscribe(([api, signalR]) => {
-      this.swagBag = signalR ? signalR : api;
-    });
+    combineLatest([this.rewardsService.getSwagBag(), this.signalRService.getSwagBagStream$])
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(([api, signalR]) => {
+        this.swagBag = signalR ? signalR : api
+        this.cdRef.detectChanges()
+      })
   }
 
-  saveUserRewardsIcon(icon){
+  saveUserRewardsIcon(icon) {
     console.log('saveUserRewardsIcon($event)', icon)
     this.showWelcome = false
   }
 }
-
-

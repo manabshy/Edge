@@ -1,7 +1,7 @@
 import { MsalService } from '@azure/msal-angular'
-import { Component, Renderer2, ChangeDetectorRef, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core'
+import { Component, Renderer2, ChangeDetectorRef, OnInit, ViewChild, ElementRef } from '@angular/core'
 import { Router, RoutesRecognized, ActivatedRoute, NavigationEnd } from '@angular/router'
-import { filter, pairwise, takeUntil, tap } from 'rxjs/operators'
+import { filter, pairwise, takeUntil } from 'rxjs/operators'
 import { AppUtils } from './core/shared/utils'
 import { AuthService } from './core/services/auth.service'
 import { SharedService, WedgeError } from './core/services/shared.service'
@@ -17,6 +17,7 @@ import manifest from 'src/manifest.json'
 import { ConfigsLoaderService } from './configs-loader.service'
 import { BaseStaffMember } from './shared/models/base-staff-member'
 import { BsLocaleService } from 'ngx-bootstrap/datepicker'
+import { SignalRService } from './core/services/signal-r.service'
 
 @Component({
   selector: 'app-root',
@@ -30,6 +31,52 @@ export class AppComponent extends BaseComponent implements OnInit {
   currentStaffMember: StaffMember
   listInfo: any
   locale = 'en-gb'
+
+  // Side nav config
+  showDashboardPages = true
+  dashboardPages = [
+    {
+      url: '',
+      name: 'Calendar'
+    },
+    {
+      url: 'rewards',
+      name: 'Rewards'
+    }
+  ]
+
+  showContactPages = true
+  contactPages = [
+    {
+      url: 'contact-centre',
+      name: 'Contact centre'
+    },
+    {
+      url: 'company-centre',
+      name: 'Company centre'
+    },
+    {
+      url: 'leads',
+      name: 'Leads'
+    }
+  ]
+
+  showPropertyPages = true
+  propertyPages = [
+    {
+      url: 'property-centre',
+      name: 'Property centre'
+    },
+    {
+      url: 'valuations',
+      name: 'Valuations'
+    },
+    {
+      url: 'instructions',
+      name: 'Instructions'
+    }
+  ]
+  // end sidenav config
 
   loginRequest = {
     scopes: ['User.ReadWrite']
@@ -57,7 +104,8 @@ export class AppComponent extends BaseComponent implements OnInit {
     private renderer: Renderer2,
     private toastr: ToastrService,
     private serviceWorker: EdgeServiceWorkerService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    public signalRService: SignalRService
   ) {
     super()
     this.localeService.use(this.locale)
@@ -80,7 +128,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.router.events
       .pipe(filter((e) => e instanceof RoutesRecognized))
       .pipe(
-        pairwise(),
+        pairwise()
         // tap((data) => console.log('events here....', data))
       )
       .subscribe((event: any[] | RoutesRecognized[]) => {
@@ -203,11 +251,18 @@ export class AppComponent extends BaseComponent implements OnInit {
         break
     }
   }
+
   private setupEnvironmentVariables() {
     if (environment.production) {
       environment.baseUrl = this.configLoaderService.ApiEndpoint
       environment.endpointUrl = this.configLoaderService.ApiEndpoint
       environment.baseRedirectUri = this.configLoaderService.AppEndpoint
     }
+  }
+
+  toggleSideBar = false
+
+  toggleSideNav() {
+    this.toggleSideBar = !this.toggleSideBar
   }
 }

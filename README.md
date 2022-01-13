@@ -47,6 +47,9 @@ For more information on storybook see src/stories/Introductions.stories.mdx
 ## Storybook static site for team use
 Run `npm run storybook-build` to generate a static website of the component library that can be deployed to test/qa environments for team consumption and discussion. TODO: css style imports incomplete on build (some CSS needs importing from somewhere)
 
+### Updating Storybook package
+To update to the latest version of Storbook run `npx sb@latest upgrade`
+
 ## Documentation
 
 This application uses Compodoc to generate a static documentation website.  It follows typedoc conventions for structuring comments in the code.

@@ -9,4 +9,4 @@ export const environment = {
   baseUrl: '',
   baseRedirectUri: '',
   endpointUrl: ''
-};
+}

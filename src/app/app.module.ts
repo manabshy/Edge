@@ -76,6 +76,11 @@ import { SvgIconsModule } from '@ngneat/svg-icon'
 import { appPaperclipIcon } from './svg/paperclip'
 import { appEmailIcon } from './svg/email'
 
+
+//NgRx Store
+import {StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
 export const protectedResourceMap: Map<string, Array<string>> = new Map([
   [
     'http://localhost:57211/v10',
@@ -235,7 +240,15 @@ const externalModulesExports = [
     SvgIconsModule.forRoot({
       icons: [appPaperclipIcon, appEmailIcon]
     }),
-    RewardsModule
+    RewardsModule,
+
+    StoreModule.forRoot({}, {}),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
+      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
+    })
+
   ],
   exports: [MainmenuComponent],
   providers: [

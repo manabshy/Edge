@@ -180,7 +180,7 @@
         cursor: not-allowed;
 
         &:nth-child(even) {
-            border-color: rgba(theme-color("dark"), 0.4)!important;
+            // border-color: rgba(theme-color("dark"), 0.4)!important;
         }
 
         &.clickable {

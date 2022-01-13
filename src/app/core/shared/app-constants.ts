@@ -10,7 +10,7 @@ export class AppConstants {
   public static get leaderboardRankingBaseUrl(): string {
     return `${environment.baseUrl}/leaderboard`
   }
-  public static get baseUrl(): string {
+  public static get staffMemberBaseUrl(): string {
     return `${environment.baseUrl}/staffmembers`
   }
   public static get baseDashboardUrl(): string {
@@ -18,6 +18,9 @@ export class AppConstants {
   }
   public static get baseValuationUrl(): string {
     return `${environment.baseUrl}/valuations`
+  }
+  public static get baseInstructionUrl(): string {
+    return `${environment.baseUrl}/instructions`
   }
   public static get esignUrl(): string {
     return `${environment.baseUrl}/esign`
@@ -61,11 +64,11 @@ export class AppConstants {
   public static get baseEmailUrl(): string {
     return `${environment.baseUrl}/email`
   }
-  public static get redirectUri(): string {
-    return `${environment.baseRedirectUri}/auth-callback`
-  }
   public static get baseRewardsHubUrl(): string {
     return `${environment.baseUrl}/rewards-hub`
+  }
+  public static get redirectUri(): string {
+    return `${environment.baseRedirectUri}/auth-callback`
   }
   public static get baseRewardsUrl(): string {
     return `${environment.baseUrl}/rewards`

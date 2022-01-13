@@ -15,22 +15,26 @@ import { ComponentsModule } from '../shared/components.module'
 /**
  * Valuation Components
  */
-import { ValuationsComponent } from './valuation-list-page/valuations.component'
-import { ValuationListComponent } from './valuation-list-page/valuation-list/valuation-list.component'
+import { ValuationsShellComponent } from './valuations-list-page/valuations-shell-with-dependencies/valuations.component'
+import { ValuationsListComponent } from './valuations-list-page/components/valuations-list/valuation-list.component'
 import { ValuationDetailEditComponent } from './valuation-detail-page/valuation-detail-edit/valuation-detail-edit.component'
 import { ValuationsLandRegisterComponent } from './valuation-detail-page/cards/valuation-land-register/valuation-land-register.component'
 import { CancelValuationComponent } from './valuation-detail-page/dialogs/cancel-valuation/cancel-valuation.component'
 import { ValuationOriginComponent } from './valuation-detail-page/cards/valuation-origin/valuation-origin.component'
 import { PropertyInfoComponent } from './valuation-detail-page/cards/property-info/property-info.component'
+import { PureValuationsListPageShellComponent } from './valuations-list-page/pure-valuations-shell/pure-valuations-list-page-shell.component'
+import { ValuationsSearchComponent } from './valuations-list-page/components/valuations-search/valuations-search.component'
 
 const components = [
-  ValuationsComponent,
-  ValuationListComponent,
+  ValuationsShellComponent,
+  ValuationsListComponent,
   ValuationDetailEditComponent,
   ValuationsLandRegisterComponent,
   CancelValuationComponent,
   ValuationOriginComponent,
-  PropertyInfoComponent
+  PropertyInfoComponent,
+  PureValuationsListPageShellComponent,
+  ValuationsSearchComponent
 ]
 
 @NgModule({

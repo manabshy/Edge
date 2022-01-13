@@ -7,7 +7,7 @@ import { PropertyService } from '../property.service';
 
 import { PropertyDuplicateCheckerComponent } from './property-duplicate-checker.component';
 
-fdescribe('PropertyDuplicateCheckerComponent', () => {
+describe('PropertyDuplicateCheckerComponent', () => {
   let component: PropertyDuplicateCheckerComponent;
   let fixture: ComponentFixture<PropertyDuplicateCheckerComponent>;
   let propertyService: PropertyService;
