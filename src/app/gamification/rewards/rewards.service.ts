@@ -1,12 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import * as signalR from "@aspnet/signalr";
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { StaffMember } from 'src/app/shared/models/staff-member';
 import { AppConstants } from '../../core/shared/app-constants';
-import { StaffMemberService } from '../../core/services/staff-member.service';
  
+export interface SyncBoard {
+  streakSyncResult: boolean,
+  bonusSyncResult: boolean,
+  swagBagSyncResult: boolean
+}
+
 export interface SwagBag {
   swagBag: number
 }
@@ -33,9 +36,19 @@ export interface BonusDetail {
 })
 export class RewardsService {
  
-  isLoaded = false;
   constructor(private http: HttpClient) {  }
  
+
+  sync(): Observable<SyncBoard | any> {
+    const url = `${AppConstants.baseRewardsUrl}/board/sync`
+    return this.http.get<any>(url).pipe(
+      map((response) => {
+        return response.result
+      })
+    )
+  }
+
+
   getSwagBag(): Observable<SwagBag | any> {
     const url = `${AppConstants.baseRewardsUrl}/board/swag-bag`
     return this.http.get<any>(url).pipe(

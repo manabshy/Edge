@@ -1,9 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import * as signalR from "@aspnet/signalr";
 import { BehaviorSubject, Subject } from 'rxjs';
-import { StaffMember } from 'src/app/shared/models/staff-member';
 import { AppConstants } from '../shared/app-constants';
-import { StaffMemberService } from './staff-member.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +17,7 @@ export class SignalRService {
   private getSwagBagStream: BehaviorSubject<any> = new BehaviorSubject(null);
   public getSwagBagStream$ = this.getSwagBagStream.asObservable();
 
-  private connectionStatusSubject = new Subject<boolean>();
+  private connectionStatusSubject =new BehaviorSubject(null);
   public connectionStatus$ = this.connectionStatusSubject.asObservable();
 
 
@@ -29,27 +27,14 @@ export class SignalRService {
   public isConnectionLost = true;
 
 
-  constructor(private staffMemberService: StaffMemberService) { 
-   
-   }
 
-
-  public hubConnectionOnclose = (error: any) => {
+  public hubConnectionOnclose = (error: any, staffMember: any) => {
     this.isConnectionLost = true;
     this.setConnectionStatus(this.isConnectionLost);
-    this.reconnect();
+    this.reconnect(staffMember);
   }
 
-  public startConnection = () => {
-
-    this.staffMemberService.getCurrentStaffMember().subscribe(staffMember => {
-      if(staffMember) {
-
-        this.addGetBonusListener(staffMember);
-        this.addStreakDataListener(staffMember);
-        this.addSwagBagDataListener(staffMember);
-      }
-    });
+  public startConnection = (staffMember) => {
 
     const url = `${AppConstants.baseRewardsHubUrl}`;
     this.hubConnection = new signalR.HubConnectionBuilder()
@@ -62,23 +47,24 @@ export class SignalRService {
         this.isConnectionLost = false;
         this.setConnectionStatus(this.isConnectionLost);
         console.log('Connection started');
+
+        this.addGetBonusListener(staffMember);
+        this.addStreakDataListener(staffMember);
+        this.addSwagBagDataListener(staffMember);
+
       })
       .catch(err => {
         console.log('Error while starting connection: ' + err);
         this.setConnectionStatus(this.isConnectionLost);
-        this.reconnect();
+        this.reconnect(staffMember);
       });
-
-
-
-
   }
 
-  public reconnect() {
+  public reconnect(staffMember) {
     console.log('reconnecting... at', new Date(), 'isConnectionLost', this.isConnectionLost);
     if (this.isConnectionLost) {
       setTimeout(() => {
-        this.startConnection();
+        this.startConnection(staffMember);
         this.numOfRetries++;
         console.log('retries within 5  minutes', this.numOfRetries);
       }, this.timeOut);
@@ -101,32 +87,24 @@ export class SignalRService {
       if (data.staffMemberId != currentStaffMember.staffMemberId)
         return;
 
-        console.log('get-bonuses content', data.content);
       this.getBonusesStream.next(data.content);
     });
   }
 
   public addStreakDataListener = (currentStaffMember) => {
     this.hubConnection.on('get-streak', (data) => {
-      console.log('get-streak', data);
-      console.log('staffMemberId', currentStaffMember.staffMemberId);
-
       if (data.staffMemberId != currentStaffMember.staffMemberId)
         return;
 
-      console.log('get-streak content', data.content);
       this.getStreakStream.next(data.content);
     });
   }
 
   public addSwagBagDataListener = (currentStaffMember) => {
     this.hubConnection.on('get-swag-bag', (data) => {
-      console.log('get-swag-bag', data);
-      console.log('staffMemberId', currentStaffMember.staffMemberId);
       if (data.staffMemberId != currentStaffMember.staffMemberId)
         return;
 
-      console.log('get-swag-bag content', data.content);
       this.getSwagBagStream.next(data.content);
     });
   }

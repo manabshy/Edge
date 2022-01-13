@@ -38,6 +38,10 @@ export class AppComponent extends BaseComponent implements OnInit {
     {
       url: '',
       name: 'Calendar'
+    },
+    {
+      url: 'rewards',
+      name: 'Rewards'
     }
   ]
 
