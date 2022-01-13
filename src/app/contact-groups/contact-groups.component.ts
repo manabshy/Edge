@@ -13,6 +13,11 @@ import { Observable, of, EMPTY } from 'rxjs'
 import { distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators'
 import { PeopleService } from '../core/services/people.service'
 import { CompanyService } from '../company/shared/company.service'
+import { Store } from "@ngrx/store";
+import { State } from '../shared/state'
+import { ContactGroupsPageActions } from './actions'
+import { ContactGroupsApiActions } from './actions'
+import { selectAllContactGroups } from '../shared/state'
 
 const PAGE_SIZE = 20
 @Component({
@@ -39,8 +44,9 @@ export class ContactGroupsComponent implements OnInit {
   searching: boolean
   searchFailed: boolean
   suggestedTerm: any
-
+  contactGroups$: Observable<any>;
   constructor(
+    private store: Store<State>,
     private contactGroupService: ContactGroupsService,
     private companyService: CompanyService,
     private route: ActivatedRoute,
@@ -52,6 +58,7 @@ export class ContactGroupsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.store.dispatch(ContactGroupsPageActions.init());
     this.sharedService.setTitle('Contact Centre')
     this.contactFinderForm = this.fb.group({
       searchTerm: ['']
@@ -111,6 +118,7 @@ export class ContactGroupsComponent implements OnInit {
     this.suggestedTerm
       ? (this.searchTerm = this.suggestedTerm)
       : (this.searchTerm = this.contactFinderForm.get('searchTerm').value)
+    this.store.dispatch(ContactGroupsApiActions.searchContactGroups({searchTerm:this.searchTerm}));
     this.getNextContactGroupsPage(this.page)
     if (submit) {
       this.sharedService.scrollElIntoView('list-group')
@@ -118,45 +126,7 @@ export class ContactGroupsComponent implements OnInit {
   }
 
   getNextContactGroupsPage(page: number) {
-    this.contactGroupService.getAutocompleteContactGroups(this.searchTerm, PAGE_SIZE, page).subscribe(
-      (result) => {
-        if (this.searchTerm && this.searchTerm.length) {
-          if (result && !result.length) {
-            this.isMessageVisible = true
-            this.bottomReached = true
-            this.getDifferentSearchSuggestions(this.searchTerm)
-            return
-          } else {
-            this.isMessageVisible = false
-          }
-        } else {
-          this.isMessageVisible = false
-        }
-
-        if (result) {
-          if (page === 1) {
-            this.contactGroups = result
-          } else {
-            this.contactGroups = _.concat(this.contactGroups, result)
-          }
-          if (this.contactGroups && this.contactGroups.length) {
-            this.contactGroups.forEach((x) => {
-              if (x.warningStatusId !== 1) {
-                x.warningStatus = this.sharedService.showWarning(
-                  x.warningStatusId,
-                  this.warnings,
-                  x.warningStatusComment
-                )
-              }
-            })
-          }
-        }
-      },
-      (error) => {
-        this.contactGroups = []
-        this.isHintVisible = true
-      }
-    )
+    this.contactGroups$ = this.store.select(selectAllContactGroups);
   }
 
   getDifferentSearchSuggestions(searchTerm: string) {

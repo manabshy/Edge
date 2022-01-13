@@ -76,11 +76,10 @@ import { SvgIconsModule } from '@ngneat/svg-icon'
 import { appPaperclipIcon } from './svg/paperclip'
 import { appEmailIcon } from './svg/email'
 
-
 //NgRx Store
-import {StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-
+import { StoreModule } from '@ngrx/store'
+import { StoreDevtoolsModule } from '@ngrx/store-devtools'
+import { reducers } from './shared/state'
 export const protectedResourceMap: Map<string, Array<string>> = new Map([
   [
     'http://localhost:57211/v10',
@@ -109,6 +108,7 @@ import { defineLocale } from 'ngx-bootstrap/chronos'
 import { deLocale, frLocale, plLocale, enGbLocale } from 'ngx-bootstrap/locale'
 import { ProfileComponent } from './profile/profile.component'
 import { ComponentsModule } from './shared/components.module'
+import { EffectsModule } from '@ngrx/effects'
 
 defineLocale('de', deLocale)
 defineLocale('fr', frLocale)
@@ -240,15 +240,13 @@ const externalModulesExports = [
     SvgIconsModule.forRoot({
       icons: [appPaperclipIcon, appEmailIcon]
     }),
-    RewardsModule,
-
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot(reducers, {}),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
-      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
-    })
-
+      autoPause: true // Pauses recording actions and state changes when the extension window is not open
+    }),
+    EffectsModule.forRoot([])
   ],
   exports: [MainmenuComponent],
   providers: [
