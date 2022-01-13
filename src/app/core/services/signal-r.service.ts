@@ -17,7 +17,7 @@ export class SignalRService {
   private getSwagBagStream: BehaviorSubject<any> = new BehaviorSubject(null);
   public getSwagBagStream$ = this.getSwagBagStream.asObservable();
 
-  private connectionStatusSubject = new Subject<boolean>();
+  private connectionStatusSubject =new BehaviorSubject(null);
   public connectionStatus$ = this.connectionStatusSubject.asObservable();
 
 
@@ -87,32 +87,24 @@ export class SignalRService {
       if (data.staffMemberId != currentStaffMember.staffMemberId)
         return;
 
-      console.log('get-bonuses content', data.content);
       this.getBonusesStream.next(data.content);
     });
   }
 
   public addStreakDataListener = (currentStaffMember) => {
     this.hubConnection.on('get-streak', (data) => {
-      console.log('get-streak', data);
-      console.log('staffMemberId', currentStaffMember.staffMemberId);
-
       if (data.staffMemberId != currentStaffMember.staffMemberId)
         return;
 
-      console.log('get-streak content', data.content);
       this.getStreakStream.next(data.content);
     });
   }
 
   public addSwagBagDataListener = (currentStaffMember) => {
     this.hubConnection.on('get-swag-bag', (data) => {
-      console.log('get-swag-bag', data);
-      console.log('staffMemberId', currentStaffMember.staffMemberId);
       if (data.staffMemberId != currentStaffMember.staffMemberId)
         return;
 
-      console.log('get-swag-bag content', data.content);
       this.getSwagBagStream.next(data.content);
     });
   }

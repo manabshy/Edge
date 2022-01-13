@@ -31,7 +31,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
 
       <div class="flex-1"></div>
 
-      <app-rewards-bonus-bank [connectionStatus]="connectionStatus" [swagBag]="swagBag"></app-rewards-bonus-bank>
+      <app-rewards-bonus-bank [isConnectionLost]="isConnectionLost" [swagBag]="swagBag"></app-rewards-bonus-bank>
     </div>
   `
 })
@@ -40,7 +40,7 @@ export class RewardsToolbarComponent implements OnInit {
   
   @Input() swagBag: any
   @Input() streak: any
-  @Input() connectionStatus: any
+  @Input() isConnectionLost: any
   
   @Output() onIconChange: EventEmitter<string> = new EventEmitter()
 
