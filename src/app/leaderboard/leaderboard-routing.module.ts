@@ -5,7 +5,6 @@ import { InstructionsComponent } from './instructions/instructions.component'
 import { ExchangesComponent } from './exchanges/exchanges.component'
 import { LeaderboardComponent } from './leaderboard.component'
 import { MsalGuard } from '@azure/msal-angular'
-// import { PipeResolver } from '@angular/compiler'; // ? unsure what this is for
 
 const routes: Routes = [
   {
@@ -17,7 +16,6 @@ const routes: Routes = [
       { path: 'instructions', component: InstructionsComponent },
       { path: 'pipeline', component: PipelineComponent },
       { path: 'exchanges', component: ExchangesComponent }
-      // { path: 'pipeline', component: PipelineComponent, resolve: {pipelineResolver: PipeResolver} },
     ]
   }
 ]
