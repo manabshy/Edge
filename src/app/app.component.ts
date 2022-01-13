@@ -25,6 +25,9 @@ import { SignalRService } from './core/services/signal-r.service'
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent extends BaseComponent implements OnInit {
+  appVersion:string = environment.version
+  isNonProdEnvironment: boolean
+  isDev = !environment.production
   title = 'Wedge'
   isFading = false
   isCurrentUserAvailable = false
@@ -110,7 +113,6 @@ export class AppComponent extends BaseComponent implements OnInit {
     super()
     this.localeService.use(this.locale)
     this.setupEnvironmentVariables()
-    this.setIsFadingFlag()
     this.updateOnAllowedRoutes()
 
     setTimeout(() => {
@@ -121,28 +123,6 @@ export class AppComponent extends BaseComponent implements OnInit {
         this.msalService.loginRedirect(this.loginRequest)
       }
     }, 1000)
-  }
-
-  /*  DELETE ASAP IF NOT USED 25/03/21  */
-  private setIsFadingFlag() {
-    this.router.events
-      .pipe(filter((e) => e instanceof RoutesRecognized))
-      .pipe(
-        pairwise()
-        // tap((data) => console.log('events here....', data))
-      )
-      .subscribe((event: any[] | RoutesRecognized[]) => {
-        AppUtils.prevRouteBU = AppUtils.prevRoute || ''
-        AppUtils.prevRoute = event[0].urlAfterRedirects
-        const current = event[1].urlAfterRedirects
-
-        if (current.indexOf('calendarView') === -1) {
-          this.isFading = true
-        }
-        setTimeout(() => {
-          this.isFading = false
-        }, 1200)
-      })
   }
 
   private updateOnAllowedRoutes() {
@@ -166,7 +146,9 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.setManifestName()
     this.setImpersonatedAsCurrentUser()
     this.storage.delete('calendarStaffMembers').subscribe() // Remove from localstorage
-
+    if (environment.production) {
+      this.isNonProdEnvironment = location.href.includes('https://edge.dng.co.uk') ? false : true
+    }
     this.route.queryParams.subscribe((params) => {
       if (params['docTitle']) {
         this.sharedService.setTitle(params['docTitle'])
@@ -198,7 +180,7 @@ export class AppComponent extends BaseComponent implements OnInit {
           .getCurrentStaffMember()
           .pipe(takeUntil(this.ngUnsubscribe))
           .subscribe(
-            (data) => {
+            (data: any) => {
               if (data) {
                 this.currentStaffMember = data
                 this.isCurrentUserAvailable = true
