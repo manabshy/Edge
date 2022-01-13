@@ -1,4 +1,4 @@
-<div class="row">
+<div class="flex flex-row">
   <div class="mb-10 md:mb-0 row__item row__item--aside">
     <div class="wrapper--sticky">
       <app-contact-group-card
@@ -23,8 +23,8 @@
             </span>
           </div>
           <div class="card__body">
-            <ol>
-              <li *ngFor="let item of statuses">
+            <ul>
+              <li *ngFor="let item of statuses" class="block -ml-4">
                 <div class="flex flex-row">
                   <div
                     class="flex items-center w-4 h-4 mr-2 text-center rounded-full"
@@ -36,10 +36,10 @@
                   >
                     <i *ngIf="item.isValid" class="ml-0.3 text-white pi pi-check"></i>
                   </div>
-                  <a (click)="toggleAccordion(item.value)">{{ item?.name | toPascalCase }}</a>
+                  <a (click)="toggleAccordion(item.value)" class="no-underline">{{ item?.name | toPascalCase }}</a>
                 </div>
               </li>
-            </ol>
+            </ul>
             <div>
               <span class="text-sm font-black">Instruct</span>
             </div>
@@ -48,7 +48,7 @@
       </div>
     </div>
   </div>
-  <div #mainRowItem class="w-screen row__item">
+  <div #mainRowItem class="w-full row__item">
     <div class="wrapper--sticky wrapper--stickyTop">
       <div *ngIf="!isNoteSelected" class="row__item">
         <div class="wrapper--redacted" *ngIf="!property">
