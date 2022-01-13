@@ -4,41 +4,42 @@ import { NgModule, NO_ERRORS_SCHEMA, APP_INITIALIZER, ErrorHandler } from '@angu
 import { AppComponent } from './app.component'
 import { MainmenuComponent } from './mainmenu/mainmenu.component'
 import { HomeComponent } from './home/home.component'
-import { AppRoutingModule } from './/app-routing.module'
-import { PropertyDetailsLettingComponent } from './property-details-letting/property-details-letting.component'
-import { PropertyDetailsSaleComponent } from './property-details-sale/property-details-sale.component'
-import { PropertyFeaturesComponent } from './property-features/property-features.component'
+import { AppRoutingModule } from './app-routing.module'
 import { MiniMapAndPhotosComponent } from './shared/mini-map-and-photos/mini-map-and-photos.component'
-import { PropertyMarketingComponent } from './property-marketing/property-marketing.component'
-import { PropertyHistoryComponent } from './property-history/property-history.component'
-import { PropertyMediaComponent } from './property-media/property-media.component'
-import { PropertyNotesComponent } from './property-notes/property-notes.component'
+// import { PropertyDetailsLettingComponent } from './property-details-letting/property-details-letting.component'
+// import { PropertyDetailsSaleComponent } from './unused-files/property-details-sale/property-details-sale.component'
+// import { PropertyFeaturesComponent } from './property-features/property-features.component'
+// import { PropertyMarketingComponent } from './unused-files/property-marketing/property-marketing.component'
+// import { PropertyHistoryComponent } from './property-history/property-history.component'
+// import { PropertyChecklistLettingComponent } from './property-checklist-letting/property-checklist-letting.component'
+// import { PropertyMediaComponent } from './unused-files/property-media/property-media.component'
+// import { PropertyNotesComponent } from './unused-files/property-notes/property-notes.component'
+// import { SendEdetailsComponent } from './unused-files/send-edetails/send-edetails.component'
+// import { PropertyChecklistItemComponent } from './unused-files/property-checklist-item/property-checklist-item.component'
+// import { ApplicantRegisterComponent } from './applicant-register/applicant-register.component'
+// import { ApplicantViewLettingComponent } from './applicant-view-letting/applicant-view-letting.component'
+// import { ApplicantViewSaleComponent } from './applicant-view-sale/applicant-view-sale.component'
+// import { ViewingsContactComponent } from './viewings-contact/viewings-contact.component'
+// import { ViewingsPropertyComponent } from './viewings-property/viewings-property.component'
+// import { ViewingsComponent } from './unused-files/viewings/viewings.component'
+import { ApplicantMatchingComponent } from './unused-files/applicant-matching/applicant-matching.component'
 import { DashboardComponent } from './dashboard/dashboard.component'
 import { LeaderboardComponent } from './leaderboard/leaderboard.component'
-import { ApplicantRegisterComponent } from './applicant-register/applicant-register.component'
-import { ApplicantViewLettingComponent } from './applicant-view-letting/applicant-view-letting.component'
-import { ViewingsComponent } from './viewings/viewings.component'
-import { ViewingsContactComponent } from './viewings-contact/viewings-contact.component'
-import { ViewingsPropertyComponent } from './viewings-property/viewings-property.component'
-import { ApplicantViewSaleComponent } from './applicant-view-sale/applicant-view-sale.component'
-import { ApplicantMatchingComponent } from './applicant-matching/applicant-matching.component'
-import { SendEdetailsComponent } from './send-edetails/send-edetails.component'
-import { PropertyChecklistLettingComponent } from './property-checklist-letting/property-checklist-letting.component'
-import { PropertyChecklistItemComponent } from './property-checklist-item/property-checklist-item.component'
 import { DashboardModule } from './dashboard/dashboard.module'
 import { CoreModule } from './core/core.module'
 import { AccountModule } from './account/account.module'
 import { LeaderboardModule } from './leaderboard/leaderboard.module'
+import { ImpersonateMemberComponent } from './impersonate-member/impersonate-member.component'
+import { ConfigsLoaderService } from './configs-loader.service'
+import { GlobalErrorHandlerService } from './core/services/global-error-handler.service'
+
+// 3rd party modules TODO(?) better to move to vendors module with all other 3rd party libs?
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NotFoundComponent } from './not-found/not-found.component'
 import { ServiceWorkerModule } from '@angular/service-worker'
 import { environment } from '../environments/environment'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
-import { ImpersonateMemberComponent } from './impersonate-member/impersonate-member.component'
-import { ConfigsLoaderService } from './configs-loader.service'
-import { GlobalErrorHandlerService } from './core/services/global-error-handler.service'
-import { RewardsModule } from './gamification/rewards/rewards.module'
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead'
@@ -165,26 +166,26 @@ const externalModulesExports = [
     AppComponent,
     MainmenuComponent,
     HomeComponent,
-    PropertyDetailsLettingComponent,
-    PropertyDetailsSaleComponent,
-    PropertyFeaturesComponent,
     MiniMapAndPhotosComponent,
-    PropertyMarketingComponent,
-    PropertyHistoryComponent,
-    PropertyMediaComponent,
-    PropertyNotesComponent,
+    // PropertyDetailsLettingComponent,
+    // PropertyDetailsSaleComponent,
+    // PropertyFeaturesComponent,
+    // PropertyMarketingComponent,
+    // PropertyHistoryComponent,
+    // PropertyMediaComponent,
+    // PropertyNotesComponent,
+    // ApplicantRegisterComponent,
+    // ApplicantViewLettingComponent,
+    // ApplicantViewSaleComponent,
     DashboardComponent,
     LeaderboardComponent,
-    ApplicantRegisterComponent,
-    ApplicantViewLettingComponent,
-    ViewingsComponent,
-    ViewingsContactComponent,
-    ViewingsPropertyComponent,
-    ApplicantViewSaleComponent,
+    // ViewingsComponent,
+    // ViewingsContactComponent,
+    // ViewingsPropertyComponent,
     ApplicantMatchingComponent,
-    SendEdetailsComponent,
-    PropertyChecklistLettingComponent,
-    PropertyChecklistItemComponent,
+    // SendEdetailsComponent,
+    // PropertyChecklistLettingComponent,
+    // PropertyChecklistItemComponent,
     NotFoundComponent,
     ImpersonateMemberComponent,
     HeaderComponent,
