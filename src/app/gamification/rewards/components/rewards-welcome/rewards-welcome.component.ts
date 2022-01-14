@@ -1,6 +1,4 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core'
-import { off } from 'process'
-import { Observable, of } from 'rxjs'
 
 @Component({
   selector: 'app-rewards-welcome',
@@ -14,7 +12,7 @@ import { Observable, of } from 'rxjs'
           <div
             class="rounded-full border-0 p-6 w-24 h-24 mx-auto cursor-pointer hover:bg-{{
               icon.colorClass
-            }}-100 hover:shadow-sm"
+            }}-100 hover:shadow-sm "
             [ngClass]="icon.dynamicStyle"
             (click)="changeIcon(icon)"
           >
@@ -27,13 +25,13 @@ import { Observable, of } from 'rxjs'
         </div>
       </div>
       <div class="mx-auto w-64">
-        <button
+        <app-button
           *ngIf="showSaveButton"
-          class="px-4 py-2 text-white text-center bg-plantation-400 rounded-sm mx-auto"
-          (click)="saveAndContinue()"
-        >
-          Save & Continue
-        </button>
+          [backgroundColorClass]="'bg-ocean-green-500'"
+          [label]="'Save & Continue'"
+          (onClick)="saveAndContinue()"
+        >     
+        </app-button>
       </div>
     </div>
   `

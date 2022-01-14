@@ -71,6 +71,7 @@ import { MessagesComponent } from './components/messages/messages.component'
 import { FileUploadComponent } from './components/file-upload/file-upload.component'
 import { FileListComponent } from './components/file-list/file-list.component'
 import { BigButtonComponent } from './components/big-button/big-button.component'
+import { ButtonComponent } from './components/button/button.component'
 import { StandAloneNoteComponent } from './notes/standalone-note.component'
 import { MenuComponent } from './components/menu/menu.component'
 import { SharedRewardsComponent } from './components/rewards/rewards.component'
@@ -132,6 +133,7 @@ const components = [
   FileUploadComponent,
   FileListComponent,
   BigButtonComponent,
+  ButtonComponent,
   StandAloneNoteComponent,
   MenuComponent,
   TableColumnSortComponent,

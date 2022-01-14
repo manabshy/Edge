@@ -5,40 +5,49 @@ module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx,html}'],
   theme: {
     extend: {
+      colors: {
+        info: '#3498DB',
+        primary: '#4DA685',
+        secondary: '#0a1a4a',
+        'ocean-green': {
+          DEFAULT: '#4DA685',
+          50: '#C6E5D9',
+          100: '#B8DED0',
+          200: '#9CD1BE',
+          300: '#80C4AB',
+          400: '#64B799',
+          500: '#4DA685',
+          600: '#3B8066',
+          700: '#295948',
+          800: '#183329',
+          900: '#060D0A'
+        },
+        downriver: {
+          DEFAULT: '#0A1A4A',
+          50: '#2958E2',
+          100: '#1D4DDA',
+          200: '#1940B6',
+          300: '#143392',
+          400: '#0F276E',
+          500: '#0A1A4A',
+          600: '#030919',
+          700: '#000000',
+          800: '#000000',
+          900: '#000000'
+        },
+        transparent: 'transparent',
+        current: 'currentColor',
+        black: colors.black,
+        white: colors.white,
+        gray: colors.gray,
+        emerald: colors.emerald,
+        indigo: colors.indigo,
+        yellow: colors.yellow,
+        red: colors.red
+      },
       backgroundColor: ['even'],
       transitionProperty: {
         spacing: 'margin, padding'
-      },
-      colors: {
-        info: '#3498DB',
-        primary: '#285a48',
-        secondary: '#0a1a4a',
-        plantation: {
-            DEFAULT: '#285A48',
-            50: '#77C3A7',
-            100: '#69BC9E',
-            200: '#4EAF8C',
-            300: '#419275',
-            400: '#35765F',
-            500: '#285A48',
-            600: '#173329',
-            700: '#050C0A',
-            800: '#000000',
-            900: '#000000'
-        },
-        downriver: {
-            DEFAULT: '#0A1A4A',
-            50: '#2958E2',
-            100: '#1D4DDA',
-            200: '#1940B6',
-            300: '#143392',
-            400: '#0F276E',
-            500: '#0A1A4A',
-            600: '#030919',
-            700: '#000000',
-            800: '#000000',
-            900: '#000000'
-        }
       },
       fontSize: {
         xs: '.65rem'
