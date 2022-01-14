@@ -3,7 +3,7 @@
   [ngClass]="idHasExpired ? 'border-red-500 bg-red-100' : ''">
   <div *ngFor="let file of files" class="flex flex-row content-center w-full my-1">
     <i class="mt-1 mr-1 tracking-normal text-gray-400 fa fa-file"></i>
-    <a class="mr-2 tracking-tight" [ngClass]="documentType == DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS ? 'w-3/5' : ''"
+    <a class="mr-2 tracking-tight no-underline" [ngClass]="documentType == DOCUMENT_TYPE.ADDITIONAL_DOCUMENTS ? 'w-3/5' : ''"
       href="{{ file.url }}" target="_blank">
       <p class="overflow-hidden truncate">
         {{ file.label || label }}
@@ -32,6 +32,7 @@
     <!-- DELETE BTN -->
     <button
       (click)="deleteFile.emit({ id: file.fileStoreId ? file.fileStoreId : file.blobName, documentType: documentType })"
+      class="bg-transparent"
       [pTooltip]="'Delete Document'" *ngIf="!isFrozen">
       <svg aria-hidden="true" width="40" height="40" viewBox="0 0 64 64" class="ml-2 text-gray-400 icon">
         <path
@@ -57,7 +58,7 @@
 
 <!-- DIALOG FOR UPLOADING COMPLIANCE DOCUMENTS -->
 <p-dialog header="{{ uploadDialogHeaderText }}" appendTo="body" [(visible)]="showFileUploadDialog" [modal]="true"
-  [draggable]="false" (onHide)="afterFileOperation.emit(true)">
+  [draggable]="false" (onHide)="afterFileOperation.emit(true)" [baseZIndex]="1000">
   <div class="flex flex-col" style="width: 500px">
     <div class="animate__animated animate__pulse">
       <app-messages [message]="message"></app-messages>
@@ -67,11 +68,11 @@
       [isMultiple]="isMultiple"></app-file-upload>
 
     <!-- ID EXPIRTY DATE PICKER -->
-    <div *ngIf="showExpiryDatePicker" class="mt-2 mb-0 ml-2">
+    <div *ngIf="showExpiryDatePicker" class="mt-2 mb-0 ml-2 z-30">
       <form [formGroup]="idExpiryForm">
         <fieldset [ngClass]="{ invalid: idHasExpired }">
           <label for="">ID Expiry Date</label>
-          <input class="p-2 mt-2" type="text" id="idExpiryDate" placeholder="dd/mm/yyyy" formControlName="idExpiryDate"
+          <input class="p-2 mt-2 z-100" type="text" id="idExpiryDate" placeholder="dd/mm/yyyy" formControlName="idExpiryDate"
             [bsConfig]="{
               showWeekNumbers: false,
               dateInputFormat: 'DD/MM/YYYY',

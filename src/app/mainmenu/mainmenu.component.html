@@ -42,7 +42,6 @@
                 <a
                   routerLink="{{ page.url }}"
                   routerLinkActive="active"
-                  [routerLinkActiveOptions]="{ exact: true }"
                   class="block no-underline"
                 >
                   {{ page.name }}
@@ -84,7 +83,6 @@
                   class="no-underline block"
                   routerLink="{{ page.url }}"
                   routerLinkActive="active"
-                  [routerLinkActiveOptions]="{ exact: true }"
                   (click)="clearLocalStroge()"
                 >
                   {{ page.name }}
@@ -130,7 +128,6 @@
                   class="no-underline block"
                   routerLink="{{ page.url }}"
                   routerLinkActive="active"
-                  [routerLinkActiveOptions]="{ exact: true }"
                 >
                   {{ page.name }}
                 </a>

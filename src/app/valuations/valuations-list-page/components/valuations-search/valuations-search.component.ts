@@ -10,7 +10,7 @@ import { RoleName, StaffMember } from 'src/app/shared/models/staff-member'
   selector: 'app-valuations-search',
   template: `
     <div class="sticky top-20 w-56 top-20 z-10">
-      <div class="p-4 border border-solid border-gray-200 rounded-md mb-10">
+      <div class="p-4 border border-solid border-gray-300 rounded-md mb-10">
         <h3 class="font-bold text-md">
           <i class="fas fa-search"></i>
           Search Valuations
@@ -103,7 +103,7 @@ import { RoleName, StaffMember } from 'src/app/shared/models/staff-member'
         </form>
       </div>
 
-      <div class="border border-solid border-gray-200 rounded-md mt-4 pt-3 pb-4">
+      <div class="border border-solid border-gray-300 rounded-md mt-4 pt-3 pb-4">
         <h3 class="pt-2 pl-3 font-medium text-sm -mb-1">Actions</h3>
         <nav>
           <a

@@ -55,10 +55,10 @@
     (onManualEntry)="onCreateNewCompany.emit($event)"></app-company-finder>
 </p-dialog>
 
-<p-dialog header="Refresh Documents" [(visible)]="dialogs.showRefreshDocumentstDialog" [modal]="true"
+<p-dialog header="Refresh Documents" appendTo="body" [(visible)]="dialogs.showRefreshDocumentstDialog" [modal]="true"
   [draggable]="false">
   <div class="p-4">
-    <h1>Refresh documents for this valuation?</h1>
+    <p class="text-lg">Refresh documents for this valuation?</p>
     <p>Documents associated with this valuation will be deleted.</p>
   </div>
   <div class="flex flex-row mt-4 -mb-1">

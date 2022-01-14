@@ -46,7 +46,7 @@ export class MainmenuComponent implements OnInit {
         name: 'Calendar'
       },
       {
-        url: 'rewards',
+        url: '/rewards',
         name: 'Rewards'
       }
     ]
@@ -54,15 +54,15 @@ export class MainmenuComponent implements OnInit {
     showContactPages = true
     contactPages = [
       {
-        url: 'contact-centre',
+        url: '/contact-centre',
         name: 'Contact centre'
       },
       {
-        url: 'company-centre',
+        url: '/company-centre',
         name: 'Company centre'
       },
       {
-        url: 'leads',
+        url: '/leads',
         name: 'Leads'
       }
     ]
@@ -70,11 +70,11 @@ export class MainmenuComponent implements OnInit {
     showPropertyPages = true
     propertyPages = [
       {
-        url: 'property-centre',
+        url: '/property-centre',
         name: 'Property centre'
       },
       {
-        url: 'valuations',
+        url: '/valuations',
         name: 'Valuations'
       },
       {
