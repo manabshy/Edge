@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
-import { Observable } from 'rxjs'
 
 @Component({
   selector: `app-button`,
@@ -7,9 +6,9 @@ import { Observable } from 'rxjs'
     <button
       class="px-3 py-1.5 rounded-sm mx-auto cursor-pointer hover:bg-ocean-green-600 bg-{{
         backgroundColorClass
-      }}-500 duration-75"
-      [ngClass]="disabled ? 'disabled' : ''"
-      (click)="onClick.emit()"
+      }}-500 duration-75 disabled:opacity-75 disabled:bg-gray-300"
+      [attr.data-cy]="cypressId"
+      (click)="btnClicked()"
       [disabled]="disabled"
     >
       <svg aria-hidden="true" viewBox="0 0 64 64" class="h-3 w-3 animate-spin" *ngIf="isSubmitting">
@@ -27,8 +26,24 @@ import { Observable } from 'rxjs'
 export class ButtonComponent {
   @Input() backgroundColorClass: string
   @Input() label: string
+  @Input() cypressId?: string
   @Input() disabled?: boolean = false
   @Input() isSubmitting?: boolean = false
 
   @Output() onClick: EventEmitter<any> = new EventEmitter()
+
+  clicked: boolean
+
+  constructor() {
+    this.clicked = false
+  }
+
+  btnClicked() {
+    if (this.clicked) return
+    this.clicked = true
+    this.onClick.emit()
+    setTimeout(() => {
+      this.clicked = false
+    }, 2000)
+  }
 }

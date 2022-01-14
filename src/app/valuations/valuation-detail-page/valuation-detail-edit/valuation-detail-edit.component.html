@@ -1421,7 +1421,7 @@
           </ng-container>
 
           <ng-container *ngIf="property">
-            <footer class="footer">
+            <footer class="footer space-x-2">
               <button (click)="cancel()" type="button" class="btn btn--ghost" data-cy="cancelVal">Cancel</button>
               <!-- <button
                 *ngIf="canSaveValuation"
@@ -1433,16 +1433,7 @@
               >
                 Save Valuation
               </button> -->
-              <app-button
-                [label]="'Save Valuation'"
-                [disabled]="isSubmitting"
-                [isSubmitting]="isSubmitting"
-                [cypressId]="'saveVal'"
-                [backgroundColorClass]="'ocean-green'"
-                (onClick)="saveValuation()"
-                *ngIf="canSaveValuation"
-              ></app-button>
-              <button
+              <!-- <button
                 *ngIf="canInstruct"
                 [disabled]="isDisabledInstructButton === true ? true : null"
                 type="button"
@@ -1451,7 +1442,26 @@
                 data-cy="startInstruction"
               >
                 Instruct
-              </button>
+              </button> -->
+
+              <app-button
+                [label]="'Save Valuation'"
+                [disabled]="isSubmittingVal"
+                [isSubmitting]="isSubmittingVal"
+                [cypressId]="'saveVal'"
+                [backgroundColorClass]="'ocean-green'"
+                (onClick)="saveValuation()"
+                *ngIf="canSaveValuation"
+              ></app-button>
+              <app-button
+                [label]="'Instruct'"
+                [disabled]="isDisabledInstructButton"
+                [isSubmitting]="isSubmittingInstruction"
+                [cypressId]="'startInstruction'"
+                [backgroundColorClass]="'ocean-green'"
+                (onClick)="startInstruction()"
+                *ngIf="canInstruct"
+              ></app-button>
             </footer>
           </ng-container>
         </form>
@@ -1589,7 +1599,7 @@
   <p-messages severity="warn">
     <ng-template pTemplate>
       <div data-cy="activeValuationMessage">
-        There are active valuations on this property, you can continue with one from the list below or create a new one
+        {{ activeValuationMessageString }}
       </div>
     </ng-template>
   </p-messages>
@@ -1649,7 +1659,13 @@
 
   <footer class="footer--modal">
     <div class="btn--container">
-      <button type="submit" class="btn btn--info" data-cy="createValuation" (click)="createNewValuation()">
+      <button
+        type="submit"
+        class="btn btn--info"
+        data-cy="createValuation"
+        (click)="createNewValuation()"
+        *ngIf="showCreateNewValuationBtnInActiveValuationDialog"
+      >
         Create New Valuation
       </button>
     </div>
@@ -1974,7 +1990,7 @@
   [draggable]="false"
   class="modal--medium modal--hasFooter"
 >
-  <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff>
+  <form [formGroup]="instructionForm" autocompleteOff>
     <ng-container *ngIf="instruction?.askingPrice">
       <fieldset *ngIf="showInstruct" class="mb-2">
         <span class="checkbox">
@@ -2197,7 +2213,7 @@
         <button type="button" class="btn btn--ghost" (click)="isInstructVisible = false; cancelInstruction()">
           Cancel
         </button>
-        <button
+        <!-- <button
           type="submit"
           class="btn btn--positive"
           [disabled]="
@@ -2206,7 +2222,16 @@
           data-cy="saveInstruction"
         >
           Instruct
-        </button>
+        </button> -->
+        <app-button
+          [label]="'Instruct'"
+          [disabled]="isSubmittingInstruction"
+          [isSubmitting]="isSubmittingInstruction"
+          [cypressId]="'saveInstruction'"
+          [backgroundColorClass]="'ocean-green'"
+          (onClick)="saveInstruction()"
+          *ngIf="canInstruct"
+        ></app-button>
       </div>
     </footer>
   </form>

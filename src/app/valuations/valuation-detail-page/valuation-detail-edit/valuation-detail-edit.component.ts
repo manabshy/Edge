@@ -69,7 +69,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isNewValuation: boolean = false
   showOnlyMainStaffMember: boolean
   errorMessage: WedgeError
-  isSubmitting: boolean
+  isSubmittingVal: boolean
+  isSubmittingInstruction: boolean
   formErrors = FormErrors
   property: Property
   isOwnerChanged: boolean
@@ -216,7 +217,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   ]
   contactGroupLoading: boolean = true
-
+  activeValuationMessageString: string = ''
+  showCreateNewValuationBtnInActiveValuationDialog: boolean = true
+ 
   // previousContactGroupId: number;
   get dataNote() {
     if (this.contactGroup?.contactGroupId) {
@@ -509,7 +512,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       valuationStatusDescription: 'New',
       originId: this.originId | 0,
       originTypeId: 0,
-      declarableInterest: null,
       eSignSignatureTob: {}
     }
     this._valuationFacadeSvc._valuationData.next(this.valuation)
@@ -1953,6 +1955,21 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
               x.valuationStatus == ValuationStatusEnum.Valued
           )
           this.isActiveValuationsVisible = this.activeValuations.length > 0 ? true : false
+          
+          if (this.isActiveValuationsVisible) {
+            const thereIsABookedValuation = this.activeValuations.find(
+              (val) => val.valuationStatus == ValuationStatusEnum.Booked
+            )
+            this.activeValuationMessageString = thereIsABookedValuation
+            ? 'There is a booked valuation on this property, you can continue with the one from the list below or cancel it and create a new one.'
+            : 'There is a valued valuation on this property, you can continue with the one from the list below or create a new one.'
+            if (thereIsABookedValuation) {
+              // There can only be 1 active valuation at a time for a property.
+              this.showCreateNewValuationBtnInActiveValuationDialog = false
+            } else {
+              this.showCreateNewValuationBtnInActiveValuationDialog = true
+            }
+          }
         }
       })
   }
@@ -2694,7 +2711,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.instructionForm.get('instructSale').value || this.instructionForm.get('instructLet').value
     if (this.instructionForm.valid) {
       if (this.instructionForm.dirty && instructionSelected) {
-        this.isSubmitting = true
+        this.isSubmittingInstruction = true
         const instruction = {
           ...this.instruction,
           ...this.instructionForm.value
@@ -2705,7 +2722,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
             this.onInstructionSaveComplete(result.status)
           },
           (error: WedgeError) => {
-            this.isSubmitting = false
+            this.isSubmittingInstruction = false
           }
         )
       } else {
@@ -2859,9 +2876,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     // validation of land register
     //this._valuationFacadeSvc.valuationValidationSubject.next(true);
-
-    const declarableInterest = this._valuationFacadeSvc._valuationData.getValue().declarableInterest
-    if (declarableInterest == null || typeof declarableInterest == 'undefined') {
+    
+    const valuationData = this._valuationFacadeSvc._valuationData.getValue()
+    console.log('checking valuation valid for save. valuationData = ', valuationData)
+    if (valuationData.declarableInterest == null || typeof valuationData.declarableInterest == 'undefined') {
       this.messageService.add({
         severity: 'warn',
         summary: 'Please complete declarable interest',
@@ -2916,7 +2934,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private gatherValuationPropsFromViewReadyForSaving() {
-    this.isSubmitting = true
+    this.isSubmittingVal = true
 
     let valuationValue = this._valuationFacadeSvc._valuationData.getValue() // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
     const valuation = { ...valuationValue, ...this.valuationForm.value }
@@ -3010,7 +3028,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
             summary: error.displayMessage,
             closable: false
           })
-          this.isSubmitting = false
+          this.isSubmittingVal = false
         }
       )
     } else {
@@ -3022,7 +3040,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         },
         (error: WedgeError) => {
           this.errorMessage = error
-          this.isSubmitting = false
+          this.isSubmittingVal = false
         }
       )
     }
@@ -3149,7 +3167,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   onSaveComplete(valuation?: Valuation) {
     console.log('onSaveComplete: ', valuation)
     this.valuationForm.markAsPristine()
-    this.isSubmitting = false
+    this.isSubmittingVal = false
     this.errorMessage = null
     if (this.isNewValuation) {
       this.messageService.add({
@@ -3177,7 +3195,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   onInstructionSaveComplete(status?: boolean) {
     // const instructionEventId = instruction.salesInstructionEventId || instruction.lettingsInstructionEventId;
     this.instructionForm.markAsPristine()
-    this.isSubmitting = false
+    this.isSubmittingVal = false
     this.errorMessage = null
     if (status) {
       this.messageService.add({
@@ -3290,7 +3308,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   canDeactivate(): boolean {
-    if (!this.isCanDeactivate && this.valuationForm.dirty && !this.isSubmitting) {
+    if (!this.isCanDeactivate && this.valuationForm.dirty && !this.isSubmittingVal && !this.isSubmittingInstruction) {
       return false
     }
     return true

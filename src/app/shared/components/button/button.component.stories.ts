@@ -38,13 +38,26 @@ const ButtonTemplate: Story<ButtonComponent> = (args: ButtonComponent) => ({
 
 export const PrimaryButton = ButtonTemplate.bind({});
 PrimaryButton.args = {
-  backgroundColorClass: 'bg-ocean-green-500',
+  backgroundColorClass: 'ocean-green',
   label: 'Click Me',
-  disabled$: of(false)
+  disabled: false,
+  isSubmitting: false,
+  cypressId: 'Test Button'
 };
+
 export const PrimaryButtonDisabled = ButtonTemplate.bind({});
 PrimaryButtonDisabled.args = {
-  backgroundColorClass: 'bg-ocean-green-500',
+  backgroundColorClass: 'ocean-green',
   label: 'Click Me',
-  disabled$: of(true)
+  disabled: true,
+  isSubmitting: false,
+  cypressId: 'Test Button'
+}
+  export const PrimaryButtonSubmitting = ButtonTemplate.bind({});
+  PrimaryButtonSubmitting.args = {
+  backgroundColorClass: 'ocean-green',
+  label: 'Im loading',
+  disabled: true,
+  isSubmitting: true,
+  cypressId: 'Test Button'
 };
