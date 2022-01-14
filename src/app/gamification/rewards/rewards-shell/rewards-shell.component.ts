@@ -17,7 +17,7 @@ import { Subject } from 'rxjs'
     ></app-rewards-welcome>
     <div *ngIf="streak && bonus && swagBag && !showWelcome" class="">
       <app-rewards-toolbar
-        [connectionStatus]="connectionStatus"
+        [isConnectionLost]="isConnectionLost"
         [swagBag]="swagBag"
         [streak]="streak"
       ></app-rewards-toolbar>
@@ -29,7 +29,6 @@ import { Subject } from 'rxjs'
 })
 export class RewardsShellComponent implements OnInit, OnDestroy {
   ngUnsubscribe = new Subject<void>()
-  connectionStatus: string
   swagBag: any
   streak: any
   bonus: any
@@ -79,9 +78,6 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.signalRService.connectionStatus$.subscribe((status) => {
-      this.connectionStatus = status
-    })
 
     this.signalRService.connectionStatus$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((isConnectionLost) => {
       if (isConnectionLost !== null && this.isConnectionLost !== isConnectionLost) {
@@ -97,6 +93,8 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
             })
         }
         this.isConnectionLost = isConnectionLost
+        this.cdRef.detectChanges()
+
       }
     })
 
