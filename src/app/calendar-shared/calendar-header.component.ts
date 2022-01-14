@@ -1,15 +1,23 @@
-import { Component, Input, Output, EventEmitter, OnChanges, OnInit, ViewChild } from '@angular/core'
-import { FormGroup, FormBuilder } from '@angular/forms'
-import { BaseStaffMember } from '../shared/models/base-staff-member'
-import { StaffMemberService } from '../core/services/staff-member.service'
-import { Observable, of, merge, empty } from 'rxjs'
-import { StorageMap } from '@ngx-pwa/local-storage'
-import { CalendarView } from './shared/calendar-shared'
-import { StaffMember } from '../shared/models/staff-member'
-import { Router, ActivatedRoute } from '@angular/router'
-import { BsDropdownDirective } from 'ngx-bootstrap/dropdown'
-import { tap } from 'rxjs/operators'
-import { ResultData } from '../shared/result-data'
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
+import { FormGroup, FormBuilder } from "@angular/forms";
+import { BaseStaffMember } from "../shared/models/base-staff-member";
+import { StaffMemberService } from "../core/services/staff-member.service";
+import { Observable, of, merge, empty } from "rxjs";
+import { StorageMap } from "@ngx-pwa/local-storage";
+import { CalendarView } from "./shared/calendar-shared";
+import { StaffMember } from "../shared/models/staff-member";
+import { Router, ActivatedRoute } from "@angular/router";
+import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
+import { tap } from "rxjs/operators";
+import { ResultData } from "../shared/result-data";
 
 @Component({
   selector: 'app-calendar-header',
