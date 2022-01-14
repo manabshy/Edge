@@ -50,7 +50,8 @@ module.exports = {
         spacing: 'margin, padding'
       },
       fontSize: {
-        xs: '.65rem'
+        xs: '.65rem',
+        12: '12px'
       },
       margin: {
         0.3: '0.15rem'

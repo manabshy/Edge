@@ -10,7 +10,7 @@ import { Component, Output, EventEmitter, OnInit } from '@angular/core'
       <div class="w-full items-justified flex flex-col md:flex-row my-10 md:my-16">
         <div *ngFor="let icon of icons" class="w-full sm:w-1/2 md:w-1/4 mx-2 rounded-md p-4 text-center mx-auto">
           <div
-            class="rounded-full border-0 p-6 w-24 h-24 mx-auto cursor-pointer hover:bg-{{
+            class="rounded-full border-0 border border-solid p-6 w-24 h-24 mx-auto cursor-pointer hover:bg-{{
               icon.colorClass
             }}-100 hover:shadow-sm "
             [ngClass]="icon.dynamicStyle"
@@ -24,20 +24,19 @@ import { Component, Output, EventEmitter, OnInit } from '@angular/core'
           </p>
         </div>
       </div>
-      <div class="mx-auto w-64">
+      <div class="mx-auto w-64" *ngIf="showSaveButton">
         <app-button
-          *ngIf="showSaveButton"
-          [backgroundColorClass]="'bg-ocean-green-500'"
+          [backgroundColorClass]="'ocean-green'"
           [label]="'Save & Continue'"
           (onClick)="saveAndContinue()"
-        >     
-        </app-button>
+        ></app-button>
       </div>
     </div>
   `
 })
 export class RewardsWelcomeComponent implements OnInit {
   @Output() onSave: EventEmitter<any> = new EventEmitter()
+
   icons: any[]
   showSaveButton: boolean = false
   constructor() {}
@@ -93,7 +92,7 @@ export class RewardsWelcomeComponent implements OnInit {
         i.dynamicStyle = ''
       } else if (i.name === icon.name) {
         i.selected = true
-        i.dynamicStyle = 'bg-' + icon.colorClass + '-200 border border-' + icon.colorClass + '-300'
+        i.dynamicStyle = 'bg-' + icon.colorClass + '-200 border-' + icon.colorClass + '-300'
       }
     })
   }

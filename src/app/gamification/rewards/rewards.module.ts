@@ -10,6 +10,7 @@ import { RewardsGoal } from './components/rewards-goal/rewards-goal.component'
 import { RewardsRoutingModule } from './rewards-routing.module'
 import { RewardsBonusBankComponent } from './components/rewards-bonus-bank/rewards-bonus-bank.component'
 import { RewardsWelcomeComponent } from './components/rewards-welcome/rewards-welcome.component'
+import { SharedModule } from 'src/app/shared/shared.module'
 
 const components = [
   RewardsShellComponent,
@@ -24,7 +25,7 @@ const components = [
 
 @NgModule({
   declarations: components,
-  imports: [CommonModule, RewardsRoutingModule],
+  imports: [CommonModule, RewardsRoutingModule, SharedModule],
   exports: components
 })
 export class RewardsModule {}

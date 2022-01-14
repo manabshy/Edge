@@ -1,5 +1,5 @@
 <!-- FILE LIST WITH DELETE & UPLOAD BUTTONS -->
-<div class="w-full p-2 border rounded-sm cursor-pointer border-grey-100"
+<div class="w-full p-2 border rounded-sm cursor-pointer border-gray-200 border-solid"
   [ngClass]="idHasExpired ? 'border-red-500 bg-red-100' : ''">
   <div *ngFor="let file of files" class="flex flex-row content-center w-full my-1">
     <i class="mt-1 mr-1 tracking-normal text-gray-400 fa fa-file"></i>
@@ -42,7 +42,7 @@
   </div>
 
   <!-- OPEN UPLOAD FILE DIALOG BTN -->
-  <button *ngIf="showFilesUploadButton" [disabled]="isFrozen" (click)="openUploadDialog()" class="py-1">
+  <button *ngIf="showFilesUploadButton" [disabled]="isFrozen" (click)="openUploadDialog()" class="py-1 bg-white">
     <span *ngIf="!isFrozen; else unFrozenLabel">
       <i class="fa fa-upload" aria-hidden="true"></i>
       <span class="ml-2 underline">Upload {{ label }}</span>

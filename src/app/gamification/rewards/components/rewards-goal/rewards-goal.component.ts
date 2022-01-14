@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core'
 @Component({
   selector: 'app-rewards-goal',
   template: `
-    <div [ngClass]="{ 'opacity-50': !animate }" class="p-2 w-full h-48 border border-gray-300 rounded-md">
+    <div [ngClass]="{ 'opacity-50': !animate }" class="p-2 w-full h-48 border border-solid border-gray-300 rounded-md">
       <p class="text-center">
         <span class="text-green-600">Collect £{{ streak?.streakAmount }} bonus</span>
         <br />
@@ -17,12 +17,8 @@ import { Component, Input, OnInit } from '@angular/core'
     </div>
   `
 })
-export class RewardsGoal implements OnInit {
+export class RewardsGoal {
   @Input() streak: any
   @Input() timeframe: string
   @Input() animate: boolean
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }

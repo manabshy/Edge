@@ -6,10 +6,10 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
     <div class="w-full flex flex-row p-1">
       <div class="gap-2 md:flex-row flex flex-col">
         <button class="px-2 py-1 rounded-sm bg-green-500 text-white text-center">Challenges</button>
-        <button class="px-2 py-1 rounded-sm bg-white text-blue-800 border border-gray-200 text-center">
+        <button class="px-2 py-1 rounded-sm bg-white text-blue-800 border border-solid border-gray-200 text-center">
           Leaderboard
         </button>
-        <button class="px-2 py-1 rounded-sm bg-white text-blue-800 border border-gray-200 text-center">
+        <button class="px-2 py-1 rounded-sm bg-white text-blue-800 border border-solid border-gray-200 text-center">
           Milestones
         </button>
       </div>
