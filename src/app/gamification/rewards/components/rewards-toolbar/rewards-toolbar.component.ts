@@ -5,7 +5,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
   template: `
     <div class="w-full flex flex-row p-1">
       <div class="gap-2 md:flex-row flex flex-col">
-        <button class="px-2 py-1 rounded-sm bg-green-500 text-white text-center">Challenges</button>
+        <button class="px-2 py-1 rounded-sm bg-ocean-green-500 text-white text-center">Challenges</button>
         <button class="px-2 py-1 rounded-sm bg-white text-blue-800 border border-solid border-gray-300 text-center">
           Leaderboard
         </button>
@@ -17,13 +17,13 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
       <div class="flex-1"></div>
 
       <div class="gap-2 md:flex-row flex flex-col relative">
-        <button *ngIf="bronzeComplete" class="rounded-full h-10 w-10" [ngClass]="bronzeComplete ? 'bg-green-500' : ''">
+        <button *ngIf="bronzeComplete" class="rounded-full h-10 w-10" [ngClass]="bronzeComplete ? 'bg-ocean-green-500' : ''">
           <i class="fa text-lg text-yellow-700" [ngClass]="icon"></i>
         </button>
-        <button *ngIf="silverComplete" class="rounded-full h-10 w-10" [ngClass]="silverComplete ? 'bg-green-500' : ''">
+        <button *ngIf="silverComplete" class="rounded-full h-10 w-10" [ngClass]="silverComplete ? 'bg-ocean-green-500' : ''">
           <i class="fa text-lg text-gray-500" [ngClass]="icon"></i>
         </button>
-        <button *ngIf="goldComplete" class="rounded-full h-10 w-10" [ngClass]="goldComplete ? 'bg-green-500' : ''">
+        <button *ngIf="goldComplete" class="rounded-full h-10 w-10" [ngClass]="goldComplete ? 'bg-ocean-green-500' : ''">
           <i class="fa text-lg text-yellow-300" [ngClass]="icon"></i>
         </button>
         <i class="fa fa-info-circle text-blue-400 text-sm -top-5 absolute right-0"></i>
