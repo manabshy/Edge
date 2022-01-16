@@ -42,6 +42,7 @@
                 <a
                   routerLink="{{ page.url }}"
                   routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
                   class="block no-underline"
                 >
                   {{ page.name }}
@@ -124,11 +125,7 @@
                 class="nav__item block rounded text-gray-400 transition duration-200 hover:text-white py-1"
                 [ngClass]="isNonProdEnvironment ? 'hover:bg-ocean-green-400' : 'hover:bg-downriver-400'"
               >
-                <a
-                  class="no-underline block"
-                  routerLink="{{ page.url }}"
-                  routerLinkActive="active"
-                >
+                <a class="no-underline block" routerLink="{{ page.url }}" routerLinkActive="active">
                   {{ page.name }}
                 </a>
               </li>
