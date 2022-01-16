@@ -18,7 +18,6 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { tap } from "rxjs/operators";
 import { ResultData } from "../shared/result-data";
-import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: "app-calendar-header",

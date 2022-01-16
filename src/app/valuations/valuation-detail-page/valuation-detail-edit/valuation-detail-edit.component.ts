@@ -74,7 +74,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isNewValuation: boolean = false
   showOnlyMainStaffMember: boolean
   errorMessage: WedgeError
-  isSubmitting: boolean
+  isSubmittingVal: boolean
+  isSubmittingInstruction: boolean
   formErrors = FormErrors
   property: Property
   isOwnerChanged: boolean
@@ -2716,7 +2717,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.instructionForm.get('instructSale').value || this.instructionForm.get('instructLet').value
     if (this.instructionForm.valid) {
       if (this.instructionForm.dirty && instructionSelected) {
-        this.isSubmitting = true
+        this.isSubmittingInstruction = true
         const instruction = {
           ...this.instruction,
           ...this.instructionForm.value
@@ -2727,7 +2728,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
             this.onInstructionSaveComplete(result.status)
           },
           (error: WedgeError) => {
-            this.isSubmitting = false
+            this.isSubmittingInstruction = false
           }
         )
       } else {
@@ -2939,7 +2940,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private gatherValuationPropsFromViewReadyForSaving() {
-    this.isSubmitting = true
+    this.isSubmittingVal = true
 
     let valuationValue = this._valuationFacadeSvc._valuationData.getValue() // grabs current value of valuation Observable since it may have been updated by compliance store (personDocuments || companyDocuments)
     const valuation = { ...valuationValue, ...this.valuationForm.value }
@@ -3033,7 +3034,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
             summary: error.displayMessage,
             closable: false
           })
-          this.isSubmitting = false
+          this.isSubmittingVal = false
         }
       )
     } else {
@@ -3045,7 +3046,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         },
         (error: WedgeError) => {
           this.errorMessage = error
-          this.isSubmitting = false
+          this.isSubmittingVal = false
         }
       )
     }
@@ -3172,7 +3173,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   onSaveComplete(valuation?: Valuation) {
     console.log('onSaveComplete: ', valuation)
     this.valuationForm.markAsPristine()
-    this.isSubmitting = false
+    this.isSubmittingVal = false
     this.errorMessage = null
     if (this.isNewValuation) {
       this.messageService.add({
@@ -3200,7 +3201,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   onInstructionSaveComplete(status?: boolean) {
     // const instructionEventId = instruction.salesInstructionEventId || instruction.lettingsInstructionEventId;
     this.instructionForm.markAsPristine()
-    this.isSubmitting = false
+    this.isSubmittingInstruction = false
     this.errorMessage = null
     if (status) {
       this.messageService.add({
@@ -3313,7 +3314,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   canDeactivate(): boolean {
-    if (!this.isCanDeactivate && this.valuationForm.dirty && !this.isSubmitting) {
+    if (!this.isCanDeactivate && this.valuationForm.dirty && !this.isSubmittingVal && !this.isSubmittingInstruction) {
       return false
     }
     return true
