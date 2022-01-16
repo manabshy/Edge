@@ -1,13 +1,13 @@
-import { moduleMetadata, componentWrapperDecorator  } from '@storybook/angular';
-import { CommonModule } from '@angular/common';
+import { moduleMetadata, componentWrapperDecorator } from '@storybook/angular'
+import { CommonModule } from '@angular/common'
 // also exported from '@storybook/angular' if you can deal with breaking changes in 6.1
-import { Story, Meta } from '@storybook/angular/types-6-0';
+import { Story, Meta } from '@storybook/angular/types-6-0'
 import { action } from '@storybook/addon-actions'
-import { VendorsModule } from '../../vendors.module';
+import { VendorsModule } from '../../vendors.module'
 
 // component under test
-import { ButtonComponent } from './button.component';
-import { of } from 'rxjs';
+import { ButtonComponent } from './button.component'
+
 
 export default {
   title: 'Components/Shared/Button',
@@ -16,14 +16,15 @@ export default {
   decorators: [
     moduleMetadata({
       declarations: [ButtonComponent],
-      imports: [CommonModule, VendorsModule],
+      imports: [CommonModule, VendorsModule]
     }),
-    componentWrapperDecorator((story)=> `
+    componentWrapperDecorator(
+      (story) => `
         <div class="mx-auto w-full">${story}</div>
       `
     )
-  ],
-} as Meta;
+  ]
+} as Meta
 
 export const actionsData = {
   buttonClicked: action('buttonClicked')
@@ -34,30 +35,31 @@ const ButtonTemplate: Story<ButtonComponent> = (args: ButtonComponent) => ({
     ...args,
     onClick: actionsData.buttonClicked
   }
-});
+})
 
-export const PrimaryButton = ButtonTemplate.bind({});
+export const PrimaryButton = ButtonTemplate.bind({})
 PrimaryButton.args = {
   backgroundColorClass: 'ocean-green',
   label: 'Click Me',
   disabled: false,
   isSubmitting: false,
   cypressId: 'Test Button'
-};
+}
 
-export const PrimaryButtonDisabled = ButtonTemplate.bind({});
+export const PrimaryButtonDisabled = ButtonTemplate.bind({})
 PrimaryButtonDisabled.args = {
   backgroundColorClass: 'ocean-green',
-  label: 'Click Me',
+  label: 'I\'m disabled',
   disabled: true,
   isSubmitting: false,
   cypressId: 'Test Button'
 }
-  export const PrimaryButtonSubmitting = ButtonTemplate.bind({});
-  PrimaryButtonSubmitting.args = {
+
+export const PrimaryButtonSubmitting = ButtonTemplate.bind({})
+PrimaryButtonSubmitting.args = {
   backgroundColorClass: 'ocean-green',
   label: 'Im loading',
   disabled: true,
   isSubmitting: true,
   cypressId: 'Test Button'
-};
+}
