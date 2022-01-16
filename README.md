@@ -69,3 +69,5 @@ if running scripts has been disabled by admin persmissions then you may need a w
 - here 4 is the major version, 0 minor, 0 patch - 60 prerelease
 - once all dev is done for a version then bump prerelease to -beta and then drop that flag when it goes to production as simply 4.0.0 (no prerelease tags)
 
+### Animations
+https://animate.style/ CSS animations library used throughout. Search animate__animated to find examples

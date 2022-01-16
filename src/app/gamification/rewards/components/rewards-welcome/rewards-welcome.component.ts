@@ -2,21 +2,42 @@ import { Component, Output, EventEmitter, OnInit } from '@angular/core'
 
 @Component({
   selector: 'app-rewards-welcome',
+  styles: [`
+  .bg-red-200 {
+    background-color: rgb(254 202 202) !important;
+    --tw-shadow-color: #fecaca;
+  }
+  .bg-yellow-200 {
+    background-color: rgb(254 240 138) !important;
+    --tw-shadow-color: #fef08a;
+  }
+  .bg-ocean-green-200 {
+    background-color: '#9CD1BE' !important;
+    --tw-shadow-color: '#9CD1BE' !important;
+
+  }
+  .bg-downriver-200 {
+    background-color: '#1940B6' !important;
+    --tw-shadow-color: '#1940B6' !important;
+  }
+  `],
   template: `
     <div class="w-full h-full flex flex-col mx-auto my-10 lg:mx-18">
       <p class="text-2xl font-bold text-center">Welcome to your rewards board</p>
       <p class="text-lg text-center">Select the icon that speaks to you - each icon represents a D&G Value.</p>
 
       <div class="w-full items-justified flex flex-col md:flex-row my-10 md:my-16">
-        <div *ngFor="let icon of icons" class="w-full sm:w-1/2 md:w-1/4 mx-2 rounded-md p-4 text-center mx-auto">
+        <div *ngFor="let icon of icons" class="w-full sm:w-1/2 md:w-1/4 rounded-md p-4 text-center mx-auto">
           <div
-            class="rounded-full border-0 border border-solid p-6 w-24 h-24 mx-auto cursor-pointer hover:bg-{{
-              icon.colorClass
-            }}-100 hover:shadow-sm "
-            [ngClass]="icon.dynamicStyle"
+            class="rounded-full p-6 w-24 h-24 mx-auto cursor-pointer hover:shadow-md animate__animated hover:bg-{{icon.colorClass}}-200"
+            [ngClass]="
+              icon.selected
+                ? 'bg-' + icon.colorClass + '-200 shadow-md ' + icon.animateClass
+                : ''
+            "
             (click)="changeIcon(icon)"
           >
-            <img src="assets/gamification-icons/{{ icon.icnName }}.svg" class="border-0 mx-auto" />
+            <img src="assets/gamification-icons/{{ icon.icnName }}.svg" class="mt-1 h-10 w-10 border-0 mx-auto" />
           </div>
           <p class="text-lg font-bold mt-4">{{ icon.name }}</p>
           <p class="text-center mt-1 px-6">
@@ -49,6 +70,7 @@ export class RewardsWelcomeComponent implements OnInit {
           'Everyone should have someone to turn to; someone they can trust. This is the foundation of our business. We are always there for you.',
         icnName: 'passionate',
         colorClass: 'red',
+        animateClass: 'animate__heartBeat',
         dynamicStyle: '',
         selected: false
       },
@@ -57,7 +79,8 @@ export class RewardsWelcomeComponent implements OnInit {
         description:
           " It's our aim to surprise and delight. We deliver to your needs and always look to provide solutions beyond your expectations.",
         icnName: 'climber',
-        colorClass: 'green',
+        colorClass: 'ocean-green',
+        animateClass: 'animate__rubberBand',
         dynamicStyle: '',
         selected: false
       },
@@ -67,6 +90,7 @@ export class RewardsWelcomeComponent implements OnInit {
           'We are not the cheapest. We are the best of breed. Our track record, market knowledge and relentless work ethic cannot be equalled.',
         icnName: 'expert',
         colorClass: 'yellow',
+        animateClass: 'animate__flipInY', // animate__tada
         dynamicStyle: '',
         selected: false
       },
@@ -76,6 +100,7 @@ export class RewardsWelcomeComponent implements OnInit {
           'Our passion and energy for innovation knows no bounds. From technology to customer experiences, better never stops.',
         icnName: 'trailblazer',
         colorClass: 'blue',
+        animateClass: 'animate__swing',
         dynamicStyle: '',
         selected: false
       }
@@ -89,10 +114,10 @@ export class RewardsWelcomeComponent implements OnInit {
     this.icons.forEach((i) => {
       if (i.name !== icon.name) {
         i.selected = false
-        i.dynamicStyle = ''
+        // i.dynamicStyle = ''
       } else if (i.name === icon.name) {
         i.selected = true
-        i.dynamicStyle = 'bg-' + icon.colorClass + '-200 border-' + icon.colorClass + '-300'
+        // i.dynamicStyle = 'bg-' + icon.colorClass + '-300'
       }
     })
   }
