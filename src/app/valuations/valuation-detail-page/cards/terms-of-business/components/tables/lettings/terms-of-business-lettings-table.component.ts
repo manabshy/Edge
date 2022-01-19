@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, OnChanges } from '@angular/core'
 import moment from 'moment'
 import { ToBDocument } from '../../../terms-of-business.component'
 
@@ -11,6 +11,7 @@ import { ToBDocument } from '../../../terms-of-business.component'
           <tr>
             <th>Signed On</th>
             <th>Management</th>
+            <th>Managed By </th>
             <th>Zero Deposit</th>
             <th>Document(s)</th>
           </tr>
@@ -23,6 +24,10 @@ import { ToBDocument } from '../../../terms-of-business.component'
             <td data-title="Management">
               <span class="cell-content">{{ data?.isManagement ? 'Yes' : 'No' }}</span>
             </td>
+            <td data-title="Managed By">
+              <span class="cell-content">{{ managedByType }}</span>
+            </td>            
+
             <td data-title="Zero Deposit">
               <span class="cell-content">{{ data?.zeroDepositAccepted ? 'Yes' : 'No' }}</span>
             </td>
@@ -41,7 +46,17 @@ import { ToBDocument } from '../../../terms-of-business.component'
     </div>
   `
 })
-export class TermsOfBusinessTableLettingsComponent {
+export class TermsOfBusinessTableLettingsComponent implements OnChanges {
   @Input() data: any
   moment = moment
-}
+  managedByType: string;
+  ngOnChanges (){
+    switch (this.data['managedByTypeId']) {
+      case 1:
+        return this.managedByType = 'D&G'
+      case 2:
+        return this.managedByType = 'Landlord'
+      default: 
+        return this.managedByType = 'Unknown'
+    }
+  }}
