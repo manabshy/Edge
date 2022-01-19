@@ -40,7 +40,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
         <div [ngClass]="bgColor" class="opacity-95 absolute right-0 left-0 bottom-0">
           <p class="font-bold px-2 text-center text-sm py-2">
             <span class="font-black text-lg">SMASHED IT</span>
-            - and you rolled a 5
+            - and you rolled a {{ progress }}
           </p>
           <img
             class="w-24 mx-auto border-0 animate__animated"
