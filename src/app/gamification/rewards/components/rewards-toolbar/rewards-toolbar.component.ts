@@ -40,6 +40,7 @@ export class RewardsToolbarComponent implements OnInit {
   
   @Input() swagBag: any
   @Input() streak: any
+  @Input() phoneCall: any
   @Input() isConnectionLost: any
   
   @Output() onIconChange: EventEmitter<string> = new EventEmitter()

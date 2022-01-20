@@ -11,6 +11,9 @@ export class SignalRService {
   private getBonusesStream: BehaviorSubject<any> = new BehaviorSubject(null);
   public getBonusesStream$ = this.getBonusesStream.asObservable();
 
+  private getPhoneCallStream: BehaviorSubject<any> = new BehaviorSubject(null);
+  public getPhoneCallStream$ = this.getBonusesStream.asObservable();
+
   private getStreakStream: BehaviorSubject<any> = new BehaviorSubject(null);
   public getStreakStream$ = this.getStreakStream.asObservable();
 
@@ -51,6 +54,7 @@ export class SignalRService {
         this.addGetBonusListener(staffMember);
         this.addStreakDataListener(staffMember);
         this.addSwagBagDataListener(staffMember);
+        this.addPhoneCallDataListener(staffMember);
 
       })
       .catch(err => {
@@ -106,6 +110,15 @@ export class SignalRService {
         return;
 
       this.getSwagBagStream.next(data.content);
+    });
+  }
+
+  public addPhoneCallDataListener = (currentStaffMember) => {
+    this.hubConnection.on('get-phone-call', (data) => {
+      if (data.staffMemberId != currentStaffMember.staffMemberId)
+        return;
+
+      this.getPhoneCallStream.next(data.content);
     });
   }
 }

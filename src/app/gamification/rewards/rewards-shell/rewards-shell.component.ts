@@ -20,6 +20,7 @@ import { Subject } from 'rxjs'
         [isConnectionLost]="isConnectionLost"
         [swagBag]="swagBag"
         [streak]="streak"
+        [phoneCall]="phoneCall"
       ></app-rewards-toolbar>
       <ng-container *ngFor="let b of bonus">
         <app-rewards-row [streak]="streak" [bonus]="b"></app-rewards-row>
@@ -29,9 +30,12 @@ import { Subject } from 'rxjs'
 })
 export class RewardsShellComponent implements OnInit, OnDestroy {
   ngUnsubscribe = new Subject<void>()
+  
   swagBag: any
   streak: any
   bonus: any
+  phoneCall: any;
+
   isConnectionLost: any
   showWelcome = true
   connectionClosed = false
@@ -87,8 +91,8 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.ngUnsubscribe))
             .subscribe((data: any) => {
               if (data) {
-                const syncResult = data.streakSyncResult && data.bonusSyncResult && data.swagBagSyncResult
-                this.isConnectionLost = syncResult
+                this.isConnectionLost = false
+                this.cdRef.detectChanges()
               }
             })
         }
@@ -96,6 +100,11 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges()
 
       }
+    })
+
+    this.signalRService.getPhoneCallStream$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data) => {
+      this.phoneCall = data
+      this.cdRef.detectChanges()
     })
 
     this.signalRService.getBonusesStream$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data) => {
