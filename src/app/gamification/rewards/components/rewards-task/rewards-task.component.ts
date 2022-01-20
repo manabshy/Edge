@@ -62,10 +62,10 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
               class="w-28 h-20 mx-auto border-0 my-4"
             />
           </div>
-          <div class="flex flex-row mx-2 relative bg-green-200 h-4 mb-2 rounded-sm">
+          <div class="flex flex-row mx-2 relative bg-green-200 h-4 mb-2 rounded-sm progress">
             <p class="text-center text-sm z-10 w-full">{{ progress }}</p>
-            <div class="absolute top-0 left-0 right-0 h-4 progress">
-              <div class="absolute left-0 -top-4 bg-green-400 h-4 progress-value" [ngClass]="progressWidthClass"></div>
+            <div [ngClass]="progressWidthClass" class="absolute top-0 left-0 right-0 h-4 ">
+              <div class="absolute left-0 -top-4 bg-green-400 h-4 progress-value" ></div>
             </div>
           </div>
         </div>
@@ -98,14 +98,10 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
   }
 
   calculateProgress() {
-    if (this.progress === 0) {
-      this.progressWidthClass = 'w-0'
-    } else {
-      const c = Math.round((this.progress * 12) / this.target)
-      this.progressWidthClass = 'w-' + c + '/12'
-    }
+    
+    const p = Math.round((this.progress * 12) / this.target) 
 
-    console.log(this.progressWidthClass)
+    this.progressWidthClass = p == 0 ? 'w-0' : 'w-' + p + '/12';
 
     this.targetReached = this.progress >= this.target
 
@@ -113,6 +109,7 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
 
     this.animationClass = this.targetReached ? 'animate__bounce  animate__delay-' + this.animationDelay + 's' : ''
   }
+
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['progress'] && !changes['progress'].firstChange) {
