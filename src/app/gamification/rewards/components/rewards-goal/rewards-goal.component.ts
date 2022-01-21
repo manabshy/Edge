@@ -2,6 +2,15 @@ import { Component, Input, OnInit } from '@angular/core'
 
 @Component({
   selector: 'app-rewards-goal',
+  styles: [
+    `
+  
+      div > img {
+        display: flex;
+      }
+     
+    `
+  ],
   template: `
     <div [ngClass]="{ 'opacity-50': !animate }" class="p-2 w-full h-48 border border-solid border-gray-300 rounded-md">
       <p class="text-center">

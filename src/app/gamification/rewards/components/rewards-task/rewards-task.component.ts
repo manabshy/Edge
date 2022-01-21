@@ -16,7 +16,9 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
         animation: load 3s normal forwards;
         box-shadow: 0 10px 40px -10px #fff;
       }
-
+      div > img {
+        display: flex;
+      }
       @keyframes load {
         0% {
           width: 0;
