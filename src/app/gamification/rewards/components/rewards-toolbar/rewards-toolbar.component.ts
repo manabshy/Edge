@@ -2,6 +2,14 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
 
 @Component({
   selector: 'app-rewards-toolbar',
+  styles: [
+    `
+      button + h1 {
+        line-height: initial;
+      }
+
+    `
+  ],
   template: `
     <div class="w-full flex flex-row p-1">
       <div class="gap-2 md:flex-row flex flex-col">
@@ -31,6 +39,13 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
 
       <div class="flex-1"></div>
 
+      <div class="gap-2 md:flex-row flex flex-col relative">
+        <button *ngIf="phoneCall" class="rounded-full h-10 w-10 bg-ocean-green-500">
+        <i class="fa text-lg text-yellow-700 bg-ocean-green-500" [ngClass]="phoneIcon"></i>
+        </button>
+        <h1>{{phoneCall?.numberOfPhoneCalls}}</h1>
+      </div>
+      <div class="flex-1"></div>
       <app-rewards-bonus-bank [isConnectionLost]="isConnectionLost" [swagBag]="swagBag"></app-rewards-bonus-bank>
     </div>
   `
@@ -44,7 +59,7 @@ export class RewardsToolbarComponent implements OnInit {
   @Input() isConnectionLost: any
   
   @Output() onIconChange: EventEmitter<string> = new EventEmitter()
-
+  phoneIcon: string = 'fa-phone'
   constructor() { }
 
   bronzeComplete = false
