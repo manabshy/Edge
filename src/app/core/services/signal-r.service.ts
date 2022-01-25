@@ -12,7 +12,7 @@ export class SignalRService {
   public getBonusesStream$ = this.getBonusesStream.asObservable();
 
   private getPhoneCallStream: BehaviorSubject<any> = new BehaviorSubject(null);
-  public getPhoneCallStream$ = this.getBonusesStream.asObservable();
+  public getPhoneCallStream$ = this.getPhoneCallStream.asObservable();
 
   private getStreakStream: BehaviorSubject<any> = new BehaviorSubject(null);
   public getStreakStream$ = this.getStreakStream.asObservable();
