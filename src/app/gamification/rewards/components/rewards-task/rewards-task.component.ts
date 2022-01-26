@@ -27,6 +27,24 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
           width: 100%;
         }
       }
+      .w-1 {
+        width: 15%!important;
+      }
+      .w-2 {
+        width: 25%!important;
+      }
+      .w-3 {
+        width: 50%!important;
+      }
+      .w-4 {
+        width: 60%!important;
+      }
+      .w-5 {
+        width: 85%!important;
+      }
+      .w-6 {
+        width: 100%!important;
+      }
     `
   ],
   template: `
@@ -66,7 +84,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
           </div>
           <div [ngClass]="progress === 0 ? 'bg-pink-400' : 'bg-green-400 ' + progressWidthClass" class="flex flex-row mx-2 relative bg-pink-400 h-4 mb-2 rounded-sm progress">
             <p class="text-center text-sm z-10 w-full">{{ progress }}</p>
-            <div [ngClass]="progressWidthClass" class="absolute top-0 left-0 right-0 h-4 ">
+            <div [ngClass]="progressWidthClass" class="absolute top-0 left-0 right-0 h-4">
               <div class="absolute left-0 -top-4 bg-green-400 h-4 progress-value" ></div>
             </div>
           </div>
