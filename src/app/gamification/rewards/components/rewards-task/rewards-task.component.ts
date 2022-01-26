@@ -82,7 +82,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
               class="w-28 h-20 mx-auto border-0 my-4"
             />
           </div>
-          <div [ngClass]="progress === 0 ? 'bg-pink-400' : 'bg-green-400 ' + progressWidthClass" class="flex flex-row mx-2 relative bg-pink-400 h-4 mb-2 rounded-sm progress">
+          <div [ngClass]="progress === 0 ? 'bg-pink-400' : 'bg-green-400'" class="flex flex-row mx-2 relative bg-pink-400 h-4 mb-2 rounded-sm progress">
             <p class="text-center text-sm z-10 w-full">{{ progress }}</p>
             <div [ngClass]="progressWidthClass" class="absolute top-0 left-0 right-0 h-4">
               <div class="absolute left-0 -top-4 bg-green-400 h-4 progress-value" ></div>
@@ -121,7 +121,7 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
     
     const p = Math.round((this.progress * 12) / this.target) 
 
-    this.progressWidthClass = p == 0 ? 'w-0' : 'w-' + p ;
+    this.progressWidthClass = p == 0 ? 'w-0' : 'w-' + this.progress ;
 
     this.targetReached = this.progress >= this.target
 
