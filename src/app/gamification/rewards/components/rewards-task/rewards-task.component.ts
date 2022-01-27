@@ -45,6 +45,9 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
       .w-6 {
         width: 100%!important;
       }
+      .bg-light {
+        background-color: #E5F6DF;
+      }
     `
   ],
   template: `
@@ -82,7 +85,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
               class="w-28 h-20 mx-auto border-0 my-4"
             />
           </div>
-          <div [ngClass]="progress === 0 ? 'bg-pink-400' : 'bg-green-400'" class="flex flex-row mx-2 relative bg-pink-400 h-4 mb-2 rounded-sm progress">
+          <div [ngClass]="topClass" class="flex flex-row mx-2 relative h-4 mb-2 rounded-sm">
             <p class="text-center text-sm z-10 w-full">{{ progress }}</p>
             <div [ngClass]="progressWidthClass" class="absolute top-0 left-0 right-0 h-4">
               <div class="absolute left-0 -top-4 bg-green-400 h-4 progress-value" ></div>
@@ -99,14 +102,16 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
   @Input() action!: string
   @Input() name: string
   @Input() animationDelay: number = 0
-
+  
+  topClass: string;
   targetReached: boolean = false
   progressWidthClass!: string
   bgColor!: string
   animationClass: string
   nameStringArray: any
 
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit(): void {
     this.calculateProgress()
@@ -118,6 +123,8 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
   }
 
   calculateProgress() {
+    
+    this.topClass = this.progress === 0 ? 'bg-pink-400' : 'bg-light';
     
     const p = Math.round((this.progress * 12) / this.target) 
 
