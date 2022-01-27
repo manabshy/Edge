@@ -64,15 +64,16 @@ export class ApiHelperService {
       encoder: new CustomQueryEncoderHelper(),
       fromObject: {
         searchTerm: requestOption.searchTerm,
-        salesStatus: requestOption.salesStatus.toString(),
+        // salesStatus: requestOption.salesStatus.toString(),
         lettingsStatus: requestOption.lettingsStatus.toString(),
-        departmentType: requestOption.departmentType.toString(),
+        departmentType: requestOption.departmentTypeArr[0],
         dateFrom: requestOption.dateFrom ? requestOption.dateFrom.toString() : '',
         pageSize: requestOption.pageSize.toString(),
         page: requestOption.page.toString(),
         listerId: requestOption.listerId ? requestOption.listerId.toString() : '',
         officeId: requestOption.officeId ? requestOption.officeId.toString() : '',
-        orderBy: requestOption.orderBy.toString()
+        orderBy: requestOption.orderBy.toString(),
+        salesStatus: requestOption.status
       }
     })
     return options
