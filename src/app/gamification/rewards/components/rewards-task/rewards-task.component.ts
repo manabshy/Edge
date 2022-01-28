@@ -98,7 +98,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
 })
 export class RewardsTaskComponent implements OnInit, OnChanges {
   @Input() progress: number = 0
-  @Input() target: number = 5
+  @Input() target: number = 6
   @Input() action!: string
   @Input() name: string
   @Input() animationDelay: number = 0
@@ -125,10 +125,10 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
   calculateProgress() {
     
     this.topClass = this.progress === 0 ? 'bg-pink-400' : 'bg-light';
-    
-    const p = Math.round((this.progress * 12) / this.target) 
+     
+    const p = Math.round((6 * this.progress) / this.target) 
 
-    this.progressWidthClass = p == 0 ? 'w-0' : 'w-' + this.progress ;
+    this.progressWidthClass = p == 0 ? 'w-0' : 'w-' + p
 
     this.targetReached = this.progress >= this.target
 
