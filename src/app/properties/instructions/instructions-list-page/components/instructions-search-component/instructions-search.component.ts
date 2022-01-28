@@ -280,7 +280,8 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy, OnChanges
 
   getInstructions() {
     this.onGetInstructions.emit({
-      departmentType: this.currentDepartmentValue()
+      departmentType: this.currentDepartmentValue(),
+      status: this.selectControlModels.status
     })
   }
 

@@ -51,6 +51,7 @@ export class ApiHelperService {
   }
 
   public setQueryParamsForInstructions(requestOption: InstructionRequestOption) {
+    let departmentType;
     if (!requestOption.page) {
       requestOption.page = 1
     }
@@ -60,19 +61,28 @@ export class ApiHelperService {
     if (requestOption.departmentType === InstructionsTableType.SALES_AND_LETTINGS) {
       requestOption.departmentType = ''
     }
+    if (requestOption.departmentTypeArr) {
+      if (requestOption.departmentTypeArr.length !== 0) {
+        departmentType =  requestOption.departmentTypeArr[0]
+      } else {
+        departmentType = ''
+      }
+    } else {
+      departmentType = ''
+    }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper(),
       fromObject: {
         searchTerm: requestOption.searchTerm,
-        salesStatus: requestOption.salesStatus.toString(),
         lettingsStatus: requestOption.lettingsStatus.toString(),
-        departmentType: requestOption.departmentType.toString(),
+        departmentType: departmentType,
         dateFrom: requestOption.dateFrom ? requestOption.dateFrom.toString() : '',
         pageSize: requestOption.pageSize.toString(),
         page: requestOption.page.toString(),
         listerId: requestOption.listerId ? requestOption.listerId.toString() : '',
         officeId: requestOption.officeId ? requestOption.officeId.toString() : '',
-        orderBy: requestOption.orderBy.toString()
+        orderBy: requestOption.orderBy.toString(),
+        salesStatus: requestOption.status
       }
     })
     return options

@@ -90,6 +90,7 @@ export interface InstructionRequestOption extends BaseRequestOption {
   officeId?: number[]
   departmentType: string
   orderBy: string
+  departmentTypeArr?:string[] 
 }
 
 export enum SortableColumnsForInstructions {
