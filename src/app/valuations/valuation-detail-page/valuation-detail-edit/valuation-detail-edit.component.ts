@@ -2874,9 +2874,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     ) {
       this.messageService.add({
         severity: 'warn',
-        summary: `You can't price a valuation after 1 month! TODO fix validation (add lockDate to valuation)`,
+        summary: `You can't price a valuation more than a month old`,
         closable: false
       })
+      // TODO fix validation (add lockDate to valuation)
       // return false
     }
 
