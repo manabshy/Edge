@@ -27,6 +27,27 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
           width: 100%;
         }
       }
+      .w-1 {
+        width: 15%!important;
+      }
+      .w-2 {
+        width: 25%!important;
+      }
+      .w-3 {
+        width: 50%!important;
+      }
+      .w-4 {
+        width: 60%!important;
+      }
+      .w-5 {
+        width: 85%!important;
+      }
+      .w-6 {
+        width: 100%!important;
+      }
+      .bg-light {
+        background-color: #E5F6DF;
+      }
     `
   ],
   template: `
@@ -64,9 +85,9 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
               class="w-28 h-20 mx-auto border-0 my-4"
             />
           </div>
-          <div [ngClass]="progress === 0 ? 'bg-pink-400' : 'bg-green-400'" class="flex flex-row mx-2 relative bg-pink-400 h-4 mb-2 rounded-sm progress">
+          <div [ngClass]="topClass" class="flex flex-row mx-2 relative h-4 mb-2 rounded-sm">
             <p class="text-center text-sm z-10 w-full">{{ progress }}</p>
-            <div [ngClass]="progressWidthClass" class="absolute top-0 left-0 right-0 h-4 ">
+            <div [ngClass]="progressWidthClass" class="absolute top-0 left-0 right-0 h-4">
               <div class="absolute left-0 -top-4 bg-green-400 h-4 progress-value" ></div>
             </div>
           </div>
@@ -77,18 +98,20 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
 })
 export class RewardsTaskComponent implements OnInit, OnChanges {
   @Input() progress: number = 0
-  @Input() target: number = 5
+  @Input() target: number = 6
   @Input() action!: string
   @Input() name: string
   @Input() animationDelay: number = 0
-
+  
+  topClass: string;
   targetReached: boolean = false
   progressWidthClass!: string
   bgColor!: string
   animationClass: string
   nameStringArray: any
 
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit(): void {
     this.calculateProgress()
@@ -101,9 +124,11 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
 
   calculateProgress() {
     
-    const p = Math.round((this.progress * 12) / this.target) 
+    this.topClass = this.progress === 0 ? 'bg-pink-400' : 'bg-light';
+     
+    const p = Math.round((6 * this.progress) / this.target) 
 
-    this.progressWidthClass = p == 0 ? 'w-0' : 'w-' + p + '/12';
+    this.progressWidthClass = p == 0 ? 'w-0' : 'w-' + p
 
     this.targetReached = this.progress >= this.target
 

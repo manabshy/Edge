@@ -4,11 +4,6 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AppConstants } from '../../core/shared/app-constants';
  
-export interface SyncBoard {
-  streakSyncResult: boolean,
-  bonusSyncResult: boolean,
-  swagBagSyncResult: boolean
-}
 
 export interface SwagBag {
   swagBag: number
@@ -39,11 +34,11 @@ export class RewardsService {
   constructor(private http: HttpClient) {  }
  
 
-  sync(): Observable<SyncBoard | any> {
+  sync(): Observable<any> {
     const url = `${AppConstants.baseRewardsUrl}/board/sync`
     return this.http.get<any>(url).pipe(
-      map((response) => {
-        return response.result
+      map((response) => { 
+        return response
       })
     )
   }

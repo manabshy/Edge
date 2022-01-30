@@ -30,7 +30,7 @@ import { Subject } from 'rxjs'
 })
 export class RewardsShellComponent implements OnInit, OnDestroy {
   ngUnsubscribe = new Subject<void>()
-  
+
   swagBag: any
   streak: any
   bonus: any
@@ -103,23 +103,31 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
     })
 
     this.signalRService.getPhoneCallStream$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data) => {
-      this.phoneCall = data
-      this.cdRef.detectChanges()
+      if (data) {
+        this.phoneCall = data
+        this.cdRef.detectChanges()
+      }
     })
 
     this.signalRService.getBonusesStream$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data) => {
-      this.bonus = data
-      this.cdRef.detectChanges()
+      if (data) {
+        this.bonus = data
+        this.cdRef.detectChanges()
+      }
     })
 
     this.signalRService.getStreakStream$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data) => {
-      this.streak = data
-      this.cdRef.detectChanges()
+      if (data) {
+        this.streak = data
+        this.cdRef.detectChanges()
+      }
     })
 
     this.signalRService.getSwagBagStream$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data) => {
-      this.swagBag = data
-      this.cdRef.detectChanges()
+      if (data) {
+        this.swagBag = data
+        this.cdRef.detectChanges()
+      }
     })
   }
 
