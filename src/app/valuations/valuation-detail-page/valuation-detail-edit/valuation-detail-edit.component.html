@@ -1155,23 +1155,27 @@
                     </div>
                   </div>
                 </p-accordionTab>
+
                 <!-- VALUES TAB TODO MAKE COMPONENT -->
                 <p-accordionTab
                   header="Values"
                   [(selected)]="activeState[3]"
                   *ngIf="areValuesVisible"
                   data-cy="valuationValues"
+                  [ngClass]="{
+                    'opacity-75 cursor-not-allowed bg-gray-200':
+                      !userHasPermissionToInstruct
+                  }"
                 >
-                  <div class="flex flex-row w-full">
+                  <div
+                    class="relative flex flex-row w-full"
+                  >
                     <span class="flex-1"></span>
-                    <ng-container *ngIf="isStillInOneMonthPeriod && !isCancelled">
+                    <ng-container *ngIf="isStillInOneMonthPeriod && !isCancelled && userHasPermissionToInstruct">
                       <app-menu [menuItems]="valueMenuItems"></app-menu>
                     </ng-container>
                   </div>
-                  <div
-                    [ngClass]="{ 'opacity-75 pointer-events-none': isCancelled }"
-                    (click)="controlIsCancelled(isCancelled)"
-                  >
+                  <div>
                     <ol class="mb-4 cards" [ngStyle]="{ 'grid-gap': !isEditable && !isNewValuation ? '30px' : '' }">
                       <li
                         *ngIf="
@@ -1193,6 +1197,10 @@
                               formControlName="suggestedAskingPrice"
                               *ngIf="!(!isEditable && !isNewValuation) || isEditValueActive"
                               data-cy="sellValue"
+                              [ngClass]="{
+                                'cursor-not-allowed':
+                                  !userHasPermissionToInstruct
+                              }"
                             />
                             <strong class="text-lg" *ngIf="!isEditable && !isNewValuation && !isEditValueActive">
                               {{ valuationForm.get('suggestedAskingPrice').value }}
@@ -1229,6 +1237,10 @@
                               formControlName="suggestedAskingRentLongLet"
                               *ngIf="!(!isEditable && !isNewValuation) || isEditValueActive"
                               data-cy="longLetValue"
+                              [ngClass]="{
+                                'cursor-not-allowed':
+                                  !userHasPermissionToInstruct
+                              }"
                             />
                             <strong class="text-lg" *ngIf="!isEditable && !isNewValuation && !isEditValueActive">
                               {{ valuationForm.get('suggestedAskingRentLongLet').value }}
@@ -1265,6 +1277,10 @@
                               formControlName="suggestedAskingRentLongLetMonthly"
                               *ngIf="!(!isEditable && !isNewValuation) || isEditValueActive"
                               data-cy="longLetMonthlyValue"
+                              [ngClass]="{
+                                'cursor-not-allowed':
+                                  !userHasPermissionToInstruct
+                              }"
                             />
                             <strong class="text-lg" *ngIf="!isEditable && !isNewValuation && !isEditValueActive">
                               {{ valuationForm.get('suggestedAskingRentLongLetMonthly').value }}
@@ -1292,6 +1308,10 @@
                               formControlName="suggestedAskingRentShortLet"
                               *ngIf="!(!isEditable && !isNewValuation) || isEditValueActive"
                               data-cy="shortLetValue"
+                              [ngClass]="{
+                                'cursor-not-allowed':
+                                  !userHasPermissionToInstruct
+                              }"
                             />
                             <strong class="text-lg" *ngIf="!isEditable && !isNewValuation && !isEditValueActive">
                               {{ valuationForm.get('suggestedAskingRentShortLet').value }}
@@ -1319,6 +1339,10 @@
                               formControlName="suggestedAskingRentShortLetMonthly"
                               *ngIf="!(!isEditable && !isNewValuation) || isEditValueActive"
                               data-cy="shortLetMonthlyValue"
+                              [ngClass]="{
+                                'cursor-not-allowed':
+                                  !userHasPermissionToInstruct
+                              }"
                             />
                             <strong class="text-lg" *ngIf="!isEditable && !isNewValuation && !isEditValueActive">
                               {{ valuationForm.get('suggestedAskingRentShortLetMonthly').value }}
@@ -1335,18 +1359,10 @@
                         isValuationMeetingNotesVisible
                       "
                     >
-                      <fieldset class="mb-3 inline-child" [ngClass]="{ invalid: formErrors?.valuationNote }">
+                      <fieldset class="mb-3 inline-child" 
+                        [ngClass]="{ invalid: formErrors?.valuationNote }">
                         <label for="valuationNote">Valuation Meeting Notes</label>
                         <textarea
-                          [attr.disabled]="
-                            !(
-                              valuation?.valuationStatus == 0 ||
-                              valuation?.valuationStatus == 1 ||
-                              valuation?.valuationStatus == 2
-                            ) && !isStillInOneMonthPeriod
-                              ? true
-                              : null
-                          "
                           class="p-2"
                           name="valuationNote"
                           id="valuationNote"
@@ -1423,26 +1439,6 @@
           <ng-container *ngIf="property">
             <footer class="footer space-x-2">
               <button (click)="cancel()" type="button" class="btn btn--ghost" data-cy="cancelVal">Cancel</button>
-              <!-- <button
-                *ngIf="canSaveValuation"
-                (click)="saveValuation()"
-                class="btn btn--positive"
-                id="saveVal"
-                data-cy="saveVal"
-                [disabled]="isSubmitting ? '' : null"
-              >
-                Save Valuation
-              </button> -->
-              <!-- <button
-                *ngIf="canInstruct"
-                [disabled]="isDisabledInstructButton === true ? true : null"
-                type="button"
-                class="btn btn--positive"
-                (click)="startInstruction()"
-                data-cy="startInstruction"
-              >
-                Instruct
-              </button> -->
 
               <app-button
                 [label]="'Save Valuation'"
@@ -1460,7 +1456,7 @@
                 [cypressId]="'startInstruction'"
                 [backgroundColorClass]="'ocean-green'"
                 (onClick)="startInstruction()"
-                *ngIf="canInstruct"
+                *ngIf="canInstruct && userHasPermissionToInstruct"
               ></app-button>
             </footer>
           </ng-container>

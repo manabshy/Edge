@@ -44,6 +44,23 @@ export class StaffMemberService {
     return this.staffMember$
   }
 
+  /***
+   * An observable stream or current users permission to Instruct Valuations
+   */
+  public hasCurrentUserValuationInstructPermission(): Observable<boolean> {
+    let currentMember$ = this.getCurrentStaffMember()
+    if (currentMember$)
+      return currentMember$.pipe(
+        map((staffMember) =>
+          staffMember.permissions.findIndex((x: Permission) => x.permissionId == 76) > -1 ? true : false
+        )
+      )
+    return of(false)
+  }
+
+  /***
+   * An observable stream or current users permission to Create Valuations
+   */
   public hasCurrentUserValuationCreatePermission(): Observable<boolean> {
     let currentMember$ = this.getCurrentStaffMember()
     if (currentMember$)
@@ -56,7 +73,7 @@ export class StaffMemberService {
   }
 
   private requestCurrentStaffMember(): Observable<StaffMember> {
-    console.log('requesting current staff member',`${AppConstants.staffMemberBaseUrl}/currentUser`);
+    console.log('requesting current staff member', `${AppConstants.staffMemberBaseUrl}/currentUser`)
     return this.http.get<StaffMemberResult>(`${AppConstants.staffMemberBaseUrl}/currentUser`).pipe(
       map((response) => response.result),
       tap((data) => {
@@ -286,7 +303,7 @@ export class StaffMemberService {
         headers: { ignoreLoadingBar: '' }
       })
       .pipe(
-        map((response) => response.result),
+        map((response) => response.result)
         // tap((data) => {
         //   if (data) {
         //     console.log('suggestions:', data)

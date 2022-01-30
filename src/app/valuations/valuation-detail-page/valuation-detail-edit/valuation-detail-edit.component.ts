@@ -4,7 +4,12 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { StorageMap } from '@ngx-pwa/local-storage'
 import { debounceTime, takeUntil, distinctUntilChanged, map } from 'rxjs/operators'
-import { ContactGroup, ContactNote, PersonSummaryFigures, Signer } from 'src/app/contact-groups/shared/contact-group.interfaces'
+import {
+  ContactGroup,
+  ContactNote,
+  PersonSummaryFigures,
+  Signer
+} from 'src/app/contact-groups/shared/contact-group.interfaces'
 import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service'
 import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service'
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service'
@@ -79,6 +84,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isEditable: boolean = false
   showLeaseExpiryDate: boolean
   canInstruct: boolean
+  userHasPermissionToInstruct: boolean
   canSaveValuation: boolean = true
   propertyId: number
   lastKnownOwnerId: number
@@ -198,6 +204,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isStillInOneMonthPeriod: boolean = false
   isValuationMeetingNotesVisible = true
   isAllowedForValueChangesSubscription = new Subscription()
+  canInstructValueChangesSubscription = new Subscription()
   isEditValueActive = false
   hasLiveInstruct = false
   liveInstructWarning = false
@@ -219,7 +226,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   contactGroupLoading: boolean = true
   activeValuationMessageString: string = ''
   showCreateNewValuationBtnInActiveValuationDialog: boolean = true
- 
+
   // previousContactGroupId: number;
   get dataNote() {
     if (this.contactGroup?.contactGroupId) {
@@ -1352,6 +1359,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       suggestedAskingRentShortLet: [],
       suggestedAskingRentLongLetMonthly: [],
       suggestedAskingRentShortLetMonthly: [],
+      valuationNote: [],
       ageOfSuggestedAskingPrice: [],
       salesMeetingOwner: [true],
       lettingsMeetingOwner: [true],
@@ -1370,8 +1378,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       isRetirementHome: [false],
       isNewBuild: [false],
       hasDisabledAccess: [false],
-      adminContact: [],
-      valuationNote: []
+      adminContact: []
     })
   }
 
@@ -1460,6 +1467,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         isValuationMeetingNotesVisible
         `)
         this.setHeaderDropdownList(this.valuation.valuationStatus, this.valuation.valuationType)
+        // canInstruct - controls show/hide of Instruct button in the UI.
         this.valuation.valuationStatus === 3 ? (this.canInstruct = true) : (this.canInstruct = false)
         this.valuation.approxLeaseExpiryDate ? (this.showLeaseExpiryDate = true) : (this.showLeaseExpiryDate = false)
         if (
@@ -1589,10 +1597,30 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
         this._valuationFacadeSvc.updateLocalValuation(this.valuation)
 
+        // check if current user has permission to create valuations
         this.isAllowedForValueChangesSubscription = this.staffMemberService
           .hasCurrentUserValuationCreatePermission()
           .subscribe((userHasPermission: boolean) => {
+            console.log('hasCurrentUserValuationCreatePermission: ', userHasPermission)
             this.isAllowedForValueChanges = userHasPermission
+          })
+
+        // check if current user has permission to instruct valuations
+        this.canInstructValueChangesSubscription = this.staffMemberService
+          .hasCurrentUserValuationInstructPermission()
+          .subscribe((userHasPermission: boolean) => {
+            console.log('hasCurrentUserValuationInstructPermission: ', userHasPermission)
+            this.userHasPermissionToInstruct = userHasPermission
+            if (userHasPermission) {
+              this.valuation.valuationStatus === 3 ? (this.canInstruct = true) : (this.canInstruct = false)
+            } else {
+              this.valuationForm.controls['suggestedAskingPrice'].disable()
+              this.valuationForm.controls['suggestedAskingRentLongLet'].disable()
+              this.valuationForm.controls['suggestedAskingRentShortLet'].disable()
+              this.valuationForm.controls['suggestedAskingRentLongLetMonthly'].disable()
+              this.valuationForm.controls['suggestedAskingRentShortLetMonthly'].disable()
+              this.valuationForm.controls['valuationNote'].disable()
+            }
           })
 
         if (
@@ -1622,7 +1650,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.sharedService.valuationStatusChanged.next(status)
   }
 
-  // ???? what is the point of this function?
+  // stops event propogating if control is true
   controlIsCancelled(control: boolean) {
     if (control) {
       return false
@@ -1955,14 +1983,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
               x.valuationStatus == ValuationStatusEnum.Valued
           )
           this.isActiveValuationsVisible = this.activeValuations.length > 0 ? true : false
-          
+
           if (this.isActiveValuationsVisible) {
             const thereIsABookedValuation = this.activeValuations.find(
               (val) => val.valuationStatus == ValuationStatusEnum.Booked
             )
             this.activeValuationMessageString = thereIsABookedValuation
-            ? 'There is a booked valuation on this property, you can continue with the one from the list below or cancel it and create a new one.'
-            : 'There is a valued valuation on this property, you can continue with the one from the list below or create a new one.'
+              ? 'There is a booked valuation on this property, you can continue with the one from the list below or cancel it and create a new one.'
+              : 'There is a valued valuation on this property, you can continue with the one from the list below or create a new one.'
             if (thereIsABookedValuation) {
               // There can only be 1 active valuation at a time for a property.
               this.showCreateNewValuationBtnInActiveValuationDialog = false
@@ -2876,7 +2904,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     // validation of land register
     //this._valuationFacadeSvc.valuationValidationSubject.next(true);
-    
+
     const valuationData = this._valuationFacadeSvc._valuationData.getValue()
     console.log('checking valuation valid for save. valuationData = ', valuationData)
     if (valuationData.declarableInterest == null || typeof valuationData.declarableInterest == 'undefined') {
@@ -3358,6 +3386,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.contactGroupSubscription.unsubscribe()
     this.saveValuationSubscription.unsubscribe()
     this.isAllowedForValueChangesSubscription.unsubscribe()
+    this.canInstructValueChangesSubscription.unsubscribe()
     this.storage.delete(this.mainPersonId?.toString()).subscribe()
     this.destroy.unsubscribe()
   }
