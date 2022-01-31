@@ -1,5 +1,5 @@
 <div class="flex flex-row items-center">
-    <img [src]="currentStaffMember?.thumbnailUrl" alt="" class="w-8 rounded-full py-2" *ngIf="currentStaffMember?.thumbnailUrl; else noPhoto" />
+    <img [src]="currentStaffMember?.thumbnailUrl" alt="" class="w-8 h-8 rounded-full" *ngIf="currentStaffMember?.thumbnailUrl; else noPhoto" />
     <ng-template #noPhoto>
         <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
       <path

@@ -35,8 +35,7 @@
             <ol class="nav nav--secondary">
               <li
                 *ngFor="let page of dashboardPages"
-                class="nav__item block rounded text-gray-400 transition duration-200 hover:text-white py-1"
-                [ngClass]="isNonProdEnvironment ? 'hover:bg-ocean-green-400' : 'hover:bg-downriver-400'"
+                class="nav__item  rounded text-gray-400 transition duration-200 hover:text-white "
                 (click)="toggleMobileMenu()"
               >
                 <a
@@ -77,8 +76,7 @@
             <ol class="nav nav--secondary">
               <li
                 *ngFor="let page of contactPages"
-                class="nav__item block rounded text-gray-400 transition duration-200 hover:text-white py-1"
-                [ngClass]="isNonProdEnvironment ? 'hover:bg-ocean-green-400' : 'hover:bg-downriver-400'"
+                class="nav__item rounded text-gray-400 transition duration-200 hover:text-white "
               >
                 <a
                   class="no-underline block"
@@ -122,8 +120,7 @@
             <ol class="nav nav--secondary">
               <li
                 *ngFor="let page of propertyPages"
-                class="nav__item block rounded text-gray-400 transition duration-200 hover:text-white py-1"
-                [ngClass]="isNonProdEnvironment ? 'hover:bg-ocean-green-400' : 'hover:bg-downriver-400'"
+                class="nav__item block text-gray-400 transition duration-200 hover:text-white "
               >
                 <a class="no-underline block" routerLink="{{ page.url }}" routerLinkActive="active">
                   {{ page.name }}
@@ -157,8 +154,7 @@
             <ol class="nav nav--secondary">
               <li
                 (click)="toggleMobileMenu()"
-                class="nav__item block rounded text-gray-400 transition duration-200 hover:text-white py-1"
-                [ngClass]="isNonProdEnvironment ? 'hover:bg-ocean-green-400' : 'hover:bg-downriver-400'"
+                class="nav__items rounded text-gray-400 transition duration-200 hover:text-white "
               >
                 <a routerLink="/admin-panel" routerLinkActive="active">CS Board</a>
               </li>
