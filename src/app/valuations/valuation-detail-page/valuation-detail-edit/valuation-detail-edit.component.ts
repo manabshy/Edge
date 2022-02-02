@@ -1741,8 +1741,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         bathrooms: valuation.bathrooms || 0,
         receptions: valuation.receptions || 0,
         tenureId: valuation.tenureId || 0,
-        approxLeaseExpiryDate: this.changeLeaseExpiryDateToYears(valuation.approxLeaseExpiryDate),
-        sqFt: this.isEditable ? valuation.sqFt || 0 : valuation.sqFt || 'Not Known',
+        approxLeaseExpiryDate: this.isEditable ? this.changeLeaseExpiryDateToYears(valuation.approxLeaseExpiryDate) : valuation.approxLeaseExpiryDate,        sqFt: this.isEditable ? valuation.sqFt || 0 : valuation.sqFt || 'Not Known',
         outsideSpace: this.getInfoDetailValues(valuation.outsideSpace, this.outsideSpaces),
         parking: this.getInfoDetailValues(valuation.parking, this.parkings),
         propertyFeature: valuation.propertyFeature,
@@ -3146,7 +3145,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       const leaseExpiryDateInYears = +this.valuationForm.get('approxLeaseExpiryDate').value
       this.approxLeaseExpiryDate = addYears(new Date(), leaseExpiryDateInYears)
     } else {
-      this.approxLeaseExpiryDate = null
+      this.approxLeaseExpiryDate = this.valuationForm.get('approxLeaseExpiryDate').value
     }
   }
 
