@@ -3,24 +3,12 @@ import { Component, Output, EventEmitter, OnInit } from '@angular/core'
 @Component({
   selector: 'app-rewards-welcome',
   styles: [`
-  .bg-red-200 {
-    background-color: rgb(254 202 202) !important;
-    --tw-shadow-color: #fecaca;
-  }
-  .bg-yellow-200 {
-    background-color: rgb(254 240 138) !important;
-    --tw-shadow-color: #fef08a;
-  }
   .bg-ocean-green-200 {
     background-color: '#9CD1BE' !important;
     --tw-shadow-color: '#9CD1BE' !important;
 
   }
-  .bg-downriver-200 {
-    background-color: '#1940B6' !important;
-    --tw-shadow-color: '#1940B6' !important;
-  }
-  `],
+    `],
   template: `
     <div class="w-full h-full flex flex-col mx-auto my-10 lg:mx-18">
       <p class="text-2xl font-bold text-center">Welcome to your rewards board</p>
@@ -29,10 +17,10 @@ import { Component, Output, EventEmitter, OnInit } from '@angular/core'
       <div class="w-full items-justified flex flex-col md:flex-row my-10 md:my-16">
         <div *ngFor="let icon of icons" class="w-full sm:w-1/2 md:w-1/4 rounded-md p-4 text-center mx-auto">
           <div
-            class="rounded-full p-6 w-24 h-24 mx-auto cursor-pointer hover:shadow-md animate__animated hover:bg-{{icon.colorClass}}-200"
+            class="rounded-full p-6 w-24 h-24 mx-auto cursor-pointer hover:shadow-md active:shadow-none active:scale-95 animate__animated hover:bg-ocean-green-200 active:bg-ocean-green-300 transition-all duration-100 hover:ease-in"
             [ngClass]="
               icon.selected
-                ? 'bg-' + icon.colorClass + '-200 shadow-md ' + icon.animateClass
+                ? 'bg-' + icon.colorClass + '-200 ' + icon.animateClass
                 : ''
             "
             (click)="changeIcon(icon)"
@@ -45,7 +33,7 @@ import { Component, Output, EventEmitter, OnInit } from '@angular/core'
           </p>
         </div>
       </div>
-      <div class="mx-auto w-64" *ngIf="showSaveButton">
+      <div class="mx-auto w-auto transition-all duration-300" *ngIf="showSaveButton">
         <app-button
           [backgroundColorClass]="'ocean-green'"
           [label]="'Save & Continue'"
@@ -69,8 +57,8 @@ export class RewardsWelcomeComponent implements OnInit {
         description:
           'Everyone should have someone to turn to; someone they can trust. This is the foundation of our business. We are always there for you.',
         icnName: 'passionate',
-        colorClass: 'red',
-        animateClass: 'animate__heartBeat',
+        colorClass: 'ocean-green',
+        animateClass: 'animate__rubberBand',
         dynamicStyle: '',
         selected: false
       },
@@ -89,8 +77,8 @@ export class RewardsWelcomeComponent implements OnInit {
         description:
           'We are not the cheapest. We are the best of breed. Our track record, market knowledge and relentless work ethic cannot be equalled.',
         icnName: 'expert',
-        colorClass: 'yellow',
-        animateClass: 'animate__flipInY', // animate__tada
+        colorClass: 'ocean-green',
+        animateClass: 'animate__rubberBand',
         dynamicStyle: '',
         selected: false
       },
@@ -99,8 +87,8 @@ export class RewardsWelcomeComponent implements OnInit {
         description:
           'Our passion and energy for innovation knows no bounds. From technology to customer experiences, better never stops.',
         icnName: 'trailblazer',
-        colorClass: 'blue',
-        animateClass: 'animate__swing',
+        colorClass: 'ocean-green',
+        animateClass: 'animate__rubberBand',
         dynamicStyle: '',
         selected: false
       }

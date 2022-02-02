@@ -1,16 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpBackend } from '@angular/common/http';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
 import { AppConstants } from '../shared/app-constants';
 import { TapiRequestInfo } from '../../shared/models/tapi-request-info';
 import { Observable } from 'rxjs';
-import { CookieService } from './cookies.service';
 import { Guid } from 'guid-typescript';
 import { StaffMemberService } from './staff-member.service';
 import { StaffMember } from '../../shared/models/staff-member';
-
-
 
 @Injectable({
   providedIn: 'root'
