@@ -7,11 +7,10 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
       button + h1 {
         line-height: initial;
       }
-
     `
   ],
   template: `
-    <div class="w-full flex flex-row p-1">
+    <div class="w-full flex flex-row p-1 mt-4">
       <div class="gap-2 md:flex-row flex flex-col">
         <button class="px-2 py-1 rounded-sm bg-ocean-green-500 text-white text-center">Challenges</button>
         <button class="px-2 py-1 rounded-sm bg-white text-blue-800 border border-solid border-gray-300 text-center">
@@ -25,25 +24,18 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
       <div class="flex-1"></div>
 
       <div class="gap-2 md:flex-row flex flex-col relative">
-        <button *ngIf="bronzeComplete" class="rounded-full h-10 w-10" [ngClass]="bronzeComplete ? 'bg-ocean-green-500' : ''">
-          <i class="fa text-lg text-yellow-700" [ngClass]="icon"></i>
+        <button class="rounded-full h-10 w-10" [ngClass]="iconBgColour">
+          <img src="assets/gamification-icons/{{ icon }}.svg" width="24" height="24" />
         </button>
-        <button *ngIf="silverComplete" class="rounded-full h-10 w-10" [ngClass]="silverComplete ? 'bg-ocean-green-500' : ''">
-          <i class="fa text-lg text-gray-500" [ngClass]="icon"></i>
-        </button>
-        <button *ngIf="goldComplete" class="rounded-full h-10 w-10" [ngClass]="goldComplete ? 'bg-ocean-green-500' : ''">
-          <i class="fa text-lg text-yellow-300" [ngClass]="icon"></i>
-        </button>
-        <i class="fa fa-info-circle text-blue-400 text-sm -top-5 absolute right-0"></i>
+        <i class="fa fa-info-circle text-blue-400 text-sm top-0 absolute -right-5" [pTooltip]="'Help text required'"></i>
       </div>
 
-      <div class="flex-1"></div>
 
-      <div class="gap-2 md:flex-row flex flex-col relative">
+      <div class="gap-2 md:flex-row flex flex-col relative ml-14">
         <button *ngIf="phoneCall" class="rounded-full h-10 w-10 bg-ocean-green-500">
-        <i class="fa text-lg text-yellow-700 bg-ocean-green-500" [ngClass]="phoneIcon"></i>
+          <img src="assets/gamification-icons/calls.svg" width="24" height="24" />
         </button>
-        <h1>{{phoneCall?.numberOfPhoneCalls}}</h1>
+        <h1>{{ phoneCall?.numberOfPhoneCalls }}</h1>
       </div>
       <div class="flex-1"></div>
       <app-rewards-bonus-bank [isConnectionLost]="isConnectionLost" [swagBag]="swagBag"></app-rewards-bonus-bank>
@@ -51,28 +43,29 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
   `
 })
 export class RewardsToolbarComponent implements OnInit {
-  @Input() icon: string = 'fa-trophy'
-  
+  @Input() icon
   @Input() swagBag: any
   @Input() streak: any
   @Input() phoneCall: any
   @Input() isConnectionLost: any
-  
-  @Output() onIconChange: EventEmitter<string> = new EventEmitter()
-  phoneIcon: string = 'fa-phone'
-  constructor() { }
 
-  bronzeComplete = false
-  silverComplete = false
-  goldComplete = false
+  @Output() onIconChange: EventEmitter<string> = new EventEmitter()
+
+  iconBgColour: string
+
+  constructor() {}
 
   ngOnInit(): void {
-    this.setStreakColours()
+    this.iconBgColour = this.setIconBackgroundColor()
   }
 
-  setStreakColours() {
-      this.bronzeComplete = this.streak.currentStreak == 0
-      this.silverComplete = this.streak.currentStreak == 1
-      this.goldComplete = this.streak.currentStreak == 2
+  setIconBackgroundColor() {
+    return this.streak.currentStreak == 0
+      ? 'bg-orange-700'
+      : this.streak.currentStreak == 1
+      ? 'bg-gray-300'
+      : this.streak.currentStreak == 2
+      ? 'bg-yellow-400'
+      : 'bg-ocean-green-500'
   }
 }

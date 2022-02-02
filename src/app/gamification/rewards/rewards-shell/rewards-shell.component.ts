@@ -6,21 +6,22 @@ import { StaffMember } from 'src/app/shared/models/staff-member'
 import { StorageMap } from '@ngx-pwa/local-storage'
 import { takeUntil } from 'rxjs/operators'
 import { Subject } from 'rxjs'
+import { CookieService } from 'src/app/core/services/cookies.service'
 
 @Component({
   selector: 'app-rewards-shell',
   template: `
     <app-rewards-welcome
-      class="animate__animated animate__fadeOut"
       *ngIf="showWelcome"
       (onSave)="saveUserRewardsIcon($event)"
     ></app-rewards-welcome>
-    <div *ngIf="streak && bonus && swagBag && !showWelcome" class="">
+    <div *ngIf="!showWelcome">
       <app-rewards-toolbar
         [isConnectionLost]="isConnectionLost"
         [swagBag]="swagBag"
         [streak]="streak"
         [phoneCall]="phoneCall"
+        [icon]="userRewardsIcon"
       ></app-rewards-toolbar>
       <ng-container *ngFor="let b of bonus">
         <app-rewards-row [streak]="streak" [bonus]="b"></app-rewards-row>
@@ -37,7 +38,8 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
   phoneCall: any;
 
   isConnectionLost: any
-  showWelcome = true
+  showWelcome:boolean
+  userRewardsIcon: string
   connectionClosed = false
 
   constructor(
@@ -45,7 +47,8 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
     private storage: StorageMap,
     private cdRef: ChangeDetectorRef,
     private signalRService: SignalRService,
-    private rewardsService: RewardsService
+    private rewardsService: RewardsService,
+    private cookieService: CookieService
   ) {
     this.storage
       .get('currentUser')
@@ -129,10 +132,15 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges()
       }
     })
+
+    const hasRewardsIconCookie = this.cookieService.getCookie('userRewardsIcon')
+    this.showWelcome = hasRewardsIconCookie ? false: true
+    this.userRewardsIcon = hasRewardsIconCookie
   }
 
   saveUserRewardsIcon(icon) {
-    console.log('saveUserRewardsIcon($event)', icon)
+    this.cookieService.setCookie('userRewardsIcon', icon, 30)
+    this.userRewardsIcon = icon
     this.showWelcome = false
   }
 }

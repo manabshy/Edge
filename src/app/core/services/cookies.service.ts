@@ -1,9 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpBackend } from '@angular/common/http';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
-import { AppConstants } from '../shared/app-constants';
-import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
