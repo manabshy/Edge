@@ -9,7 +9,7 @@ import { RoleName, StaffMember } from 'src/app/shared/models/staff-member'
 @Component({
   selector: 'app-valuations-search',
   template: `
-    <div class="sticky top-20 w-56 top-20 z-10">
+    <div class="sticky md:top-20 w-100 md:w-56 top-24 md:top-20 z-10">
       <div class="p-4 border border-solid border-gray-300 rounded-md mb-10">
         <h3 class="font-bold text-md">
           <i class="fas fa-search"></i>

@@ -6,25 +6,28 @@ import { Valuation } from '../../shared/valuation'
   selector: 'app-pure-valuations-list-page-shell',
   template: `
     <div class="row">
-      <app-valuations-search
-        [searchStats]="searchStats"
-        [searchModel]="searchModel"
-        [valuerOptions]="valuerOptions"
-        [statusOptions]="statusOptions"
-        [officeOptions]="officeOptions"
-        [currentStaffMember]="currentStaffMember"
-        (onGetValuations)="onGetValuations.emit($event)"
-        (onSearchModelChanges)="onSearchModelChanges.emit($event)"
-      ></app-valuations-search>
-
-      <app-valuations-list
-        *ngIf="!isHintVisible"
-        [page]="searchModel.page"
-        [valuations]="valuations"
-        [bottomReached]="bottomReached"
-        (onScrollDown)="onScrollDown.emit($event)"
-        (onNavigateToValuation)="onNavigateTo.emit($event)"
-      ></app-valuations-list>
+      <div class="row__item row__item--aside mt-4">
+        <app-valuations-search
+          [searchStats]="searchStats"
+          [searchModel]="searchModel"
+          [valuerOptions]="valuerOptions"
+          [statusOptions]="statusOptions"
+          [officeOptions]="officeOptions"
+          [currentStaffMember]="currentStaffMember"
+          (onGetValuations)="onGetValuations.emit($event)"
+          (onSearchModelChanges)="onSearchModelChanges.emit($event)"
+        ></app-valuations-search>
+      </div>
+      <div class="row__item">
+        <app-valuations-list
+          *ngIf="!isHintVisible"
+          [page]="searchModel.page"
+          [valuations]="valuations"
+          [bottomReached]="bottomReached"
+          (onScrollDown)="onScrollDown.emit($event)"
+          (onNavigateToValuation)="onNavigateTo.emit($event)"
+        ></app-valuations-list>
+      </div>
     </div>
   `
 })
