@@ -7,6 +7,12 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
       button + h1 {
         line-height: initial;
       }
+      div>button:nth-child(2) {
+        display: none;
+      }
+      div>button:nth-child(3) {
+        display: none;
+      }
     `
   ],
   template: `
@@ -22,7 +28,12 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
       </div>
 
       <div class="flex-1"></div>
-
+      <div class="gap-2 md:flex-row flex flex-col relative ml-14">
+        <button *ngIf="phoneCall" class="rounded-full h-10 w-10 bg-ocean-green-500">
+          <img src="assets/gamification-icons/calls.svg" width="24" height="24" />
+        </button>
+        <h1>{{ phoneCall?.numberOfPhoneCalls }}</h1>
+      </div>
       <div class="gap-2 md:flex-row flex flex-col relative">
         <button class="rounded-full h-10 w-10" [ngClass]="iconBgColour">
           <img src="assets/gamification-icons/{{ icon }}.svg" width="24" height="24" />
@@ -31,13 +42,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
       </div>
 
 
-      <div class="gap-2 md:flex-row flex flex-col relative ml-14">
-        <button *ngIf="phoneCall" class="rounded-full h-10 w-10 bg-ocean-green-500">
-          <img src="assets/gamification-icons/calls.svg" width="24" height="24" />
-        </button>
-        <h1>{{ phoneCall?.numberOfPhoneCalls }}</h1>
-      </div>
-      <div class="flex-1"></div>
+
       <app-rewards-bonus-bank [isConnectionLost]="isConnectionLost" [swagBag]="swagBag"></app-rewards-bonus-bank>
     </div>
   `
