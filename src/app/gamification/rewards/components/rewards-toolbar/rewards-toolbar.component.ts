@@ -13,6 +13,9 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
       div>button:nth-child(3) {
         display: none;
       }
+      div.gap-2 {
+        margin-right: 30px;
+      }
     `
   ],
   template: `

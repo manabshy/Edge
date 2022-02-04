@@ -51,6 +51,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
       .animation.w-full video {
         margin-top: -50px;
       }
+
     `
   ],
   template: `
@@ -131,9 +132,7 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
     this.progressWidthClass = p == 0 ? 'w-0' : 'w-' + p
 
     this.targetReached = this.progress >= this.target
-    this.targetReached = true
     this.bgColor = this.targetReached ? 'bg-green-100' : 'bg-white'
-
     this.animationClass = this.targetReached ? 'animate__bounce  animate__delay-' + this.animationDelay + 's' : ''
   }
 
