@@ -48,6 +48,9 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
       .bg-light {
         background-color: #E5F6DF;
       }
+      .animation.w-full video {
+        margin-top: -50px;
+      }
     `
   ],
   template: `
@@ -60,16 +63,13 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
             {{ nameStringArray[1] }}
           </p>
         </div>
-        <div [ngClass]="bgColor" class="opacity-95 absolute right-0 left-0 bottom-0">
-          <p class="font-bold px-2 text-center text-sm py-2">
-            <span class="font-black text-lg">SMASHED IT</span>
-            - and you rolled a {{ progress }}
-          </p>
-          <img
-            class="w-24 mx-auto border-0 animate__animated"
-            [ngClass]="animationClass"
-            src="/assets/gamification-icons/dice-1.gif"
-          />
+ 
+        <div class="animation w-full">
+      
+          <video autoplay>
+           <source src="./assets/mp4/target_smashed.mp4" type="video/mp4">
+          </video>
+    
         </div>
       </div>
       <div class="h-48 flex">
@@ -97,7 +97,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
   `
 })
 export class RewardsTaskComponent implements OnInit, OnChanges {
-  @Input() progress: number = 0
+  @Input() progress: number = 6
   @Input() target: number = 6
   @Input() action!: string
   @Input() name: string
@@ -131,7 +131,7 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
     this.progressWidthClass = p == 0 ? 'w-0' : 'w-' + p
 
     this.targetReached = this.progress >= this.target
-
+    this.targetReached = true
     this.bgColor = this.targetReached ? 'bg-green-100' : 'bg-white'
 
     this.animationClass = this.targetReached ? 'animate__bounce  animate__delay-' + this.animationDelay + 's' : ''
