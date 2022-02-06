@@ -10,14 +10,17 @@ import {
 @Component({
   selector: 'app-instructions-list',
   template: `
-    <div class="p-4">
+    <div class="table mt-4">
       <app-infinite-scroll (scrolled)="onScrollDown.emit()">
-        <table class="table-fixed border bg-white">
+        <table class="table--mobile table--rowHover table-fixed border bg-white table">
           <thead class="sticky top-14 pt-6 bg-white z-10">
             <tr>
-              <th (click)="onSortClicked.emit('status')" class="w-24 cursor-pointer">
+              <th (click)="onSortClicked.emit('status')" class="cursor-pointer">
                 <span class="mr-1">Status</span>
-                <app-table-col-sort [orderBy]="searchModel.orderBy" [columnId]="'InstructionStatusId'"></app-table-col-sort>
+                <app-table-col-sort
+                  [orderBy]="searchModel.orderBy"
+                  [columnId]="'InstructionStatusId'"
+                ></app-table-col-sort>
               </th>
               <th (click)="onSortClicked.emit('address')" class="cursor-pointer">
                 <span class="mr-1">Address</span>
@@ -26,19 +29,23 @@ import {
               <th>
                 <span class="mr-1 cursor-not-allowed">Owner</span>
               </th>
-              <th (click)="onSortClicked.emit('instructionDate')" class="w-24 cursor-pointer">
+              <th (click)="onSortClicked.emit('instructionDate')" class="cursor-pointer">
                 <span class="mr-1">Instruction Date</span>
                 <app-table-col-sort [orderBy]="searchModel.orderBy" [columnId]="'InstructionDate'"></app-table-col-sort>
               </th>
               <th (click)="onSortClicked.emit('lister')" class="cursor-pointer w-40">
                 <span class="mr-1">Lister</span>
-                <app-table-col-sort [orderBy]="searchModel.orderBy" [columnId]="'InstructionLister'"></app-table-col-sort>
+                <app-table-col-sort
+                  [orderBy]="searchModel.orderBy"
+                  [columnId]="'InstructionLister'"
+                ></app-table-col-sort>
               </th>
               <th
                 (click)="onSortClicked.emit('longLetPrice')"
-                class="cursor-pointer w-24"
+                class="cursor-pointer"
                 *ngIf="
-                  searchModel.departmentType === instructionsTableType.LETTINGS || searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
+                  searchModel.departmentType === instructionsTableType.LETTINGS ||
+                  searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
                 <span class="mr-1">Long Let</span>
@@ -46,9 +53,10 @@ import {
               </th>
               <th
                 (click)="onSortClicked.emit('shortLetPrice')"
-                class="cursor-pointer w-24"
+                class="cursor-pointer"
                 *ngIf="
-                searchModel.departmentType === instructionsTableType.LETTINGS || searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
+                  searchModel.departmentType === instructionsTableType.LETTINGS ||
+                  searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
                 <span class="mr-1">Short Let</span>
@@ -56,9 +64,10 @@ import {
               </th>
               <th
                 (click)="onSortClicked.emit('marketingPrice')"
-                class="cursor-pointer w-24"
+                class="cursor-pointer"
                 *ngIf="
-                  searchModel.departmentType === instructionsTableType.SALES || searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
+                  searchModel.departmentType === instructionsTableType.SALES ||
+                  searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
                 <span class="mr-1">Marketing Price</span>
@@ -114,7 +123,8 @@ import {
               <td
                 data-title="LongLet"
                 *ngIf="
-                  searchModel.departmentType === instructionsTableType.LETTINGS || searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
+                  searchModel.departmentType === instructionsTableType.LETTINGS ||
+                  searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
                 <span class="cell-content">
@@ -126,7 +136,8 @@ import {
               <td
                 data-title="ShortLet"
                 *ngIf="
-                  searchModel.departmentType === instructionsTableType.LETTINGS || searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
+                  searchModel.departmentType === instructionsTableType.LETTINGS ||
+                  searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
                 <span class="cell-content">
@@ -138,7 +149,8 @@ import {
               <td
                 data-title="MarketingPrice"
                 *ngIf="
-                  searchModel.departmentType === instructionsTableType.SALES || searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
+                  searchModel.departmentType === instructionsTableType.SALES ||
+                  searchModel.departmentType === instructionsTableType.SALES_AND_LETTINGS
                 "
               >
                 <span class="cell-content">
@@ -174,11 +186,11 @@ export class InstructionsListComponent {
   @Input() searchModel: any
   @Input() tableData: InstructionTableCell[] = []
   @Input() bottomReached: boolean
-  
+
   @Output() onSortClicked: EventEmitter<any> = new EventEmitter()
   @Output() onScrollDown: EventEmitter<any> = new EventEmitter()
   @Output() onNavigateToInstruction: EventEmitter<any> = new EventEmitter()
-  
+
   page: number
   instructionsTableType = InstructionsTableType
   sortableColumnHeaders = SortableColumnsForInstructions
@@ -222,7 +234,6 @@ export class InstructionsListComponent {
 
       case InstructionStatusForSalesAndLettingsEnum.exchanged:
         return 'bg-pink-400'
-
     }
   }
 }

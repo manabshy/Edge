@@ -6,24 +6,27 @@ import { InstructionsStoreState } from '../../instructions.interfaces'
   selector: 'app-pure-instructions-list-page-shell',
   template: `
     <div class="row">
-      <app-instructions-search
-        [searchStats]="vm.searchStats"
-        [searchModel]="vm.searchModel"
-        [listerOptions]="vm.listersForSelect"
-        [statusOptions]="vm.statusesForSelect"
-        [officeOptions]="vm.officesForSelect"
-        [currentStaffMember]="currentStaffMember"
-        (onGetInstructions)="onGetInstructions.emit($event)"
-        (onSearchModelChanges)="onSearchModelChanges.emit($event)"
-      ></app-instructions-search>
-
-      <app-instructions-list
-        [searchModel]="vm.searchModel"
-        [tableData]="vm.instructions"
-        (onNavigateToInstruction)="onNavigateToInstruction.emit($event)"
-        (onSortClicked)="onSortClicked.emit($event)"
-        (onScrollDown)="onScrollDown.emit($event)"
-      ></app-instructions-list>
+      <div class="row__item row__item--aside mt-4">
+        <app-instructions-search
+          [searchStats]="vm.searchStats"
+          [searchModel]="vm.searchModel"
+          [listerOptions]="vm.listersForSelect"
+          [statusOptions]="vm.statusesForSelect"
+          [officeOptions]="vm.officesForSelect"
+          [currentStaffMember]="currentStaffMember"
+          (onGetInstructions)="onGetInstructions.emit($event)"
+          (onSearchModelChanges)="onSearchModelChanges.emit($event)"
+        ></app-instructions-search>
+      </div>
+      <div class="row__item">
+        <app-instructions-list
+          [searchModel]="vm.searchModel"
+          [tableData]="vm.instructions"
+          (onNavigateToInstruction)="onNavigateToInstruction.emit($event)"
+          (onSortClicked)="onSortClicked.emit($event)"
+          (onScrollDown)="onScrollDown.emit($event)"
+        ></app-instructions-list>
+      </div>
     </div>
   `
 })

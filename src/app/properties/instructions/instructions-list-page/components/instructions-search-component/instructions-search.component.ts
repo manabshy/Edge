@@ -34,7 +34,7 @@ export interface InstructionsSearchDropdowns {
 @Component({
   selector: 'app-instructions-search',
   template: `
-    <div class="border border-solid border-gray-300 rounded-md w-56 p-4 sticky top-20 z-10">
+    <div class="border border-solid border-gray-300 rounded-md w-100 md:w-56 p-4 sticky top-24 md:top-20 z-10">
       <h3 class="font-bold text-md">
         <i class="fas fa-search"></i>
         Search Instructions
