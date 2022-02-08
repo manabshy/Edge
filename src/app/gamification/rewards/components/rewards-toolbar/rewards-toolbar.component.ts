@@ -14,7 +14,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
         display: none;
       }
       div.gap-2 {
-        margin-right: 30px;
+        margin-right: 45px;
       }
     `
   ],
@@ -42,10 +42,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
           <img src="assets/gamification-icons/{{ icon }}.svg" width="24" height="24" />
         </button>
         <i class="fa fa-info-circle text-blue-400 text-sm top-0 absolute -right-5" [pTooltip]="'Help text required'"></i>
-      </div>
-
-
-
+      </div>  
       <app-rewards-bonus-bank [isConnectionLost]="isConnectionLost" [swagBag]="swagBag"></app-rewards-bonus-bank>
     </div>
   `

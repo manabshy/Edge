@@ -3,8 +3,15 @@ import moment from 'moment'
 
 @Component({
   selector: 'app-rewards-timer',
+  styles: [
+    `
+    .bg-blue-clock {
+      background-color: #BFEBFA;
+    }
+    `
+  ],
   template: `
-    <div class="h-48 text-center flex flex-col justify-around bg-blue-100 rounded-md p-4">
+    <div class="h-48 text-center flex flex-col justify-around bg-blue-clock rounded-md p-4">
       <div class="flex md:flex-col items-center mx-auto">
         <h1 class="text-6xl font-black text-blue-800">{{ hours }}</h1>
         <h3 class="text-3xl">{{ minutes }}</h3>

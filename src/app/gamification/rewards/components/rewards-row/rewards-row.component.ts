@@ -2,6 +2,15 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 
 @Component({
   selector: 'app-rewards-row',
+  styles: [
+    `
+    i.fa.fa-equals {
+      position: relative;
+      top: 85px;
+      font-size: 20px;
+    }
+    `
+  ],
   template: `
     <div class="p-3">
       <p class="text-xl mb-2">{{ bonus.name }}</p>
@@ -19,8 +28,12 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
         >
         <i *ngIf="i < bonus.bonusDetailCriteria.length" class="fa fa-plus invisible md:visible"></i>
         </app-rewards-task>
+        <div>
+          <i  class="fa fa-equals"></i>
+        </div>
         </ng-container>
-               
+        
+      
         <app-rewards-goal
           class="w-full md:w-1/6"
           [streak]="streak"

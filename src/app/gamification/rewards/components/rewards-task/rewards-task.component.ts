@@ -48,10 +48,30 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
       .bg-light {
         background-color: #E5F6DF;
       }
+      .bg-pink-400 {
+        background-color: #F9CBDF !important;
+      }
       .animation.w-full video {
         margin-top: -50px;
+        margin-left: -25px;
+      }
+      div > .rounded-sm {
+        border-radius: 10px!important;
+      }
+    
+      .animation {
+        position: fixed; /* Sit on top of the page content */
+        width: 100%; /* Full width (cover the whole page) */
+        height: 100%; /* Full height (cover the whole page) */
+        top: 0;
+        left:0;
+        bottom: 0;
+        cursor: pointer; /* Add a pointer on hover */
       }
 
+      .stopOverlay {
+        display: none;
+      }
     `
   ],
   template: `
@@ -65,12 +85,10 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
           </p>
         </div>
  
-        <div class="animation w-full">
-      
-          <video autoplay>
-           <source src="./assets/mp4/target_smashed.mp4" type="video/mp4">
-          </video>
-    
+        <div class="w-full">
+        <img
+        src="{{ '/assets/gamification-icons/go-final-daily.gif' }}"
+        />    
         </div>
       </div>
       <div class="h-48 flex">
@@ -110,7 +128,6 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
   bgColor!: string
   animationClass: string
   nameStringArray: any
-
   constructor() {
   }
 
@@ -122,7 +139,7 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
   buildNameString() {
     return this.name.split('{target}')
   }
-
+  
   calculateProgress() {
     
     this.topClass = this.progress === 0 ? 'bg-pink-400' : 'bg-light';
