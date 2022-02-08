@@ -46,10 +46,13 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
         width: 100%!important;
       }
       .bg-light {
-        background-color: #E5F6DF;
+        background-color: #C9E4DA;
       }
       .bg-pink-400 {
-        background-color: #F9CBDF !important;
+        background-color: #FDEFF5 !important;
+      }
+      .bg-green-400 {
+        background-color: #4DA685!important;
       }
       .animation.w-full video {
         margin-top: -50px;
@@ -58,19 +61,10 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
       div > .rounded-sm {
         border-radius: 10px!important;
       }
-    
-      .animation {
-        position: fixed; /* Sit on top of the page content */
-        width: 100%; /* Full width (cover the whole page) */
-        height: 100%; /* Full height (cover the whole page) */
-        top: 0;
-        left:0;
-        bottom: 0;
-        cursor: pointer; /* Add a pointer on hover */
-      }
-
-      .stopOverlay {
-        display: none;
+     
+      .text-sm {
+        line-height: 1rem !important;
+        margin-left: 5px;
       }
     `
   ],
@@ -105,7 +99,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
             />
           </div>
           <div [ngClass]="topClass" class="flex flex-row mx-2 relative h-4 mb-2 rounded-sm">
-            <p class="text-center text-sm z-10 w-full">{{ progress }}</p>
+            <p class="text-sm z-10 w-full">{{ progress }}</p>
             <div [ngClass]="progressWidthClass" class="absolute top-0 left-0 right-0 h-4">
               <div class="absolute left-0 -top-4 bg-green-400 h-4 progress-value" ></div>
             </div>
@@ -147,7 +141,6 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
     const p = Math.round((6 * this.progress) / this.target) 
 
     this.progressWidthClass = p == 0 ? 'w-0' : 'w-' + p
-
     this.targetReached = this.progress >= this.target
     this.bgColor = this.targetReached ? 'bg-green-100' : 'bg-white'
     this.animationClass = this.targetReached ? 'animate__bounce  animate__delay-' + this.animationDelay + 's' : ''

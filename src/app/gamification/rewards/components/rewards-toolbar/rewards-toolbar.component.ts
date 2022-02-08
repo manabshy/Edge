@@ -23,7 +23,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
         line-height: 1.8em;
       }
       div.call {
-       margin-right: -15px;
+       margin-right: 30px;
       }
     `
   ],
@@ -45,12 +45,6 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
           <img src="assets/gamification-icons/calls.svg" width="24" height="24" />
         </button>
         <h1>{{ phoneCall?.numberOfPhoneCalls }}</h1>
-      </div>
-      <div class="gap-2 md:flex-row flex flex-col relative ml-14">
-        <button class="rounded-full h-10 w-10 bg-bronze">
-          <img src="assets/gamification-icons/trailblazer.svg" width="24" height="24" />
-        </button>
-        <i class="fa fa-info-circle text-blue-400 text-sm top-0 absolute -right-5" [pTooltip]="'Help text required'"></i>
       </div>
 
       <div class="gap-2 md:flex-row flex flex-col relative">
