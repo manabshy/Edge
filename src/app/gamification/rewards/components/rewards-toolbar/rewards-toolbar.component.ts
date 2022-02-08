@@ -16,6 +16,15 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
       div.gap-2 {
         margin-right: 45px;
       }
+      .bg-bronze {
+        background-color:#E5A678;
+      }
+      button + h1  {
+        line-height: 1.8em;
+      }
+      div.call {
+       margin-right: -15px;
+      }
     `
   ],
   template: `
@@ -31,12 +40,19 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
       </div>
 
       <div class="flex-1"></div>
-      <div class="gap-2 md:flex-row flex flex-col relative ml-14">
+      <div class="call gap-2 md:flex-row flex flex-col relative ml-14">
         <button *ngIf="phoneCall" class="rounded-full h-10 w-10 bg-ocean-green-500">
           <img src="assets/gamification-icons/calls.svg" width="24" height="24" />
         </button>
         <h1>{{ phoneCall?.numberOfPhoneCalls }}</h1>
       </div>
+      <div class="gap-2 md:flex-row flex flex-col relative ml-14">
+        <button class="rounded-full h-10 w-10 bg-bronze">
+          <img src="assets/gamification-icons/trailblazer.svg" width="24" height="24" />
+        </button>
+        <i class="fa fa-info-circle text-blue-400 text-sm top-0 absolute -right-5" [pTooltip]="'Help text required'"></i>
+      </div>
+
       <div class="gap-2 md:flex-row flex flex-col relative">
         <button class="rounded-full h-10 w-10" [ngClass]="iconBgColour">
           <img src="assets/gamification-icons/{{ icon }}.svg" width="24" height="24" />
