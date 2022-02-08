@@ -2,6 +2,12 @@ import { Component, Input } from '@angular/core'
 
 @Component({
   selector: 'app-rewards-bonus-bank',
+  styles: [ ` 
+    .text-blue-800 {
+      color: #0A1A4A!important
+    }
+  `
+  ],
   template: `
     <ng-container *ngIf="swagBag as d">
       <div class="flex flex-row w-40 items-center">
@@ -10,8 +16,8 @@ import { Component, Input } from '@angular/core'
         <img src="assets/gamification-icons/bonus-bank.svg" width="24" height="24" />
       </button>
         <div class="text-2xl flex flex-row items-center ml-2">
-          <div><i class="fa fa-pound-sign text-ocean-green-500"></i></div>
-          <div class="text-3xl font-black ml-1">
+          <div><i class="fa fa-pound-sign text-blue-800"></i></div>
+          <div class="text-3xl font-black text-blue-800 ml-1">
             {{ d.swagBag }}
           </div>
         </div>

@@ -8,6 +8,9 @@ import moment from 'moment'
     .bg-blue-clock {
       background-color: #BFEBFA;
     }
+    .text-blue-800 {
+      color: #0A1A4A!important
+    }
     `
   ],
   template: `
