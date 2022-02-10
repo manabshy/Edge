@@ -28,12 +28,12 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
         >
         <i *ngIf="i < bonus.bonusDetailCriteria.length" class="fa fa-plus invisible md:visible"></i>
         </app-rewards-task>
-        <div>
-          <i  class="fa fa-equals"></i>
-        </div>
+
         </ng-container>
         
-      
+        <div>
+        <i  class="fa fa-equals"></i>
+        </div>
         <app-rewards-goal
           class="w-full md:w-1/6"
           [streak]="streak"
