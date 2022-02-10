@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-rewards-toolbar',
@@ -68,18 +69,24 @@ export class RewardsToolbarComponent implements OnInit {
 
   iconBgColour: string
 
-  constructor() {}
+  constructor(private storage: StorageMap) {}
 
   ngOnInit(): void {
-    this.iconBgColour = this.setIconBackgroundColor()
+    if (this.streak) {
+      this.storage.set('streak', this.streak).subscribe()
+      this.iconBgColour = this.setIconBackgroundColor( this.streak)    
+
+    } else {
+      this.storage.get('streak').subscribe(streak => this.iconBgColour = this.setIconBackgroundColor(streak))
+    }
   }
 
-  setIconBackgroundColor() {
-    return this.streak.currentStreak == 0
+  setIconBackgroundColor(streak) {
+    return streak.currentStreak == 0
       ? 'bg-orange-700'
-      : this.streak.currentStreak == 1
+      : streak.currentStreak == 1
       ? 'bg-gray-300'
-      : this.streak.currentStreak == 2
+      : streak.currentStreak == 2
       ? 'bg-yellow-400'
       : 'bg-ocean-green-500'
   }
