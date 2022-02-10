@@ -1,5 +1,8 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
+import { Component, Input, Output, EventEmitter, OnInit,  OnDestroy, ChangeDetectorRef } from '@angular/core'
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { SignalRService } from 'src/app/core/services/signal-r.service'
+import { takeUntil } from 'rxjs/operators'
+import { Subject } from 'rxjs'
 
 @Component({
   selector: 'app-rewards-toolbar',
@@ -64,24 +67,30 @@ export class RewardsToolbarComponent implements OnInit {
   @Input() streak: any
   @Input() phoneCall: any
   @Input() isConnectionLost: any
+  ngUnsubscribe = new Subject<void>()
 
   @Output() onIconChange: EventEmitter<string> = new EventEmitter()
 
   iconBgColour: string
 
-  constructor(private storage: StorageMap) {}
+  constructor(private storage: StorageMap, private signalRService: SignalRService, private cdRef: ChangeDetectorRef,
+
+  ) {}
 
   ngOnInit(): void {
-    if (this.streak) {
-      this.storage.set('streak', this.streak).subscribe()
-      this.iconBgColour = this.setIconBackgroundColor( this.streak)    
+    this.signalRService.getStreakStream$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data) => {
+      if (data) {
+        this.streak = data
+        this.cdRef.detectChanges()
+        console.info('streak from signalR:', this.streak);
+        this.iconBgColour = this.setIconBackgroundColor(data)
+      }
+    })
 
-    } else {
-      this.storage.get('streak').subscribe(streak => this.iconBgColour = this.setIconBackgroundColor(streak))
-    }
   }
 
   setIconBackgroundColor(streak) {
+   
     return streak.currentStreak == 0
       ? 'bg-orange-700'
       : streak.currentStreak == 1
@@ -89,5 +98,11 @@ export class RewardsToolbarComponent implements OnInit {
       : streak.currentStreak == 2
       ? 'bg-yellow-400'
       : 'bg-ocean-green-500'
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next()
+    this.ngUnsubscribe.complete()
+    this.signalRService.disconnect()
   }
 }
