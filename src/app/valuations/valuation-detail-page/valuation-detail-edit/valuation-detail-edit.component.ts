@@ -1472,11 +1472,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.valuation.valuationStatus === ValuationStatusEnum.Valued ||
           this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
           this.valuation.valuationStatus === ValuationStatusEnum.Closed
-        ) {
-          this.isEditable = false
-        } else {
-          this.isEditable = true
-        }
+          ) {
+            this.isEditable = false
+          } else {
+            this.isEditable = true
+          }
         if (this.valuation.valuationStatus === ValuationStatusEnum.Instructed) {
           this.isCancelled = true
         }
@@ -1730,7 +1730,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
 
       this.onPropertyType(valuation.property?.propertyTypeId)
-      console.log('1 about to patchValue on valuationForm  ', valuation)
       this.valuationForm.patchValue({
         property: valuation.property,
         propertyOwner: valuation.propertyOwner,
@@ -1741,7 +1740,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         bathrooms: valuation.bathrooms || 0,
         receptions: valuation.receptions || 0,
         tenureId: valuation.tenureId || 0,
-        approxLeaseExpiryDate: this.isEditable ? this.changeLeaseExpiryDateToYears(valuation.approxLeaseExpiryDate) : valuation.approxLeaseExpiryDate,        sqFt: this.isEditable ? valuation.sqFt || 0 : valuation.sqFt || 'Not Known',
+        approxLeaseExpiryDate: this.changeLeaseExpiryDateToYears(valuation.approxLeaseExpiryDate),
+        // this.isEditable
+          // : valuation.approxLeaseExpiryDate, changed to always print years as part of fix for #3521
+        sqFt: this.isEditable ? valuation.sqFt || 0 : valuation.sqFt || 'Not Known',
         outsideSpace: this.getInfoDetailValues(valuation.outsideSpace, this.outsideSpaces),
         parking: this.getInfoDetailValues(valuation.parking, this.parkings),
         propertyFeature: valuation.propertyFeature,
@@ -3145,7 +3147,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       const leaseExpiryDateInYears = +this.valuationForm.get('approxLeaseExpiryDate').value
       this.approxLeaseExpiryDate = addYears(new Date(), leaseExpiryDateInYears)
     } else {
-      this.approxLeaseExpiryDate = this.valuationForm.get('approxLeaseExpiryDate').value
+      this.approxLeaseExpiryDate = null
     }
   }
 
