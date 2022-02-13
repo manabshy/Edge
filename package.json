@@ -1,6 +1,6 @@
 {
   "name": "wedge",
-  "version": "4.0.1",
+  "version": "4.0.2-1",
   "scripts": {
     "ng": "nx",
     "start": "ng serve --hmr",
