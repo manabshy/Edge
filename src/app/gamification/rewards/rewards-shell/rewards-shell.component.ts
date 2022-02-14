@@ -21,7 +21,7 @@ import { CookieService } from 'src/app/core/services/cookies.service'
         [swagBag]="swagBag"
         [streak]="streak"
         [phoneCall]="phoneCall"
-        [icon]="userRewardsIcon"
+        [icon]="userRewardsIcon"s
       ></app-rewards-toolbar>
       <ng-container *ngFor="let b of bonus">
         <app-rewards-row [streak]="streak" [bonus]="b"></app-rewards-row>
