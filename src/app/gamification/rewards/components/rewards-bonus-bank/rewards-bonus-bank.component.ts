@@ -6,6 +6,10 @@ import { Component, Input } from '@angular/core'
     .text-blue-800 {
       color: #0A1A4A!important
     }
+    .font-black {
+      font-family: 'Poppins-Medium';
+      font-weight: 800;
+    }
   `
   ],
   template: `

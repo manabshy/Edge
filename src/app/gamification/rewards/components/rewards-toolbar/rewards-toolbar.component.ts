@@ -8,8 +8,10 @@ import { Subject } from 'rxjs'
   selector: 'app-rewards-toolbar',
   styles: [
     `
-      button + h1 {
+      button + span {
         line-height: initial;
+        font-family: 'Poppins-Medium';
+        font-weight: 800;
       }
       div>button:nth-child(2) {
         display: none;
@@ -28,6 +30,10 @@ import { Subject } from 'rxjs'
       }
       div.call {
        margin-right: 30px;
+      }
+      button.text-white {
+        height: 29px;
+        width: 110px;
       }
     `
   ],
@@ -48,7 +54,7 @@ import { Subject } from 'rxjs'
         <button *ngIf="phoneCall" class="rounded-full h-10 w-10 bg-ocean-green-500">
           <img src="assets/gamification-icons/calls.svg" width="24" height="24" />
         </button>
-        <h1>{{ phoneCall?.numberOfPhoneCalls }}</h1>
+        <span class="text-3xl font-black ml-1">{{ phoneCall?.numberOfPhoneCalls }}</span>
       </div>
 
       <div class="gap-2 md:flex-row flex flex-col relative">

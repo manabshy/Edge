@@ -18,8 +18,9 @@ import { Component, Input, OnInit } from '@angular/core'
         <br />
         <span class="text-xs">For passing the {{ timeframe }} on a high</span>
       </p>
+
       <img
-        src="/assets/gamification-icons/pass-go-icn.jpg"
+        src="/assets/gamification-icons/GO.svg"
         class="animate__animated animate__delay-1s w-28 mx-auto border-0 filter"
         [ngClass]="{ animate__heartBeat: animate }"
       />

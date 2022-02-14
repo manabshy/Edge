@@ -52,7 +52,8 @@ export class RewardsRowComponent implements OnInit {
   timeframe: string
   goalsHit: boolean = false
 
-  constructor() { }
+  constructor() {
+   }
 
   ngOnInit(): void {
     switch (this.bonus.timeWindow) {

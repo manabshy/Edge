@@ -11,6 +11,13 @@ import moment from 'moment'
     .text-blue-800 {
       color: #0A1A4A!important
     }
+    * + h3, * + .legend {
+      margin-top: 0px;
+         font-family: 'Poppins-Medium';
+      }
+    h1 {
+      font-family: 'Poppins-Medium';
+    }
     `
   ],
   template: `
