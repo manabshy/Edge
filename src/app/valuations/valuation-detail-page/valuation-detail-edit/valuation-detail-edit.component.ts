@@ -1472,11 +1472,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.valuation.valuationStatus === ValuationStatusEnum.Valued ||
           this.valuation.valuationStatus === ValuationStatusEnum.Cancelled ||
           this.valuation.valuationStatus === ValuationStatusEnum.Closed
-          ) {
-            this.isEditable = false
-          } else {
-            this.isEditable = true
-          }
+        ) {
+          this.isEditable = false
+        } else {
+          this.isEditable = true
+        }
         if (this.valuation.valuationStatus === ValuationStatusEnum.Instructed) {
           this.isCancelled = true
         }
@@ -3140,12 +3140,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   private setLeaseExpiryDate() {
     if (
       this.valuationForm.get('approxLeaseExpiryDate').value &&
-      this.valuationForm.get('approxLeaseExpiryDate').value > 0
+      this.valuationForm.get('approxLeaseExpiryDate').value > 0 &&
+      this.valuationForm.get('approxLeaseExpiryDate').touched 
     ) {
       const leaseExpiryDateInYears = +this.valuationForm.get('approxLeaseExpiryDate').value
       this.approxLeaseExpiryDate = addYears(new Date(), leaseExpiryDateInYears)
     } else {
-      this.approxLeaseExpiryDate = this.valuationForm.get('approxLeaseExpiryDate').value
+      this.approxLeaseExpiryDate = this.valuation?.approxLeaseExpiryDate || null
     }
   }
 
