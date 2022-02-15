@@ -34,6 +34,7 @@ import { Subject } from 'rxjs'
       button.text-white {
         height: 29px;
         width: 110px;
+        font-family: 'Poppins';
       }
     `
   ],
@@ -73,6 +74,9 @@ export class RewardsToolbarComponent implements OnInit {
   @Input() streak: any
   @Input() phoneCall: any
   @Input() isConnectionLost: any
+  bonus: any
+  goalsHit: boolean = false
+
   ngUnsubscribe = new Subject<void>()
 
   @Output() onIconChange: EventEmitter<string> = new EventEmitter()
@@ -92,6 +96,15 @@ export class RewardsToolbarComponent implements OnInit {
         this.iconBgColour = this.setIconBackgroundColor(data)
       }
     })
+    this.signalRService.getBonusesStream$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data) => {
+      if (data) {
+        this.bonus = data
+        this.goalsHit = this.bonus[0].bonusDetailCriteria.every(bc => bc.progress >= bc.target)
+        console.info('this.goalsHit on toolbar', this.goalsHit);
+
+        this.cdRef.detectChanges()
+      }
+    })
 
   }
 
@@ -99,7 +112,7 @@ export class RewardsToolbarComponent implements OnInit {
    
     return streak.currentStreak == 0
       ? 'bg-orange-700'
-      : streak.currentStreak == 1
+      : streak.currentStreak == 1 || this.goalsHit
       ? 'bg-gray-300'
       : streak.currentStreak == 2
       ? 'bg-yellow-400'

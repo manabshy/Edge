@@ -71,5 +71,6 @@ export class RewardsRowComponent implements OnInit {
     }
 
     this.goalsHit = this.bonus.bonusDetailCriteria.every(bc => bc.progress >= bc.target)
+    console.log('row rewards:', this.goalsHit);
   }
 }

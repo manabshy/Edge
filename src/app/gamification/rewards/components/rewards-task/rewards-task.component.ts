@@ -52,6 +52,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
         background-color: #FDEFF5 !important;
       }
       .bg-green-400 {
+        border-radius: 10px;
         background-color: #4DA685!important;
       }
       .animation.w-full video {
@@ -65,6 +66,10 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
       .text-sm {
         line-height: 1rem !important;
         margin-left: 5px;
+      }
+      p.text-blue-900 {
+        color: #0A1A4A !important;
+        margin-top: 10px;
       }
     `
   ],
