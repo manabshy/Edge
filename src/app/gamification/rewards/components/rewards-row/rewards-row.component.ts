@@ -9,6 +9,11 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
       top: 85px;
       font-size: 20px;
     }
+    i.fa.fa-plus {
+      position: relative;
+      top: 85px;
+      font-size: 20px;
+    }
     `
   ],
   template: `
@@ -26,8 +31,8 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
           [name]="bc.name"
           [animationDelay]="0"
         >
-        <i *ngIf="i < bonus.bonusDetailCriteria.length" class="fa fa-plus invisible md:visible"></i>
         </app-rewards-task>
+        <i *ngIf="i < bonus.bonusDetailCriteria.length - 1" class="fa fa-plus"></i>
 
         </ng-container>
         
