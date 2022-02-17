@@ -7,8 +7,6 @@ module.exports = {
     extend: {
       colors: {
         info: '#3498DB',
-        primary: '#4DA685',
-        secondary: '#0a1a4a',
         'ocean-green': {
           DEFAULT: '#4DA685',
           50: '#C6E5D9',
@@ -35,19 +33,6 @@ module.exports = {
           800: '#000000',
           900: '#000000'
         },
-        transparent: 'transparent',
-        current: 'currentColor',
-        black: colors.black,
-        white: colors.white,
-        gray: colors.gray,
-        emerald: colors.emerald,
-        indigo: colors.indigo,
-        yellow: colors.yellow,
-        red: colors.red
-      },
-      backgroundColor: ['even'],
-      transitionProperty: {
-        spacing: 'margin, padding'
       },
       fontSize: {
         xs: '.65rem',

@@ -1,4 +1,3 @@
-// button.component.ts
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 
 @Component({
@@ -6,11 +5,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core'
   template: `
     <button
       class="px-3 py-1.5 rounded-sm mx-auto duration-75 disabled:opacity-75 disabled:bg-gray-300 hover:disabled:bg-gray-300"
-      [ngClass]="
-        disabled
-          ? 'cursor-not-allowed bg-gray-300'
-          : 'bg-' + backgroundColorClass + '-500 cursor-pointer hover:bg-' + backgroundColorClass + '-600'
-      "
+      [ngClass]="disabled ? 'cursor-not-allowed bg-gray-300' : 'bg-'+ backgroundColorClass + '-500 cursor-pointer hover:bg-' + backgroundColorClass + '-600'"
       [attr.data-cy]="cypressId"
       (click)="btnClicked()"
       [disabled]="disabled"
@@ -30,33 +25,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core'
   `
 })
 export class ButtonComponent {
-  /**
-   * pass in a valid colour string from tailwind.config colours. The primary green colour is ocean-green
-   */
   @Input() backgroundColorClass: string
-  /**
-   * Label to display to the user
-   */
   @Input() label: string
-  /**
-   * Optional ID used in Cypress tests to target the button
-   */
   @Input() cypressId?: string
-  /**
-   * Disables the button
-   */
   @Input() disabled?: boolean = false
-  /**
-   * Disables the button and displays a loading spinner
-   */
   @Input() isSubmitting?: boolean = false
-  /**
-   * Emits an event on click
-   */
+
   @Output() onClick: EventEmitter<any> = new EventEmitter()
-  /**
-   * Sets a 2 seconds timeout. TODO replace with debounce
-   */
+
   clicked: boolean
 
   constructor() {

@@ -121,7 +121,7 @@ export class ValuationFacadeService {
   }
 
   public updateLocalContactGroup(contactGroupData) {
-    console.log('updateLocalContactGroup: contactGroupData', contactGroupData)
+    // console.log('updateLocalContactGroup: contactGroupData', contactGroupData)
     this._contactGroupBs.next(contactGroupData)
   }
 

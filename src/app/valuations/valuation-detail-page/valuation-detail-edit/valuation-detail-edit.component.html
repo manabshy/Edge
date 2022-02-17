@@ -728,7 +728,7 @@
                               "
                               data-cy="openAvailabilitySales"
                             >
-                              Edit
+                            Rearrange
                             </button>
                           </fieldset>
                           <ng-template pTemplate="footer">
@@ -855,7 +855,7 @@
                         >
                           {{
                             valuation?.lettingsValuationBooking && valuation?.salesValuationBooking
-                              ? 'Edit Both'
+                              ? 'Rearrange Both'
                               : valuation?.salesValuationBooking
                               ? 'Add Lettings'
                               : 'Add Sales'
@@ -916,7 +916,7 @@
                               "
                               data-cy="openAvailabilityLettings"
                             >
-                              Edit
+                              Rearrange
                             </button>
                           </fieldset>
                           <ng-template pTemplate="footer">
@@ -1439,7 +1439,6 @@
           <ng-container *ngIf="property">
             <footer class="footer space-x-2">
               <button (click)="cancel()" type="button" class="btn btn--ghost" data-cy="cancelVal">Cancel</button>
-
               <app-button
                 [label]="'Save Valuation'"
                 [disabled]="isSubmittingVal"
@@ -1456,7 +1455,7 @@
                 [cypressId]="'startInstruction'"
                 [backgroundColorClass]="'ocean-green'"
                 (onClick)="startInstruction()"
-                *ngIf="canInstruct && userHasPermissionToInstruct"
+                *ngIf="canInstruct"
               ></app-button>
             </footer>
           </ng-container>
@@ -1652,7 +1651,6 @@
     </ng-template>
   </p-table>
   <ng-template #noValue>-</ng-template>
-
   <footer class="footer--modal">
     <div class="btn--container">
       <button
@@ -2209,16 +2207,6 @@
         <button type="button" class="btn btn--ghost" (click)="isInstructVisible = false; cancelInstruction()">
           Cancel
         </button>
-        <!-- <button
-          type="submit"
-          class="btn btn--positive"
-          [disabled]="
-            !instructionForm.get('instructLet').value && !instructionForm.get('instructSale').value ? true : null
-          "
-          data-cy="saveInstruction"
-        >
-          Instruct
-        </button> -->
         <app-button
           [label]="'Instruct'"
           [disabled]="isSubmittingInstruction"

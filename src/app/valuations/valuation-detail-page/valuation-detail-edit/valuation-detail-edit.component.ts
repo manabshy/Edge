@@ -226,7 +226,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   contactGroupLoading: boolean = true
   activeValuationMessageString: string = ''
   showCreateNewValuationBtnInActiveValuationDialog: boolean = true
-
   // previousContactGroupId: number;
   get dataNote() {
     if (this.contactGroup?.contactGroupId) {
@@ -519,6 +518,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       valuationStatusDescription: 'New',
       originId: this.originId | 0,
       originTypeId: 0,
+      // declarableInterest: null,
       eSignSignatureTob: {}
     }
     this._valuationFacadeSvc._valuationData.next(this.valuation)
@@ -1753,7 +1753,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
 
       this.onPropertyType(valuation.property?.propertyTypeId)
-      console.log('1 about to patchValue on valuationForm  ', valuation)
       this.valuationForm.patchValue({
         property: valuation.property,
         propertyOwner: valuation.propertyOwner,
@@ -3164,12 +3163,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   private setLeaseExpiryDate() {
     if (
       this.valuationForm.get('approxLeaseExpiryDate').value &&
-      this.valuationForm.get('approxLeaseExpiryDate').value > 0
+      this.valuationForm.get('approxLeaseExpiryDate').value > 0 &&
+      this.valuationForm.get('approxLeaseExpiryDate').touched 
     ) {
       const leaseExpiryDateInYears = +this.valuationForm.get('approxLeaseExpiryDate').value
       this.approxLeaseExpiryDate = addYears(new Date(), leaseExpiryDateInYears)
     } else {
-      this.approxLeaseExpiryDate = null
+      this.approxLeaseExpiryDate = this.valuation?.approxLeaseExpiryDate || null
     }
   }
 
@@ -3224,7 +3224,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   onInstructionSaveComplete(status?: boolean) {
     // const instructionEventId = instruction.salesInstructionEventId || instruction.lettingsInstructionEventId;
     this.instructionForm.markAsPristine()
-    this.isSubmittingVal = false
+    this.isSubmittingInstruction = false
     this.errorMessage = null
     if (status) {
       this.messageService.add({

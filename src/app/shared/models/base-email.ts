@@ -19,4 +19,5 @@ export interface BaseEmail {
   recipientEmail: EmailInfo[];
   ccExternalEmail: EmailInfo[];
   ccInternalEmail: EmailInfo[];
+  senderDisplayName?: string;
 }
