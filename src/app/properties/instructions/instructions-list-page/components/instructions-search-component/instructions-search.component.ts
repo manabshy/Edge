@@ -111,6 +111,7 @@ export interface InstructionsSearchDropdowns {
         </fieldset>
 
         <fieldset class="mb-0 w-full">
+       
           <app-generic-multi-select-control
             [label]="'Department'"
             [placeholder]="'Select department'"
@@ -152,7 +153,7 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy, OnChanges
   @Output() onGetInstructions: EventEmitter<any> = new EventEmitter()
   @Output() onDepartmentChanged: EventEmitter<any> = new EventEmitter()
   @Output() onSearchModelChanges: EventEmitter<any> = new EventEmitter()
-
+  
   InstructionStatusForSalesAndLettingsEnum = InstructionStatusForSalesAndLettingsEnum
 
   // dropdown options. All others passed in via an @Input
@@ -188,11 +189,15 @@ export class InstructionsSearchComponent implements OnInit, OnDestroy, OnChanges
   }
 
   queryResultCount: number
-
+ 
   /***
    * updates the model when dropdown values change
    */
   selectionControlChange(fieldId, ev) {
+    // For departmentType - do not allow multi-select
+    if (fieldId == 'departmentTypeArr' && ev.length === 2) {
+      ev.shift()
+    }
     this.instructionFinderForm.patchValue({
       [fieldId]: ev
     })
