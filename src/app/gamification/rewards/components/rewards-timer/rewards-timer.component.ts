@@ -27,7 +27,10 @@ import moment from 'moment'
         <h3 class="text-3xl">{{ minutes }}</h3>
       </div>
       <p class="text-md">{{ timeframe }}</p>
+      <p *ngIf="!timeframe" class="text-md">left of the day</p>
     </div>
+
+  
   `
 })
 export class RewardsTimerComponent implements OnInit {
