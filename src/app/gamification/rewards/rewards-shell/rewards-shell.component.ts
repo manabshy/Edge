@@ -24,7 +24,7 @@ import { CookieService } from 'src/app/core/services/cookies.service'
         [icon]="userRewardsIcon"s
       ></app-rewards-toolbar>
       <ng-container *ngFor="let b of bonus">
-        <app-rewards-row [streak]="streak" [bonus]="b"></app-rewards-row>
+        <app-rewards-row [streak]="streak" [bonus]="b" [countdown]="countdown"></app-rewards-row>
       </ng-container>
     </div>
   `
@@ -41,7 +41,7 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
   showWelcome:boolean
   userRewardsIcon: string
   connectionClosed = false
-
+  countdown: any
   constructor(
     private staffMemberService: StaffMemberService,
     private storage: StorageMap,
@@ -98,6 +98,17 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
                 this.cdRef.detectChanges()
               }
             })
+            this.rewardsService
+            .getCountDown()
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe((data: any) => {
+              if (data) {
+                console.log('cd', data)
+                this.countdown = data?.result
+                this.cdRef.detectChanges()
+              }
+
+            })
         }
         this.isConnectionLost = isConnectionLost
         this.cdRef.detectChanges()
@@ -132,7 +143,8 @@ export class RewardsShellComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges()
       }
     })
-
+    
+   
     const hasRewardsIconCookie = this.cookieService.getCookie('userRewardsIcon')
     this.showWelcome = hasRewardsIconCookie ? false: true
     this.userRewardsIcon = hasRewardsIconCookie

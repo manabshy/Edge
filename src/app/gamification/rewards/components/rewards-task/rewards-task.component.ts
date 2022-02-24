@@ -71,20 +71,43 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
         color: #0A1A4A !important;
         margin-top: 10px;
       }
+      div.monthly  {
+        color: white !important;
+        background-color: #0A1A4A!important;
+        margin-top: -8px;
+        padding-top: 24px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+         p.tax-center {
+            margin-bottom: 15px;
+        }
+      }
+      .monthly p.text-center {
+        margin-bottom: 20px;
+      }
+      
+      .border-purple {
+        border-color: #0A1A4A!important;
+      }
+      .monthly-margin {
+        margin-bottom: 68px !important;
+      }
+      
+     
     `
   ],
   template: `
-    <div class="flex flex-col border border-gray-300 border-solid rounded-md relative">
+    <div [ngClass]="{'border-purple': timeWindow === 2}" class="flex flex-col border border-gray-300 border-solid rounded-md relative">
       <div *ngIf="targetReached" class="absolute z-30 top-0 right-0 left-0 bottom-0">
         <div class="bg-white w-full text-center py-2">
-          <p *ngIf="nameStringArray.length === 2" class="text-blue-900 text-center">
+          <p *ngIf="nameStringArray.length === 2" class="text-blue-900 text-center" >
             {{ nameStringArray[0] }}
             <span class="text-green-600">{{ target }}</span>
             {{ nameStringArray[1] }}
           </p>
         </div>
  
-        <div class="w-full">
+        <div class="w-full"  *ngIf="timeWindow !== 2">
         <img
         src="{{ '/assets/gamification-icons/go-final-daily.gif' }}"
         />    
@@ -92,23 +115,38 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
       </div>
       <div class="h-48 flex">
         <div class="flex flex-col justify-between flex-1 mt-2">
-          <p *ngIf="nameStringArray.length === 2" class="text-blue-900 text-center">
-            {{ nameStringArray[0] }}
-            <span class="text-green-600">{{ target }}</span>
-            {{ nameStringArray[1] }}
-          </p>
-          <div class="my-2">
+            <div class='daily' *ngIf="timeWindow !== 2">
+              <p *ngIf="nameStringArray.length === 2" class="text-blue-900 text-center">
+                {{ nameStringArray[0] }}
+                <span class="text-green-600">{{ target }}</span>
+                {{ nameStringArray[1] }}
+              </p>
+            </div>
+            <div class='monthly' *ngIf="timeWindow == 2">
+              <p *ngIf="nameStringArray.length === 2" class="text-center">
+                {{ nameStringArray[0] }}
+                <span class="text-green-600">{{ target }}</span>
+                {{ nameStringArray[1] }}
+              </p>
+          </div>    
+          <div class="my-2" *ngIf="timeWindow !== 2">
             <img
               src="{{ '/assets/gamification-icons/' + (action | lowercase) + '-icn.svg' }}"
               class="w-28 h-20 mx-auto border-0 my-4"
             />
           </div>
-          <div [ngClass]="topClass" class="flex flex-row mx-2 relative h-4 mb-2 rounded-sm">
+          <div  *ngIf="timeWindow == 1" [ngClass]="topClass" class="flex flex-row mx-2 relative h-4 mb-2 rounded-sm">
             <p class="text-sm z-10 w-full">{{ progress }}</p>
             <div [ngClass]="progressWidthClass" class="absolute top-0 left-0 right-0 h-4">
               <div class="absolute left-0 -top-4 bg-green-400 h-4 progress-value" ></div>
             </div>
           </div>
+          <div  *ngIf="timeWindow == 2" [ngClass]="topClass" class="monthly-margin flex flex-row mx-2 relative h-4 mb-2 rounded-sm">
+            <p class="text-sm z-10 w-full">{{ progress }}</p>
+            <div [ngClass]="progressWidthClass" class="absolute top-0 left-0 right-0 h-4">
+              <div class="absolute left-0 -top-4 bg-green-400 h-4 progress-value" ></div>
+            </div>
+        </div>
         </div>
       </div>
     </div>
@@ -120,6 +158,7 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
   @Input() action!: string
   @Input() name: string
   @Input() animationDelay: number = 0
+  @Input() timeWindow: number
   
   topClass: string;
   targetReached: boolean = false
@@ -133,6 +172,7 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.calculateProgress()
     this.nameStringArray = this.buildNameString()
+    console.log('tw', this.timeWindow)
   }
 
   buildNameString() {
