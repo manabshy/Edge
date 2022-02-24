@@ -46,10 +46,8 @@ export class RewardsService {
   
   getCountDown(): Observable<any> {
     const url = `${AppConstants.baseRewardsUrl}/board/countdowns`
-    console.log('url:', url);
     return this.http.get<any>(url).pipe(
       map((response) => { 
-        console.log('countdowns:', response);
         return response
       })
     )
