@@ -14,6 +14,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
       top: 85px;
       font-size: 20px;
     }
+  
     `
   ],
   template: `
@@ -30,6 +31,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
           [action]="bc.actionId"
           [name]="bc.name"
           [animationDelay]="0"
+          [timeWindow]="bonus.timeWindow"
         >
         </app-rewards-task>
         <i *ngIf="i < bonus.bonusDetailCriteria.length - 1" class="fa fa-plus"></i>
