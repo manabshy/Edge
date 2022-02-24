@@ -71,6 +71,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
         color: #0A1A4A !important;
         margin-top: 10px;
       }
+     
     `
   ],
   template: `

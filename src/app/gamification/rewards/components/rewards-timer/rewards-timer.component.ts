@@ -18,9 +18,13 @@ import moment from 'moment'
     h1 {
       font-family: 'Poppins-Medium';
     }
+    p.timeframe {
+      width: 100px;
+    }
     `
   ],
   template: `
+  <div class='timer'>
     <div *ngIf='timewindow == 1' class="h-48 text-center flex flex-col justify-around bg-blue-clock rounded-md p-4">
       <div class="flex md:flex-col items-center mx-auto">
         <h1 class="text-6xl font-black text-blue-800">{{ hours }}</h1>
@@ -33,12 +37,13 @@ import moment from 'moment'
       <h1 class="text-6xl font-black text-blue-800">{{ countdown?.daysLeftInMonth }}</h1>
       <h3 class="text-3xl">Days</h3>
     </div>
-    <p class="text-md">{{ timeframe }}</p>
+    <p class="timeframe text-md">{{ timeframe }}</p>
     </div>
+  </div>  
   
   `
 })
-export class RewardsTimerComponent implements OnInit, OnChanges {
+export class RewardsTimerComponent {
   @Input() timeframe: string
   @Input() countdown: any
   @Input() timewindow: number
@@ -50,16 +55,7 @@ export class RewardsTimerComponent implements OnInit, OnChanges {
     this.wireUpTimer()
   }
 
-  ngOnInit(): void {
-    if (this.timeframe === '2') {
-      console.log('this.timeframe', this.timeframe);
-    }
-  }
-  ngOnChanges() {
-
-    console.log(this.timewindow);
   
-  }
   wireUpTimer() {
     this.setTime()
 
