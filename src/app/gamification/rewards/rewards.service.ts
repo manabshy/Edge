@@ -36,14 +36,24 @@ export class RewardsService {
 
   sync(): Observable<any> {
     const url = `${AppConstants.baseRewardsUrl}/board/sync`
+    console.log('url:', url);
     return this.http.get<any>(url).pipe(
       map((response) => { 
         return response
       })
     )
   }
-
-
+  
+  getCountDown(): Observable<any> {
+    const url = `${AppConstants.baseRewardsUrl}/board/countdowns`
+    console.log('url:', url);
+    return this.http.get<any>(url).pipe(
+      map((response) => { 
+        console.log('countdowns:', response);
+        return response
+      })
+    )
+  }
   getSwagBag(): Observable<SwagBag | any> {
     const url = `${AppConstants.baseRewardsUrl}/board/swag-bag`
     return this.http.get<any>(url).pipe(
