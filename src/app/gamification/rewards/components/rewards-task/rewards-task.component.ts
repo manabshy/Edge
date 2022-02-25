@@ -99,7 +99,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
   template: `
     <div [ngClass]="{'border-purple': timeWindow === 2}" class="flex flex-col border border-gray-300 border-solid rounded-md relative">
       <div *ngIf="targetReached" class="absolute z-30 top-0 right-0 left-0 bottom-0">
-        <div class="bg-white w-full text-center py-2">
+        <div class="w-full text-center py-2">
           <p *ngIf="nameStringArray.length === 2" class="text-blue-900 text-center" >
             {{ nameStringArray[0] }}
             <span class="text-green-600">{{ target }}</span>
