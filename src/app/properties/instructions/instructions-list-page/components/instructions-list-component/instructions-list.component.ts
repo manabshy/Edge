@@ -9,6 +9,15 @@ import {
 
 @Component({
   selector: 'app-instructions-list',
+  styles: [`
+  @media (min-width: 768px) {
+    .table--mobile td .cell-content {
+      width: 100%;
+      overflow: hidden !important;
+    }
+  }
+  `],
+
   template: `
     <div class="table mt-4">
       <app-infinite-scroll (scrolled)="onScrollDown.emit()">
