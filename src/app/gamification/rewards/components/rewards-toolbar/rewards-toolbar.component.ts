@@ -10,7 +10,7 @@ import { Subject } from 'rxjs'
     `
       button + span {
         line-height: initial;
-        font-family: 'Poppins-Medium';
+        font-family: 'Poppins,Medium';
         font-weight: 800;
       }
       div>button:nth-child(2) {

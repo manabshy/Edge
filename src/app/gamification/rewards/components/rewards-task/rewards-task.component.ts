@@ -70,6 +70,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
       p.text-blue-900 {
         color: #0A1A4A !important;
         margin-top: 10px;
+        font-weight: bolder;
       }
       div.monthly  {
         color: white !important;
@@ -99,7 +100,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
   template: `
     <div [ngClass]="{'border-purple': timeWindow === 2}" class="flex flex-col border border-gray-300 border-solid rounded-md relative">
       <div *ngIf="targetReached" class="absolute z-30 top-0 right-0 left-0 bottom-0">
-        <div class="w-full text-center py-2">
+        <div *ngIf="timeWindow === 2"class="w-full text-center py-2">
           <p *ngIf="nameStringArray.length === 2" class="text-blue-900 text-center" >
             {{ nameStringArray[0] }}
             <span class="text-green-600">{{ target }}</span>
@@ -122,7 +123,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
                 {{ nameStringArray[1] }}
               </p>
             </div>
-            <div class='monthly' *ngIf="timeWindow == 2">
+            <div class='monthly' *ngIf="timeWindow === 2">
               <p *ngIf="nameStringArray.length === 2" class="text-center">
                 {{ nameStringArray[0] }}
                 <span class="text-green-600">{{ target }}</span>
@@ -180,6 +181,8 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
   }
   
   calculateProgress() {
+
+    this.progress = 2
     
     this.topClass = this.progress === 0 ? 'bg-pink-400' : 'bg-light';
      
