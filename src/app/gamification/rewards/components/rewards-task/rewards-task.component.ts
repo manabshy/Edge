@@ -181,8 +181,6 @@ export class RewardsTaskComponent implements OnInit, OnChanges {
   }
   
   calculateProgress() {
-
-    this.progress = 2
     
     this.topClass = this.progress === 0 ? 'bg-pink-400' : 'bg-light';
      
