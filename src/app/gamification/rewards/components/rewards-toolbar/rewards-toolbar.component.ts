@@ -10,7 +10,7 @@ import { Subject } from 'rxjs'
     `
       button + span {
         line-height: initial;
-        font-family: 'Poppins,Medium';
+        font-family: 'poppins';
         font-weight: 800;
       }
       div>button:nth-child(2) {
@@ -23,7 +23,7 @@ import { Subject } from 'rxjs'
         margin-right: 45px;
       }
       .bg-bronze {
-        background-color:#E5A678;
+        background-color:#E5A678; 
       }
       button + h1  {
         line-height: 1.8em;
@@ -34,7 +34,16 @@ import { Subject } from 'rxjs'
       button.text-white {
         height: 29px;
         width: 110px;
-        font-family: 'Poppins';
+        font-family: 'poppins';
+      }
+      .bg-orange-700 {
+        background-color: #E5A678 !important;
+      }
+      .bg-gray-300 {
+        background-color:  #CED1DB!important;
+      }
+      .bg-yellow-300 {
+        background-color:  #FFD38C!important;
       }
     `
   ],
@@ -109,13 +118,13 @@ export class RewardsToolbarComponent implements OnInit {
   }
 
   setIconBackgroundColor(streak) {
-   
+    // Streak color is driven by the currentStreak value, so when currentStreak === 0 then Bronze, currentStreak === 1 then Silver, currentStreak === 2 then GOLD
     return streak.currentStreak == 0
-      ? 'bg-orange-700'
+      ? 'bg-orange-700'  // Bronze
       : streak.currentStreak == 1 || this.goalsHit
-      ? 'bg-gray-300'
+      ? 'bg-gray-300'   // Silver
       : streak.currentStreak == 2
-      ? 'bg-yellow-400'
+      ? 'bg-yellow-400' // Gold 
       : 'bg-ocean-green-500'
   }
 
