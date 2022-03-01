@@ -7,8 +7,8 @@ import { Component, Input } from '@angular/core'
       color: #0A1A4A!important
     }
     .font-black {
-      font-family: 'Poppins,Medium';
-      font-weight: 800;
+      font-family: 'poppins';
+      font-weight: bold !important;
     }
   `
   ],

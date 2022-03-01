@@ -13,10 +13,13 @@ import moment from 'moment'
     }
     * + h3, * + .legend {
       margin-top: 0px;
-         font-family: 'Poppins,Medium';
+      font-family:"poppins";
+      font-weight:"500";
       }
-    h1 {
-      font-family: 'Poppins,Medium';
+   div > h1 {
+      font-family:"poppins";
+      font-weight: bold !important;
+      font-size: 75px !important;
     }
     p.timeframe {
       width: 100px;
