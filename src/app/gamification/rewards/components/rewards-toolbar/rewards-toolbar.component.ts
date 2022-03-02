@@ -71,7 +71,7 @@ import { Subject } from 'rxjs'
         <button class="rounded-full h-10 w-10" [ngClass]="iconBgColour">
           <img src="assets/gamification-icons/{{ icon }}.svg" width="24" height="24" />
         </button>
-        <i class="fa fa-info-circle text-blue-400 text-sm top-0 absolute -right-5" [pTooltip]="'Help text required'"></i>
+        <i class="fa fa-info-circle text-blue-400 text-sm top-0 absolute -right-5" [pTooltip]="helptext"></i>
       </div>  
       <app-rewards-bonus-bank [isConnectionLost]="isConnectionLost" [swagBag]="swagBag"></app-rewards-bonus-bank>
     </div>
@@ -85,7 +85,7 @@ export class RewardsToolbarComponent implements OnInit {
   @Input() isConnectionLost: any
   bonus: any
   goalsHit: boolean = false
-
+  helptext: string;
   ngUnsubscribe = new Subject<void>()
 
   @Output() onIconChange: EventEmitter<string> = new EventEmitter()
@@ -94,7 +94,14 @@ export class RewardsToolbarComponent implements OnInit {
 
   constructor(private storage: StorageMap, private signalRService: SignalRService, private cdRef: ChangeDetectorRef,
 
-  ) {}
+  ) {
+    this.helptext =  `<div  style=" height: 120px;width: 60px">
+    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #E5A678;border-radius: 50%;display: inline-block;"><span style="padding-left:35px">0</span></span></div>
+    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #CED1DB;border-radius: 50%;display: inline-block;"><span style="padding-left:35px">1</span></span></div>
+    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #FFD38C;border-radius: 50%;display: inline-block;"><span style="padding-left:35px">2</span></span></div>
+    
+    </div> `
+  }
 
   ngOnInit(): void {
     this.signalRService.getStreakStream$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data) => {
