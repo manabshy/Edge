@@ -76,7 +76,8 @@
             <ol class="nav nav--secondary">
               <li
                 *ngFor="let page of contactPages"
-                class="nav__item rounded text-gray-400 transition duration-200 hover:text-white "
+                class="nav__item rounded text-gray-400 transition duration-200 hover:text-white"
+                (click)="toggleMobileMenu()"
               >
                 <a
                   class="no-underline block"
@@ -120,7 +121,8 @@
             <ol class="nav nav--secondary">
               <li
                 *ngFor="let page of propertyPages"
-                class="nav__item block text-gray-400 transition duration-200 hover:text-white "
+                class="nav__item block text-gray-400 transition duration-200 hover:text-white"
+                (click)="toggleMobileMenu()"
               >
                 <a class="no-underline block" routerLink="{{ page.url }}" routerLinkActive="active">
                   {{ page.name }}
