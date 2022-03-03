@@ -87,7 +87,6 @@ export class RewardsToolbarComponent implements OnInit {
   goalsHit: boolean = false
   helptext: string;
   ngUnsubscribe = new Subject<void>()
-
   @Output() onIconChange: EventEmitter<string> = new EventEmitter()
 
   iconBgColour: string
@@ -95,19 +94,13 @@ export class RewardsToolbarComponent implements OnInit {
   constructor(private storage: StorageMap, private signalRService: SignalRService, private cdRef: ChangeDetectorRef,
 
   ) {
-    this.helptext =  `<div  style=" height: 120px;width: 60px">
-    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #E5A678;border-radius: 50%;display: inline-block;"><span style="padding-left:35px">0</span></span></div>
-    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #CED1DB;border-radius: 50%;display: inline-block;"><span style="padding-left:35px">1</span></span></div>
-    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #FFD38C;border-radius: 50%;display: inline-block;"><span style="padding-left:35px">2</span></span></div>
-    
-    </div> `
   }
 
   ngOnInit(): void {
     this.signalRService.getStreakStream$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data) => {
       if (data) {
         this.streak = data
-        this.cdRef.detectChanges()
+        this.cdRef.detectChanges();
         console.info('streak from signalR:', this.streak);
         this.iconBgColour = this.setIconBackgroundColor(data)
       }
@@ -125,6 +118,14 @@ export class RewardsToolbarComponent implements OnInit {
   }
 
   setIconBackgroundColor(streak) {
+
+    this.helptext =  `<div  style=" height: 130px;width: 100px">
+    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #E5A678;border-radius: 50%;display: inline-block;"></span><span style="margin-left:20px;position:relative; bottom: 6px"> ${streak.referenceBronzeAmount}</span></div>
+    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #CED1DB;border-radius: 50%;display: inline-block;"></span><span style="margin-left:20px;position:relative; bottom: 6px"> ${streak.referenceSilverAmount}</span></div>
+    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #FFD38C;border-radius: 50%;display: inline-block;"></span><span style="margin-left:20px;position:relative; bottom: 6px"> ${streak.referenceGoldAmount}</span></div>
+    
+    </div> `
+
     // Streak color is driven by the currentStreak value, so when currentStreak === 0 then Bronze, currentStreak === 1 then Silver, currentStreak === 2 then GOLD
     return streak.currentStreak == 0
       ? 'bg-orange-700'  // Bronze
