@@ -120,9 +120,9 @@ export class RewardsToolbarComponent implements OnInit {
   setIconBackgroundColor(streak) {
 
     this.helptext =  `<div  style=" height: 130px;width: 100px">
-    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #E5A678;border-radius: 50%;display: inline-block;"></span><span style="margin-left:20px;position:relative; bottom: 6px"> ${streak.referenceBronzeAmount}</span></div>
-    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #CED1DB;border-radius: 50%;display: inline-block;"></span><span style="margin-left:20px;position:relative; bottom: 6px"> ${streak.referenceSilverAmount}</span></div>
-    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #FFD38C;border-radius: 50%;display: inline-block;"></span><span style="margin-left:20px;position:relative; bottom: 6px"> ${streak.referenceGoldAmount}</span></div>
+    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #E5A678;border-radius: 50%;display: inline-block;"></span><span style="margin-left:20px;position:relative; bottom: 6px">£ ${streak.referenceBronzeAmount}</span></div>
+    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #CED1DB;border-radius: 50%;display: inline-block;"></span><span style="margin-left:20px;position:relative; bottom: 6px">£ ${streak.referenceSilverAmount}</span></div>
+    <div> <span class="dot" style=" height: 20px;width: 20px;background-color: #FFD38C;border-radius: 50%;display: inline-block;"></span><span style="margin-left:20px;position:relative; bottom: 6px">£ ${streak.referenceGoldAmount}</span></div>
     
     </div> `
 
